@@ -3,6 +3,7 @@
 .env
 .env.backup
 .env.production
+.agents/
 *.sqlite
 *.sqlite-shm
 *.sqlite-wal

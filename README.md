@@ -154,8 +154,10 @@ Additional notes are available in:
 
 This project is licensed under the MIT License. See `LICENSE` for details.
 
-## Author
+## Authors
 
-Evan William
+- Evan William
+  - GitHub: [@evan-william](https://github.com/evan-william)
 
-- GitHub: [@evan-william](https://github.com/evan-william)
+- BattedBrake
+  - GitHub: [@BattedBrake](https://github.com/BattedBrake)
