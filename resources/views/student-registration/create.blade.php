@@ -64,9 +64,18 @@
                     <div class="fg"><label class="lbl">Chinese Legal Name <span class="req">*</span><span class="zh">中文法定姓名</span></label><input name="chinese_legal_name" value="{{ old('chinese_legal_name') }}" placeholder="e.g. 陳明華" required></div>
                 </div>
                 <div class="row row-2">
+                    <div class="fg"><label class="lbl">Date of Birth <span class="req">*</span><span class="zh">出生日期</span></label><input type="date" name="date_of_birth" value="{{ old('date_of_birth') }}" required @error('date_of_birth') aria-invalid="true" @enderror></div>
+                    <div class="fg"><label class="lbl">Nationality <span class="req">*</span><span class="zh">國籍</span></label><input name="nationality" value="{{ old('nationality') }}" placeholder="e.g. Taiwan" required @error('nationality') aria-invalid="true" @enderror></div>
+                </div>
+                <div class="row row-2">
+                    <div class="fg"><label class="lbl">Passport Number <span class="req">*</span><span class="zh">護照號碼</span></label><input name="passport_number" value="{{ old('passport_number') }}" placeholder="e.g. A12345678" required @error('passport_number') aria-invalid="true" @enderror>@error('passport_number')<span class="error">{{ $message }}</span>@enderror</div>
+                    <div class="fg"><label class="lbl">Passport Expiry Date <span class="zh">護照有效期限</span></label><input type="date" name="passport_expiry_date" value="{{ old('passport_expiry_date') }}" @error('passport_expiry_date') aria-invalid="true" @enderror></div>
+                </div>
+                <div class="row row-2">
                     <div class="fg"><label class="lbl">Grade <span class="req">*</span><span class="zh">年級</span></label><select name="grade" required><option value="">Select / 請選擇</option>@foreach($gradeLevels as $grade)<option value="{{ $grade }}" @selected(old('grade')===$grade || old('grade_level')===$grade)>Grade {{ $grade }} / {{ $grade }} 年級</option>@endforeach</select></div>
                     <div class="fg"><label class="lbl">Current School <span class="req">*</span><span class="zh">目前就讀學校</span></label><input name="current_school" value="{{ old('current_school', old('school_name')) }}" placeholder="e.g. Taipei International School" required></div>
                 </div>
+                <input type="hidden" name="school_country" value="{{ old('school_country', 'Taiwan') }}">
                 <div class="row row-2">
                     <div class="fg"><label class="lbl">Student Email <span class="req">*</span><span class="zh">學生電子郵件</span></label><input type="email" name="student_email" value="{{ old('student_email') }}" placeholder="student@example.com" required @error('student_email') aria-invalid="true" @enderror>@error('student_email')<span class="error">{{ $message }}</span>@enderror</div>
                     <div class="fg"><label class="lbl">Student Phone <span class="req">*</span><span class="zh">學生電話</span></label><input type="tel" name="student_phone" value="{{ old('student_phone') }}" placeholder="0912345678" required></div>
@@ -92,6 +101,7 @@
             <div class="card">
                 <div class="section-title">Parent / Guardian Information <span>家長 / 監護人資料</span></div>
                 <div class="row row-2"><div class="fg"><label class="lbl">Parent First Name <span class="req">*</span><span class="zh">家長名字</span></label><input name="parent_first_name" value="{{ old('parent_first_name') }}" required></div><div class="fg"><label class="lbl">Parent Last Name <span class="req">*</span><span class="zh">家長姓氏</span></label><input name="parent_last_name" value="{{ old('parent_last_name') }}" required></div></div>
+                <div class="row row-1"><div class="fg"><label class="lbl">Relationship to Student <span class="req">*</span><span class="zh">與學生關係</span></label><input name="relationship" value="{{ old('relationship') }}" placeholder="Mother, Father, Guardian" required></div></div>
                 <div class="row row-2"><div class="fg"><label class="lbl">Parent Email <span class="req">*</span><span class="zh">家長電子郵件</span></label><input type="email" name="parent_email" value="{{ old('parent_email') }}" required></div><div class="fg"><label class="lbl">Parent Phone <span class="req">*</span><span class="zh">家長電話</span></label><input type="tel" name="parent_phone" value="{{ old('parent_phone') }}" required></div></div>
                 <div class="row row-1"><div class="fg"><label class="lbl">Mailing Address <span class="req">*</span><span class="zh">通訊地址</span></label><input name="mailing_address" value="{{ old('mailing_address') }}" required></div></div>
                 <div class="row row-2"><div class="fg"><label class="lbl">City / District <span class="req">*</span><span class="zh">城市 / 區域</span></label><input name="mailing_city" value="{{ old('mailing_city') }}" required></div><div class="fg"><label class="lbl">Postal Code <span class="zh">郵遞區號</span></label><input name="postal_code" value="{{ old('postal_code') }}" maxlength="12"></div></div>
@@ -99,6 +109,7 @@
             <div class="card">
                 <div class="section-title">Emergency Contact <span>緊急聯絡人</span></div>
                 <div class="row row-2"><div class="fg"><label class="lbl">Name <span class="req">*</span><span class="zh">姓名</span></label><input name="emergency_contact_name" value="{{ old('emergency_contact_name') }}" required></div><div class="fg"><label class="lbl">Phone <span class="req">*</span><span class="zh">電話</span></label><input type="tel" name="emergency_contact_phone" value="{{ old('emergency_contact_phone') }}" required></div></div>
+                <div class="row row-1"><div class="fg"><label class="lbl">Emergency Contact Relationship <span class="req">*</span><span class="zh">緊急聯絡人關係</span></label><input name="emergency_contact_relationship" value="{{ old('emergency_contact_relationship') }}" placeholder="Father, Mother, Guardian" required></div></div>
             </div>
         </section>
 
@@ -177,7 +188,8 @@
                 <div class="pay-options">
                     <label class="pay-opt"><input type="radio" name="payment_method" value="bank_transfer" required @checked(old('payment_method') === 'bank_transfer')><div><h4>Bank Transfer / 銀行轉帳</h4><p>Transfer to school bank account, then confirm with School Cashier WaWa Wang. / 匯款至學校帳戶後，請向出納確認。</p></div></label>
                     <label class="pay-opt"><input type="radio" name="payment_method" value="cash" @checked(old('payment_method') === 'cash')><div><h4>Cash / 現金</h4><p>Direct cash payment to school cashier. / 直接至學校出納繳現金。</p></div></label>
-                    <label class="pay-opt"><input type="radio" name="payment_method" value="online" @checked(old('payment_method') === 'online')><div><h4>Online Payment / 線上付款 <span class="badge-soon">Coming Soon / 即將開放</span></h4><p>Credit/debit card portal is in development. / 信用卡付款功能建置中。</p></div></label>
+                    <label class="pay-opt"><input type="radio" name="payment_method" value="credit_card" @checked(old('payment_method') === 'credit_card' || old('payment_method') === 'online')><div><h4>Credit Card / 信用卡 <span class="badge-soon">Gateway Setup Required / 需設定金流</span></h4><p>Available after ECPay or NewebPay credentials are configured. / 設定金流商資料後可使用。</p></div></label>
+                    <label class="pay-opt"><input type="radio" name="payment_method" value="atm" @checked(old('payment_method') === 'atm')><div><h4>ATM Transfer / ATM 轉帳 <span class="badge-soon">Gateway Setup Required / 需設定金流</span></h4><p>Available after the selected Taiwan gateway enables ATM payment. / 金流商啟用 ATM 後可使用。</p></div></label>
                 </div>
                 <div class="notice" style="margin-top:16px"><h4>Acknowledgement / 聲明確認</h4><ul><li>All information provided is accurate and complete. / 所填資料正確且完整。</li><li>I understand there are no refunds once payment is made. / 繳費後恕不退費。</li><li>I have verified the exam schedule for conflicts. / 我已確認考試時程無衝突。</li></ul></div>
                 <div class="sig-area"><div class="sig-box"><p><strong>Student Signature / 學生簽名</strong></p><div class="sig-line"></div><p>Date: _____________</p></div><div class="sig-box"><p><strong>Parent / Guardian Signature / 家長簽名</strong></p><div class="sig-line"></div><p>Date: _____________</p></div></div>

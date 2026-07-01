@@ -58,7 +58,10 @@ class StudentRegistrationService
             $examTotal = $subjects->sum('exam_fee');
             $serviceTotal = $subjects->sum('service_fee');
             $lateTotal = $subjects->sum(fn ($subject) => $subject->lateFeeApplies() ? $subject->late_registration_fee : 0);
-            $practiceTotal = (int) ($data['practice_exam_total'] ?? 0);
+            $practiceExams = $this->practiceExams($data['practice_exams'] ?? []);
+            $practiceFee = (int) config('registration.practice_exam_fee', 1800);
+            $practiceTotal = count($practiceExams) * $practiceFee;
+            $accommodations = $this->accommodations($data['accommodations'] ?? []);
             $currency = $subjects->first()?->currency ?? 'NTD';
             $grandTotal = $examTotal + $serviceTotal + $lateTotal + $practiceTotal;
 
@@ -68,6 +71,11 @@ class StudentRegistrationService
                 'registration_number' => $this->makeRegistrationNumber(),
                 'exam_season_id' => $season?->id,
                 'status' => 'submitted',
+                'family_name_en' => $data['family_name_en'] ?? null,
+                'first_name_en' => $data['first_name_en'] ?? null,
+                'middle_initial' => $data['middle_initial'] ?? null,
+                'middle_name' => $data['middle_name'] ?? null,
+                'chinese_legal_name' => $data['chinese_legal_name'] ?? null,
                 'registration_period' => $period,
                 'registration_period_type' => $period,
                 'payment_method' => $paymentMethod,
@@ -92,6 +100,13 @@ class StudentRegistrationService
                 'grand_total' => $grandTotal,
                 'currency' => $currency,
                 'fee_snapshot_at' => now(),
+                'needs_accommodations' => (bool) ($data['needs_accommodations'] ?? false),
+                'ssd_code' => $data['ssd_code'] ?? null,
+                'accommodation_status' => $data['accommodation_status'] ?? null,
+                'accommodations_payload' => $accommodations,
+                'practice_exam_count' => count($practiceExams),
+                'practice_exam_total' => $practiceTotal,
+                'review_confirmed_at' => now(),
                 'submitted_at' => now(),
             ]);
 
@@ -111,10 +126,15 @@ class StudentRegistrationService
             }
 
             $registration->contact()->create([
+                'parent_first_name' => $data['parent_first_name'] ?? null,
+                'parent_last_name' => $data['parent_last_name'] ?? null,
                 'parent_full_name' => $data['parent_full_name'],
                 'relationship' => $data['relationship'],
                 'parent_email' => $data['parent_email'],
                 'parent_phone' => $data['parent_phone'],
+                'mailing_address' => $data['mailing_address'] ?? null,
+                'mailing_city' => $data['mailing_city'] ?? null,
+                'postal_code' => $data['postal_code'] ?? null,
                 'emergency_contact_name' => $data['emergency_contact_name'],
                 'emergency_contact_phone' => $data['emergency_contact_phone'],
                 'emergency_contact_relationship' => $data['emergency_contact_relationship'],
@@ -137,11 +157,30 @@ class StudentRegistrationService
                 $subject->increment('registered_count');
             }
 
+            foreach ($practiceExams as $practiceExam) {
+                DB::table('registration_exam_selections')->insert([
+                    'uuid' => (string) Str::uuid(),
+                    'student_registration_id' => $registration->id,
+                    'ap_exam_subject_id' => null,
+                    'selection_type' => 'practice',
+                    'exam_name' => $practiceExam,
+                    'practice_fee' => $practiceFee,
+                    'total_amount' => $practiceFee,
+                    'currency' => $currency,
+                    'status' => 'selected',
+                    'metadata' => json_encode(['source' => 'student_registration_form']),
+                    'selected_at' => now(),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+
             Log::info('Student registration total calculated.', [
                 'registration_number' => $registration->registration_number,
                 'exam_fee_total' => $examTotal,
                 'service_fee_total' => $serviceTotal,
                 'late_fee_total' => $lateTotal,
+                'practice_exam_total' => $practiceTotal,
             ]);
 
             foreach (['accurate_information', 'ap_policies', 'privacy_policy', 'terms_conditions'] as $agreement) {
@@ -167,6 +206,8 @@ class StudentRegistrationService
             Mail::to($registration->student_email)
                 ->cc($registration->contact->parent_email)
                 ->send(new StudentRegistrationConfirmation($registration->load(['contact', 'exams'])));
+
+            $registration->update(['confirmation_sent_at' => now()]);
 
             app(PaymentFlowService::class)->ensurePayment($registration->fresh(['contact', 'exams']), $paymentMethod);
 
@@ -217,8 +258,39 @@ class StudentRegistrationService
     {
         return match ($method) {
             'cash' => 'cash',
+            'atm' => 'atm',
             'online', 'credit_card' => 'credit_card',
             default => 'manual_bank_transfer',
         };
+    }
+
+    /**
+     * @param array<int, mixed> $practiceExams
+     * @return array<int, string>
+     */
+    private function practiceExams(array $practiceExams): array
+    {
+        return collect($practiceExams)
+            ->filter(fn ($value) => is_string($value) && trim($value) !== '')
+            ->map(fn (string $value) => trim($value))
+            ->unique()
+            ->values()
+            ->all();
+    }
+
+    /**
+     * @param array<int, array<string, mixed>> $rows
+     * @return array<int, array{exam: string, request: string}>
+     */
+    private function accommodations(array $rows): array
+    {
+        return collect($rows)
+            ->map(fn (array $row) => [
+                'exam' => trim((string) ($row['exam'] ?? '')),
+                'request' => trim((string) ($row['request'] ?? '')),
+            ])
+            ->filter(fn (array $row) => $row['exam'] !== '' || $row['request'] !== '')
+            ->values()
+            ->all();
     }
 }

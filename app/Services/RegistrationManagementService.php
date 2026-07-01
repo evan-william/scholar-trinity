@@ -27,15 +27,19 @@ class RegistrationManagementService
             $reason = $data['reason'] ?? null;
             $original = $registration->replicate();
             $fields = collect($data)->only([
-                'student_full_name', 'date_of_birth', 'nationality', 'passport_number', 'student_email', 'student_phone',
+                'family_name_en', 'first_name_en', 'middle_initial', 'middle_name', 'chinese_legal_name',
+                'student_full_name', 'preferred_name', 'date_of_birth', 'nationality', 'passport_number', 'student_email', 'student_phone',
                 'school_name', 'school_country', 'school_city', 'grade_level', 'status', 'payment_status',
                 'payment_method', 'payment_reference', 'payment_date', 'payment_amount',
+                'needs_accommodations', 'ssd_code', 'accommodation_status', 'accommodations_payload',
             ])->all();
 
             $registration->fill($fields)->save();
 
             $registration->contact()->updateOrCreate([], collect($data)->only([
+                'parent_first_name', 'parent_last_name',
                 'parent_full_name', 'relationship', 'parent_email', 'parent_phone',
+                'mailing_address', 'mailing_city', 'postal_code',
                 'emergency_contact_name', 'emergency_contact_phone', 'emergency_contact_relationship',
             ])->all());
 
@@ -100,6 +104,12 @@ class RegistrationManagementService
             throw ValidationException::withMessages(['exam_subject_uuids' => 'One or more selected exams are unavailable.']);
         }
 
+        $oldSubjectIds = $registration->exams()->pluck('ap_exam_subjects.id');
+        \App\Models\ApExamSubject::query()
+            ->whereIn('id', $oldSubjectIds)
+            ->where('registered_count', '>', 0)
+            ->decrement('registered_count');
+
         $registration->exams()->detach();
         $examTotal = 0;
         $serviceTotal = 0;
@@ -121,14 +131,27 @@ class RegistrationManagementService
             $examTotal += $subject->exam_fee;
             $serviceTotal += $subject->service_fee;
             $lateTotal += $lateFee;
+            $subject->increment('registered_count');
         }
 
+        $grandTotal = $examTotal + $serviceTotal + $lateTotal + (int) $registration->practice_exam_total;
         $registration->update([
             'exam_fee_total' => $examTotal,
             'service_fee_total' => $serviceTotal,
             'late_fee_total' => $lateTotal,
-            'total_fee' => $examTotal + $serviceTotal + $lateTotal,
+            'total_fee' => $grandTotal,
+            'grand_total' => $grandTotal,
         ]);
+        $registration->payments()
+            ->whereNotIn('payment_status', ['paid', 'refunded'])
+            ->latest()
+            ->first()
+            ?->update([
+                'exam_fee_amount' => $examTotal,
+                'service_fee_amount' => $serviceTotal,
+                'late_fee_amount' => $lateTotal,
+                'grand_total' => $grandTotal,
+            ]);
         $this->audit($registration, 'updated', 'exam_subjects', null, $subjects->pluck('code')->join(','), $reason, $adminId, $ip);
     }
 

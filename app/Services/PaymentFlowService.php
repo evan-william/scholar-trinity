@@ -141,7 +141,7 @@ class PaymentFlowService
             'ItemDesc' => 'AP Exam Fee + Service Fee',
             'ReturnURL' => $setting->callback_url ?: route('payments.gateway.callback'),
             'ClientBackURL' => $setting->return_url ?: route('payments.success', $payment->uuid),
-            'ChoosePayment' => 'Credit',
+            'ChoosePayment' => $this->gatewayPaymentMethod($payment->payment_method),
         ];
         $payload['CheckMacValue'] = $this->signature($payload, $setting);
         $this->log($payment, 'gateway_request_created', $payment->payment_status, $payment->payment_status, null, request()?->ip(), [
@@ -245,6 +245,14 @@ class PaymentFlowService
         Mail::to($payment->registration->student_email)
             ->cc($payment->registration->contact?->parent_email)
             ->send(new PaymentConfirmationMail($payment));
+    }
+
+    private function gatewayPaymentMethod(string $method): string
+    {
+        return match ($method) {
+            'atm' => 'ATM',
+            default => 'Credit',
+        };
     }
 
     private function safePayload(array $payload): array
