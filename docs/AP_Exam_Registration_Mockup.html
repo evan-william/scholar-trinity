@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AP® Exam Registration | 大學先修課程報名</title>
+  <style>
+    :root {
+      --primary: #1a3a6b;
+      --primary-light: #2a5298;
+      --accent: #c9a84c;
+      --success: #27ae60;
+      --danger: #e74c3c;
+      --gray-50: #f8f9fa;
+      --gray-100: #f1f3f5;
+      --gray-200: #e9ecef;
+      --gray-400: #ced4da;
+      --gray-600: #6c757d;
+      --gray-800: #343a40;
+      --white: #ffffff;
+      --radius: 8px;
+      --shadow: 0 2px 16px rgba(0,0,0,0.09);
+      --transition: all 0.2s ease;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial,
+        '微軟正黑體', 'Microsoft JhengHei', 'PingFang TC', sans-serif;
+      background: var(--gray-50);
+      color: var(--gray-800);
+      min-height: 100vh;
+    }
+
+    /* ─── HEADER ─── */
+    .header {
+      background: var(--primary);
+      color: white;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .header-logos { display: flex; align-items: center; gap: 12px; }
+    .logo-pill {
+      background: white;
+      color: var(--primary);
+      font-size: 10px;
+      font-weight: 800;
+      padding: 6px 10px;
+      border-radius: 6px;
+      line-height: 1.3;
+      text-align: center;
+      letter-spacing: 0.3px;
+    }
+    .logo-divider { width: 1px; height: 36px; background: rgba(255,255,255,0.25); }
+    .header-title { flex: 1; min-width: 200px; }
+    .header-title h1 { font-size: 16px; font-weight: 700; line-height: 1.35; }
+    .header-title p  { font-size: 11px; opacity: 0.75; margin-top: 2px; }
+    .header-badge {
+      background: var(--accent);
+      color: #5a3800;
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    /* ─── PROGRESS ─── */
+    .progress-wrap {
+      background: white;
+      border-bottom: 1px solid var(--gray-200);
+      padding: 0 16px;
+      overflow-x: auto;
+    }
+    .progress-steps {
+      display: flex;
+      min-width: max-content;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .step-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 14px 6px;
+      position: relative;
+    }
+    .step-item:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 25px;
+      left: calc(50% + 17px);
+      right: calc(-50% + 17px);
+      height: 2px;
+      background: var(--gray-200);
+      transition: background 0.3s;
+    }
+    .step-item.completed:not(:last-child)::after { background: var(--primary); }
+    .step-circle {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      border: 2px solid var(--gray-400);
+      background: white;
+      color: var(--gray-600);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700;
+      z-index: 1;
+      transition: var(--transition);
+    }
+    .step-item.active   .step-circle { border-color: var(--primary); background: var(--primary); color: white; }
+    .step-item.completed .step-circle { border-color: var(--primary); background: var(--primary); color: white; }
+    .step-label { margin-top: 5px; font-size: 10px; text-align: center; color: var(--gray-600); line-height: 1.3; }
+    .step-item.active .step-label { color: var(--primary); font-weight: 600; }
+
+    /* ─── MAIN ─── */
+    .main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 24px 16px 100px;
+    }
+
+    /* ─── CARD ─── */
+    .card {
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 26px 24px;
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--primary);
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 9px;
+      margin-bottom: 20px;
+    }
+    .section-title span {
+      display: block;
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--gray-600);
+      margin-top: 2px;
+    }
+
+    /* ─── FIELDS ─── */
+    .row   { display: grid; gap: 14px; margin-bottom: 14px; }
+    .row-2 { grid-template-columns: 1fr 1fr; }
+    .row-3 { grid-template-columns: 1fr 1fr 0.55fr; }
+    .row-1 { grid-template-columns: 1fr; }
+    @media(max-width:520px){
+      .row-2, .row-3 { grid-template-columns: 1fr; }
+    }
+
+    .fg { display: flex; flex-direction: column; gap: 5px; }
+    .fg.span2 { grid-column: 1 / -1; }
+
+    label.lbl { font-size: 13px; font-weight: 600; color: var(--gray-800); }
+    label.lbl .zh { display: block; font-size: 11px; font-weight: 400; color: var(--gray-600); }
+    label.lbl .req { color: var(--danger); margin-left: 2px; }
+
+    input[type=text], input[type=email], input[type=tel], select, textarea {
+      border: 1.5px solid var(--gray-400);
+      border-radius: 6px;
+      padding: 9px 12px;
+      font-size: 14px;
+      color: var(--gray-800);
+      background: white;
+      width: 100%;
+      font-family: inherit;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      appearance: none;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(26,58,107,0.1);
+    }
+    input::placeholder { color: var(--gray-400); }
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 11 11'%3E%3Cpath fill='%236c757d' d='M5.5 7L0.5 2h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 11px center;
+      padding-right: 34px;
+    }
+    .hint { font-size: 11px; color: var(--gray-600); margin-top: 3px; }
+
+    /* ─── FILE UPLOAD ─── */
+    .upload-area {
+      border: 2px dashed var(--gray-400);
+      border-radius: var(--radius);
+      padding: 22px 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition);
+      background: var(--gray-50);
+      position: relative;
+    }
+    .upload-area:hover { border-color: var(--primary); background: rgba(26,58,107,0.03); }
+    .upload-area input[type=file] {
+      position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+    }
+    .upload-icon { font-size: 30px; margin-bottom: 6px; }
+    .upload-text { font-size: 13px; color: var(--gray-600); }
+    .upload-text strong { color: var(--primary); }
+    .upload-sub { font-size: 11px; color: var(--gray-600); margin-top: 3px; }
+    .upload-selected { margin-top: 8px; font-size: 13px; color: var(--success); font-weight: 600; display: none; }
+
+    /* ─── NOTICE ─── */
+    .notice {
+      background: #fff8e1;
+      border: 1px solid #f0c040;
+      border-left: 4px solid var(--accent);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      margin-bottom: 18px;
+    }
+    .notice h4 { font-size: 13px; font-weight: 700; color: #7a5800; margin-bottom: 7px; }
+    .notice p, .notice li { font-size: 12px; color: #5a4000; line-height: 1.65; }
+    .notice ul { padding-left: 16px; }
+
+    /* ─── EXAM CATEGORIES ─── */
+    .exam-sticky {
+      position: sticky; top: 0; z-index: 10;
+      background: white;
+      border-bottom: 1px solid var(--gray-200);
+      padding: 10px 0 10px;
+      margin: 0 0 16px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .sel-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--primary); color: white;
+      padding: 4px 13px; border-radius: 20px;
+      font-size: 12px; font-weight: 700;
+    }
+    .price-preview { font-size: 14px; font-weight: 700; color: var(--primary); }
+
+    .cat-title {
+      font-size: 12px; font-weight: 700; color: var(--primary);
+      background: var(--gray-100);
+      padding: 5px 12px; border-radius: 4px;
+      margin-bottom: 10px; margin-top: 4px;
+    }
+    .exam-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-bottom: 18px; }
+    @media(max-width:480px){ .exam-grid { grid-template-columns: 1fr; } }
+
+    .exam-cb {
+      display: flex; align-items: flex-start; gap: 9px;
+      padding: 9px 11px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: var(--transition);
+      background: white;
+      user-select: none;
+    }
+    .exam-cb:hover { border-color: var(--primary-light); background: rgba(26,58,107,0.03); }
+    .exam-cb.checked { border-color: var(--primary); background: rgba(26,58,107,0.06); }
+    .exam-cb input[type=checkbox] {
+      width: 15px; height: 15px; min-width: 15px;
+      accent-color: var(--primary); margin-top: 2px;
+      cursor: pointer;
+      border: none; padding: 0;
+    }
+    .exam-name { font-size: 12px; font-weight: 500; line-height: 1.35; }
+    .exam-sub  { font-size: 10px; color: var(--gray-600); margin-top: 2px; }
+    .exam-price-tag {
+      margin-left: auto; font-size: 11px; font-weight: 700;
+      color: var(--primary); white-space: nowrap; padding-top: 2px;
+    }
+
+    .other-fields { display: flex; flex-direction: column; gap: 8px; margin-bottom: 18px; }
+
+    /* ─── PRICE SUMMARY ─── */
+    .price-box {
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      margin-top: 10px;
+    }
+    .price-row { display: flex; justify-content: space-between; font-size: 13px; padding: 5px 0; }
+    .price-row.total {
+      border-top: 2px solid var(--primary);
+      margin-top: 8px; padding-top: 10px;
+      font-weight: 700; font-size: 15px; color: var(--primary);
+    }
+
+    /* ─── ACCOMMODATIONS ─── */
+    .check-line {
+      display: flex; align-items: flex-start; gap: 9px;
+      font-size: 13px; cursor: pointer; line-height: 1.5;
+    }
+    .check-line input[type=checkbox] {
+      width: 16px; height: 16px; min-width: 16px;
+      accent-color: var(--primary); margin-top: 2px;
+      border: none; padding: 0;
+    }
+
+    /* ─── REVIEW ─── */
+    .rev-section h3 { font-size: 13px; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
+    .rev-table { width: 100%; border-collapse: collapse; }
+    .rev-table td { padding: 6px 0; font-size: 12.5px; vertical-align: top; }
+    .rev-table td:first-child { color: var(--gray-600); width: 38%; padding-right: 10px; }
+    .rev-table td:last-child { font-weight: 500; }
+    hr.div { border: none; border-top: 1px solid var(--gray-200); margin: 14px 0; }
+    .exam-tag {
+      display: inline-block;
+      background: rgba(26,58,107,0.09); color: var(--primary);
+      padding: 3px 9px; border-radius: 20px;
+      font-size: 11px; margin: 2px;
+    }
+
+    /* ─── PAYMENT ─── */
+    .pay-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 18px; }
+    .pay-opt {
+      border: 2px solid var(--gray-200); border-radius: var(--radius);
+      padding: 13px 16px; cursor: pointer;
+      display: flex; align-items: flex-start; gap: 12px;
+      transition: var(--transition);
+    }
+    .pay-opt.selected { border-color: var(--primary); background: rgba(26,58,107,0.04); }
+    .pay-opt input[type=radio] { accent-color: var(--primary); margin-top: 2px; }
+    .pay-opt h4 { font-size: 13px; font-weight: 700; margin-bottom: 2px; }
+    .pay-opt p  { font-size: 11px; color: var(--gray-600); line-height: 1.5; }
+    .badge-soon {
+      font-size: 10px; background: #e8f4fd; color: #1a6a9a;
+      padding: 1px 7px; border-radius: 10px; margin-left: 6px;
+    }
+
+    /* ─── SIGNATURES ─── */
+    .sig-area { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 18px; }
+    @media(max-width:480px){ .sig-area { grid-template-columns: 1fr; } }
+    .sig-box {
+      border: 1.5px solid var(--gray-400);
+      border-radius: 6px; padding: 14px; text-align: center;
+    }
+    .sig-box p { font-size: 12px; color: var(--gray-600); }
+    .sig-line { height: 56px; border-bottom: 1px solid var(--gray-400); margin: 8px 0 4px; }
+
+    /* ─── CONFIRMATION ─── */
+    .confirm-wrap { text-align: center; padding: 32px 16px; }
+    .confirm-icon { font-size: 60px; margin-bottom: 14px; }
+    .confirm-wrap h2 { font-size: 22px; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
+    .confirm-wrap p { font-size: 14px; color: var(--gray-600); line-height: 1.7; max-width: 420px; margin: 0 auto 18px; }
+    .ref-box {
+      background: var(--gray-50); border-radius: var(--radius);
+      padding: 14px 20px; display: inline-block; margin-bottom: 18px; font-size: 13px;
+    }
+    .next-steps {
+      background: #f0f4ff; border-radius: var(--radius);
+      padding: 16px 20px; text-align: left; margin-top: 18px;
+    }
+    .next-steps h4 { font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+    .next-steps ol { font-size: 12px; color: var(--gray-800); padding-left: 16px; line-height: 2.1; }
+
+    /* ─── NAV FOOTER ─── */
+    .nav-footer {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: white; border-top: 1px solid var(--gray-200);
+      padding: 14px 24px;
+      display: flex; justify-content: space-between; align-items: center;
+      z-index: 200;
+    }
+    .step-ind { font-size: 12px; color: var(--gray-600); }
+    .btn {
+      padding: 11px 26px; border-radius: 6px; font-size: 14px;
+      font-weight: 600; cursor: pointer; border: none; font-family: inherit;
+      transition: var(--transition);
+    }
+    .btn-outline { background: white; border: 2px solid var(--gray-400); color: var(--gray-800); }
+    .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--primary-light); }
+    .btn-success { background: var(--success); color: white; }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════ HEADER ══════════════════════ -->
+<header class="header">
+  <div class="header-logos">
+    <div class="logo-pill">THE<br>PRIMACY<br>COLLEGIATE</div>
+    <div class="logo-divider"></div>
+    <div class="logo-pill">TRINITY<br>SCHOLAR</div>
+  </div>
+  <div class="header-title">
+    <h1>AP® Exam Registration &nbsp;|&nbsp; 大學先修課程報名系統</h1>
+    <p>The Primacy Collegiate Academy × Trinity Scholar &nbsp;·&nbsp; 2026–2027 Academic Year / 學年度</p>
+  </div>
+  <div class="header-badge">Community Students 校外生</div>
+</header>
+
+<!-- ══════════════════════ PROGRESS ══════════════════════ -->
+<div class="progress-wrap">
+  <div class="progress-steps">
+    <div class="step-item active" data-s="1">
+      <div class="step-circle">1</div>
+      <div class="step-label">Student Info<br>學生資料</div>
+    </div>
+    <div class="step-item" data-s="2">
+      <div class="step-circle">2</div>
+      <div class="step-label">Parent Info<br>家長資料</div>
+    </div>
+    <div class="step-item" data-s="3">
+      <div class="step-circle">3</div>
+      <div class="step-label">Exam Selection<br>選擇考科</div>
+    </div>
+    <div class="step-item" data-s="4">
+      <div class="step-circle">4</div>
+      <div class="step-label">Accommodations<br>特殊需求</div>
+    </div>
+    <div class="step-item" data-s="5">
+      <div class="step-circle">5</div>
+      <div class="step-label">Review & Pay<br>確認付款</div>
+    </div>
+  </div>
+</div>
+
+<main class="main">
+
+<!-- ══════════════════════ STEP 1 — STUDENT ══════════════════════ -->
+<div id="step1">
+
+  <div class="card">
+    <div class="section-title">Student Information <span>學生基本資料</span></div>
+
+    <div class="row row-3">
+      <div class="fg">
+        <label class="lbl">Family Name <span class="req">*</span><span class="zh">英文姓氏（護照）</span></label>
+        <input type="text" id="lastNameEn" placeholder="e.g. CHEN">
+      </div>
+      <div class="fg">
+        <label class="lbl">First Name <span class="req">*</span><span class="zh">英文名字（護照）</span></label>
+        <input type="text" id="firstNameEn" placeholder="e.g. MING-HUA">
+      </div>
+      <div class="fg">
+        <label class="lbl">M.I. <span class="zh">中間名首字母</span></label>
+        <input type="text" id="middleInitial" placeholder="A." maxlength="3">
+      </div>
+    </div>
+
+    <div class="row row-2">
+      <div class="fg">
+        <label class="lbl">Middle Name <span class="zh">英文中間名（護照，如有）</span></label>
+        <input type="text" id="middleName" placeholder="e.g. ALEX">
+      </div>
+      <div class="fg">
+        <label class="lbl">Chinese Legal Name <span class="req">*</span><span class="zh">中文法定姓名</span></label>
+        <input type="text" id="chineseName" placeholder="e.g. 陳明華">
+      </div>
+    </div>
+
+    <div class="row row-1">
+      <div class="fg">
+        <label class="lbl">English Name as Used in Class <span class="zh">課堂英文常用名</span></label>
+        <input type="text" id="className" placeholder="e.g. Alex Chen">
+        <p class="hint">Name as it appears on class rosters / 課堂點名冊上的英文名</p>
+      </div>
+    </div>
+
+    <div class="row row-2">
+      <div class="fg">
+        <label class="lbl">Grade <span class="req">*</span><span class="zh">就讀年級</span></label>
+        <select id="grade">
+          <option value="">Select / 請選擇</option>
+          <option value="9">9th Grade / 國三</option>
+          <option value="10">10th Grade / 高一</option>
+          <option value="11">11th Grade / 高二</option>
+          <option value="12">12th Grade / 高三</option>
+          <option value="other">Other / 其他</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label class="lbl">Current School <span class="req">*</span><span class="zh">目前就讀學校</span></label>
+        <input type="text" id="school" placeholder="e.g. 建國高中">
+      </div>
+    </div>
+
+    <div class="row row-2">
+      <div class="fg">
+        <label class="lbl">Student Email <span class="req">*</span><span class="zh">學生電子郵件</span></label>
+        <input type="email" id="studentEmail" placeholder="student@example.com">
+      </div>
+      <div class="fg">
+        <label class="lbl">Student Phone <span class="req">*</span><span class="zh">學生手機（ex: 0912345678）</span></label>
+        <input type="tel" id="studentPhone" placeholder="0912345678">
+      </div>
+    </div>
+
+    <!-- Passport Upload -->
+    <div class="row row-1">
+      <div class="fg">
+        <label class="lbl">Passport Upload <span class="req">*</span><span class="zh">護照上傳（照片頁，用於考試身份驗證）</span></label>
+        <div class="upload-area" id="dropZone">
+          <input type="file" id="passportFile" accept=".pdf,.jpg,.jpeg,.png" onchange="handleFile(this)">
+          <div class="upload-icon">🛂</div>
+          <div class="upload-text"><strong>Click to upload / 點擊上傳</strong>&nbsp; or drag &amp; drop</div>
+          <div class="upload-sub">PDF, JPG, PNG &nbsp;·&nbsp; Max 10MB &nbsp;·&nbsp; Must show photo page clearly / 需清楚顯示照片頁</div>
+          <div class="upload-selected" id="fileLabel"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="notice">
+    <h4>⚠️ Important Notice / 重要事項</h4>
+    <ul>
+      <li>Except AP Chinese, we <strong>DO NOT OFFER LATE OR EXCEPTION EXAM SESSIONS</strong>. Please confirm your schedule for conflicts beforehand. &nbsp;|&nbsp; AP中文以外，本校<strong>不提供補考或特殊考試場次</strong>，請事先確認考試日期無衝突。</li>
+      <li>Once payment is submitted, there will be <strong>NO REFUNDS</strong> for cancelled exams. &nbsp;|&nbsp; 繳費後，取消考試將<strong>無法退費</strong>。</li>
+    </ul>
+  </div>
+
+</div><!-- /step1 -->
+
+<!-- ══════════════════════ STEP 2 — PARENT ══════════════════════ -->
+<div id="step2" class="hidden">
+
+  <div class="card">
+    <div class="section-title">Parent / Guardian Information <span>家長／監護人資料</span></div>
+
+    <div class="row row-2">
+      <div class="fg">
+        <label class="lbl">Parent First Name <span class="req">*</span><span class="zh">家長名字</span></label>
+        <input type="text" id="parentFirst" placeholder="e.g. David">
+      </div>
+      <div class="fg">
+        <label class="lbl">Parent Last Name <span class="req">*</span><span class="zh">家長姓氏</span></label>
+        <input type="text" id="parentLast" placeholder="e.g. Chen">
+      </div>
+    </div>
+
+    <div class="row row-2">
+      <div class="fg">
+        <label class="lbl">Parent Email <span class="req">*</span><span class="zh">家長電子郵件</span></label>
+        <input type="email" id="parentEmail" placeholder="parent@example.com">
+      </div>
+      <div class="fg">
+        <label class="lbl">Parent Phone <span class="req">*</span><span class="zh">家長手機（ex: 0912345678）</span></label>
+        <input type="tel" id="parentPhone" placeholder="0912345678">
+      </div>
+    </div>
+
+    <div class="row row-1">
+      <div class="fg">
+        <label class="lbl">Mailing Address — Line 1 <span class="req">*</span><span class="zh">郵寄地址第一行</span></label>
+        <input type="text" id="addr1" placeholder="e.g. 台北市大安區信義路四段1號">
+      </div>
+    </div>
+    <div class="row row-1">
+      <div class="fg">
+        <label class="lbl">Mailing Address — Line 2 <span class="zh">郵寄地址第二行（樓層、室號等）</span></label>
+        <input type="text" id="addr2" placeholder="e.g. 5樓, Room 501 （選填）">
+      </div>
+    </div>
+
+    <div class="row row-2">
+      <div class="fg">
+        <label class="lbl">City / District <span class="req">*</span><span class="zh">縣市／區域</span></label>
+        <input type="text" id="city" placeholder="e.g. 台北市大安區">
+      </div>
+      <div class="fg">
+        <label class="lbl">Postal Code <span class="zh">郵遞區號</span></label>
+        <input type="text" id="postal" placeholder="e.g. 10617" maxlength="10">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-title">Emergency Contact <span>緊急聯絡人（如與家長不同，選填）</span></div>
+    <div class="row row-2">
+      <div class="fg">
+        <label class="lbl">Name <span class="zh">姓名</span></label>
+        <input type="text" id="emgName" placeholder="e.g. Mary Chen">
+      </div>
+      <div class="fg">
+        <label class="lbl">Phone <span class="zh">電話</span></label>
+        <input type="tel" id="emgPhone" placeholder="0912345678">
+      </div>
+    </div>
+  </div>
+
+</div><!-- /step2 -->
+
+<!-- ══════════════════════ STEP 3 — EXAMS ══════════════════════ -->
+<div id="step3" class="hidden">
+  <div class="card">
+    <div class="section-title">AP® Exam Selection <span>選擇欲報名的正式考科 (NT$7,800 / exam)</span></div>
+
+    <!-- sticky counter -->
+    <div class="exam-sticky">
+      <span id="selBadge" class="sel-badge">0 selected / 已選 0 科</span>
+      <span id="pricePreview" class="price-preview">NT$ 0</span>
+    </div>
+
+    <!-- Arts -->
+    <div class="cat-title">🎨 Arts / 藝術</div>
+    <div class="exam-grid">
+      <label class="exam-cb"><input type="checkbox" value="AP 2-D Art and Design" data-p="7800"><div><div class="exam-name">2-D Art and Design</div></div></label>
+      <label class="exam-cb"><input type="checkbox" value="AP 3-D Art and Design" data-p="7800"><div><div class="exam-name">3-D Art and Design</div></div></label>
+      <label class="exam-cb"><input type="checkbox" value="AP Art History" data-p="7800"><div><div class="exam-name">Art History 藝術史</div></div></label>
+      <label class="exam-cb"><input type="checkbox" value="AP Drawing" data-p="7800"><div><div class="exam-name">Drawing 素描</div></div></label>
+      <label class="exam-cb"><input type="checkbox" value="AP Music Theory" data-p="7800"><div><div class="exam-name">Music Theory 音樂理論</div></div></label>
+    </div>
+
+    <!-- English -->
+    <div class="cat-title">📖 English / 英文</div>
+    <div class="exam-grid">
+      <label class="exam-cb"><input type="checkbox" value="AP English Language and Composition" data-p="7800"><div><div class="exam-name">English Language and Composition</div></div></label>
+      <label class="exam-cb"><input type="checkbox" value="AP English Literature and Composition" data-p="7800"><div><div class="exam-name">English Literature and Composition</div></div></label>
+    </div>
+
+    <!-- History & Social Studies -->
+    <div class="cat-title">🌍 History &amp; Social Studies / 歷史與社會科學</div>
+    <div class="exam-grid">
+      <label class="exam-cb"><input type="checkbox" value="AP African American Studies" data-p="7800"><div><div class="exam-name">African American Studies</div></div></label>
+      <label class="exam-cb"><input type="checkbox" value="AP Comparative Government and Politics" data-p="7800"><div><div class="exam-name">Comparative Gov. &amp; Politics 比較政治</div></div></label>
+      <label class="exam-cb"><input type="checkbox" value="AP European History" data-p="7800"><div><div class="exam-name">European History 歐洲史</div></div></label>
+      <label class="exam-cb"><input type="checkbox" value="AP Human Geography" data-p="7800"><div><div class="exam-name">Human Geography 人文地理</div></div></label>
+      <label class="exam-cb"><input type="checkbox" value="AP Macroeconomics" data-p="7800"><div><div class="exam-name">Macroeconomics 總體經濟</div></div></label>
+      <label class="exam-cb"><input type="checkbox" value="AP Microeconomics" data-p="7800"><div><div class="exam-name">Microeconomics 個體經濟</div></div></label>
+      <label class="exam-cb"><input type="checkbox" value="AP Psychology" data-p="7800"><div><div class="exam-name">Psychology 心理學</div></div></label>
+      <label class="exam-cb"><input type="checkbox" value="AP United States Government and Politics" data-p="7800"><div><div class="exam-name">US Government &amp; Politics 美國政治</div></div></label>
+      <label class="exam-cb"><input type="checkbox" value="AP United States History" data-p="7800"><div><div class="exam-name">United States History 美國史</div></div></label>
+      <label class="exam-cb"><input type="checkbox" value="AP World History: Modern" data-p="7800"><div><div class="exam-name">World History: Modern 世界歷史（現代）</div></div></label>
+    </div>
+
+    <!-- Math & Computer Science -->
+    <div class="cat-title">💻 Math &amp; Computer Science / 數學與資訊科學</div>
+    <div class="exam-grid">
+      <label class="exam-cb"><input type="checkbox" value="AP Calculus AB" data-p="7800"><div><div class="exam-name">Calculus AB 微積分 AB</div></div></label>
+      <label class="exam-cb"><input type="checkbox" value="AP Calculus BC" data-p="7800"><div><div class="exam-name">Calculus BC 微積分 BC</div></div></label>
+      <label class="exam-cb"><input type="checkbox" value="AP Computer Science A" data-p="7800"><div><div class="exam-name">Computer Science A 電腦科學 A</div></div></label>
+      <label class="exam-cb"><input type="checkbox" value="AP Computer Science Principles" data-p="7800"><div><div class="exam-name">Computer Science Principles 電腦科學原理</div></div></label>
+      <label class="exam-cb"><input type="checkbox" value="AP Precalculus" data-p="7800"><div><div class="exam-name">Precalculus 預備微積分</div></div></label>
+      <label class="exam-cb"><input type="checkbox" value="AP Statistics" data-p="7800"><div><div class="exam-name">Statistics 統計學</div></div></label>
+    </div>
+
+    <!-- Sciences -->
+    <div class="cat-title">🔬 Sciences / 自然科學</div>
+    <div class="exam-grid">
+      <label class="exam-cb"><input type="checkbox" value="AP Biology" data-p="7800"><div><div class="exam-name">Biology 生物</div></div></label>
+      <label class="exam-cb"><input type="checkbox" value="AP Chemistry" data-p="7800"><div><div class="exam-name">Chemistry 化學</div></div></label>
+      <label class="exam-cb"><input type="checkbox" value="AP Environmental Science" data-p="7800"><div><div class="exam-name">Environmental Science 環境科學</div></div></label>
+      <label class="exam-cb"><input type="checkbox" value="AP Physics 1: Algebra-Based" data-p="7800"><div><div class="exam-name">Physics 1: Algebra-Based 物理 1</div></div></label>
+      <label class="exam-cb"><input type="checkbox" value="AP Physics 2: Algebra-Based" data-p="7800"><div><div class="exam-name">Physics 2: Algebra-Based 物理 2</div></div></label>
+      <label class="exam-cb"><input type="checkbox" value="AP Physics C: Electricity and Magnetism" data-p="7800"><div><div class="exam-name">Physics C: Electricity &amp; Magnetism 物理 C 電磁學</div></div></label>
+      <label class="exam-cb"><input type="checkbox" value="AP Physics C: Mechanics" data-p="7800"><div><div class="exam-name">Physics C: Mechanics 物理 C 力學</div></div></label>
+    </div>
+
+    <!-- World Languages -->
+    <div class="cat-title">🌐 World Languages &amp; Cultures / 外國語言與文化</div>
+    <div class="exam-grid">
+      <label class="exam-cb"><input type="checkbox" value="AP Chinese Language and Culture" data-p="7800"><div><div class="exam-name">Chinese Language and Culture 中文</div></div></label>
+      <label class="exam-cb"><input type="checkbox" value="AP French Language and Culture" data-p="7800"><div><div class="exam-name">French Language and Culture 法文</div></div></label>
+      <label class="exam-cb"><input type="checkbox" value="AP German Language and Culture" data-p="7800"><div><div class="exam-name">German Language and Culture 德文</div></div></label>
+      <label class="exam-cb"><input type="checkbox" value="AP Italian Language and Culture" data-p="7800"><div><div class="exam-name">Italian Language and Culture 義大利文</div></div></label>
+      <label class="exam-cb"><input type="checkbox" value="AP Japanese Language and Culture" data-p="7800"><div><div class="exam-name">Japanese Language and Culture 日文</div></div></label>
+      <label class="exam-cb"><input type="checkbox" value="AP Latin" data-p="7800"><div><div class="exam-name">Latin 拉丁文</div></div></label>
+      <label class="exam-cb"><input type="checkbox" value="AP Spanish Language and Culture" data-p="7800"><div><div class="exam-name">Spanish Language and Culture 西班牙文</div></div></label>
+      <label class="exam-cb"><input type="checkbox" value="AP Spanish Literature and Culture" data-p="7800"><div><div class="exam-name">Spanish Literature and Culture 西班牙文學</div></div></label>
+    </div>
+
+    <!-- Other -->
+    <div class="cat-title">📝 Other Ad-Com Approved Exam / 其他委員會核准考科</div>
+    <div class="other-fields">
+      <div class="fg">
+        <label class="lbl">Subject 1 / 考科 1 <span class="zh">請填寫 College Board 核准之考科全名</span></label>
+        <input type="text" id="otherExam1" placeholder="e.g. AP Macroeconomics">
+      </div>
+      <div class="fg">
+        <label class="lbl">Subject 2 / 考科 2</label>
+        <input type="text" id="otherExam2" placeholder="e.g. AP Art History">
+      </div>
+    </div>
+
+    <!-- ── PRACTICE EXAMS ── -->
+    <div class="section-title" style="margin-top:24px;">
+      Practice Exams (Optional) <span>模擬考報名（選填）&nbsp;·&nbsp; NT$1,800 / exam</span>
+    </div>
+
+    <div class="notice" style="margin-bottom:14px;">
+      <h4>模擬考資訊 Practice Exam Info</h4>
+      <p>NT$1,800 per practice exam. Dates subject to change / 每科模擬考 NT$1,800，日期可能調整。</p>
+    </div>
+
+    <div class="exam-grid">
+      <label class="exam-cb"><input type="checkbox" value="Practice: Biology" data-p="1800" data-t="practice"><div><div class="exam-name">Biology 生物</div><div class="exam-sub">Practice / 模擬考</div></div><div class="exam-price-tag">NT$1,800</div></label>
+      <label class="exam-cb"><input type="checkbox" value="Practice: English Language and Composition" data-p="1800" data-t="practice"><div><div class="exam-name">English Language &amp; Composition</div><div class="exam-sub">Practice / 模擬考</div></div><div class="exam-price-tag">NT$1,800</div></label>
+      <label class="exam-cb"><input type="checkbox" value="Practice: Physics 1" data-p="1800" data-t="practice"><div><div class="exam-name">Physics 1 物理 1</div><div class="exam-sub">Practice / 模擬考</div></div><div class="exam-price-tag">NT$1,800</div></label>
+      <label class="exam-cb"><input type="checkbox" value="Practice: Computer Science A" data-p="1800" data-t="practice"><div><div class="exam-name">Computer Science A 電腦科學 A</div><div class="exam-sub">Practice / 模擬考</div></div><div class="exam-price-tag">NT$1,800</div></label>
+      <label class="exam-cb"><input type="checkbox" value="Practice: Calculus AB/BC" data-p="1800" data-t="practice"><div><div class="exam-name">Calculus AB/BC 微積分</div><div class="exam-sub">Practice / 模擬考</div></div><div class="exam-price-tag">NT$1,800</div></label>
+      <label class="exam-cb"><input type="checkbox" value="Practice: Macroeconomics" data-p="1800" data-t="practice"><div><div class="exam-name">Macroeconomics 總體經濟</div><div class="exam-sub">Practice / 模擬考</div></div><div class="exam-price-tag">NT$1,800</div></label>
+      <label class="exam-cb"><input type="checkbox" value="Practice: Precalculus" data-p="1800" data-t="practice"><div><div class="exam-name">Precalculus 預備微積分</div><div class="exam-sub">Practice / 模擬考</div></div><div class="exam-price-tag">NT$1,800</div></label>
+    </div>
+
+    <!-- Price summary -->
+    <div class="price-box">
+      <div class="price-row"><span>Regular AP Exams / 正式考 (<span id="regCt">0</span> exams)</span><span>NT$ <span id="regTot">0</span></span></div>
+      <div class="price-row"><span>Practice Exams / 模擬考 (<span id="praCt">0</span> exams)</span><span>NT$ <span id="praTot">0</span></span></div>
+      <div class="price-row"><span>Late Registration Fee / 逾期報名費</span><span>NT$ <span id="lateTot">0</span></span></div>
+      <div class="price-row total"><span>Total Due / 應付總額</span><span>NT$ <span id="grandTot">0</span></span></div>
+      <p class="hint" style="margin-top:8px;">* Final pricing confirmed by AP Coordinator / 最終費用由AP協調員確認。</p>
+    </div>
+
+  </div>
+</div><!-- /step3 -->
+
+<!-- ══════════════════════ STEP 4 — ACCOMMODATIONS ══════════════════════ -->
+<div id="step4" class="hidden">
+  <div class="card">
+    <div class="section-title">Testing Accommodations <span>考試特殊需求申請</span></div>
+
+    <div class="notice">
+      <h4>📋 About Accommodations / 關於特殊需求</h4>
+      <p>If you believe you qualify (e.g., extra time, food/medication in room, Braille, sign language, reader/scribe), please contact AP Coordinator <strong>Mr. Eric Shen</strong> first, then register with the College Board.<br><br>如符合特殊考試需求資格，請先聯繫AP協調員<strong>沈老師（Eric Shen）</strong>，再向 College Board 申請。</p>
+    </div>
+
+    <label class="check-line" style="margin-bottom:18px;">
+      <input type="checkbox" id="needsAccom" onchange="toggleAccom()">
+      <span>I am requesting testing accommodations / 我需要申請特殊考試需求</span>
+    </label>
+
+    <div id="accomFields" class="hidden">
+      <div class="row row-2">
+        <div class="fg">
+          <label class="lbl">College Board SSD Code <span class="req">*</span><span class="zh">College Board SSD 代碼</span></label>
+          <input type="text" id="ssdCode" placeholder="SSD Code">
+        </div>
+        <div class="fg">
+          <label class="lbl">Approval Status <span class="zh">核准狀態</span></label>
+          <select id="approvalStatus">
+            <option value="">Select / 請選擇</option>
+            <option>Already Approved / 已核准</option>
+            <option>Pending / 申請中</option>
+            <option>New Request / 全新申請</option>
+          </select>
+        </div>
+      </div>
+
+      <label class="lbl" style="margin-bottom:8px;display:block;">
+        Exam Name &amp; Specific Accommodations / 考科與特殊需求明細
+      </label>
+      <div id="accomRows">
+        <div class="row row-2" style="margin-bottom:8px;">
+          <div class="fg"><input type="text" placeholder="Exam name / 考科名稱"></div>
+          <div class="fg"><input type="text" placeholder="Accommodation requested / 申請的特殊需求"></div>
+        </div>
+        <div class="row row-2" style="margin-bottom:8px;">
+          <div class="fg"><input type="text" placeholder="Exam name / 考科名稱"></div>
+          <div class="fg"><input type="text" placeholder="Accommodation requested / 申請的特殊需求"></div>
+        </div>
+      </div>
+      <button type="button" onclick="addAccomRow()"
+        style="background:none;border:1.5px dashed #ced4da;padding:7px 14px;border-radius:6px;cursor:pointer;font-size:12px;color:#6c757d;margin-top:4px;font-family:inherit;">
+        + Add row / 新增一行
+      </button>
+    </div>
+  </div>
+</div><!-- /step4 -->
+
+<!-- ══════════════════════ STEP 5 — REVIEW & PAY ══════════════════════ -->
+<div id="step5" class="hidden">
+
+  <div class="card">
+    <div class="section-title">Review Your Registration <span>確認報名資料</span></div>
+
+    <div class="rev-section">
+      <h3>Student Information / 學生資料</h3>
+      <table class="rev-table">
+        <tr><td>Legal Name (EN)</td><td id="r-name">—</td></tr>
+        <tr><td>Chinese Name / 中文姓名</td><td id="r-cn">—</td></tr>
+        <tr><td>Grade / 年級</td><td id="r-grade">—</td></tr>
+        <tr><td>School / 學校</td><td id="r-school">—</td></tr>
+        <tr><td>Student Email</td><td id="r-semail">—</td></tr>
+        <tr><td>Student Phone</td><td id="r-sphone">—</td></tr>
+        <tr><td>Passport / 護照</td><td id="r-pass">—</td></tr>
+      </table>
+    </div>
+
+    <hr class="div">
+
+    <div class="rev-section">
+      <h3>Parent Information / 家長資料</h3>
+      <table class="rev-table">
+        <tr><td>Parent Name</td><td id="r-pname">—</td></tr>
+        <tr><td>Parent Email</td><td id="r-pemail">—</td></tr>
+        <tr><td>Parent Phone</td><td id="r-pphone">—</td></tr>
+        <tr><td>Mailing Address</td><td id="r-addr">—</td></tr>
+      </table>
+    </div>
+
+    <hr class="div">
+
+    <div class="rev-section">
+      <h3>Selected Exams / 已選考科</h3>
+      <div id="r-exams" style="margin-top:8px;">—</div>
+    </div>
+
+    <hr class="div">
+
+    <div class="rev-section">
+      <h3>Fee Summary / 費用明細</h3>
+      <table class="rev-table">
+        <tr><td>Regular Exams / 正式考</td><td id="r-reg">—</td></tr>
+        <tr><td>Practice Exams / 模擬考</td><td id="r-pra">—</td></tr>
+        <tr style="font-weight:700;color:var(--primary);"><td>Total / 總計</td><td id="r-tot">—</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- Payment -->
+  <div class="card">
+    <div class="section-title">Payment Method <span>付款方式</span></div>
+
+    <div class="pay-options">
+      <label class="pay-opt" onclick="selPay(this)">
+        <input type="radio" name="pay" value="bank">
+        <div>
+          <h4>🏦 Bank Transfer / 銀行轉帳</h4>
+          <p>Transfer to school bank account, then confirm with School Cashier WaWa Wang. / 匯款至學校帳戶後，通知出納 WaWa Wang 確認。</p>
+        </div>
+      </label>
+      <label class="pay-opt" onclick="selPay(this)">
+        <input type="radio" name="pay" value="cash">
+        <div>
+          <h4>💵 Cash / 現金</h4>
+          <p>Direct cash payment to school cashier. / 直接至學校出納繳現金。</p>
+        </div>
+      </label>
+      <label class="pay-opt" onclick="selPay(this)">
+        <input type="radio" name="pay" value="online">
+        <div>
+          <h4>💳 Online Payment / 線上付款 <span class="badge-soon">Coming Soon 即將開放</span></h4>
+          <p>Credit/debit card portal (in development). / 信用卡／簽帳卡付款（開發中）。</p>
+        </div>
+      </label>
+    </div>
+
+    <div class="notice">
+      <h4>Acknowledgement / 聲明確認</h4>
+      <ul>
+        <li>All information provided is accurate and complete. / 所提供資料均正確且完整。</li>
+        <li>I understand there are <strong>NO REFUNDS</strong> once payment is made. / 繳費後<strong>恕不退費</strong>。</li>
+        <li>I have verified the exam schedule for conflicts. / 本人已確認考試日期無衝突。</li>
+      </ul>
+    </div>
+
+    <div class="sig-area">
+      <div class="sig-box">
+        <p><strong>Student Signature / 學生簽名</strong></p>
+        <div class="sig-line"></div>
+        <p>Date: _____________</p>
+      </div>
+      <div class="sig-box">
+        <p><strong>Parent/Guardian Signature / 家長簽名</strong></p>
+        <div class="sig-line"></div>
+        <p>Date: _____________</p>
+      </div>
+    </div>
+
+    <div style="margin-top:18px;">
+      <label class="check-line">
+        <input type="checkbox" id="termsCheck">
+        <span>I have read and agree to the terms above. / 本人已閱讀並同意上述條款。 <span style="color:var(--danger)">*</span></span>
+      </label>
+    </div>
+  </div>
+
+</div><!-- /step5 -->
+
+<!-- ══════════════════════ STEP 6 — CONFIRMATION ══════════════════════ -->
+<div id="step6" class="hidden">
+  <div class="card">
+    <div class="confirm-wrap">
+      <div class="confirm-icon">✅</div>
+      <h2>Registration Submitted! / 報名完成！</h2>
+      <p>Your AP Exam registration has been received. The AP Coordinator will review and contact you to confirm payment.<br><br>您的 AP 考試報名已收到。AP協調員將審核並聯繫您確認付款。</p>
+
+      <div class="ref-box">
+        📋 Reference No. / 參考編號：<strong id="refNum">AP2026-XXXXX</strong><br>
+        <span style="font-size:11px;color:var(--gray-600);">Save this number for your records / 請保存此編號</span>
+      </div>
+
+      <p style="font-size:12px;color:var(--gray-600);">
+        Confirmation email sent to / 確認信將寄至：<strong id="confEmail">—</strong>
+      </p>
+
+      <div class="next-steps">
+        <h4>Next Steps / 後續步驟</h4>
+        <ol>
+          <li>AP Coordinator Mr. Shen will verify your registration / AP協調員沈老師將審核報名</li>
+          <li>Complete payment by the registration deadline / 在截止日前完成付款</li>
+          <li>Confirm payment with School Cashier WaWa Wang / 向出納 WaWa Wang 確認匯款</li>
+          <li>Watch your email for exam schedule details / 留意電子郵件中的考試時程通知</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div><!-- /step6 -->
+
+</main>
+
+<!-- ══════════════════════ NAV FOOTER ══════════════════════ -->
+<div class="nav-footer" id="navFooter">
+  <button class="btn btn-outline" id="btnBack" onclick="goBack()" style="display:none">← Back / 上一步</button>
+  <span class="step-ind" id="stepInd">Step 1 of 5</span>
+  <button class="btn btn-primary" id="btnNext" onclick="goNext()">Next / 下一步 →</button>
+</div>
+
+<script>
+  let cur = 1;
+  const TOTAL = 5;
+
+  /* ── NAVIGATION ── */
+  function goNext() {
+    if (cur === TOTAL) { submitForm(); return; }
+    setStep(cur + 1);
+  }
+  function goBack() { if (cur > 1) setStep(cur - 1); }
+
+  function setStep(n) {
+    document.getElementById('step' + cur).classList.add('hidden');
+    cur = n;
+    document.getElementById('step' + cur).classList.remove('hidden');
+
+    document.querySelectorAll('.step-item').forEach((el, i) => {
+      el.classList.remove('active', 'completed');
+      const c = el.querySelector('.step-circle');
+      if (i + 1 < cur)  { el.classList.add('completed'); c.textContent = '✓'; }
+      else               { el.classList.remove('completed'); c.textContent = i + 1; }
+      if (i + 1 === cur) { el.classList.add('active'); }
+    });
+
+    document.getElementById('btnBack').style.display = cur > 1 ? '' : 'none';
+    document.getElementById('stepInd').textContent = `Step ${cur} of ${TOTAL}`;
+
+    const btn = document.getElementById('btnNext');
+    if (cur === TOTAL) {
+      btn.textContent = '✓ Submit / 提交報名';
+      btn.className = 'btn btn-success';
+      buildReview();
+    } else {
+      btn.textContent = 'Next / 下一步 →';
+      btn.className = 'btn btn-primary';
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function submitForm() {
+    document.getElementById('step' + cur).classList.add('hidden');
+    document.getElementById('step6').classList.remove('hidden');
+    document.getElementById('navFooter').classList.add('hidden');
+    document.getElementById('refNum').textContent = 'AP2026-' + Math.floor(10000 + Math.random() * 90000);
+    document.getElementById('confEmail').textContent = document.getElementById('studentEmail').value || '(your email)';
+    document.querySelectorAll('.step-item').forEach((el, i) => {
+      el.classList.remove('active'); el.classList.add('completed');
+      el.querySelector('.step-circle').textContent = '✓';
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  /* ── EXAM CHECKBOXES ── */
+  document.querySelectorAll('.exam-cb').forEach(lbl => {
+    const cb = lbl.querySelector('input[type=checkbox]');
+    cb.addEventListener('change', () => { lbl.classList.toggle('checked', cb.checked); calcPrice(); });
+    lbl.addEventListener('click', e => { if (e.target === lbl) { cb.checked = !cb.checked; lbl.classList.toggle('checked', cb.checked); calcPrice(); } });
+  });
+
+  function calcPrice() {
+    let rc = 0, rt = 0, pc = 0, pt = 0;
+    document.querySelectorAll('.exam-cb input:checked').forEach(cb => {
+      const p = parseInt(cb.dataset.p || 7800);
+      if (cb.dataset.t === 'practice') { pc++; pt += p; }
+      else { rc++; rt += p; }
+    });
+    const gt = rt + pt;
+    document.getElementById('regCt').textContent = rc;
+    document.getElementById('praCt').textContent = pc;
+    document.getElementById('regTot').textContent = rt.toLocaleString();
+    document.getElementById('praTot').textContent = pt.toLocaleString();
+    document.getElementById('grandTot').textContent = gt.toLocaleString();
+    const tot = rc + pc;
+    document.getElementById('selBadge').textContent = `${tot} selected / 已選 ${tot} 科`;
+    document.getElementById('pricePreview').textContent = `NT$ ${gt.toLocaleString()}`;
+  }
+
+  /* ── ACCOMMODATIONS ── */
+  function toggleAccom() {
+    document.getElementById('accomFields').classList.toggle('hidden', !document.getElementById('needsAccom').checked);
+  }
+  function addAccomRow() {
+    const c = document.getElementById('accomRows');
+    const d = document.createElement('div');
+    d.className = 'row row-2'; d.style.marginBottom = '8px';
+    d.innerHTML = '<div class="fg"><input type="text" placeholder="Exam name / 考科名稱"></div><div class="fg"><input type="text" placeholder="Accommodation requested / 申請的特殊需求"></div>';
+    c.appendChild(d);
+  }
+
+  /* ── REVIEW ── */
+  function buildReview() {
+    const fn = document.getElementById('firstNameEn').value;
+    const ln = document.getElementById('lastNameEn').value;
+    const mi = document.getElementById('middleInitial').value;
+    document.getElementById('r-name').textContent    = [ln, fn, mi].filter(Boolean).join(' ') || '—';
+    document.getElementById('r-cn').textContent      = document.getElementById('chineseName').value || '—';
+    const gradeEl = document.getElementById('grade');
+    document.getElementById('r-grade').textContent   = gradeEl.options[gradeEl.selectedIndex]?.text || '—';
+    document.getElementById('r-school').textContent  = document.getElementById('school').value || '—';
+    document.getElementById('r-semail').textContent  = document.getElementById('studentEmail').value || '—';
+    document.getElementById('r-sphone').textContent  = document.getElementById('studentPhone').value || '—';
+    document.getElementById('r-pass').textContent    = document.getElementById('passportFile').files[0]?.name || '—';
+
+    const pf = document.getElementById('parentFirst').value;
+    const pl = document.getElementById('parentLast').value;
+    document.getElementById('r-pname').textContent   = [pf, pl].filter(Boolean).join(' ') || '—';
+    document.getElementById('r-pemail').textContent  = document.getElementById('parentEmail').value || '—';
+    document.getElementById('r-pphone').textContent  = document.getElementById('parentPhone').value || '—';
+    const a1 = document.getElementById('addr1').value;
+    const a2 = document.getElementById('addr2').value;
+    const ct = document.getElementById('city').value;
+    document.getElementById('r-addr').textContent    = [a1, a2, ct].filter(Boolean).join(', ') || '—';
+
+    const checked = document.querySelectorAll('.exam-cb input:checked');
+    const ex = document.getElementById('r-exams');
+    if (!checked.length) { ex.textContent = 'None / 尚未選擇'; }
+    else {
+      ex.innerHTML = '';
+      checked.forEach(cb => {
+        const t = document.createElement('span');
+        t.className = 'exam-tag'; t.textContent = cb.value; ex.appendChild(t);
+      });
+      // Other exams
+      [document.getElementById('otherExam1').value, document.getElementById('otherExam2').value]
+        .filter(Boolean).forEach(v => {
+          const t = document.createElement('span');
+          t.className = 'exam-tag'; t.textContent = v; ex.appendChild(t);
+        });
+    }
+
+    let rc=0,rt=0,pc=0,pt=0;
+    checked.forEach(cb => {
+      const p = parseInt(cb.dataset.p||7800);
+      if(cb.dataset.t==='practice'){pc++;pt+=p;}else{rc++;rt+=p;}
+    });
+    document.getElementById('r-reg').textContent = `${rc} exam(s) × NT$7,800 = NT$${rt.toLocaleString()}`;
+    document.getElementById('r-pra').textContent = `${pc} exam(s) × NT$1,800 = NT$${pt.toLocaleString()}`;
+    document.getElementById('r-tot').textContent = `NT$${(rt+pt).toLocaleString()}`;
+  }
+
+  /* ── PAYMENT SELECTION ── */
+  function selPay(el) {
+    document.querySelectorAll('.pay-opt').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    el.querySelector('input[type=radio]').checked = true;
+  }
+
+  /* ── FILE UPLOAD ── */
+  function handleFile(inp) {
+    const f = inp.files[0];
+    const lbl = document.getElementById('fileLabel');
+    if (f) { lbl.textContent = '✓ ' + f.name; lbl.style.display = 'block'; }
+  }
+  const dz = document.getElementById('dropZone');
+  dz.addEventListener('dragover', e => { e.preventDefault(); dz.style.borderColor = 'var(--primary)'; });
+  dz.addEventListener('dragleave', () => dz.style.borderColor = '');
+  dz.addEventListener('drop', e => {
+    e.preventDefault(); dz.style.borderColor = '';
+    const f = e.dataTransfer.files[0];
+    if (f) {
+      const lbl = document.getElementById('fileLabel');
+      lbl.textContent = '✓ ' + f.name; lbl.style.display = 'block';
+    }
+  });
+</script>
+</body>
+</html>

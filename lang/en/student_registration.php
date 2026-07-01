@@ -1,0 +1,37 @@
+<?php
+
+return [
+    'title' => 'Student AP Exam Registration',
+    'subtitle' => 'Complete the secure registration form before payment review.',
+    'student_information' => 'Student Information',
+    'school_information' => 'School Information',
+    'guardian_information' => 'Parent / Guardian Information',
+    'exam_selection' => 'Exam Selection',
+    'search_exam' => 'Search exam',
+    'all_categories' => 'All Categories',
+    'selected_summary' => 'Selected Exam Summary',
+    'late_fee' => 'Late Registration Fee',
+    'statuses' => [
+        'draft' => 'Draft',
+        'not_open' => 'Not Yet Open',
+        'open' => 'Available',
+        'limited' => 'Limited Seats',
+        'full' => 'Full',
+        'closed' => 'Closed',
+        'cancelled' => 'Cancelled',
+    ],
+    'declaration' => 'Student Declaration',
+    'review' => 'Review Before Submit',
+    'submit' => 'Confirm Submission',
+    'successful' => 'Registration Successful',
+    'next_steps' => 'Your registration has been submitted. Payment instructions will be provided in a future phase after review.',
+    'validation' => [
+        'passport_format' => 'Passport number may contain letters, numbers, and hyphens only.',
+        'duplicate_email' => 'A registration with this student email already exists.',
+        'duplicate_passport' => 'A registration with this passport number already exists.',
+        'exam_required' => 'Please select at least one available AP exam.',
+        'exam_unavailable' => 'One or more selected exams are no longer available.',
+        'exam_closed' => 'One or more selected exams are closed.',
+        'exam_full' => 'One or more selected exams are full.',
+    ],
+];

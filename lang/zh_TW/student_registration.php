@@ -1,0 +1,37 @@
+<?php
+
+return [
+    'title' => '學生 AP 考試報名',
+    'subtitle' => '請在付款審核前完成安全報名表。',
+    'student_information' => '學生資料',
+    'school_information' => '學校資料',
+    'guardian_information' => '家長 / 監護人資料',
+    'exam_selection' => '考試選擇',
+    'search_exam' => '搜尋考試',
+    'all_categories' => '所有類別',
+    'selected_summary' => '已選考試摘要',
+    'late_fee' => '逾期報名費',
+    'statuses' => [
+        'draft' => '草稿',
+        'not_open' => '尚未開放',
+        'open' => '可報名',
+        'limited' => '名額有限',
+        'full' => '額滿',
+        'closed' => '已截止',
+        'cancelled' => '已取消',
+    ],
+    'declaration' => '學生聲明',
+    'review' => '送出前確認',
+    'submit' => '確認送出',
+    'successful' => '報名成功',
+    'next_steps' => '您的報名資料已送出，請依付款說明完成後續流程。',
+    'validation' => [
+        'passport_format' => '護照號碼只能包含英文字母、數字與連字號。',
+        'duplicate_email' => '此學生 Email 已經建立過報名資料。',
+        'duplicate_passport' => '此護照號碼已經建立過報名資料。',
+        'exam_required' => '請至少選擇一個可報名的 AP 考試。',
+        'exam_unavailable' => '一個或多個已選考試目前無法報名。',
+        'exam_closed' => '一個或多個已選考試已截止。',
+        'exam_full' => '一個或多個已選考試已額滿。',
+    ],
+];
