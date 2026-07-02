@@ -3,7 +3,9 @@
 namespace Tests\Feature;
 
 use App\Mail\PassportReuploadRequested;
+use App\Mail\RegistrationCompletedMail;
 use App\Models\ApExamSubject;
+use App\Models\ReceiptRequest;
 use App\Models\RegistrationExportLog;
 use App\Models\StudentRegistration;
 use App\Models\User;
@@ -100,6 +102,20 @@ class PassportAndExportManagementTest extends TestCase
         [$registration, $subject] = $this->registrationWithPassport([
             'payment_status' => 'paid',
             'verification_status' => 'verified',
+            'needs_accommodations' => true,
+            'accommodation_status' => 'approved',
+        ]);
+        ReceiptRequest::query()->create([
+            'student_registration_id' => $registration->id,
+            'buyer_name' => 'Ivon Jou',
+            'buyer_email' => 'ivon@example.com',
+            'buyer_phone' => '+886 987 654 321',
+            'receipt_type' => 'personal',
+            'service_fee_amount' => 1200,
+            'taxable_receipt_amount' => 1200,
+            'non_receipt_amount' => 7800,
+            'currency' => 'NTD',
+            'status' => 'pending_issue',
         ]);
         $admin = $this->adminUser();
 
@@ -109,6 +125,9 @@ class PassportAndExportManagementTest extends TestCase
             'subject_id' => $subject->id,
             'payment_status' => 'paid',
             'document_status' => 'uploaded',
+            'receipt_status' => 'pending_issue',
+            'needs_accommodations' => '1',
+            'accommodation_status' => 'approved',
             'mask_passport' => '1',
         ]));
 
@@ -122,6 +141,8 @@ class PassportAndExportManagementTest extends TestCase
         $content = Storage::disk('local')->get($export->storage_path);
         $this->assertStringContainsString('Registration Number', $content);
         $this->assertStringContainsString('****5678', $content);
+        $this->assertStringContainsString('Practice Exams', $content);
+        $this->assertStringContainsString('Needs Accommodations', $content);
         $this->assertStringNotContainsString($registration->passport_file_path, $content);
 
         $this->actingAs($admin)
@@ -145,6 +166,24 @@ class PassportAndExportManagementTest extends TestCase
             ->assertHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 
         $this->assertSame('xlsx', RegistrationExportLog::query()->firstOrFail()->export_format);
+    }
+
+    public function test_paid_and_verified_registration_is_marked_completed_and_emails_student(): void
+    {
+        Mail::fake();
+        [$registration] = $this->registrationWithPassport([
+            'payment_status' => 'paid',
+            'status' => 'paid',
+        ]);
+
+        $this->actingAs($this->adminUser())
+            ->post(route('admin.student-registrations.verify', $registration), [
+                'verification_status' => 'verified',
+                'verification_note' => 'Payment and documents checked.',
+            ])->assertRedirect(route('admin.student-registrations.show', $registration));
+
+        $this->assertSame('completed', $registration->fresh()->status);
+        Mail::assertSent(RegistrationCompletedMail::class);
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\BackupLog;
 use App\Models\ReceiptRequest;
 use App\Models\RegistrationPayment;
 use App\Models\SecurityAuditLog;
@@ -166,6 +167,21 @@ class SecurityDataProtectionTest extends TestCase
             'backup_type' => 'database',
             'status' => 'completed',
         ]);
+    }
+
+    public function test_storage_backup_command_creates_private_manifest_and_log(): void
+    {
+        Storage::fake('local');
+        Storage::disk('local')->put('student-passports/passport.pdf', 'private-passport');
+        Storage::disk('local')->put('payment-proofs/proof.pdf', 'private-proof');
+
+        $this->artisan('security:backup-storage')->assertExitCode(0);
+
+        $log = BackupLog::query()->where('backup_type', 'storage_manifest')->firstOrFail();
+        $this->assertSame('completed', $log->status);
+        Storage::disk('local')->assertExists($log->path);
+        $manifest = json_decode(Storage::disk('local')->get($log->path), true);
+        $this->assertSame(2, $manifest['file_count']);
     }
 
     private function registrationAndPayment(): array

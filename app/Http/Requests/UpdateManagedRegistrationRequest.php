@@ -58,7 +58,7 @@ class UpdateManagedRegistrationRequest extends FormRequest
             'ssd_code' => ['nullable', 'required_if:needs_accommodations,1', 'string', 'max:60'],
             'accommodation_status' => ['nullable', 'required_if:needs_accommodations,1', 'in:approved,pending,new'],
             'accommodations_payload' => ['nullable', 'array'],
-            'status' => ['required', 'in:submitted,pending_payment,paid,cancelled,expired,draft'],
+            'status' => ['required', 'in:submitted,pending_payment,paid,completed,cancelled,expired,draft'],
             'payment_status' => ['required', 'in:unpaid,pending_payment,waiting_verification,paid,failed,refunded,cancelled'],
             'payment_method' => ['nullable', 'string', 'max:80'],
             'payment_reference' => ['nullable', 'string', 'max:120'],

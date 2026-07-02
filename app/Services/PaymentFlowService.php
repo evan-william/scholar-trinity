@@ -8,6 +8,8 @@ use App\Models\PaymentLog;
 use App\Models\PaymentSetting;
 use App\Models\RegistrationPayment;
 use App\Models\StudentRegistration;
+use App\Services\Payments\EcpayPaymentProvider;
+use App\Services\Payments\PaymentGatewayManager;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -125,27 +127,11 @@ class PaymentFlowService
     public function gatewayPayload(RegistrationPayment $payment): array
     {
         $setting = $this->activeSetting();
-        $orderId = $payment->gateway_order_id ?: 'AP'.now()->format('YmdHis').$payment->id;
-        $payment->update([
-            'provider' => $setting->provider,
-            'payment_method' => $payment->payment_method === 'manual_bank_transfer' ? 'credit_card' : $payment->payment_method,
-            'gateway_order_id' => $orderId,
-        ]);
-
-        $payload = [
-            'MerchantID' => $setting->merchant_id ?: 'SANDBOX',
-            'MerchantTradeNo' => $orderId,
-            'MerchantTradeDate' => now()->format('Y/m/d H:i:s'),
-            'TotalAmount' => $payment->grand_total,
-            'TradeDesc' => 'AP Exam Registration '.$payment->registration->registration_number,
-            'ItemDesc' => 'AP Exam Fee + Service Fee',
-            'ReturnURL' => $setting->callback_url ?: route('payments.gateway.callback'),
-            'ClientBackURL' => $setting->return_url ?: route('payments.success', $payment->uuid),
-            'ChoosePayment' => $this->gatewayPaymentMethod($payment->payment_method),
-        ];
-        $payload['CheckMacValue'] = $this->signature($payload, $setting);
+        $payload = app(PaymentGatewayManager::class)->forSetting($setting)->createCheckoutPayload($payment, $setting);
+        $payment->refresh();
         $this->log($payment, 'gateway_request_created', $payment->payment_status, $payment->payment_status, null, request()?->ip(), [
-            'gateway_order_id' => $orderId,
+            'gateway_order_id' => $payment->gateway_order_id,
+            'provider' => $setting->provider,
         ]);
 
         return $payload;
@@ -164,7 +150,8 @@ class PaymentFlowService
     public function handleGatewayCallback(array $payload, ?string $ipAddress): RegistrationPayment
     {
         $setting = $this->activeSetting();
-        abort_unless($this->verifySignature($payload, $setting), 403);
+        $provider = app(PaymentGatewayManager::class)->forSetting($setting);
+        abort_unless($provider->verifyCallback($payload, $setting), 403);
 
         $orderId = (string) ($payload['MerchantTradeNo'] ?? $payload['gateway_order_id'] ?? '');
         $payment = RegistrationPayment::query()->with(['registration.contact', 'registration.exams'])
@@ -179,11 +166,11 @@ class PaymentFlowService
         }
 
         abort_unless((int) ($payload['TradeAmt'] ?? $payload['TotalAmount'] ?? 0) === $payment->grand_total, 422);
-        abort_unless((string) ($payload['RtnCode'] ?? $payload['status'] ?? '') === '1', 422);
+        abort_unless($provider->isSuccessfulCallback($payload), 422);
 
         return $this->setPaid($payment, [
             'provider' => $setting->provider,
-            'transaction_id' => (string) ($payload['TradeNo'] ?? $payload['transaction_id'] ?? ''),
+            'transaction_id' => $provider->transactionId($payload) ?: '',
             'gateway_payload' => $this->safePayload($payload),
         ], null, $ipAddress, 'gateway_payment_paid');
     }
@@ -220,16 +207,12 @@ class PaymentFlowService
 
     public function signature(array $payload, PaymentSetting $setting): string
     {
-        $data = collect($payload)->except('CheckMacValue')->sortKeys(SORT_NATURAL | SORT_FLAG_CASE)->all();
-        $query = urldecode(http_build_query($data));
-        $raw = 'HashKey='.($setting->hashKey() ?: 'sandbox-key').'&'.$query.'&HashIV='.($setting->hashIv() ?: 'sandbox-iv');
-
-        return strtoupper(hash('sha256', $raw));
+        return app(EcpayPaymentProvider::class)->signature($payload, $setting);
     }
 
     public function verifySignature(array $payload, PaymentSetting $setting): bool
     {
-        return hash_equals((string) ($payload['CheckMacValue'] ?? ''), $this->signature($payload, $setting));
+        return app(PaymentGatewayManager::class)->forSetting($setting)->verifyCallback($payload, $setting);
     }
 
     public function log(RegistrationPayment $payment, string $event, ?string $old, ?string $new, ?int $adminId, ?string $ipAddress, array $payload = []): void
@@ -252,14 +235,6 @@ class PaymentFlowService
         Mail::to($payment->registration->student_email)
             ->cc($payment->registration->contact?->parent_email)
             ->send(new PaymentConfirmationMail($payment));
-    }
-
-    private function gatewayPaymentMethod(string $method): string
-    {
-        return match ($method) {
-            'atm' => 'ATM',
-            default => 'Credit',
-        };
     }
 
     private function safePayload(array $payload): array

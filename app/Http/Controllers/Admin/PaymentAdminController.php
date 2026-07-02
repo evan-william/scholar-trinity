@@ -62,7 +62,9 @@ class PaymentAdminController extends Controller
         abort_unless($registrationPayment->proof_file_path && Storage::disk('local')->exists($registrationPayment->proof_file_path), 404);
         app(SecurityAuditService::class)->log('documents', 'payment_proof_viewed', 'Payment proof viewed.', $registrationPayment);
 
-        return Storage::disk('local')->response($registrationPayment->proof_file_path, $registrationPayment->proof_original_name, [
+        $fileName = $this->safeFileName($registrationPayment->proof_original_name ?: 'payment-proof');
+
+        return Storage::disk('local')->response($registrationPayment->proof_file_path, $fileName, [
             'Content-Type' => $registrationPayment->proof_mime_type ?: 'application/octet-stream',
         ]);
     }
@@ -72,7 +74,7 @@ class PaymentAdminController extends Controller
         abort_unless($registrationPayment->proof_file_path && Storage::disk('local')->exists($registrationPayment->proof_file_path), 404);
         app(SecurityAuditService::class)->log('documents', 'payment_proof_downloaded', 'Payment proof downloaded.', $registrationPayment);
 
-        return Storage::disk('local')->download($registrationPayment->proof_file_path, $registrationPayment->proof_original_name ?: 'payment-proof');
+        return Storage::disk('local')->download($registrationPayment->proof_file_path, $this->safeFileName($registrationPayment->proof_original_name ?: 'payment-proof'));
     }
 
     public function settings(): View
@@ -92,5 +94,13 @@ class PaymentAdminController extends Controller
         $setting->save();
 
         return redirect()->route('admin.payments.settings')->with('status', 'Payment settings saved.');
+    }
+
+    private function safeFileName(string $name): string
+    {
+        $name = basename(str_replace(["\r", "\n", '"', '\\'], '', $name));
+        $name = preg_replace('/[^A-Za-z0-9._ -]/', '_', $name) ?: 'download';
+
+        return trim($name) !== '' ? $name : 'download';
     }
 }

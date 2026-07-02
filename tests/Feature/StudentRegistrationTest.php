@@ -31,10 +31,18 @@ class StudentRegistrationTest extends TestCase
         $response->assertRedirect(route('student-registrations.show', $registration->registration_number));
         $this->assertMatchesRegularExpression('/^APR-\d{4}-\d{6}$/', $registration->registration_number);
         $this->assertSame('submitted', $registration->status);
+        $this->assertSame('CHEN', $registration->family_name_en);
+        $this->assertSame('Ming', $registration->first_name_en);
+        $this->assertSame('Chen Ming Hua', $registration->chinese_legal_name);
+        $this->assertTrue($registration->needs_accommodations);
+        $this->assertSame('SSD-123', $registration->ssd_code);
+        $this->assertSame(1, $registration->practice_exam_count);
+        $this->assertSame(1800, $registration->practice_exam_total);
         $this->assertSame(7800, $registration->exam_fee_total);
         $this->assertSame(1200, $registration->service_fee_total);
-        $this->assertSame(9000, $registration->total_fee);
+        $this->assertSame(10800, $registration->total_fee);
         $this->assertCount(1, $registration->exams);
+        $this->assertCount(1, $registration->practiceExamSelections);
         $this->assertCount(4, $registration->agreements);
         $this->assertCount(1, $registration->histories);
         Mail::assertSent(StudentRegistrationConfirmation::class);
@@ -115,6 +123,11 @@ class StudentRegistrationTest extends TestCase
     {
         return array_replace([
             'student_full_name' => 'Alex Chen',
+            'family_name_en' => 'CHEN',
+            'first_name_en' => 'Ming',
+            'middle_initial' => 'A',
+            'middle_name' => 'Alex',
+            'chinese_legal_name' => 'Chen Ming Hua',
             'preferred_name' => 'Alex',
             'gender' => 'Male',
             'date_of_birth' => '2009-01-15',
@@ -129,12 +142,22 @@ class StudentRegistrationTest extends TestCase
             'grade_level' => '11',
             'graduation_year' => '2027',
             'parent_full_name' => 'Ivon Jou',
+            'parent_first_name' => 'Ivon',
+            'parent_last_name' => 'Jou',
             'relationship' => 'Mother',
             'parent_email' => 'parent@example.com',
             'parent_phone' => '+886 987 654 321',
             'emergency_contact_name' => 'Mark Jou',
             'emergency_contact_phone' => '+886 988 111 222',
             'emergency_contact_relationship' => 'Father',
+            'needs_accommodations' => '1',
+            'ssd_code' => 'SSD-123',
+            'accommodation_status' => 'approved',
+            'accommodations' => [
+                ['exam' => 'Calculus AB', 'request' => 'Extra time'],
+            ],
+            'practice_exams' => ['Calculus AB practice'],
+            'practice_exam_total' => '99999',
             'accurate_information' => '1',
             'ap_policies' => '1',
             'privacy_policy' => '1',

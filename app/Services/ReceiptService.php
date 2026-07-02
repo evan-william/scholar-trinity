@@ -9,6 +9,7 @@ use App\Models\EInvoiceTransaction;
 use App\Models\ReceiptLog;
 use App\Models\ReceiptRequest;
 use App\Models\RegistrationPayment;
+use App\Services\EInvoices\EInvoiceProviderManager;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -158,21 +159,7 @@ class ReceiptService
     public function simulateAutoIssue(ReceiptRequest $receipt): EInvoiceTransaction
     {
         $setting = $this->activeSetting();
-        $transaction = EInvoiceTransaction::query()->create([
-            'receipt_request_id' => $receipt->id,
-            'provider' => $setting->provider,
-            'provider_status' => $receipt->buyer_email ? 'issued' : 'failed',
-            'provider_invoice_number' => $receipt->buyer_email ? 'FA'.now()->format('Ymd').str_pad((string) $receipt->id, 4, '0', STR_PAD_LEFT) : null,
-            'provider_random_code' => $receipt->buyer_email ? (string) random_int(1000, 9999) : null,
-            'provider_transaction_id' => 'EINV-'.$receipt->uuid,
-            'request_payload' => [
-                'amount' => $receipt->taxable_receipt_amount,
-                'buyer_email' => $receipt->buyer_email,
-            ],
-            'response_payload' => ['sandbox' => true],
-            'error_message' => $receipt->buyer_email ? null : 'Missing buyer email.',
-            'issued_at' => $receipt->buyer_email ? now() : null,
-        ]);
+        $transaction = app(EInvoiceProviderManager::class)->forSetting($setting)->issue($receipt, $setting);
 
         if ($transaction->provider_status === 'failed') {
             $old = $receipt->status;

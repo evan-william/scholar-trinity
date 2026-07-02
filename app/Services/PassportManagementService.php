@@ -25,9 +25,11 @@ class PassportManagementService
         app(SecurityAuditService::class)->log('documents', 'passport_viewed', 'Passport viewed.', $registration, [], [], ['registration' => $registration->registration_number]);
         Log::info('Passport viewed.', ['registration' => $registration->registration_number, 'admin_id' => $adminId]);
 
-        return Storage::disk('local')->response($registration->passport_file_path, $registration->passport_original_name, [
+        $fileName = $this->safeFileName($registration->passport_original_name ?: 'passport');
+
+        return Storage::disk('local')->response($registration->passport_file_path, $fileName, [
             'Content-Type' => $registration->passport_mime_type ?: 'application/octet-stream',
-            'Content-Disposition' => 'inline; filename="'.addslashes($registration->passport_original_name ?: 'passport').'"',
+            'Content-Disposition' => 'inline; filename="'.$fileName.'"',
         ]);
     }
 
@@ -42,7 +44,7 @@ class PassportManagementService
         app(SecurityAuditService::class)->log('documents', 'passport_downloaded', 'Passport downloaded.', $registration, [], [], ['registration' => $registration->registration_number]);
         Log::info('Passport downloaded.', ['registration' => $registration->registration_number, 'admin_id' => $adminId]);
 
-        return Storage::disk('local')->download($registration->passport_file_path, $registration->passport_original_name ?: 'passport');
+        return Storage::disk('local')->download($registration->passport_file_path, $this->safeFileName($registration->passport_original_name ?: 'passport'));
     }
 
     public function replace(StudentRegistration $registration, UploadedFile $file, string $reason, int $adminId): StudentRegistration
@@ -121,6 +123,14 @@ class PassportManagementService
     private function ensureFileExists(StudentRegistration $registration): void
     {
         abort_unless($registration->passport_file_path && Storage::disk('local')->exists($registration->passport_file_path), 404);
+    }
+
+    private function safeFileName(string $name): string
+    {
+        $name = basename(str_replace(["\r", "\n", '"', '\\'], '', $name));
+        $name = preg_replace('/[^A-Za-z0-9._ -]/', '_', $name) ?: 'download';
+
+        return trim($name) !== '' ? $name : 'download';
     }
 
     private function audit(StudentRegistration $registration, string $action, ?string $field, mixed $old, mixed $new, int $adminId, ?string $reason = null): void

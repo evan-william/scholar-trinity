@@ -75,6 +75,31 @@ Template decision still pending. For tomorrow's update, prioritize a clean compr
   - `DEPLOYMENT.md` documents server setup without secrets.
   - `INTEGRATIONS.md` documents payment and e-invoice provider checklist.
 - Payment gateway skeleton now supports `PAYMENT_GATEWAY_ENDPOINT`; when configured it renders a POST handoff form, otherwise it stays in sandbox payload preview mode.
+- Landing CTA cleanup:
+  - Legacy `/register` now redirects to the new `/student-registration` flow.
+  - Legacy `/registrations` POST and `/registrations/{registration}` GET now redirect to the new flow instead of invoking the old controller.
+  - Landing CTA links now point to the new student registration route.
+- Admin dashboard data polish:
+  - Added operations queue metrics for pending documents, waiting verification, payment pending, receipt pending, and quota watch.
+  - Annual report now includes accommodation request count, practice exam count, and practice exam fee revenue.
+- Email completion:
+  - Added `RegistrationCompletedMail` with HTML/text templates.
+  - Admin verification now marks a paid+verified registration as `completed`, writes audit logs, and sends the completion email.
+- Security polish:
+  - Passport and payment proof preview/download filenames are sanitized before response headers are generated.
+- Integration structure:
+  - Added payment gateway provider interface and adapters for manual, ECPay, and NewebPay placeholder.
+  - Added e-invoice/fapiao provider interface and adapters for manual sandbox, ECPay placeholder, and NewebPay placeholder.
+- Deployment docs:
+  - Added `.env.production.example`, `SERVER_CHECKLIST.md`, and `DEPLOY_COMMANDS.md`.
+- Tests prepared:
+  - Updated tests for new registration field persistence, server-side practice fee calculation, export columns, legacy route redirect, and registration completion email.
+- Non-UI backend hardening:
+  - Admin registration list/export now supports document status, verification status, receipt status, accommodation requested, and accommodation status filters.
+  - Annual report can now be exported as CSV.
+  - Added `security:backup-storage` artisan command for private storage manifest/optional zip backup logging.
+  - Added provider manager tests for payment and e-invoice adapters.
+  - Added storage backup and annual report export tests.
 - Re-audit status: easy backend correctness fixes above are done; production payment/e-invoice/template redesign remain.
 
 ## TODO
@@ -91,6 +116,7 @@ Template decision still pending. For tomorrow's update, prioritize a clean compr
   - Contact info.
   - Register Now CTA.
   - Use selected template style; if template is not purchased yet, use temporary clean education layout.
+  - DONE: temporary landing content/module already exists and CTA now points to `/student-registration`.
 
 - Polish registration form:
   - Keep 5-step/6-step flow working.
@@ -108,6 +134,7 @@ Template decision still pending. For tomorrow's update, prioritize a clean compr
 
 - Landing / Information Page:
   - `PARTIAL`: content exists in backend/landing module but needs template-quality redesign.
+  - DONE: CTA no longer points to legacy `/register`.
   - TODO: implement final homepage/compro layout.
   - TODO: verify bilingual content.
 
@@ -130,6 +157,7 @@ Template decision still pending. For tomorrow's update, prioritize a clean compr
 - Submission Confirmation:
   - `PARTIAL`: confirmation page and email exist.
   - DONE: confirmation page now includes more complete student/guardian/exam/payment summary.
+  - DONE: registration completed email is implemented for paid + verified registrations.
   - TODO: final visual polish and bilingual email rendering QA.
 
 ### Phase 2 - Admin Management System
@@ -140,6 +168,8 @@ Template decision still pending. For tomorrow's update, prioritize a clean compr
 
 - Registration Dashboard:
   - `PARTIAL`: metrics exist.
+  - DONE: operations queue metrics added for document, verification, payment, receipt, and quota follow-up.
+  - DONE: dashboard counts uploaded/pending-review passports instead of a hardcoded placeholder.
   - TODO: redesign dashboard using selected admin template.
 
 - Registration Management:
@@ -149,11 +179,13 @@ Template decision still pending. For tomorrow's update, prioritize a clean compr
 
 - Passport Management:
   - `MOSTLY DONE`: preview, download, replace, valid/invalid, reupload request exist.
-  - TODO: audit header filename sanitization and private storage behavior on server.
+  - DONE: passport download/preview filename headers are sanitized.
+  - TODO: confirm private storage behavior on server.
 
 - Export Data:
   - `MOSTLY DONE`: CSV/XLSX export exists.
   - DONE: new registration fields and practice/accommodation data are included in exports.
+  - DONE: export filters now include document status, verification status, receipt status, and accommodations.
   - TODO: verify XLSX works on server with PHP Zip extension.
 
 ### Phase 3 - Payment Flow
@@ -165,6 +197,7 @@ Template decision still pending. For tomorrow's update, prioritize a clean compr
 
 - Taiwan Payment Gateway:
   - `NOT PRODUCTION READY`: gateway payload/callback skeleton exists.
+  - DONE: provider adapter structure added for manual, ECPay, and NewebPay.
   - DONE: ATM method can now map to gateway `ATM`.
   - DONE: gateway page can POST to a configured `PAYMENT_GATEWAY_ENDPOINT`; otherwise it stays in sandbox preview.
   - TODO: choose provider: ECPay or NewebPay.
@@ -198,6 +231,7 @@ Template decision still pending. For tomorrow's update, prioritize a clean compr
 
 - Auto Fapiao Integration:
   - `NOT PRODUCTION READY`: current auto issue is sandbox simulation.
+  - DONE: provider adapter structure added for manual sandbox, ECPay placeholder, and NewebPay placeholder.
   - TODO: choose Taiwan e-invoice provider.
   - TODO: implement real issue/cancel/resend API.
 
@@ -215,21 +249,23 @@ Template decision still pending. For tomorrow's update, prioritize a clean compr
 
 - Email Templates:
   - `PARTIAL`: registration/payment/missing document templates exist.
-  - TODO: registration completed email.
+  - DONE: registration completed email.
   - TODO: bilingual QA pass.
 
 ### Phase 6 - Security & Data Protection
 
 - Secure Hosting:
   - `PENDING SERVER`: HTTPS/SSL, firewall, deploy user, environment variables.
-  - DONE: `.env.example` and `DEPLOYMENT.md` now document required production variables without secrets.
+  - DONE: `.env.example`, `.env.production.example`, `DEPLOYMENT.md`, `SERVER_CHECKLIST.md`, and `DEPLOY_COMMANDS.md` now document required production variables and operations without secrets.
   - TODO: configure real `.env` on server only.
   - TODO: confirm SSL for `trinity.sophistec.global`.
 
 - Database Security:
   - `PENDING SERVER`: MySQL/MariaDB direction is documented; DB credentials not provided yet.
   - TODO: define DB name/user/password on server.
-  - TODO: backup plan and restricted DB access.
+  - DONE: backup checklist documented in `SERVER_CHECKLIST.md`.
+  - DONE: `security:backup-storage` creates a private storage manifest or optional zip and logs it.
+  - TODO: configure actual backup job and restricted DB access on server.
 
 - File Security:
   - `PARTIAL`: private file storage and validation exist.
@@ -256,14 +292,16 @@ Template decision still pending. For tomorrow's update, prioritize a clean compr
 
 - Reporting:
   - `PARTIAL`: annual, revenue, subject, payment, receipt summaries exist.
-  - TODO: exportable reports and better charts.
+  - DONE: annual report now includes practice exam and accommodation breakdowns.
+  - DONE: annual report CSV export endpoint added.
+  - TODO: better charts after admin template is selected.
 
 ## Bugs / Re-Audit Findings
 
 - PHP and Composer are not available in the current Codex environment, so tests have not been run here.
 - `resources/views/student-registration/create.blade.php` still contains a lot of inline CSS/JS and should be replaced or refactored after template choice.
 - Gateway page now supports configured endpoint handoff, but real provider signature and sandbox verification are still pending.
-- Receipt auto issue is still sandbox simulation.
+- Receipt auto issue is still not production-ready; manual sandbox and provider placeholder adapters exist, but real issue/cancel/resend APIs are pending.
 - Language coverage is incomplete because many view strings are hardcoded.
 - Server credentials were shared in chat but must stay out of Git.
 
@@ -271,6 +309,8 @@ Template decision still pending. For tomorrow's update, prioritize a clean compr
 
 2026-07-02
 - Static check: `git diff --check` passed for this implementation pass.
+- Static check: no merge conflict markers found in this implementation pass.
+- Static check: no `.agent` or `.agents` folder found in repo root.
 - Static check: `git diff --check` passed in previous implementation pass.
 - Static check: `package.json` parsed successfully in previous implementation pass.
 - Blocked: `php -v` failed because PHP is not in PATH.

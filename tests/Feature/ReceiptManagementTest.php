@@ -10,6 +10,10 @@ use App\Models\RegistrationPayment;
 use App\Models\StudentRegistration;
 use App\Models\User;
 use App\Services\ReceiptService;
+use App\Services\EInvoices\EInvoiceProviderManager;
+use App\Services\EInvoices\EcpayEInvoiceProvider;
+use App\Services\EInvoices\ManualEInvoiceProvider;
+use App\Services\EInvoices\NewebPayEInvoiceProvider;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -220,6 +224,15 @@ class ReceiptManagementTest extends TestCase
             'receipt_request_id' => $receipt->id,
             'event_type' => 'e_invoice_failed',
         ]);
+    }
+
+    public function test_e_invoice_provider_manager_resolves_provider_adapters(): void
+    {
+        $manager = app(EInvoiceProviderManager::class);
+
+        $this->assertInstanceOf(ManualEInvoiceProvider::class, $manager->forSetting(new EInvoiceSetting(['provider' => 'manual'])));
+        $this->assertInstanceOf(EcpayEInvoiceProvider::class, $manager->forSetting(new EInvoiceSetting(['provider' => 'ecpay'])));
+        $this->assertInstanceOf(NewebPayEInvoiceProvider::class, $manager->forSetting(new EInvoiceSetting(['provider' => 'newebpay'])));
     }
 
     private function registrationAndPayment(array $paymentOverrides = []): array

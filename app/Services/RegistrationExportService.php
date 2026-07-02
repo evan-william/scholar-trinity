@@ -97,6 +97,9 @@ class RegistrationExportService
             ->when(($filters['period'] ?? null) === 'late', fn (Builder $query) => $query->where('late_fee_total', '>', 0))
             ->when($filters['document_status'] ?? null, fn (Builder $query, string $status) => $query->where('passport_upload_status', $status))
             ->when($filters['verification_status'] ?? null, fn (Builder $query, string $status) => $query->where('verification_status', $status))
+            ->when($filters['receipt_status'] ?? null, fn (Builder $query, string $status) => $query->whereHas('receiptRequests', fn (Builder $receipt) => $receipt->where('status', $status)))
+            ->when(isset($filters['needs_accommodations']) && $filters['needs_accommodations'] !== '', fn (Builder $query) => $query->where('needs_accommodations', (bool) $filters['needs_accommodations']))
+            ->when($filters['accommodation_status'] ?? null, fn (Builder $query, string $status) => $query->where('accommodation_status', $status))
             ->when(trim((string) ($filters['school'] ?? '')), fn (Builder $query, string $school) => $query->where('school_name', 'like', '%'.trim($school).'%'))
             ->latest('submitted_at');
     }

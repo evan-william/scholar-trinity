@@ -9,6 +9,10 @@ use App\Models\RegistrationPayment;
 use App\Models\StudentRegistration;
 use App\Models\User;
 use App\Services\PaymentFlowService;
+use App\Services\Payments\EcpayPaymentProvider;
+use App\Services\Payments\ManualPaymentProvider;
+use App\Services\Payments\NewebPayPaymentProvider;
+use App\Services\Payments\PaymentGatewayManager;
 use Database\Seeders\PaymentSettingSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
@@ -184,6 +188,15 @@ class PaymentFlowTest extends TestCase
         $setting = PaymentSetting::query()->firstOrFail();
         $this->assertNotSame('secret-key', $setting->hash_key_encrypted);
         $this->assertSame('secret-key', $setting->hashKey());
+    }
+
+    public function test_payment_gateway_manager_resolves_provider_adapters(): void
+    {
+        $manager = app(PaymentGatewayManager::class);
+
+        $this->assertInstanceOf(ManualPaymentProvider::class, $manager->forSetting(new PaymentSetting(['provider' => 'manual'])));
+        $this->assertInstanceOf(EcpayPaymentProvider::class, $manager->forSetting(new PaymentSetting(['provider' => 'ecpay'])));
+        $this->assertInstanceOf(NewebPayPaymentProvider::class, $manager->forSetting(new PaymentSetting(['provider' => 'newebpay'])));
     }
 
     private function registrationAndPayment(array $paymentOverrides = [], string $number = 'APR-2026-999001'): array

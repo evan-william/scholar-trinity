@@ -184,6 +184,56 @@ class AnnualFutureUseTest extends TestCase
         $this->assertSame(1200, $report['revenue']['service_fee']);
     }
 
+    public function test_annual_report_can_be_exported_as_csv(): void
+    {
+        $admin = User::factory()->create(['is_admin' => true]);
+        $season = ExamSeason::query()->create([
+            'season_name' => 'AP Exam 2027',
+            'academic_year' => '2026-2027',
+            'exam_year' => 2027,
+            'timezone' => 'Asia/Taipei',
+            'currency' => 'NTD',
+            'status' => 'open',
+            'is_active' => true,
+        ]);
+
+        \App\Models\StudentRegistration::query()->create([
+            'exam_season_id' => $season->id,
+            'registration_number' => 'APR-2027-000002',
+            'status' => 'completed',
+            'registration_period_type' => 'late',
+            'payment_status' => 'paid',
+            'verification_status' => 'verified',
+            'student_full_name' => 'Export Student',
+            'date_of_birth' => '2010-01-01',
+            'nationality' => 'Taiwan',
+            'passport_number' => 'B1234567',
+            'student_email' => 'export@example.com',
+            'school_name' => 'Test School',
+            'school_country' => 'Taiwan',
+            'grade_level' => '11',
+            'exam_fee_total' => 7800,
+            'service_fee_total' => 1200,
+            'late_fee_total' => 1500,
+            'practice_exam_count' => 1,
+            'practice_exam_total' => 1800,
+            'needs_accommodations' => true,
+            'total_fee' => 12300,
+            'grand_total' => 12300,
+            'currency' => 'NTD',
+            'submitted_at' => now(),
+        ]);
+
+        $rows = app(AnnualReportService::class)->csvRows($season);
+        $this->assertContains(['registration', 'practice_exam_count', 1, null, $season->season_name], $rows);
+        $this->assertContains(['revenue', 'practice_exam', null, 1800, 'NTD'], $rows);
+
+        $this->actingAs($admin)
+            ->get(route('admin.reports.annual.export', ['season' => $season->uuid]))
+            ->assertOk()
+            ->assertHeader('Content-Type', 'text/csv; charset=utf-8');
+    }
+
     private function makeSubject(int $seasonId, string $code): ApExamSubject
     {
         return ApExamSubject::query()->create([

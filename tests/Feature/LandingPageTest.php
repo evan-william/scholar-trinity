@@ -23,7 +23,7 @@ class LandingPageTest extends TestCase
             ->assertSee('Required Documents')
             ->assertSee('Frequently Asked Questions')
             ->assertSee('schema.org', false)
-            ->assertSee(route('registrations.create'), false);
+            ->assertSee(route('student-registrations.create'), false);
     }
 
     public function test_landing_page_escapes_cms_content(): void

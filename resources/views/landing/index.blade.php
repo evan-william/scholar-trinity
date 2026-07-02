@@ -336,7 +336,7 @@
             <h2 id="cta-title">{{ __('landing.ready_headline') }}</h2>
             <p>{{ __('landing.ready_body') }}</p>
         </div>
-        <a class="btn" href="{{ route('registrations.create') }}">{{ $primaryButton }}</a>
+        <a class="btn" href="{{ route('student-registrations.create') }}">{{ $primaryButton }}</a>
     </section>
 </main>
 </body>

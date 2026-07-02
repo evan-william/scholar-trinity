@@ -43,12 +43,15 @@ class AnnualReportService
                 'pending_payment' => (clone $registrations)->whereIn('payment_status', ['unpaid', 'pending_payment', 'waiting_verification'])->count(),
                 'cancelled' => (clone $registrations)->where('status', 'cancelled')->count(),
                 'verified' => (clone $registrations)->where('verification_status', 'verified')->count(),
+                'needs_accommodations' => (clone $registrations)->where('needs_accommodations', true)->count(),
+                'practice_exam_count' => (clone $registrations)->sum('practice_exam_count'),
             ],
             'revenue' => [
                 'grand_total' => (clone $registrations)->sum('grand_total'),
                 'exam_fee' => (clone $registrations)->sum('exam_fee_total'),
                 'service_fee' => (clone $registrations)->sum('service_fee_total'),
                 'late_fee' => (clone $registrations)->sum('late_fee_total'),
+                'practice_exam' => (clone $registrations)->sum('practice_exam_total'),
                 'paid' => (clone $payments)->where('payment_status', 'paid')->sum('grand_total'),
                 'pending' => (clone $payments)->whereIn('payment_status', ['pending_payment', 'waiting_verification', 'unpaid'])->sum('grand_total'),
                 'refunded' => (clone $payments)->where('payment_status', 'refunded')->sum('grand_total'),
@@ -59,6 +62,48 @@ class AnnualReportService
             'subjects' => $subjectRows,
             'trend' => $this->trend((clone $registrations)->selectRaw('date(submitted_at) as date, count(*) as total')->whereNotNull('submitted_at')->groupBy('date')->orderBy('date')->get()),
         ];
+    }
+
+    /**
+     * @return array<int, array<int, mixed>>
+     */
+    public function csvRows(?ExamSeason $season = null): array
+    {
+        $report = $this->build($season);
+        $rows = [];
+
+        foreach ($report['registration'] as $metric => $value) {
+            $rows[] = ['registration', $metric, $value, null, $season?->season_name];
+        }
+
+        foreach ($report['revenue'] as $metric => $amount) {
+            $rows[] = ['revenue', $metric, null, $amount, $season?->currency ?? 'NTD'];
+        }
+
+        foreach ($report['payment_statuses'] as $status) {
+            $rows[] = ['payment_status', $status->payment_status, $status->total, $status->amount, null];
+        }
+
+        foreach ($report['receipt_statuses'] as $status) {
+            $rows[] = ['receipt_status', $status->status, $status->total, $status->amount, null];
+        }
+
+        foreach ($report['subjects'] as $subjectRow) {
+            $subject = $subjectRow['subject'];
+            $rows[] = [
+                'subject',
+                $subject->code.' - '.$subject->name,
+                $subject->registered_count,
+                ($subject->exam_fee + $subject->service_fee + $subject->late_registration_fee) * $subject->registered_count,
+                'remaining: '.($subjectRow['remaining'] ?? 'no cap').'; paid: '.$subject->paid_count,
+            ];
+        }
+
+        foreach ($report['trend'] as $trendRow) {
+            $rows[] = ['trend', $trendRow['date'], $trendRow['total'], null, null];
+        }
+
+        return $rows;
     }
 
     private function trend(Collection $rows): Collection

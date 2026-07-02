@@ -2,11 +2,13 @@
 
 namespace App\Services;
 
+use App\Mail\RegistrationCompletedMail;
 use App\Models\RegistrationAuditLog;
 use App\Models\StudentRegistration;
 use App\Repositories\StudentRegistrationRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 
 class RegistrationManagementService
@@ -72,6 +74,7 @@ class RegistrationManagementService
         }
 
         $old = $registration->verification_status;
+        $wasCompleted = $registration->status === 'completed';
         $registration->update([
             'verification_status' => $data['verification_status'],
             'verification_note' => $data['verification_note'] ?? null,
@@ -79,6 +82,17 @@ class RegistrationManagementService
             'verified_at' => now(),
         ]);
         $this->audit($registration, 'verified', 'verification_status', $old, $data['verification_status'], $data['verification_note'] ?? null, $adminId, $ip);
+
+        if ($data['verification_status'] === 'verified' && $registration->payment_status === 'paid' && ! $wasCompleted) {
+            $oldStatus = $registration->status;
+            $registration->update(['status' => 'completed']);
+            $this->audit($registration, 'completed', 'status', $oldStatus, 'completed', 'Payment paid and registration verified.', $adminId, $ip);
+            app(SecurityAuditService::class)->log('registration', 'registration_completed', 'Registration completed.', $registration, ['status' => $oldStatus], ['status' => 'completed']);
+            Mail::to($registration->student_email)
+                ->cc($registration->contact?->parent_email)
+                ->send(new RegistrationCompletedMail($registration->fresh(['contact', 'exams'])));
+        }
+
         Log::info('Registration verification updated.', ['registration' => $registration->registration_number, 'status' => $data['verification_status']]);
 
         return $registration->fresh(['verifier', 'auditLogs']);

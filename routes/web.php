@@ -12,7 +12,6 @@ use App\Http\Controllers\Admin\RegistrationExportController;
 use App\Http\Controllers\Admin\SecurityAuditController;
 use App\Http\Controllers\Admin\StudentRegistrationAdminController;
 use App\Http\Controllers\AdminAuthController;
-use App\Http\Controllers\ExamRegistrationController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\PaymentController;
@@ -22,9 +21,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/locale/{locale}', LocaleController::class)->name('locale.switch');
 Route::get('/', LandingPageController::class)->name('landing');
-Route::get('/register', [ExamRegistrationController::class, 'create'])->name('registrations.create');
-Route::post('/registrations', [ExamRegistrationController::class, 'store'])->middleware('throttle:12,1')->name('registrations.store');
-Route::get('/registrations/{registration}', [ExamRegistrationController::class, 'show'])->name('registrations.show');
+Route::redirect('/register', '/student-registration')->name('registrations.create');
+Route::post('/registrations', fn () => redirect('/student-registration'))->name('registrations.store');
+Route::redirect('/registrations/{registration}', '/student-registration')->name('registrations.show');
 
 Route::get('/student-registration', [StudentRegistrationController::class, 'create'])->name('student-registrations.create');
 Route::post('/student-registration', [StudentRegistrationController::class, 'store'])->middleware('throttle:8,1')->name('student-registrations.store');
@@ -55,6 +54,7 @@ Route::middleware(['auth', 'admin', 'admin.timeout'])->prefix('admin')->name('ad
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
     Route::get('/reports/annual', [AnnualReportController::class, 'index'])->name('reports.annual');
+    Route::get('/reports/annual/export', [AnnualReportController::class, 'export'])->name('reports.annual.export');
 
     Route::post('/exam-seasons/{examSeason}/activate', [ExamSeasonAdminController::class, 'activate'])->middleware('throttle:20,1')->name('exam-seasons.activate');
     Route::post('/exam-seasons/{examSeason}/archive', [ExamSeasonAdminController::class, 'archive'])->middleware('throttle:20,1')->name('exam-seasons.archive');

@@ -27,8 +27,8 @@ class StudentRegistrationAdminController extends Controller
     public function index(Request $request, StudentRegistrationRepository $repository): View
     {
         return view('admin.student-registrations.index', [
-            'registrations' => $repository->search($request->only(['search', 'status', 'payment_status', 'period', 'date_from', 'date_to', 'subject_id', 'season_id', 'sort', 'direction'])),
-            'filters' => $request->only(['search', 'status', 'payment_status', 'period', 'date_from', 'date_to', 'subject_id', 'season_id']),
+            'registrations' => $repository->search($request->only(['search', 'status', 'payment_status', 'document_status', 'verification_status', 'receipt_status', 'needs_accommodations', 'accommodation_status', 'period', 'date_from', 'date_to', 'subject_id', 'season_id', 'sort', 'direction'])),
+            'filters' => $request->only(['search', 'status', 'payment_status', 'document_status', 'verification_status', 'receipt_status', 'needs_accommodations', 'accommodation_status', 'period', 'date_from', 'date_to', 'subject_id', 'season_id']),
             'subjects' => ApExamSubject::query()->orderBy('name')->get(),
             'seasons' => ExamSeason::query()->orderByDesc('exam_year')->get(),
         ]);
@@ -47,7 +47,7 @@ class StudentRegistrationAdminController extends Controller
     {
         return view('admin.student-registrations.edit', [
             'registration' => $studentRegistration->load(['contact', 'exams', 'practiceExamSelections', 'histories']),
-            'statuses' => ['submitted', 'pending_payment', 'paid', 'cancelled', 'expired'],
+            'statuses' => ['submitted', 'pending_payment', 'paid', 'completed', 'cancelled', 'expired'],
             'paymentStatuses' => ['unpaid', 'pending_payment', 'waiting_verification', 'paid', 'failed', 'refunded', 'cancelled'],
             'subjects' => ApExamSubject::query()->where('is_active', true)->orderBy('name')->get(),
         ]);
