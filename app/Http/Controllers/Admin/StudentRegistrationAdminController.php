@@ -39,14 +39,14 @@ class StudentRegistrationAdminController extends Controller
         Log::info('Registration viewed.', ['registration' => $studentRegistration->registration_number, 'admin_id' => request()->user()->id]);
 
         return view('admin.student-registrations.show', [
-            'registration' => $studentRegistration->load(['contact', 'exams', 'agreements', 'histories', 'adminNotes.author', 'auditLogs', 'verifier']),
+            'registration' => $studentRegistration->load(['contact', 'exams', 'practiceExamSelections', 'agreements', 'histories', 'adminNotes.author', 'auditLogs', 'verifier']),
         ]);
     }
 
     public function edit(StudentRegistration $studentRegistration): View
     {
         return view('admin.student-registrations.edit', [
-            'registration' => $studentRegistration->load(['contact', 'exams', 'histories']),
+            'registration' => $studentRegistration->load(['contact', 'exams', 'practiceExamSelections', 'histories']),
             'statuses' => ['submitted', 'pending_payment', 'paid', 'cancelled', 'expired'],
             'paymentStatuses' => ['unpaid', 'pending_payment', 'waiting_verification', 'paid', 'failed', 'refunded', 'cancelled'],
             'subjects' => ApExamSubject::query()->where('is_active', true)->orderBy('name')->get(),
@@ -114,7 +114,7 @@ class StudentRegistrationAdminController extends Controller
     public function print(StudentRegistration $studentRegistration): View
     {
         return view('admin.student-registrations.print', [
-            'registration' => $studentRegistration->load(['contact', 'exams', 'histories']),
+            'registration' => $studentRegistration->load(['contact', 'exams', 'practiceExamSelections', 'histories']),
         ]);
     }
 }

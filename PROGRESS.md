@@ -16,7 +16,7 @@ Do not store server passwords, DB passwords, API keys, or payment provider crede
 - Current frontend state: Laravel Blade is still the main UI. Vue is now wired as a progressive frontend path, but pages still need migration/redesign.
 - Production direction: one Laravel app should serve the site and built Vue assets. Use `npm run build` for production assets; do not run a separate Node frontend server in production unless the deployment plan changes.
 - Server info from team: domain `trinity.sophistec.global`, app port `3014`.
-- Database: not decided yet. Need DB name, username, and password from server setup. Do not commit credentials.
+- Database direction: MySQL/MariaDB for server deploy. DB name, username, and password still need to be filled in server `.env`. Do not commit credentials.
 
 ## Template Candidates
 
@@ -67,6 +67,14 @@ Template decision still pending. For tomorrow's update, prioritize a clean compr
 - Practice exam fee now calculated server-side from selected practice exams using `registration.practice_exam_fee`.
 - Admin exam replacement now updates old/new subject quota counts and recalculates unpaid payment totals.
 - Payment method handling improved for gateway payload: credit card maps to `Credit`, ATM maps to `ATM`.
+- Admin detail/edit/print now shows the newer registration fields: legal names, DOB, nationality, passport expiry, parent mailing fields, emergency relationship, accommodations, and practice exams.
+- CSV/XLSX export now includes legal names, DOB, nationality, passport expiry, parent/mailing/emergency fields, accommodations, practice exams, payment fields, and template-specific TPCA/school subsets.
+- Student confirmation and pre-submit review now show more complete submitted data.
+- Deployment prep added:
+  - `.env.example` now has production-oriented placeholders for app port, MySQL DB, file size, registration fee, payment gateway, and e-invoice values.
+  - `DEPLOYMENT.md` documents server setup without secrets.
+  - `INTEGRATIONS.md` documents payment and e-invoice provider checklist.
+- Payment gateway skeleton now supports `PAYMENT_GATEWAY_ENDPOINT`; when configured it renders a POST handoff form, otherwise it stays in sandbox payload preview mode.
 - Re-audit status: easy backend correctness fixes above are done; production payment/e-invoice/template redesign remain.
 
 ## TODO
@@ -89,7 +97,7 @@ Template decision still pending. For tomorrow's update, prioritize a clean compr
   - Clean visual design to match chosen template.
   - Make required fields obvious.
   - Confirm mobile layout.
-  - Confirm review page contains all submitted data.
+  - DONE: pre-submit review now includes the newly required fields and accommodations summary.
 
 - Decide template:
   - Pick admin template: Skote vs Vuexy vs Metronic.
@@ -106,21 +114,23 @@ Template decision still pending. For tomorrow's update, prioritize a clean compr
 - Student Registration Form:
   - `PARTIAL`: form and backend exist.
   - DONE: important hidden/missing data persistence fixed.
+  - DONE: review step now includes DOB, nationality, passport number, relationship, emergency contact, and accommodations.
   - TODO: visual polish with template.
-  - TODO: verify all submitted fields appear in admin detail/export.
+  - DONE: new submitted fields appear in admin detail/edit/print and exports.
 
 - Exam Preference Selection:
   - `PARTIAL`: available subjects, multiple selection, fee display, late fee, quota/status exist.
   - DONE: practice fee no longer trusted from frontend hidden total.
-  - TODO: store/display practice selections in admin detail/export.
+  - DONE: practice selections are readable through `RegistrationExamSelection`, admin detail/print, confirmation, and export.
 
 - Passport Upload:
   - `MOSTLY DONE`: upload, validation, private storage, admin access, replacement exist.
-  - TODO: re-check file size config mismatch: request allows 10MB, security config defaults 5MB.
+  - DONE: `.env.example` now aligns `SECURITY_FILE_MAX_KB=10240` with the 10MB registration form limit.
 
 - Submission Confirmation:
   - `PARTIAL`: confirmation page and email exist.
-  - TODO: improve copy/design and verify bilingual email rendering.
+  - DONE: confirmation page now includes more complete student/guardian/exam/payment summary.
+  - TODO: final visual polish and bilingual email rendering QA.
 
 ### Phase 2 - Admin Management System
 
@@ -135,15 +145,15 @@ Template decision still pending. For tomorrow's update, prioritize a clean compr
 - Registration Management:
   - `PARTIAL`: list/search/filter/detail/edit/verify/notes exist.
   - DONE: exam replacement quota recalculation fixed.
-  - TODO: ensure new registration fields appear on admin show/edit pages.
+  - DONE: new registration fields appear on admin show/edit/print pages.
 
 - Passport Management:
   - `MOSTLY DONE`: preview, download, replace, valid/invalid, reupload request exist.
   - TODO: audit header filename sanitization and private storage behavior on server.
 
 - Export Data:
-  - `PARTIAL`: CSV/XLSX export exists.
-  - TODO: include all new registration fields and practice/accommodation data in exports.
+  - `MOSTLY DONE`: CSV/XLSX export exists.
+  - DONE: new registration fields and practice/accommodation data are included in exports.
   - TODO: verify XLSX works on server with PHP Zip extension.
 
 ### Phase 3 - Payment Flow
@@ -156,8 +166,9 @@ Template decision still pending. For tomorrow's update, prioritize a clean compr
 - Taiwan Payment Gateway:
   - `NOT PRODUCTION READY`: gateway payload/callback skeleton exists.
   - DONE: ATM method can now map to gateway `ATM`.
+  - DONE: gateway page can POST to a configured `PAYMENT_GATEWAY_ENDPOINT`; otherwise it stays in sandbox preview.
   - TODO: choose provider: ECPay or NewebPay.
-  - TODO: implement real checkout post/redirect endpoint.
+  - TODO: configure and verify real checkout endpoint.
   - TODO: implement provider-specific signature algorithm exactly.
   - TODO: webhook security/IP/provider validation.
   - TODO: success and failed handling with real provider response.
@@ -168,7 +179,8 @@ Template decision still pending. For tomorrow's update, prioritize a clean compr
 
 - Payment Confirmation:
   - `PARTIAL`: success page, email, admin record, transaction ID fields exist.
-  - TODO: failed page and real gateway failure states.
+  - DONE: failed page route/view exists.
+  - TODO: real gateway failure states after provider sandbox testing.
 
 ### Phase 4 - Receipt / Fapiao Management
 
@@ -210,11 +222,12 @@ Template decision still pending. For tomorrow's update, prioritize a clean compr
 
 - Secure Hosting:
   - `PENDING SERVER`: HTTPS/SSL, firewall, deploy user, environment variables.
-  - TODO: configure `.env` on server only.
+  - DONE: `.env.example` and `DEPLOYMENT.md` now document required production variables without secrets.
+  - TODO: configure real `.env` on server only.
   - TODO: confirm SSL for `trinity.sophistec.global`.
 
 - Database Security:
-  - `PENDING SERVER`: DB credentials not provided yet.
+  - `PENDING SERVER`: MySQL/MariaDB direction is documented; DB credentials not provided yet.
   - TODO: define DB name/user/password on server.
   - TODO: backup plan and restricted DB access.
 
@@ -249,7 +262,7 @@ Template decision still pending. For tomorrow's update, prioritize a clean compr
 
 - PHP and Composer are not available in the current Codex environment, so tests have not been run here.
 - `resources/views/student-registration/create.blade.php` still contains a lot of inline CSS/JS and should be replaced or refactored after template choice.
-- Gateway page still says sandbox adapter; real checkout is not implemented yet.
+- Gateway page now supports configured endpoint handoff, but real provider signature and sandbox verification are still pending.
 - Receipt auto issue is still sandbox simulation.
 - Language coverage is incomplete because many view strings are hardcoded.
 - Server credentials were shared in chat but must stay out of Git.
@@ -257,6 +270,7 @@ Template decision still pending. For tomorrow's update, prioritize a clean compr
 ## Verification Log
 
 2026-07-02
+- Static check: `git diff --check` passed for this implementation pass.
 - Static check: `git diff --check` passed in previous implementation pass.
 - Static check: `package.json` parsed successfully in previous implementation pass.
 - Blocked: `php -v` failed because PHP is not in PATH.
@@ -268,6 +282,6 @@ Template decision still pending. For tomorrow's update, prioritize a clean compr
 2. Build compro landing page first for tomorrow update.
 3. Polish registration form visual flow.
 4. Apply admin template shell to dashboard/list/detail pages.
-5. Add all new registration fields to admin detail/export.
-6. Server deploy prep: `.env`, DB credentials, `npm run build`, Laravel migrate.
+5. Apply selected admin template shell to dashboard/list/detail pages.
+6. Server deploy execution: fill `.env`, DB credentials, `npm run build`, Laravel migrate.
 7. Payment provider decision and real integration.

@@ -137,6 +137,18 @@ class StudentRegistration extends Model
             ->withTimestamps();
     }
 
+    public function examSelections(): HasMany
+    {
+        return $this->hasMany(RegistrationExamSelection::class);
+    }
+
+    public function practiceExamSelections(): HasMany
+    {
+        return $this->hasMany(RegistrationExamSelection::class)
+            ->where('selection_type', 'practice')
+            ->orderBy('selected_at');
+    }
+
     public function examSeason(): BelongsTo
     {
         return $this->belongsTo(ExamSeason::class, 'exam_season_id');

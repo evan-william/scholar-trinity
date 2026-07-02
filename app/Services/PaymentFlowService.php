@@ -151,6 +151,13 @@ class PaymentFlowService
         return $payload;
     }
 
+    public function gatewayActionUrl(): ?string
+    {
+        $endpoint = trim((string) config('payment.gateway_endpoint'));
+
+        return $endpoint !== '' ? $endpoint : null;
+    }
+
     /**
      * @param array<string, mixed> $payload
      */

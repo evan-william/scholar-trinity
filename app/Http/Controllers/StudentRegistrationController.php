@@ -33,7 +33,7 @@ class StudentRegistrationController extends Controller
     public function show(string $registrationNumber): View
     {
         $registration = StudentRegistration::query()
-            ->with(['contact', 'exams', 'agreements', 'histories'])
+            ->with(['contact', 'exams', 'practiceExamSelections', 'agreements', 'histories'])
             ->where('registration_number', $registrationNumber)
             ->firstOrFail();
 

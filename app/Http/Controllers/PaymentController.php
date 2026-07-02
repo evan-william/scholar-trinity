@@ -43,6 +43,7 @@ class PaymentController extends Controller
         return view('payments.gateway-start', [
             'payment' => $registrationPayment->load('registration'),
             'payload' => $service->gatewayPayload($registrationPayment->load('registration')),
+            'gatewayActionUrl' => $service->gatewayActionUrl(),
         ]);
     }
 

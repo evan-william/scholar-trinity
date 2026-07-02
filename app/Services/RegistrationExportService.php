@@ -77,7 +77,7 @@ class RegistrationExportService
     private function query(array $filters): Builder
     {
         return StudentRegistration::query()
-            ->with(['contact', 'exams', 'adminNotes'])
+            ->with(['contact', 'exams', 'practiceExamSelections', 'adminNotes'])
             ->when(trim((string) ($filters['search'] ?? '')), function (Builder $query, string $search): void {
                 $search = trim($search);
                 $query->where(function (Builder $inner) use ($search): void {
@@ -118,38 +118,75 @@ class RegistrationExportService
                 $row = [
                     'Registration Number' => $registration->registration_number,
                     'Student Name' => $registration->student_full_name,
+                    'English Family Name' => $registration->family_name_en,
+                    'English First Name' => $registration->first_name_en,
+                    'Middle Initial' => $registration->middle_initial,
+                    'Middle Name' => $registration->middle_name,
+                    'Chinese Legal Name' => $registration->chinese_legal_name,
+                    'Preferred Name' => $registration->preferred_name,
+                    'Date of Birth' => optional($registration->date_of_birth)->format('Y-m-d'),
+                    'Nationality' => $registration->nationality,
+                    'Gender' => $registration->gender,
                     'Student Email' => $registration->student_email,
+                    'Student Phone' => $registration->student_phone,
                     'Parent Name' => $registration->contact?->parent_full_name,
+                    'Parent First Name' => $registration->contact?->parent_first_name,
+                    'Parent Last Name' => $registration->contact?->parent_last_name,
+                    'Parent Relationship' => $registration->contact?->relationship,
                     'Parent Email' => $registration->contact?->parent_email,
+                    'Parent Phone' => $registration->contact?->parent_phone,
+                    'Mailing Address' => $this->mailingAddress($registration),
+                    'Emergency Contact' => $registration->contact?->emergency_contact_name,
+                    'Emergency Phone' => $registration->contact?->emergency_contact_phone,
+                    'Emergency Relationship' => $registration->contact?->emergency_contact_relationship,
                     'Passport Number' => $maskPassport ? $this->maskPassport($registration->passport_number) : $registration->passport_number,
+                    'Passport Expiry Date' => optional($registration->passport_expiry_date)->format('Y-m-d'),
                     'School' => $registration->school_name,
+                    'School Country' => $registration->school_country,
+                    'School City' => $registration->school_city,
                     'Grade' => $registration->grade_level,
+                    'Graduation Year' => $registration->graduation_year,
                     'Subject Code' => $exam?->code,
                     'Subject Name' => $exam?->name,
                     'Exam Date' => $exam?->pivot?->exam_date ? Carbon::parse($exam->pivot->exam_date)->format('Y-m-d') : null,
+                    'Practice Exams' => $this->practiceExamSummary($registration),
+                    'Practice Exam Count' => $registration->practice_exam_count,
+                    'Practice Exam Total' => $registration->practice_exam_total,
+                    'Needs Accommodations' => $registration->needs_accommodations ? 'Yes' : 'No',
+                    'SSD Code' => $registration->ssd_code,
+                    'Accommodation Status' => $registration->accommodation_status,
+                    'Accommodation Requests' => $this->accommodationSummary($registration),
                     'Registration Period' => $registration->registration_period,
                     'Registration Status' => $registration->status,
                     'Payment Status' => $registration->payment_status,
+                    'Payment Method' => $registration->payment_method,
+                    'Payment Reference' => $registration->payment_reference,
+                    'Payment Amount' => $registration->payment_amount,
+                    'Payment Date' => optional($registration->payment_date)->format('Y-m-d H:i'),
                     'Document Status' => $registration->passport_upload_status,
                     'Verification Status' => $registration->verification_status,
                     'Exam Fee' => $exam?->pivot?->exam_fee,
                     'Service Fee' => $exam?->pivot?->service_fee,
                     'Late Fee' => $exam?->pivot?->late_fee_snapshot,
-                    'Total Fee' => $registration->total_fee,
+                    'Grand Total' => $registration->grand_total ?: $registration->total_fee,
                     'Submitted At' => optional($registration->submitted_at)->format('Y-m-d H:i'),
                 ];
 
                 if ($template === 'tpca') {
                     $row = array_intersect_key($row, array_flip([
-                        'Registration Number', 'Student Name', 'Student Email', 'Passport Number', 'School', 'Grade',
-                        'Subject Code', 'Subject Name', 'Exam Date', 'Payment Status', 'Document Status',
+                        'Registration Number', 'Student Name', 'English Family Name', 'English First Name', 'Middle Name',
+                        'Chinese Legal Name', 'Date of Birth', 'Nationality', 'Student Email', 'Passport Number',
+                        'Passport Expiry Date', 'School', 'Grade', 'Subject Code', 'Subject Name', 'Exam Date',
+                        'Practice Exams', 'Payment Status', 'Document Status', 'Needs Accommodations',
+                        'SSD Code', 'Accommodation Requests',
                     ]));
                 }
 
                 if ($template === 'school') {
                     $row = array_intersect_key($row, array_flip([
-                        'School', 'Grade', 'Student Name', 'Student Email', 'Parent Email', 'Subject Name',
-                        'Registration Status', 'Payment Status', 'Verification Status',
+                        'School', 'School City', 'Grade', 'Student Name', 'Chinese Legal Name', 'Student Email',
+                        'Student Phone', 'Parent Name', 'Parent Email', 'Parent Phone', 'Subject Name',
+                        'Practice Exams', 'Registration Status', 'Payment Status', 'Verification Status',
                     ]));
                 }
 
@@ -208,6 +245,30 @@ class RegistrationExportService
     private function maskPassport(string $passport): string
     {
         return strlen($passport) <= 4 ? str_repeat('*', strlen($passport)) : str_repeat('*', max(strlen($passport) - 4, 0)).substr($passport, -4);
+    }
+
+    private function practiceExamSummary(StudentRegistration $registration): string
+    {
+        return $registration->practiceExamSelections
+            ->map(fn ($selection) => $selection->exam_name.' ('.$selection->currency.' '.number_format($selection->practice_fee).')')
+            ->implode(' | ');
+    }
+
+    private function accommodationSummary(StudentRegistration $registration): string
+    {
+        return collect($registration->accommodations_payload ?? [])
+            ->map(fn (array $row) => trim(($row['exam'] ?? '').': '.($row['request'] ?? ''), ': '))
+            ->filter()
+            ->implode(' | ');
+    }
+
+    private function mailingAddress(StudentRegistration $registration): string
+    {
+        return collect([
+            $registration->contact?->mailing_address,
+            $registration->contact?->mailing_city,
+            $registration->contact?->postal_code,
+        ])->filter()->implode(', ');
     }
 
     /**

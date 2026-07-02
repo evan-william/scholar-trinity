@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Mail\StudentRegistrationConfirmation;
+use App\Models\RegistrationExamSelection;
 use App\Models\StudentRegistration;
 use App\Repositories\StudentRegistrationRepository;
 use App\Services\PaymentFlowService;
@@ -158,7 +159,7 @@ class StudentRegistrationService
             }
 
             foreach ($practiceExams as $practiceExam) {
-                DB::table('registration_exam_selections')->insert([
+                RegistrationExamSelection::query()->create([
                     'uuid' => (string) Str::uuid(),
                     'student_registration_id' => $registration->id,
                     'ap_exam_subject_id' => null,

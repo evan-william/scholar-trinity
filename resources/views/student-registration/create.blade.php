@@ -175,11 +175,13 @@
         <section class="hidden" data-step="5">
             <div class="card">
                 <div class="section-title">Review Your Registration <span>確認報名資料</span></div>
-                <div class="rev-section"><h3>Student Information / 學生資料</h3><table class="rev-table"><tr><td>Legal Name (EN)</td><td id="rName">-</td></tr><tr><td>Chinese Name / 中文姓名</td><td id="rCn">-</td></tr><tr><td>Grade / 年級</td><td id="rGrade">-</td></tr><tr><td>School / 學校</td><td id="rSchool">-</td></tr><tr><td>Student Email</td><td id="rSEmail">-</td></tr><tr><td>Student Phone</td><td id="rSPhone">-</td></tr><tr><td>Passport / 護照</td><td id="rPass">-</td></tr></table></div>
+                <div class="rev-section"><h3>Student Information / 學生資料</h3><table class="rev-table"><tr><td>Legal Name (EN)</td><td id="rName">-</td></tr><tr><td>Chinese Name / 中文姓名</td><td id="rCn">-</td></tr><tr><td>Date of Birth</td><td id="rDob">-</td></tr><tr><td>Nationality</td><td id="rNationality">-</td></tr><tr><td>Grade / 年級</td><td id="rGrade">-</td></tr><tr><td>School / 學校</td><td id="rSchool">-</td></tr><tr><td>Student Email</td><td id="rSEmail">-</td></tr><tr><td>Student Phone</td><td id="rSPhone">-</td></tr><tr><td>Passport Number</td><td id="rPassNo">-</td></tr><tr><td>Passport File / 護照</td><td id="rPass">-</td></tr></table></div>
                 <hr class="div">
-                <div class="rev-section"><h3>Parent Information / 家長資料</h3><table class="rev-table"><tr><td>Parent Name</td><td id="rPName">-</td></tr><tr><td>Parent Email</td><td id="rPEmail">-</td></tr><tr><td>Parent Phone</td><td id="rPPhone">-</td></tr><tr><td>Mailing Address</td><td id="rAddr">-</td></tr></table></div>
+                <div class="rev-section"><h3>Parent Information / 家長資料</h3><table class="rev-table"><tr><td>Parent Name</td><td id="rPName">-</td></tr><tr><td>Relationship</td><td id="rRel">-</td></tr><tr><td>Parent Email</td><td id="rPEmail">-</td></tr><tr><td>Parent Phone</td><td id="rPPhone">-</td></tr><tr><td>Mailing Address</td><td id="rAddr">-</td></tr><tr><td>Emergency Contact</td><td id="rEmergency">-</td></tr></table></div>
                 <hr class="div">
                 <div class="rev-section"><h3>Selected Exams / 已選考科</h3><div id="rExams" class="hint" style="margin-top:8px">-</div></div>
+                <hr class="div">
+                <div class="rev-section"><h3>Accommodations / 特殊需求</h3><div id="rAccom" class="hint" style="margin-top:8px">-</div></div>
                 <hr class="div">
                 <div class="rev-section"><h3>Fee Summary / 費用摘要</h3><table class="rev-table"><tr><td>Regular Exams / 正式考試</td><td id="rReg">-</td></tr><tr><td>Practice Exams / 模擬考</td><td id="rPra">-</td></tr><tr><td>Late Fee / 逾期費</td><td id="rLate">-</td></tr><tr style="font-weight:800;color:var(--primary)"><td>Total / 總計</td><td id="rTot">-</td></tr></table></div>
             </div>
@@ -293,16 +295,24 @@
         const passport = document.getElementById('passportFile').files[0]?.name || 'Uploaded file / 已選擇檔案';
         document.getElementById('rName').textContent = [field('family_name_en'), field('first_name_en'), field('middle_name')].filter(Boolean).join(' ');
         document.getElementById('rCn').textContent = field('chinese_legal_name') || '-';
+        document.getElementById('rDob').textContent = field('date_of_birth') || '-';
+        document.getElementById('rNationality').textContent = field('nationality') || '-';
         document.getElementById('rGrade').textContent = field('grade') || '-';
         document.getElementById('rSchool').textContent = field('current_school') || '-';
         document.getElementById('rSEmail').textContent = field('student_email') || '-';
         document.getElementById('rSPhone').textContent = field('student_phone') || '-';
+        document.getElementById('rPassNo').textContent = field('passport_number') || '-';
         document.getElementById('rPass').textContent = passport;
         document.getElementById('rPName').textContent = [field('parent_first_name'), field('parent_last_name')].filter(Boolean).join(' ');
+        document.getElementById('rRel').textContent = field('relationship') || '-';
         document.getElementById('rPEmail').textContent = field('parent_email') || '-';
         document.getElementById('rPPhone').textContent = field('parent_phone') || '-';
         document.getElementById('rAddr').textContent = [field('mailing_address'), field('mailing_city'), field('postal_code')].filter(Boolean).join(', ');
+        document.getElementById('rEmergency').textContent = [field('emergency_contact_name'), field('emergency_contact_phone'), field('emergency_contact_relationship')].filter(Boolean).join(' / ') || '-';
         document.getElementById('rExams').textContent = names.length ? names.join(', ') : '-';
+        document.getElementById('rAccom').textContent = document.getElementById('needsAccom').checked
+            ? [field('ssd_code'), field('accommodation_status')].filter(Boolean).join(' / ') || 'Requested'
+            : 'No accommodations requested';
         document.getElementById('rReg').textContent = `${totals.regCt} exams / NT$ ${money(totals.regTot)}`;
         document.getElementById('rPra').textContent = `${totals.praCt} exams / NT$ ${money(totals.praTot)}`;
         document.getElementById('rLate').textContent = `NT$ ${money(totals.lateTot)}`;
