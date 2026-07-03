@@ -1,1 +1,90 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>{{ $payment->payment_reference }}</title><style>body{margin:0;background:#f5f7fb;color:#1f2a37;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}.wrap{max-width:1060px;margin:0 auto;padding:22px 16px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.card{background:white;border:1px solid #d9dee8;border-radius:8px;padding:20px;margin-bottom:14px;box-shadow:0 4px 16px rgba(22,47,83,.05)}h1,h2{color:#153764}.btn{border:0;border-radius:6px;padding:10px 14px;font-weight:900;text-decoration:none;display:inline-flex;background:#153764;color:white;cursor:pointer}.btn.light{background:white;color:#153764;border:1.5px solid #d9dee8}.btn.danger{background:#b42318}table{width:100%;border-collapse:collapse}td{padding:8px 0;border-bottom:1px solid #edf0f5;font-size:13px;vertical-align:top}td:first-child{width:34%;color:#667085}label{display:flex;flex-direction:column;gap:6px;margin-bottom:10px;font-weight:800}textarea,select{border:1.5px solid #cbd3df;border-radius:6px;padding:9px 11px}.notice{background:#e8f6ef;color:#237a4f;padding:10px 12px;border-radius:8px;margin-bottom:12px}@media(max-width:800px){.grid{grid-template-columns:1fr}}</style></head><body><main class="wrap">@if(session('status'))<div class="notice">{{ session('status') }}</div>@endif<div class="card"><h1>{{ $payment->payment_reference }}</h1><a class="btn light" href="{{ route('admin.payments.index') }}">Back</a></div><div class="grid"><div class="card"><h2>Payment</h2><table><tr><td>Status</td><td>{{ $payment->payment_status }}</td></tr><tr><td>Provider</td><td>{{ $payment->provider }}</td></tr><tr><td>Method</td><td>{{ $payment->payment_method }}</td></tr><tr><td>Exam Fee</td><td>{{ number_format($payment->exam_fee_amount) }}</td></tr><tr><td>Service Fee</td><td>{{ number_format($payment->service_fee_amount) }}</td></tr><tr><td>Late Fee</td><td>{{ number_format($payment->late_fee_amount) }}</td></tr><tr><td>Total</td><td>{{ $payment->currency }} {{ number_format($payment->grand_total) }}</td></tr><tr><td>Transaction</td><td>{{ $payment->transaction_id }}</td></tr><tr><td>Gateway Order</td><td>{{ $payment->gateway_order_id }}</td></tr></table></div><div class="card"><h2>Registration</h2><table><tr><td>Reference</td><td>{{ $payment->registration->registration_number }}</td></tr><tr><td>Student</td><td>{{ $payment->registration->student_full_name }}</td></tr><tr><td>Email</td><td>{{ $payment->registration->student_email }}</td></tr><tr><td>Parent</td><td>{{ $payment->registration->contact?->parent_email }}</td></tr><tr><td>Exams</td><td>{{ $payment->registration->exams->pluck('name')->join(', ') }}</td></tr></table></div></div><div class="grid"><div class="card"><h2>Proof</h2><table><tr><td>File</td><td>{{ $payment->proof_original_name ?: '-' }}</td></tr><tr><td>Uploaded</td><td>{{ optional($payment->proof_uploaded_at)->format('Y-m-d H:i') ?: '-' }}</td></tr></table>@if($payment->proof_file_path)<a class="btn light" href="{{ route('admin.payments.proof.preview',$payment) }}" target="_blank">Preview</a> <a class="btn light" href="{{ route('admin.payments.proof.download',$payment) }}">Download</a>@endif</div><div class="card"><h2>Manual Verification</h2><form method="POST" action="{{ route('admin.payments.verify',$payment) }}">@csrf<label>Action<select name="action"><option value="verify">Verify</option><option value="reject">Reject</option></select></label><label>Note<textarea name="note"></textarea></label><label>Rejection Reason<textarea name="rejected_reason"></textarea></label><button class="btn" type="submit">Submit</button></form></div></div><div class="card"><h2>Payment Logs</h2><table><thead><tr><th>Event</th><th>Old</th><th>New</th><th>Time</th></tr></thead><tbody>@foreach($payment->logs->sortByDesc('created_at') as $log)<tr><td>{{ $log->event_type }}</td><td>{{ $log->old_status }}</td><td>{{ $log->new_status }}</td><td>{{ $log->created_at->format('Y-m-d H:i') }}</td></tr>@endforeach</tbody></table></div></main></body></html>
+<x-admin-shell
+    :title="$payment->payment_reference"
+    subtitle="Manual verification, proof review, gateway metadata, and audit trail."
+>
+    <section class="grid-2">
+        <div class="card">
+            <div class="section-title"><h2>Payment</h2><a class="btn light" href="{{ route('admin.payments.index') }}">Back</a></div>
+            <table>
+                <tbody>
+                    <tr><td>Status</td><td><span class="status {{ $payment->payment_status }}">{{ str_replace('_', ' ', $payment->payment_status) }}</span></td></tr>
+                    <tr><td>Provider</td><td>{{ $payment->provider ?: '-' }}</td></tr>
+                    <tr><td>Method</td><td>{{ str_replace('_', ' ', $payment->payment_method ?: '-') }}</td></tr>
+                    <tr><td>Exam Fee</td><td>{{ $payment->currency }} {{ number_format($payment->exam_fee_amount) }}</td></tr>
+                    <tr><td>Service Fee</td><td>{{ $payment->currency }} {{ number_format($payment->service_fee_amount) }}</td></tr>
+                    <tr><td>Late Fee</td><td>{{ $payment->currency }} {{ number_format($payment->late_fee_amount) }}</td></tr>
+                    <tr><td>Total</td><td><strong>{{ $payment->currency }} {{ number_format($payment->grand_total) }}</strong></td></tr>
+                    <tr><td>Transaction</td><td>{{ $payment->transaction_id ?: '-' }}</td></tr>
+                    <tr><td>Gateway Order</td><td>{{ $payment->gateway_order_id ?: '-' }}</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card">
+            <div class="section-title"><h2>Registration</h2><a class="btn light" href="{{ route('admin.student-registrations.show', $payment->registration) }}">Open Registration</a></div>
+            <table>
+                <tbody>
+                    <tr><td>Reference</td><td>{{ $payment->registration->registration_number }}</td></tr>
+                    <tr><td>Student</td><td>{{ $payment->registration->student_full_name }}</td></tr>
+                    <tr><td>Email</td><td>{{ $payment->registration->student_email }}</td></tr>
+                    <tr><td>Parent</td><td>{{ $payment->registration->contact?->parent_email ?: '-' }}</td></tr>
+                    <tr><td>Exams</td><td>{{ $payment->registration->exams->pluck('name')->join(', ') ?: '-' }}</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="grid-2" style="margin-top:14px">
+        <div class="card">
+            <h2>Proof</h2>
+            <table>
+                <tbody>
+                    <tr><td>File</td><td>{{ $payment->proof_original_name ?: '-' }}</td></tr>
+                    <tr><td>Uploaded</td><td>{{ optional($payment->proof_uploaded_at)->format('Y-m-d H:i') ?: '-' }}</td></tr>
+                </tbody>
+            </table>
+            @if($payment->proof_file_path)
+                <div class="top-actions" style="justify-content:flex-start;margin-top:14px">
+                    <a class="btn light" href="{{ route('admin.payments.proof.preview', $payment) }}" target="_blank">Preview</a>
+                    <a class="btn light" href="{{ route('admin.payments.proof.download', $payment) }}">Download</a>
+                </div>
+            @else
+                <p class="muted">No proof uploaded yet.</p>
+            @endif
+        </div>
+
+        <div class="card">
+            <h2>Manual Verification</h2>
+            <form method="POST" action="{{ route('admin.payments.verify', $payment) }}">
+                @csrf
+                <label>Action
+                    <select name="action">
+                        <option value="verify">Verify</option>
+                        <option value="reject">Reject</option>
+                    </select>
+                </label>
+                <label>Note
+                    <textarea name="note"></textarea>
+                </label>
+                <label>Rejection Reason
+                    <textarea name="rejected_reason"></textarea>
+                </label>
+                <button class="btn" type="submit">Submit Verification</button>
+            </form>
+        </div>
+    </section>
+
+    <section class="card" style="margin-top:14px">
+        <h2>Payment Logs</h2>
+        <table>
+            <thead><tr><th>Event</th><th>Old</th><th>New</th><th>Time</th></tr></thead>
+            <tbody>
+                @forelse($payment->logs->sortByDesc('created_at') as $log)
+                    <tr><td>{{ $log->event_type }}</td><td>{{ $log->old_status ?: '-' }}</td><td>{{ $log->new_status ?: '-' }}</td><td>{{ $log->created_at->format('Y-m-d H:i') }}</td></tr>
+                @empty
+                    <tr><td colspan="4" class="muted">No payment logs yet.</td></tr>
+                @endforelse
+            </tbody>
+        </table>
+    </section>
+</x-admin-shell>

@@ -1,13 +1,139 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Annual Reports</title><style>
-body{margin:0;background:#f5f7fb;color:#1f2a37;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}header{background:#153764;color:white;padding:18px 24px}.wrap{max-width:1240px;margin:0 auto;padding:22px 16px}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.card{background:white;border:1px solid #d9dee8;border-radius:8px;padding:18px;box-shadow:0 4px 16px rgba(22,47,83,.05)}.metric{font-size:24px;font-weight:900;color:#153764}.muted{color:#667085;font-size:12px}.btn{border:0;border-radius:6px;padding:10px 14px;font-weight:900;text-decoration:none;display:inline-flex;background:#153764;color:white}select{min-height:40px;border:1.5px solid #cbd3df;border-radius:6px;padding:8px 10px;font:inherit}table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:10px 8px;border-bottom:1px solid #edf0f5;font-size:13px}th{color:#153764}.bar{height:8px;background:#edf0f5;border-radius:999px;overflow:hidden}.bar span{display:block;height:8px;background:#237a4f}@media(max-width:900px){.grid{grid-template-columns:1fr 1fr}table{display:block;overflow-x:auto}}@media(max-width:560px){.grid{grid-template-columns:1fr}}</style></head><body>
-<header><h1>Annual AP Registration Reports</h1><p>Season, revenue, subject, payment, and receipt summary.</p></header>
-<main class="wrap"><form class="card" method="GET"><select name="season">@foreach($seasons as $season)<option value="{{ $season->uuid }}" @selected($selectedSeason?->id === $season->id)>{{ $season->season_name }} ({{ $season->exam_year }})</option>@endforeach</select> <button class="btn" type="submit">View</button> <a class="btn" href="{{ route('admin.reports.annual.export', ['season' => $selectedSeason?->uuid]) }}">Export CSV</a> <a class="btn" href="{{ route('admin.exam-seasons.index') }}">Seasons</a></form>
-<section class="grid" style="margin-top:12px">
-@foreach(['total'=>'Total registrations','main'=>'Main registrations','late'=>'Late registrations','verified'=>'Verified registrations','needs_accommodations'=>'Accommodation requests','practice_exam_count'=>'Practice exams'] as $key=>$label)<div class="card"><div class="metric">{{ number_format($report['registration'][$key]) }}</div><div class="muted">{{ $label }}</div></div>@endforeach
-</section>
-<section class="grid" style="margin-top:12px">
-@foreach(['grand_total'=>'Grand amount','exam_fee'=>'Exam fee','service_fee'=>'Service fee','late_fee'=>'Late fee','practice_exam'=>'Practice exam fee','paid'=>'Paid amount','pending'=>'Pending amount','refunded'=>'Refunded amount','receipt_eligible'=>'Receipt eligible'] as $key=>$label)<div class="card"><div class="metric">{{ $selectedSeason?->currency ?? 'NTD' }} {{ number_format($report['revenue'][$key]) }}</div><div class="muted">{{ $label }}</div></div>@endforeach
-</section>
-<section class="card" style="margin-top:12px"><h2>Exam Subject Report</h2><table><thead><tr><th>Subject</th><th>Quota</th><th>Registered</th><th>Remaining</th><th>Paid</th><th>Fee Total</th><th>Fill</th></tr></thead><tbody>@foreach($report['subjects'] as $row)@php($subject=$row['subject'])<tr><td>{{ $subject->code }} - {{ $subject->name }}</td><td>{{ $subject->quota ?? 'No cap' }}</td><td>{{ $subject->registered_count }}</td><td>{{ $row['remaining'] ?? 'No cap' }}</td><td>{{ $subject->paid_count }}</td><td>{{ $subject->currency }} {{ number_format(($subject->exam_fee + $subject->service_fee + $subject->late_registration_fee) * $subject->registered_count) }}</td><td><div class="bar"><span style="width:{{ $subject->quota ? min(100,($subject->registered_count / max(1,$subject->quota))*100) : 0 }}%"></span></div></td></tr>@endforeach</tbody></table></section>
-<section class="grid" style="margin-top:12px"><div class="card"><h2>Payment Status</h2><table><tbody>@foreach($report['payment_statuses'] as $row)<tr><td>{{ $row->payment_status }}</td><td>{{ $row->total }}</td><td>{{ number_format($row->amount) }}</td></tr>@endforeach</tbody></table></div><div class="card"><h2>Receipt Status</h2><table><tbody>@foreach($report['receipt_statuses'] as $row)<tr><td>{{ $row->status }}</td><td>{{ $row->total }}</td><td>{{ number_format($row->amount) }}</td></tr>@endforeach</tbody></table></div><div class="card"><h2>Registration Trend</h2><table><tbody>@foreach($report['trend'] as $row)<tr><td>{{ $row['date'] }}</td><td>{{ $row['total'] }}</td></tr>@endforeach</tbody></table></div></section>
-</main></body></html>
+<x-admin-shell
+    title="Annual AP Registration Reports"
+    subtitle="Season, revenue, subject, payment, and receipt summary for yearly reuse."
+>
+    @php($currency = $selectedSeason?->currency ?? 'NTD')
+
+    <form class="card" method="GET">
+        <div class="section-title">
+            <div>
+                <h2>Season Report</h2>
+                <p>Select an exam season and export the yearly report as CSV.</p>
+            </div>
+            <div class="top-actions">
+                <button class="btn" type="submit">View</button>
+                <a class="btn light" href="{{ route('admin.reports.annual.export', ['season' => $selectedSeason?->uuid]) }}">Export CSV</a>
+                <a class="btn light" href="{{ route('admin.exam-seasons.index') }}">Seasons</a>
+            </div>
+        </div>
+        <div class="filters" style="grid-template-columns:minmax(220px,360px)">
+            <select name="season">
+                @foreach($seasons as $season)
+                    <option value="{{ $season->uuid }}" @selected($selectedSeason?->id === $season->id)>{{ $season->season_name }} ({{ $season->exam_year }})</option>
+                @endforeach
+            </select>
+        </div>
+    </form>
+
+    @php($registrationMetrics = [
+        'total' => 'Total registrations',
+        'main' => 'Main registrations',
+        'late' => 'Late registrations',
+        'completed' => 'Completed registrations',
+        'pending_payment' => 'Pending payment',
+        'cancelled' => 'Cancelled',
+        'verified' => 'Verified registrations',
+        'needs_accommodations' => 'Accommodation requests',
+        'practice_exam_count' => 'Practice exams',
+    ])
+
+    <section class="metrics" style="margin-top:14px">
+        @foreach($registrationMetrics as $key => $label)
+            <div class="card metric">
+                <span class="label">{{ $label }}</span>
+                <strong>{{ number_format($report['registration'][$key] ?? 0) }}</strong>
+                <span>{{ $selectedSeason?->season_name ?: 'All seasons' }}</span>
+            </div>
+        @endforeach
+    </section>
+
+    @php($revenueMetrics = [
+        'grand_total' => 'Grand amount',
+        'exam_fee' => 'Exam fee',
+        'service_fee' => 'Service fee',
+        'late_fee' => 'Late fee',
+        'practice_exam' => 'Practice exam fee',
+        'paid' => 'Paid amount',
+        'pending' => 'Pending amount',
+        'refunded' => 'Refunded amount',
+        'receipt_eligible' => 'Receipt eligible',
+    ])
+
+    <section class="metrics" style="margin-top:14px">
+        @foreach($revenueMetrics as $key => $label)
+            <div class="card metric">
+                <span class="label">{{ $label }}</span>
+                <strong>{{ $currency }} {{ number_format($report['revenue'][$key] ?? 0) }}</strong>
+                <span>Season revenue summary</span>
+            </div>
+        @endforeach
+    </section>
+
+    <section class="card" style="margin-top:14px">
+        <div class="section-title">
+            <div>
+                <h2>Exam Subject Report</h2>
+                <p>Quota, registered count, paid count, fee total, and fill rate.</p>
+            </div>
+        </div>
+        <table>
+            <thead><tr><th>Subject</th><th>Quota</th><th>Registered</th><th>Remaining</th><th>Paid</th><th>Fee Total</th><th>Fill</th></tr></thead>
+            <tbody>
+                @forelse($report['subjects'] as $row)
+                    @php($subject = $row['subject'])
+                    <tr>
+                        <td>{{ $subject->code }} - {{ $subject->name }}</td>
+                        <td>{{ $subject->quota ?? 'No cap' }}</td>
+                        <td>{{ $subject->registered_count }}</td>
+                        <td>{{ $row['remaining'] ?? 'No cap' }}</td>
+                        <td>{{ $subject->paid_count }}</td>
+                        <td>{{ $subject->currency }} {{ number_format(($subject->exam_fee + $subject->service_fee + $subject->late_registration_fee) * $subject->registered_count) }}</td>
+                        <td><div class="bar"><i style="width:{{ $subject->quota ? min(100, ($subject->registered_count / max(1, $subject->quota)) * 100) : 0 }}%"></i></div></td>
+                    </tr>
+                @empty
+                    <tr><td colspan="7" class="muted">No subjects found for this season.</td></tr>
+                @endforelse
+            </tbody>
+        </table>
+    </section>
+
+    <section class="grid-2" style="margin-top:14px">
+        <div class="card">
+            <h2>Payment Status</h2>
+            <table>
+                <tbody>
+                    @forelse($report['payment_statuses'] as $row)
+                        <tr><td><span class="status {{ $row->payment_status }}">{{ str_replace('_', ' ', $row->payment_status) }}</span></td><td>{{ $row->total }}</td><td>{{ $currency }} {{ number_format($row->amount) }}</td></tr>
+                    @empty
+                        <tr><td colspan="3" class="muted">No payment data.</td></tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+        <div class="card">
+            <h2>Receipt Status</h2>
+            <table>
+                <tbody>
+                    @forelse($report['receipt_statuses'] as $row)
+                        <tr><td><span class="status {{ $row->status }}">{{ str_replace('_', ' ', $row->status) }}</span></td><td>{{ $row->total }}</td><td>{{ $currency }} {{ number_format($row->amount) }}</td></tr>
+                    @empty
+                        <tr><td colspan="3" class="muted">No receipt data.</td></tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="card" style="margin-top:14px">
+        <h2>Registration Trend</h2>
+        <table>
+            <tbody>
+                @forelse($report['trend'] as $row)
+                    <tr><td>{{ $row['date'] }}</td><td>{{ $row['total'] }}</td></tr>
+                @empty
+                    <tr><td class="muted">No submitted registrations in this season.</td></tr>
+                @endforelse
+            </tbody>
+        </table>
+    </section>
+</x-admin-shell>

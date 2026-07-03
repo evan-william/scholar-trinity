@@ -35,7 +35,9 @@
         .btn.light{background:#fff;color:var(--navy);border:1.5px solid var(--line)}
         .btn.gold{background:var(--gold);color:#382800}
         .filters{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
-        input,select{min-height:40px;border:1.5px solid #cbd3df;border-radius:6px;padding:8px 10px;font:inherit;background:#fff;color:var(--ink);width:100%}
+        label{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:850;color:var(--ink);margin-bottom:12px}
+        input,select,textarea{min-height:40px;border:1.5px solid #cbd3df;border-radius:6px;padding:8px 10px;font:inherit;background:#fff;color:var(--ink);width:100%}
+        textarea{min-height:92px;resize:vertical}
         .metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
         .metric strong{display:block;color:var(--navy);font-size:30px;line-height:1.05;margin:7px 0}
         .metric span{color:var(--muted);font-size:12px;line-height:1.45}
@@ -51,6 +53,7 @@
         .chart-bar{flex:1;min-width:10px;background:linear-gradient(180deg,var(--blue),var(--navy));border-radius:6px 6px 0 0;min-height:4px}
         .muted{color:var(--muted)}
         .notice{background:#fff8e1;color:#5a4000;border:1px solid #f0c040;padding:11px 13px;border-radius:8px;margin-bottom:14px}
+        .notice.error{background:#fff0ee;color:var(--red);border-color:#ffc9c4}
         form{margin:0}
         @media(max-width:1050px){.shell{grid-template-columns:1fr}.side{position:static;height:auto}.nav-group{grid-template-columns:repeat(2,minmax(0,1fr))}.filters,.metrics,.grid-2{grid-template-columns:1fr 1fr}.top{position:static}}
         @media(max-width:680px){.top{align-items:flex-start;flex-direction:column}.top-actions{justify-content:flex-start}.filters,.metrics,.grid-2,.nav-group{grid-template-columns:1fr}table{display:block;overflow-x:auto}.wrap{padding-inline:12px}}
@@ -99,6 +102,9 @@
         <main class="wrap">
             @if(session('status'))
                 <div class="notice">{{ session('status') }}</div>
+            @endif
+            @if($errors->any())
+                <div class="notice error">{{ $errors->first() }}</div>
             @endif
             {{ $slot }}
         </main>

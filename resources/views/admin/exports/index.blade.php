@@ -1,8 +1,42 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Export History</title><style>
-body{margin:0;background:#f5f7fb;color:#1f2a37;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}.wrap{max-width:1120px;margin:0 auto;padding:22px 16px}.card{background:white;border:1px solid #d9dee8;border-radius:8px;padding:20px;margin-bottom:14px;box-shadow:0 4px 16px rgba(22,47,83,.05)}h1{color:#153764}.btn{border:0;border-radius:6px;padding:9px 12px;font-weight:900;text-decoration:none;display:inline-flex;background:#153764;color:white}.btn.light{background:white;color:#153764;border:1.5px solid #d9dee8}.notice{background:#e8f6ef;color:#237a4f;padding:10px 12px;border-radius:8px;margin-bottom:12px}table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:9px 8px;border-bottom:1px solid #edf0f5;font-size:13px}th{color:#667085}</style></head><body><main class="wrap">
-@if(session('status'))<div class="notice">{{ session('status') }}</div>@endif
-<div class="card"><h1>Export History</h1><p><a class="btn light" href="{{ route('admin.student-registrations.index') }}">Back to Registrations</a></p></div>
-<div class="card"><table><thead><tr><th>File</th><th>Template</th><th>Format</th><th>Records</th><th>Created By</th><th>Created</th><th>Expires</th><th>Action</th></tr></thead><tbody>
-@forelse($exports as $export)<tr><td>{{ $export->file_name }}</td><td>{{ $export->export_type }}</td><td>{{ strtoupper($export->export_format) }}</td><td>{{ $export->record_count }}</td><td>{{ $export->exporter?->name }}</td><td>{{ $export->exported_at->format('Y-m-d H:i') }}</td><td>{{ optional($export->expires_at)->format('Y-m-d H:i') }}</td><td>@if(! $export->expires_at?->isPast())<a class="btn light" href="{{ route('admin.exports.download',$export) }}">Download</a>@else Expired @endif</td></tr>@empty<tr><td colspan="8">No exports yet.</td></tr>@endforelse
-</tbody></table>{{ $exports->links() }}</div>
-</main></body></html>
+<x-admin-shell
+    title="Export History"
+    subtitle="Download generated CSV/XLSX registration exports and review export audit metadata."
+>
+    <section class="card">
+        <div class="section-title">
+            <div>
+                <h2>Generated Exports</h2>
+                <p>Exports expire automatically when configured by the export service.</p>
+            </div>
+            <a class="btn light" href="{{ route('admin.student-registrations.index') }}">Back to Registrations</a>
+        </div>
+        <table>
+            <thead>
+                <tr><th>File</th><th>Template</th><th>Format</th><th>Records</th><th>Created By</th><th>Created</th><th>Expires</th><th>Action</th></tr>
+            </thead>
+            <tbody>
+                @forelse($exports as $export)
+                    <tr>
+                        <td><strong>{{ $export->file_name }}</strong></td>
+                        <td>{{ $export->export_type }}</td>
+                        <td>{{ strtoupper($export->export_format) }}</td>
+                        <td>{{ $export->record_count }}</td>
+                        <td>{{ $export->exporter?->name ?: '-' }}</td>
+                        <td>{{ $export->exported_at->format('Y-m-d H:i') }}</td>
+                        <td>{{ optional($export->expires_at)->format('Y-m-d H:i') ?: '-' }}</td>
+                        <td>
+                            @if(! $export->expires_at?->isPast())
+                                <a class="btn light" href="{{ route('admin.exports.download', $export) }}">Download</a>
+                            @else
+                                <span class="status failed">Expired</span>
+                            @endif
+                        </td>
+                    </tr>
+                @empty
+                    <tr><td colspan="8" class="muted">No exports yet.</td></tr>
+                @endforelse
+            </tbody>
+        </table>
+        {{ $exports->links() }}
+    </section>
+</x-admin-shell>

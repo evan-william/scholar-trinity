@@ -56,6 +56,7 @@ Current local template pass:
 - Frontend assets now live in `public/theme/edification/` with the original MIT license retained.
 - AP announcement image now lives in `public/images/ap-late-registration-2026.jpeg`.
 - Backend/admin source reviewed: `template-source/backend/filament-4.x.zip` is Filament framework/package source, not a drop-in admin HTML theme. Do not copy it into the app raw. Install/evaluate Filament later through Composer after PHP/Composer are available and admin redesign is approved.
+- Backend/admin current template pass: custom Blade `admin-shell` is being used as the temporary admin dashboard template until a final AdminLTE/Filament/Envato decision is approved.
 - Raw downloaded templates are ignored through `template-source/` in `.gitignore`.
 
 ## Current Progress
@@ -84,6 +85,11 @@ Current local template pass:
   - Added shared `admin-shell` Blade component with sidebar navigation, top actions, responsive layout, and admin route shortcuts.
   - Reworked admin dashboard to show Word-aligned metrics, filters, operations queue, quick actions, daily registration chart, payment status breakdown, and subject quota/fee summary.
   - Reworked admin login page into a branded secure operations login surface while keeping existing auth routes and validation untouched.
+- Backend/admin shell expansion:
+  - Applied `admin-shell` to registration management index, including full filters and export controls.
+  - Applied `admin-shell` to payment list/detail/settings pages, including proof review, manual verification, gateway fields, and manual bank transfer settings.
+  - Applied `admin-shell` to receipt/fapiao list/detail/settings pages, including service-fee-only receipt amount, manual issue actions, sandbox auto issue, and e-invoice provider fields.
+  - Applied `admin-shell` to export history and annual report pages.
 
 2026-07-02
 - Confirmed direction from team chat: Laravel + Vue.
@@ -217,6 +223,8 @@ Current local template pass:
   - `PARTIAL`: list/search/filter/detail/edit/verify/notes exist.
   - DONE: exam replacement quota recalculation fixed.
   - DONE: new registration fields appear on admin show/edit/print pages.
+  - DONE: registration management index now uses the backend/admin shell with full filters and export controls.
+  - TODO: apply admin shell to registration detail/edit pages.
 
 - Passport Management:
   - `MOSTLY DONE`: preview, download, replace, valid/invalid, reupload request exist.
@@ -227,6 +235,7 @@ Current local template pass:
   - `MOSTLY DONE`: CSV/XLSX export exists.
   - DONE: new registration fields and practice/accommodation data are included in exports.
   - DONE: export filters now include document status, verification status, receipt status, and accommodations.
+  - DONE: export history page now uses the backend/admin shell.
   - TODO: verify XLSX works on server with PHP Zip extension.
 
 ### Phase 3 - Payment Flow
@@ -234,6 +243,7 @@ Current local template pass:
 - Payment Setup:
   - `PARTIAL`: fee separation and totals exist.
   - DONE: server-side practice fee calculation.
+  - DONE: admin payment settings page now uses the backend/admin shell.
   - TODO: admin fee update UX and recalculation rules.
 
 - Taiwan Payment Gateway:
@@ -250,6 +260,7 @@ Current local template pass:
 - Manual Payment:
   - `MOSTLY DONE`: bank instruction, proof upload, admin verify/reject exist.
   - DONE: public payment instruction UI now shows amount breakdown, bank transfer details, proof upload, and gateway fallback clearly.
+  - DONE: admin payment list/detail pages now use the backend/admin shell and expose proof review/manual verification clearly.
   - TODO: polish email text after final bilingual copy review.
 
 - Payment Confirmation:
@@ -270,7 +281,8 @@ Current local template pass:
 
 - Admin Receipt Management:
   - `PARTIAL`: list/filter/export/issue/manual receipt number exist.
-  - TODO: template redesign.
+  - DONE: receipt list/detail/settings now use the backend/admin shell.
+  - TODO: final provider-specific e-invoice UX after provider is chosen.
 
 - Auto Fapiao Integration:
   - `NOT PRODUCTION READY`: current auto issue is sandbox simulation.
@@ -338,7 +350,8 @@ Current local template pass:
   - `PARTIAL`: annual, revenue, subject, payment, receipt summaries exist.
   - DONE: annual report now includes practice exam and accommodation breakdowns.
   - DONE: annual report CSV export endpoint added.
-  - TODO: better charts after admin template is selected.
+  - DONE: annual report page now uses the backend/admin shell with registration/revenue cards and subject/payment/receipt tables.
+  - TODO: richer charts after final admin template is selected.
 
 ## Bugs / Re-Audit Findings
 
@@ -363,6 +376,8 @@ Current local template pass:
 - Static check: no obvious mojibake markers found in newly touched public flow views.
 - Static check: `git diff --check` passed after admin dashboard/login shell polish.
 - Static check: no obvious mojibake markers found in newly touched admin shell/dashboard/login views.
+- Static check: `git diff --check` passed after applying admin shell to registration/payment/receipt/export/report pages.
+- Static check: no obvious mojibake markers found in newly touched admin management views.
 - Blocked: `php -v` failed because PHP is not in PATH.
 - Blocked: `composer --version` failed because Composer is not in PATH.
 

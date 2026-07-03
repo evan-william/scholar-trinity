@@ -1,1 +1,50 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E-Invoice Settings</title><style>body{margin:0;background:#f5f7fb;color:#1f2a37;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}.wrap{max-width:920px;margin:0 auto;padding:22px 16px}.card{background:white;border:1px solid #d9dee8;border-radius:8px;padding:20px;margin-bottom:14px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}label{display:flex;flex-direction:column;gap:6px;font-weight:800;margin-bottom:10px}input,select{border:1.5px solid #cbd3df;border-radius:6px;padding:9px 11px}.btn{border:0;border-radius:6px;padding:10px 14px;font-weight:900;text-decoration:none;display:inline-flex;background:#153764;color:white;cursor:pointer}.btn.light{background:white;color:#153764;border:1.5px solid #d9dee8}.notice{background:#e8f6ef;color:#237a4f;padding:10px 12px;border-radius:8px;margin-bottom:12px}@media(max-width:720px){.grid{grid-template-columns:1fr}}</style></head><body><main class="wrap">@if(session('status'))<div class="notice">{{ session('status') }}</div>@endif @if($errors->any())<div class="card">{{ $errors->first() }}</div>@endif<div class="card"><h1>E-Invoice Settings</h1><a class="btn light" href="{{ route('admin.receipts.index') }}">Back</a></div><form class="card" method="POST" action="{{ route('admin.receipts.settings.update') }}">@csrf @method('PUT')<div class="grid"><label>Provider<select name="provider"><option value="manual" @selected($setting->provider==='manual')>Manual</option><option value="ecpay" @selected($setting->provider==='ecpay')>ECPay</option><option value="newebpay" @selected($setting->provider==='newebpay')>NewebPay</option><option value="ezpay" @selected($setting->provider==='ezpay')>ezPay</option><option value="turnkey" @selected($setting->provider==='turnkey')>Turnkey</option></select></label><label>Environment<select name="environment"><option value="sandbox" @selected($setting->environment==='sandbox')>Sandbox</option><option value="production" @selected($setting->environment==='production')>Production</option></select></label><label>Merchant ID<input name="merchant_id" value="{{ old('merchant_id',$setting->merchant_id) }}"></label><label>Callback URL<input name="callback_url" value="{{ old('callback_url',$setting->callback_url) }}"></label><label>API Key<input name="api_key" placeholder="Leave blank to keep existing"></label><label>Hash Key<input name="hash_key" placeholder="Leave blank to keep existing"></label><label>Hash IV<input name="hash_iv" placeholder="Leave blank to keep existing"></label></div><label><span><input type="checkbox" name="late_fee_taxable" value="1" @checked($setting->late_fee_taxable)> Include late fee in receipt amount</span></label><label><span><input type="checkbox" name="allow_unpaid_receipts" value="1" @checked($setting->allow_unpaid_receipts)> Allow receipt issue before payment is paid</span></label><label><span><input type="checkbox" name="is_active" value="1" @checked($setting->is_active)> Active</span></label><button class="btn" type="submit">Save Settings</button></form></main></body></html>
+<x-admin-shell
+    title="E-Invoice Settings"
+    subtitle="Prepare Taiwan e-invoice provider credentials and receipt tax behavior."
+>
+    <section class="card">
+        <div class="section-title">
+            <div>
+                <h2>Provider Configuration</h2>
+                <p>Keep secrets out of Git. Leave sensitive fields blank to keep existing values.</p>
+            </div>
+            <a class="btn light" href="{{ route('admin.receipts.index') }}">Back to Receipts</a>
+        </div>
+        <form method="POST" action="{{ route('admin.receipts.settings.update') }}">
+            @csrf
+            @method('PUT')
+            <div class="filters" style="grid-template-columns:repeat(2,minmax(0,1fr))">
+                <label>Provider
+                    <select name="provider">
+                        <option value="manual" @selected($setting->provider === 'manual')>Manual</option>
+                        <option value="ecpay" @selected($setting->provider === 'ecpay')>ECPay</option>
+                        <option value="newebpay" @selected($setting->provider === 'newebpay')>NewebPay</option>
+                        <option value="ezpay" @selected($setting->provider === 'ezpay')>ezPay</option>
+                        <option value="turnkey" @selected($setting->provider === 'turnkey')>Turnkey</option>
+                    </select>
+                </label>
+                <label>Environment
+                    <select name="environment">
+                        <option value="sandbox" @selected($setting->environment === 'sandbox')>Sandbox</option>
+                        <option value="production" @selected($setting->environment === 'production')>Production</option>
+                    </select>
+                </label>
+                <label>Merchant ID<input name="merchant_id" value="{{ old('merchant_id', $setting->merchant_id) }}"></label>
+                <label>Callback URL<input name="callback_url" value="{{ old('callback_url', $setting->callback_url) }}"></label>
+                <label>API Key<input name="api_key" placeholder="Leave blank to keep existing"></label>
+                <label>Hash Key<input name="hash_key" placeholder="Leave blank to keep existing"></label>
+                <label>Hash IV<input name="hash_iv" placeholder="Leave blank to keep existing"></label>
+            </div>
+            <label style="display:flex;flex-direction:row;align-items:center;gap:8px">
+                <input style="width:auto;min-height:auto" type="checkbox" name="late_fee_taxable" value="1" @checked($setting->late_fee_taxable)> Include late fee in receipt amount
+            </label>
+            <label style="display:flex;flex-direction:row;align-items:center;gap:8px">
+                <input style="width:auto;min-height:auto" type="checkbox" name="allow_unpaid_receipts" value="1" @checked($setting->allow_unpaid_receipts)> Allow receipt issue before payment is paid
+            </label>
+            <label style="display:flex;flex-direction:row;align-items:center;gap:8px">
+                <input style="width:auto;min-height:auto" type="checkbox" name="is_active" value="1" @checked($setting->is_active)> Active
+            </label>
+            <button class="btn" type="submit">Save Settings</button>
+        </form>
+    </section>
+</x-admin-shell>
