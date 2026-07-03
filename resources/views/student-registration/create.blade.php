@@ -17,6 +17,13 @@
         .check-line{display:flex;align-items:flex-start;gap:10px;font-size:13px;font-weight:700;line-height:1.5}.check-line input{width:18px;height:18px;min-height:auto;margin-top:1px;accent-color:var(--primary)}.ghost-btn{background:#fff;border:1.5px dashed var(--gray-400);padding:8px 14px;border-radius:6px;cursor:pointer;font-size:12px;color:var(--gray-600);font-family:inherit}.rev-section h3{font-size:14px;color:var(--primary);margin:0 0 8px}.rev-table{width:100%;border-collapse:collapse}.rev-table td{padding:7px 0;border-bottom:1px solid #edf0f5;font-size:13px;vertical-align:top}.rev-table td:first-child{width:38%;color:var(--gray-600);padding-right:12px}.div{border:0;border-top:1px solid var(--gray-200);margin:16px 0}.pay-options{display:grid;gap:10px}.pay-opt{border:1.5px solid var(--gray-200);border-radius:8px;padding:12px;display:flex;gap:10px;cursor:pointer}.pay-opt.selected{border-color:var(--primary);background:rgba(26,58,107,.05)}.pay-opt input{width:18px;height:18px;margin-top:3px;accent-color:var(--primary)}.pay-opt h4{margin:0 0 4px;color:var(--primary);font-size:14px}.pay-opt p{margin:0;color:var(--gray-600);font-size:12px;line-height:1.55}.badge-soon{display:inline-flex;background:#eef3f9;color:var(--primary);border-radius:999px;padding:2px 7px;font-size:10px}.sig-area{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}.sig-box{border:1px solid var(--gray-200);border-radius:8px;padding:14px;background:var(--gray-50)}.sig-box p{font-size:12px;margin:0 0 8px}.sig-line{height:48px;border-bottom:1.5px solid var(--gray-400);margin-bottom:8px}.confirm-wrap{text-align:center;padding:10px 0}.confirm-icon{width:66px;height:66px;border-radius:50%;display:grid;place-items:center;background:#e8f6ef;color:var(--success);font-size:24px;font-weight:900;margin:0 auto 14px}.ref-box{display:inline-block;background:var(--gray-50);border:1px solid var(--gray-200);border-radius:8px;padding:13px 18px;margin:14px 0}.next-steps{text-align:left;background:var(--gray-50);border-radius:8px;padding:14px 18px;margin-top:16px}.next-steps h4{margin:0 0 8px;color:var(--primary)}.next-steps li{font-size:13px;margin-bottom:6px;line-height:1.5}
         .nav-footer{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--gray-200);box-shadow:0 -2px 14px rgba(0,0,0,.06);padding:12px 18px;display:flex;align-items:center;justify-content:center;gap:18px;z-index:50}.btn{border:0;border-radius:6px;padding:11px 20px;font:inherit;font-size:14px;font-weight:900;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-light)}.btn-outline{background:#fff;color:var(--primary);border:1.5px solid var(--gray-400)}.btn-success{background:var(--success);color:#fff}.step-ind{font-size:12px;color:var(--gray-600);min-width:92px;text-align:center}.loading{opacity:.65;pointer-events:none}
         @media(max-width:640px){.main{padding-inline:12px}.card{padding:20px 16px}.row-2,.row-3,.filters,.exam-grid,.sig-area{grid-template-columns:1fr}.header{padding-inline:16px}.header-actions{width:100%;justify-content:space-between}.nav-footer{justify-content:space-between;gap:10px}.btn{padding:10px 14px}.step-item{min-width:92px}}
+        .main{max-width:900px}
+        .form-intro{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:22px;align-items:center;border-top:4px solid var(--accent);overflow:hidden}
+        .form-intro h2{font-size:24px;line-height:1.2;color:var(--primary);margin:10px 0 8px}
+        .form-intro p{font-size:14px;line-height:1.65;color:var(--gray-600);margin:0 0 12px}
+        .intro-list{margin:0;padding-left:18px;color:var(--gray-800);font-size:13px;line-height:1.65}
+        .intro-poster{width:100%;border:1px solid var(--gray-200);border-radius:6px}
+        @media(max-width:640px){.form-intro{grid-template-columns:1fr}.intro-poster{max-width:320px}}
     </style>
 </head>
 <body>
@@ -48,6 +55,20 @@
     @if ($errors->any())
         <div class="error-box" id="errorSummary"><strong>Please review the form / 請檢查表單</strong><ul>@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div>
     @endif
+
+    <section class="card form-intro" aria-labelledby="registration-intro-title">
+        <div>
+            <span class="header-badge">No login required</span>
+            <h2 id="registration-intro-title">2026 AP Exam Registration</h2>
+            <p>Students can submit registration details, passport upload, exam selections, accommodations, and payment method in one guided flow.</p>
+            <ul class="intro-list">
+                <li>Late registration deadline shown in the announcement: February 10, 2026.</li>
+                <li>Registration is complete only after the form and payment are received.</li>
+                <li>Some Taipei test-center subjects may already be full; final availability is confirmed by the admin team.</li>
+            </ul>
+        </div>
+        <img class="intro-poster" src="{{ asset('images/ap-late-registration-2026.jpeg') }}" alt="2026 AP Exam late registration announcement">
+    </section>
 
     <form id="studentForm" method="POST" action="{{ route('student-registrations.store') }}" enctype="multipart/form-data">
         @csrf

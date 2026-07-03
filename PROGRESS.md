@@ -1,6 +1,6 @@
 # Trinity Scholar Progress Tracker
 
-Last updated: 2026-07-02, Asia/Bangkok
+Last updated: 2026-07-03, Asia/Bangkok
 
 This file is the working source of truth for project status. Every implementation pass must update:
 - `Current Progress` for what changed.
@@ -51,7 +51,27 @@ Shortlist:
 
 Template decision still pending. For tomorrow's update, prioritize a clean compro landing and the registration form flow over perfect backend theme integration.
 
+Current local template pass:
+- Frontend/compro selected for now: local Edification education template from `template-source/frontend/edification-main.zip`.
+- Frontend assets now live in `public/theme/edification/` with the original MIT license retained.
+- AP announcement image now lives in `public/images/ap-late-registration-2026.jpeg`.
+- Backend/admin source reviewed: `template-source/backend/filament-4.x.zip` is Filament framework/package source, not a drop-in admin HTML theme. Do not copy it into the app raw. Install/evaluate Filament later through Composer after PHP/Composer are available and admin redesign is approved.
+- Raw downloaded templates are ignored through `template-source/` in `.gitignore`.
+
 ## Current Progress
+
+2026-07-03
+- Frontend template integration:
+  - Integrated the Edification education template assets into `public/theme/edification/`.
+  - Added the supplied 2026 AP late registration announcement poster to `public/images/ap-late-registration-2026.jpeg`.
+  - Rebuilt the public landing/compro page with an education-style hero, poster panel, quick facts, AP late registration announcement copy, overview cards, process, timeline, fees, required documents, FAQ, contact, privacy, and registration CTA.
+  - Kept backend-managed landing content (`hero`, `overview`, `process`, `fees`, `documents`, `faqs`, `contact`, `privacy`) rendering inside the new layout.
+  - Added a poster/context intro card above the no-login student registration form.
+- Template source hygiene:
+  - Added `template-source/` to `.gitignore` so raw zip/template downloads are not accidentally committed.
+  - Preserved the Edification MIT license in the copied public asset folder.
+- Backend template review:
+  - Reviewed the provided backend zip and deferred Filament installation because it needs a Composer/PHP dependency path, not raw file copy.
 
 2026-07-02
 - Confirmed direction from team chat: Laravel + Vue.
@@ -115,34 +135,40 @@ Template decision still pending. For tomorrow's update, prioritize a clean compr
   - FAQ.
   - Contact info.
   - Register Now CTA.
-  - Use selected template style; if template is not purchased yet, use temporary clean education layout.
+  - DONE: Edification template assets are integrated for the current compro pass.
+  - DONE: public landing page now uses the supplied AP announcement poster and education-style visual layout.
   - DONE: temporary landing content/module already exists and CTA now points to `/student-registration`.
+  - TODO: final client content review once Trinity sends official copy beyond the poster/site reference.
+  - TODO: replace/expand visual assets if the team approves a different premium template.
 
 - Polish registration form:
   - Keep 5-step/6-step flow working.
   - Clean visual design to match chosen template.
   - Make required fields obvious.
   - Confirm mobile layout.
+  - DONE: added no-login AP registration intro with poster/deadline/payment-completion reminders.
   - DONE: pre-submit review now includes the newly required fields and accommodations summary.
 
 - Decide template:
-  - Pick admin template: Skote vs Vuexy vs Metronic.
-  - Pick compro template: Envato education HTML template or free fallback.
-  - Record final choice here.
+  - DONE: current frontend/compro pass uses local Edification template assets.
+  - TODO: pick final admin template path: keep Blade/admin shell, install Filament by Composer, or choose another Laravel admin template.
+  - TODO: decide whether Edification is final or only temporary before buying Envato assets.
 
 ### Phase 1 - MVP Registration Platform
 
 - Landing / Information Page:
-  - `PARTIAL`: content exists in backend/landing module but needs template-quality redesign.
+  - `PARTIAL`: Edification-styled page exists and still supports backend-managed content.
   - DONE: CTA no longer points to legacy `/register`.
-  - TODO: implement final homepage/compro layout.
+  - DONE: current homepage/compro layout implemented with template assets and poster content.
+  - TODO: final content approval and image replacement if client provides more assets.
   - TODO: verify bilingual content.
 
 - Student Registration Form:
   - `PARTIAL`: form and backend exist.
   - DONE: important hidden/missing data persistence fixed.
   - DONE: review step now includes DOB, nationality, passport number, relationship, emergency contact, and accommodations.
-  - TODO: visual polish with template.
+  - DONE: top-of-form intro now uses the supplied announcement poster and no-login registration guidance.
+  - TODO: deeper visual refactor after final frontend/admin template decision.
   - DONE: new submitted fields appear in admin detail/edit/print and exports.
 
 - Exam Preference Selection:
@@ -300,12 +326,23 @@ Template decision still pending. For tomorrow's update, prioritize a clean compr
 
 - PHP and Composer are not available in the current Codex environment, so tests have not been run here.
 - `resources/views/student-registration/create.blade.php` still contains a lot of inline CSS/JS and should be replaced or refactored after template choice.
+- Backend template zip is Filament source/package code, not a safe raw drop-in template. It should be installed through Composer when the environment supports it.
 - Gateway page now supports configured endpoint handoff, but real provider signature and sandbox verification are still pending.
 - Receipt auto issue is still not production-ready; manual sandbox and provider placeholder adapters exist, but real issue/cancel/resend APIs are pending.
 - Language coverage is incomplete because many view strings are hardcoded.
 - Server credentials were shared in chat but must stay out of Git.
 
 ## Verification Log
+
+2026-07-03
+- Static/template review: local Edification frontend zip inspected and usable assets copied.
+- Static/template review: local Filament backend zip inspected and deferred because it is package/framework source.
+- Static check: `git diff --check` passed.
+- Static check: no merge conflict markers found.
+- Static check: no `.agent` or `.agents` folder found in repo root.
+- Static check: `template-source/` is ignored and raw template zip files are not staged by default.
+- Blocked: `php -v` failed because PHP is not in PATH.
+- Blocked: `composer --version` failed because Composer is not in PATH.
 
 2026-07-02
 - Static check: `git diff --check` passed for this implementation pass.
@@ -319,9 +356,7 @@ Template decision still pending. For tomorrow's update, prioritize a clean compr
 ## Suggested Next Work Order
 
 1. Choose template today.
-2. Build compro landing page first for tomorrow update.
-3. Polish registration form visual flow.
-4. Apply admin template shell to dashboard/list/detail pages.
-5. Apply selected admin template shell to dashboard/list/detail pages.
-6. Server deploy execution: fill `.env`, DB credentials, `npm run build`, Laravel migrate.
-7. Payment provider decision and real integration.
+2. Get client/team approval on current Edification compro pass or replace with the approved premium frontend template.
+3. Apply final admin template shell to dashboard/list/detail pages.
+4. Server deploy execution: fill `.env`, DB credentials, `npm run build`, Laravel migrate.
+5. Payment provider decision and real integration.
