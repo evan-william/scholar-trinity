@@ -15,7 +15,7 @@
         .notice{background:#fff8e1;border:1px solid #f0c040;border-left:4px solid var(--accent);border-radius:var(--radius);padding:14px 16px;margin-bottom:18px}.notice h4{font-size:13px;font-weight:800;color:#745300;margin:0 0 7px}.notice p,.notice li{font-size:12px;color:#5a4000;line-height:1.65}.notice ul{padding-left:16px;margin:0}
         .exam-sticky{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid var(--gray-200);padding:10px 0;margin:0 0 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}.sel-badge{display:inline-flex;align-items:center;gap:6px;background:var(--primary);color:#fff;padding:4px 13px;border-radius:20px;font-size:12px;font-weight:800}.price-preview{font-size:14px;font-weight:900;color:var(--primary)}.filters{display:grid;grid-template-columns:1fr 220px;gap:10px;margin-bottom:14px}.cat-title{font-size:13px;font-weight:900;color:var(--primary);margin:18px 0 8px;padding-bottom:5px;border-bottom:1px solid var(--gray-200)}.exam-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.exam-cb{display:flex;align-items:flex-start;gap:10px;border:1.5px solid var(--gray-200);border-radius:8px;padding:10px 11px;cursor:pointer;background:#fff;min-height:58px}.exam-cb.checked{border-color:var(--primary);background:rgba(26,58,107,.05)}.exam-cb.disabled{opacity:.58;cursor:not-allowed;background:#f8fafc}.exam-cb input{width:16px;height:16px;min-height:auto;margin-top:2px;accent-color:var(--primary)}.exam-name{font-size:13px;font-weight:800;color:var(--gray-800);line-height:1.35}.exam-sub{font-size:11px;color:var(--gray-600);line-height:1.4}.exam-price-tag{margin-left:auto;font-size:12px;font-weight:900;color:var(--primary);white-space:nowrap}.price-box{background:var(--gray-50);border:1px solid var(--gray-200);border-radius:8px;padding:14px;margin-top:16px}.price-row{display:flex;justify-content:space-between;gap:12px;padding:5px 0;font-size:13px}.price-row.total{border-top:2px solid var(--primary);margin-top:8px;padding-top:10px;color:var(--primary);font-weight:900;font-size:16px}
         .check-line{display:flex;align-items:flex-start;gap:10px;font-size:13px;font-weight:700;line-height:1.5}.check-line input{width:18px;height:18px;min-height:auto;margin-top:1px;accent-color:var(--primary)}.ghost-btn{background:#fff;border:1.5px dashed var(--gray-400);padding:8px 14px;border-radius:6px;cursor:pointer;font-size:12px;color:var(--gray-600);font-family:inherit}.rev-section h3{font-size:14px;color:var(--primary);margin:0 0 8px}.rev-table{width:100%;border-collapse:collapse}.rev-table td{padding:7px 0;border-bottom:1px solid #edf0f5;font-size:13px;vertical-align:top}.rev-table td:first-child{width:38%;color:var(--gray-600);padding-right:12px}.div{border:0;border-top:1px solid var(--gray-200);margin:16px 0}.pay-options{display:grid;gap:10px}.pay-opt{border:1.5px solid var(--gray-200);border-radius:8px;padding:12px;display:flex;gap:10px;cursor:pointer}.pay-opt.selected{border-color:var(--primary);background:rgba(26,58,107,.05)}.pay-opt input{width:18px;height:18px;margin-top:3px;accent-color:var(--primary)}.pay-opt h4{margin:0 0 4px;color:var(--primary);font-size:14px}.pay-opt p{margin:0;color:var(--gray-600);font-size:12px;line-height:1.55}.badge-soon{display:inline-flex;background:#eef3f9;color:var(--primary);border-radius:999px;padding:2px 7px;font-size:10px}.sig-area{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}.sig-box{border:1px solid var(--gray-200);border-radius:8px;padding:14px;background:var(--gray-50)}.sig-box p{font-size:12px;margin:0 0 8px}.sig-line{height:48px;border-bottom:1.5px solid var(--gray-400);margin-bottom:8px}.confirm-wrap{text-align:center;padding:10px 0}.confirm-icon{width:66px;height:66px;border-radius:50%;display:grid;place-items:center;background:#e8f6ef;color:var(--success);font-size:24px;font-weight:900;margin:0 auto 14px}.ref-box{display:inline-block;background:var(--gray-50);border:1px solid var(--gray-200);border-radius:8px;padding:13px 18px;margin:14px 0}.next-steps{text-align:left;background:var(--gray-50);border-radius:8px;padding:14px 18px;margin-top:16px}.next-steps h4{margin:0 0 8px;color:var(--primary)}.next-steps li{font-size:13px;margin-bottom:6px;line-height:1.5}
-        .nav-footer{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--gray-200);box-shadow:0 -2px 14px rgba(0,0,0,.06);padding:12px 18px;display:flex;align-items:center;justify-content:center;gap:18px;z-index:50}.btn{border:0;border-radius:6px;padding:11px 20px;font:inherit;font-size:14px;font-weight:900;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-light)}.btn-outline{background:#fff;color:var(--primary);border:1.5px solid var(--gray-400)}.btn-success{background:var(--success);color:#fff}.step-ind{font-size:12px;color:var(--gray-600);min-width:92px;text-align:center}.loading{opacity:.65;pointer-events:none}
+        .nav-footer{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--gray-200);box-shadow:0 -2px 14px rgba(0,0,0,.06);padding:12px 18px;display:flex;align-items:center;justify-content:center;gap:18px;z-index:50}.btn{border:0;border-radius:6px;padding:11px 20px;font:inherit;font-size:14px;font-weight:900;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-light)}.btn-outline{background:#fff;color:var(--primary);border:1.5px solid var(--gray-400)}.btn-success{background:var(--success);color:#fff}.step-ind{font-size:12px;color:var(--gray-600);min-width:92px;text-align:center}.loading{opacity:.65;pointer-events:none}.toast{position:fixed;left:50%;bottom:82px;transform:translateX(-50%);z-index:80;max-width:min(520px,calc(100vw - 28px));background:#fff;border:1px solid #ffc9c4;border-left:5px solid var(--danger);box-shadow:0 12px 34px rgba(0,0,0,.16);border-radius:8px;padding:12px 16px;color:var(--danger);font-size:13px;font-weight:800;line-height:1.45}.toast.success{border-color:#b9e2ce;border-left-color:var(--success);color:var(--success)}
         @media(max-width:640px){.main{padding-inline:12px}.card{padding:20px 16px}.row-2,.row-3,.filters,.exam-grid,.sig-area{grid-template-columns:1fr}.header{padding-inline:16px}.header-actions{width:100%;justify-content:space-between}.nav-footer{justify-content:space-between;gap:10px}.btn{padding:10px 14px}.step-item{min-width:92px}}
         .main{max-width:900px}
         .form-intro{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:22px;align-items:center;border-top:4px solid var(--accent);overflow:hidden}
@@ -52,6 +52,13 @@
     </div>
 </div>
 <main class="main">
+    @php
+        $passportDraftToken = old('passport_file_token');
+        $passportDraft = $passportDraftToken ? session("student_registration_passport_drafts.$passportDraftToken") : null;
+        $oldAccommodations = old('accommodations', [['exam' => '', 'request' => ''], ['exam' => '', 'request' => '']]);
+        $accommodationRows = max(2, count($oldAccommodations));
+    @endphp
+
     @if ($errors->any())
         <div class="error-box" id="errorSummary"><strong>Please review the form / 請檢查表單</strong><ul>@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div>
     @endif
@@ -72,6 +79,8 @@
 
     <form id="studentForm" method="POST" action="{{ route('student-registrations.store') }}" enctype="multipart/form-data">
         @csrf
+        <input type="hidden" name="passport_file_token" id="passportFileToken" value="{{ $passportDraftToken }}">
+        <input type="hidden" name="passport_file_name" id="passportFileName" value="{{ $passportDraft['name'] ?? '' }}">
         <section data-step="1">
             <div class="card">
                 <div class="section-title">Student Information <span>學生基本資料</span></div>
@@ -109,8 +118,15 @@
                             <div class="upload-icon">Upload</div>
                             <div class="upload-text"><strong>Click to upload / 點選上傳</strong> or drag & drop</div>
                             <div class="upload-sub">PDF, JPG, PNG / Max 10MB / 請上傳清楚的護照照片頁</div>
-                            <div class="upload-selected hidden" id="fileLabel"></div>
+                            <div class="upload-selected {{ $passportDraft ? '' : 'hidden' }}" id="fileLabel">
+                                @if($passportDraft)
+                                    Selected / 已選擇: {{ $passportDraft['name'] }}
+                                @endif
+                            </div>
                         </div>
+                        @if($passportDraft)
+                            <span class="hint">This file is saved temporarily after the validation error. Upload a new file only if you want to replace it.</span>
+                        @endif
                         @error('passport_file')<span class="error">{{ $message }}</span>@enderror
                     </div>
                 </div>
@@ -161,7 +177,7 @@
                 <div class="notice"><h4>Practice Exam Info / 模擬考說明</h4><p>NT$1,800 per practice exam. Dates subject to change. / 每科模擬考 NT$1,800，日期可能調整。</p></div>
                 <div class="exam-grid">
                     @foreach(['Biology 生物','English Language and Composition 英文語言與寫作','Physics 1 物理 1','Computer Science A 電腦科學 A','Calculus AB/BC 微積分','Macroeconomics 總體經濟','Precalculus 預備微積分'] as $practice)
-                        <label class="exam-cb"><input type="checkbox" name="practice_exams[]" value="{{ $practice }}" data-type="practice" data-p="1800" data-name="Practice: {{ $practice }}"><div><div class="exam-name">{{ $practice }}</div><div class="exam-sub">Practice / 模擬考</div></div><div class="exam-price-tag">NT$1,800</div></label>
+                        <label class="exam-cb"><input type="checkbox" name="practice_exams[]" value="{{ $practice }}" data-type="practice" data-p="1800" data-name="Practice: {{ $practice }}" @checked(in_array($practice, old('practice_exams', [])))><div><div class="exam-name">{{ $practice }}</div><div class="exam-sub">Practice / 模擬考</div></div><div class="exam-price-tag">NT$1,800</div></label>
                     @endforeach
                 </div>
                 <input type="hidden" name="practice_exam_total" id="practiceExamTotal" value="0">
@@ -181,11 +197,11 @@
                 <div class="notice"><h4>About Accommodations / 關於特殊需求</h4><p>If you qualify for extra time, food/medication, reader/scribe, or other approved accommodations, please contact the AP Coordinator first. / 如需延長時間、藥物或其他核准協助，請先聯繫 AP 協調員。</p></div>
                 <label class="check-line" style="margin-bottom:18px"><input type="checkbox" name="needs_accommodations" value="1" id="needsAccom" @checked(old('needs_accommodations'))><span>I am requesting testing accommodations / 我需要申請特殊考試需求</span></label>
                 <div id="accomFields" class="hidden">
-                    <div class="row row-2"><div class="fg"><label class="lbl">SSD Code <span class="zh">College Board SSD 代碼</span></label><input name="ssd_code" value="{{ old('ssd_code') }}" placeholder="SSD Code"></div><div class="fg"><label class="lbl">Approval Status <span class="zh">核准狀態</span></label><select name="accommodation_status"><option value="">Select / 請選擇</option><option value="approved">Already Approved / 已核准</option><option value="pending">Pending / 審核中</option><option value="new">New Request / 新申請</option></select></div></div>
+                    <div class="row row-2"><div class="fg"><label class="lbl">SSD Code <span class="zh">College Board SSD 代碼</span></label><input name="ssd_code" value="{{ old('ssd_code') }}" placeholder="SSD Code"></div><div class="fg"><label class="lbl">Approval Status <span class="zh">核准狀態</span></label><select name="accommodation_status"><option value="">Select / 請選擇</option><option value="approved" @selected(old('accommodation_status') === 'approved')>Already Approved / 已核准</option><option value="pending" @selected(old('accommodation_status') === 'pending')>Pending / 審核中</option><option value="new" @selected(old('accommodation_status') === 'new')>New Request / 新申請</option></select></div></div>
                     <label class="lbl" style="margin-bottom:8px;display:block">Exam Name and Requested Accommodation Rows / 考科與申請內容</label>
                     <div id="accomRows">
-                        @for($i = 0; $i < 2; $i++)
-                            <div class="row row-2 accom-row"><div class="fg"><input name="accommodations[{{ $i }}][exam]" placeholder="Exam name / 考科名稱"></div><div class="fg"><input name="accommodations[{{ $i }}][request]" placeholder="Accommodation requested / 申請項目"></div></div>
+                        @for($i = 0; $i < $accommodationRows; $i++)
+                            <div class="row row-2 accom-row"><div class="fg"><input name="accommodations[{{ $i }}][exam]" value="{{ old("accommodations.$i.exam") }}" placeholder="Exam name / 考科名稱"></div><div class="fg"><input name="accommodations[{{ $i }}][request]" value="{{ old("accommodations.$i.request") }}" placeholder="Accommodation requested / 申請項目"></div></div>
                         @endfor
                     </div>
                     <button type="button" class="ghost-btn" id="addAccomRow">+ Add row / 新增一列</button>
@@ -240,13 +256,120 @@
     <span class="step-ind" id="stepInd">Step 1 of 6</span>
     <button class="btn btn-primary" id="btnNext" type="button">Next / 下一步</button>
 </div>
+<div class="toast hidden" id="formToast" role="status" aria-live="polite"></div>
 <script>
+    const initialStep = Number(@json(session('student_registration_error_step', 1)));
+    const preservedPassportName = @json($passportDraft['name'] ?? null);
+    const passportDraftUrl = @json(route('student-registrations.passport-draft'));
+    const draftKey = 'studentRegistrationFormDraft';
     let cur = 1;
     const totalSteps = 6;
     const form = document.getElementById('studentForm');
     const money = value => Number(value || 0).toLocaleString('en-US');
     const field = name => form.elements[name]?.value || '';
     const checkedExams = () => [...document.querySelectorAll('.exam-cb input[type="checkbox"]:checked')];
+    let toastTimer;
+
+    function notify(message, type = 'error') {
+        const toast = document.getElementById('formToast');
+        toast.textContent = message;
+        toast.classList.toggle('success', type === 'success');
+        toast.classList.remove('hidden');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toast.classList.add('hidden'), 3600);
+    }
+
+    function readFormDraft() {
+        try {
+            return JSON.parse(localStorage.getItem(draftKey) || '{}');
+        } catch {
+            return {};
+        }
+    }
+
+    function saveFormDraft() {
+        const data = {};
+        const grouped = new Map();
+
+        [...form.elements].forEach(input => {
+            if (!input.name || input.type === 'file' || input.name === '_token') return;
+
+            if (input.type === 'checkbox') {
+                if (input.name.endsWith('[]')) {
+                    const values = grouped.get(input.name) || [];
+                    if (input.checked) values.push(input.value);
+                    grouped.set(input.name, values);
+                } else {
+                    data[input.name] = input.checked ? input.value : '';
+                }
+                return;
+            }
+
+            if (input.type === 'radio') {
+                if (input.checked) data[input.name] = input.value;
+                return;
+            }
+
+            data[input.name] = input.value;
+        });
+
+        grouped.forEach((values, name) => data[name] = values);
+        data.__step = cur;
+        localStorage.setItem(draftKey, JSON.stringify(data));
+    }
+
+    function restoreFormDraft() {
+        const data = readFormDraft();
+        if (!Object.keys(data).length || document.getElementById('errorSummary')) return null;
+
+        [...form.elements].forEach(input => {
+            if (!input.name || input.type === 'file' || input.name === '_token' || !(input.name in data)) return;
+
+            if (input.type === 'checkbox') {
+                input.checked = Array.isArray(data[input.name])
+                    ? data[input.name].includes(input.value)
+                    : data[input.name] === input.value;
+                return;
+            }
+
+            if (input.type === 'radio') {
+                input.checked = data[input.name] === input.value;
+                return;
+            }
+
+            input.value = data[input.name] ?? '';
+        });
+
+        return Number(data.__step || 1);
+    }
+
+    function setPassportLabel(name, pending = false) {
+        const label = document.getElementById('fileLabel');
+        label.textContent = name ? `${pending ? 'Saving / 暫存中' : 'Selected / 已選擇'}: ${name}` : '';
+        label.classList.toggle('hidden', !name);
+    }
+
+    async function savePassportDraft(file) {
+        const body = new FormData();
+        body.append('passport_file', file);
+
+        const response = await fetch(passportDraftUrl, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': form.elements['_token'].value,
+                'Accept': 'application/json',
+            },
+            body,
+        });
+
+        if (!response.ok) {
+            const payload = await response.json().catch(() => ({}));
+            const message = payload.message || Object.values(payload.errors || {})[0]?.[0] || 'Unable to save passport file draft.';
+            throw new Error(message);
+        }
+
+        return response.json();
+    }
 
     function setStep(next) {
         document.querySelectorAll('[data-step]').forEach(section => section.classList.add('hidden'));
@@ -277,7 +400,7 @@
         const selectedRegularExams = [...form.querySelectorAll('input[name="exam_subject_uuids[]"]')]
             .filter(input => input.checked && !input.disabled);
         if (cur === 3 && selectedRegularExams.length === 0) {
-            alert('Please select at least one AP exam. / 請至少選擇一科 AP 考試。');
+            notify('Please select at least one AP exam. / 請至少選擇一科 AP 考試。');
             return false;
         }
         return true;
@@ -313,7 +436,7 @@
     function buildReview() {
         const totals = calculate();
         const names = checkedExams().map(input => input.dataset.name);
-        const passport = document.getElementById('passportFile').files[0]?.name || 'Uploaded file / 已選擇檔案';
+        const passport = document.getElementById('passportFile').files[0]?.name || document.getElementById('passportFileName').value || preservedPassportName || 'Uploaded file / 已選擇檔案';
         document.getElementById('rName').textContent = [field('family_name_en'), field('first_name_en'), field('middle_name')].filter(Boolean).join(' ');
         document.getElementById('rCn').textContent = field('chinese_legal_name') || '-';
         document.getElementById('rDob').textContent = field('date_of_birth') || '-';
@@ -354,10 +477,31 @@
     document.querySelectorAll('.pay-opt input').forEach(input => input.addEventListener('change', () => {
         document.querySelectorAll('.pay-opt').forEach(label => label.classList.toggle('selected', label.querySelector('input').checked));
     }));
-    document.getElementById('passportFile').addEventListener('change', event => {
-        const label = document.getElementById('fileLabel');
-        label.textContent = event.target.files[0] ? `Selected / 已選擇: ${event.target.files[0].name}` : '';
-        label.classList.toggle('hidden', !event.target.files[0]);
+    document.getElementById('passportFile').addEventListener('change', async event => {
+        const file = event.target.files[0];
+        document.getElementById('passportFileToken').value = '';
+        document.getElementById('passportFileName').value = '';
+
+        if (!file) {
+            setPassportLabel('');
+            saveFormDraft();
+            return;
+        }
+
+        setPassportLabel(file.name, true);
+
+        try {
+            const draft = await savePassportDraft(file);
+            document.getElementById('passportFileToken').value = draft.token;
+            document.getElementById('passportFileName').value = draft.name;
+            setPassportLabel(draft.name);
+            saveFormDraft();
+        } catch (error) {
+            setPassportLabel('');
+            event.target.value = '';
+            notify(error.message);
+            saveFormDraft();
+        }
     });
     document.getElementById('needsAccom').addEventListener('change', event => document.getElementById('accomFields').classList.toggle('hidden', !event.target.checked));
     document.getElementById('addAccomRow').addEventListener('click', () => {
@@ -381,16 +525,33 @@
         if (!validateStep()) return;
         if (cur < totalSteps) {
             setStep(cur + 1);
+            saveFormDraft();
             return;
         }
         const btn = document.getElementById('btnNext');
         btn.classList.add('loading');
         btn.textContent = 'Submitting / 送出中';
+        localStorage.removeItem(draftKey);
         form.requestSubmit();
     });
-    document.getElementById('btnBack').addEventListener('click', () => setStep(Math.max(1, cur - 1)));
+    document.getElementById('btnBack').addEventListener('click', () => {
+        setStep(Math.max(1, cur - 1));
+        saveFormDraft();
+    });
+    form.addEventListener('input', saveFormDraft);
+    form.addEventListener('change', saveFormDraft);
+    const restoredStep = restoreFormDraft();
+    if (!preservedPassportName && document.getElementById('passportFileName').value) {
+        setPassportLabel(document.getElementById('passportFileName').value);
+    }
+    document.querySelectorAll('.pay-opt').forEach(label => label.classList.toggle('selected', label.querySelector('input').checked));
     calculate();
     if (document.getElementById('needsAccom').checked) document.getElementById('accomFields').classList.remove('hidden');
+    if (initialStep > 1 && initialStep <= totalSteps) {
+        setStep(initialStep);
+    } else if (restoredStep > 1 && restoredStep <= totalSteps) {
+        setStep(restoredStep);
+    }
 </script>
 </body>
 </html>

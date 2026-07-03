@@ -8,8 +8,10 @@ use App\Models\StudentRegistration;
 use App\Models\User;
 use Database\Seeders\ApExamSubjectSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class StudentRegistrationTest extends TestCase
@@ -75,6 +77,74 @@ class StudentRegistrationTest extends TestCase
         $this->post('/student-registration', $this->validPayload([
             'exam_subject_ids' => [$subject->id],
         ]))->assertSessionHasErrors(['exam_subject_ids.0']);
+    }
+
+    public function test_registration_validation_returns_to_relevant_step_and_preserves_passport_draft(): void
+    {
+        Mail::fake();
+        Storage::fake('local');
+        $this->seed(ApExamSubjectSeeder::class);
+        $subject = ApExamSubject::query()->firstOrFail();
+
+        $this->post('/student-registration', $this->validPayload([
+            'exam_subject_ids' => [$subject->id],
+        ]))->assertRedirect();
+
+        $response = $this->post('/student-registration', $this->validPayload([
+            'passport_number' => 'B12345678',
+            'exam_subject_ids' => [$subject->id],
+            'passport_file' => UploadedFile::fake()->image('passport.jpg'),
+        ]));
+
+        $response->assertSessionHasErrors(['student_email']);
+        $response->assertSessionHas('student_registration_error_step', 1);
+
+        $token = session('_old_input.passport_file_token');
+        $this->assertIsString($token);
+        $this->assertArrayHasKey($token, session('student_registration_passport_drafts'));
+
+        $this->post('/student-registration', $this->validPayload([
+            'student_email' => 'second@example.com',
+            'passport_number' => 'B12345678',
+            'exam_subject_ids' => [$subject->id],
+            'passport_file_token' => $token,
+        ]))->assertRedirect();
+
+        $registration = StudentRegistration::query()
+            ->where('student_email', 'second@example.com')
+            ->firstOrFail();
+
+        $this->assertSame('passport.jpg', $registration->passport_original_name);
+        Storage::disk('local')->assertExists($registration->passport_file_path);
+        $this->assertArrayNotHasKey($token, session('student_registration_passport_drafts', []));
+    }
+
+    public function test_registration_exam_errors_return_to_exam_step(): void
+    {
+        $response = $this->post('/student-registration', $this->validPayload([
+            'exam_subject_ids' => [],
+            'exam_subject_uuids' => [],
+        ]));
+
+        $response->assertSessionHasErrors(['exam_subject_uuids', 'exam_subject_ids']);
+        $response->assertSessionHas('student_registration_error_step', 3);
+    }
+
+    public function test_passport_draft_can_be_saved_before_final_submission(): void
+    {
+        Storage::fake('local');
+
+        $response = $this->postJson(route('student-registrations.passport-draft'), [
+            'passport_file' => UploadedFile::fake()->image('passport-refresh.jpg'),
+        ]);
+
+        $response->assertOk()
+            ->assertJsonPath('name', 'passport-refresh.jpg');
+
+        $token = $response->json('token');
+        $this->assertIsString($token);
+        $this->assertArrayHasKey($token, session('student_registration_passport_drafts'));
+        Storage::disk('local')->assertExists(session("student_registration_passport_drafts.$token.path"));
     }
 
     public function test_admin_can_filter_export_and_update_status(): void

@@ -2,11 +2,16 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class StoreStudentRegistrationRequest extends FormRequest
 {
+    private const PASSPORT_DRAFT_SESSION_KEY = 'student_registration_passport_drafts';
+
     public function authorize(): bool
     {
         return true;
@@ -43,6 +48,7 @@ class StoreStudentRegistrationRequest extends FormRequest
             'current_school' => ['nullable', 'string', 'max:160'],
             'grade' => ['nullable', 'string', 'max:40'],
             'passport_file' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:10240'],
+            'passport_file_token' => ['nullable', 'string', 'regex:/^[A-Za-z0-9]{40}$/'],
             'school_name' => ['required', 'string', 'max:160'],
             'school_country' => ['required', 'string', 'max:80'],
             'school_city' => ['nullable', 'string', 'max:100'],
@@ -117,5 +123,98 @@ class StoreStudentRegistrationRequest extends FormRequest
             'practice_exam_total' => (int) $this->input('practice_exam_total', 0),
             'payment_method' => $this->input('payment_method') ?: 'bank_transfer',
         ]);
+    }
+
+    protected function failedValidation(Validator $validator): void
+    {
+        $passportDraft = $this->preservePassportDraft($validator);
+        $input = $this->except(array_merge($this->dontFlash ?? [], ['passport_file']));
+
+        if ($passportDraft) {
+            $input['passport_file_token'] = $passportDraft['token'];
+        }
+
+        throw new HttpResponseException(
+            redirect($this->getRedirectUrl())
+                ->withInput($input)
+                ->withErrors($validator, $this->errorBag)
+                ->with('student_registration_error_step', $this->firstErrorStep($validator))
+        );
+    }
+
+    private function preservePassportDraft(Validator $validator): ?array
+    {
+        if ($validator->errors()->has('passport_file')) {
+            return null;
+        }
+
+        $existingToken = (string) $this->input('passport_file_token');
+        $drafts = $this->session()->get(self::PASSPORT_DRAFT_SESSION_KEY, []);
+
+        if ($existingToken !== '' && isset($drafts[$existingToken])) {
+            return ['token' => $existingToken] + $drafts[$existingToken];
+        }
+
+        if (! $this->hasFile('passport_file') || ! $this->file('passport_file')?->isValid()) {
+            return null;
+        }
+
+        $file = $this->file('passport_file');
+        $token = Str::random(40);
+        $extension = $file->getClientOriginalExtension() ?: 'upload';
+        $path = $file->storeAs('registration-drafts/passports', $token.'.'.$extension, 'local');
+
+        $drafts[$token] = [
+            'path' => $path,
+            'name' => basename($file->getClientOriginalName()),
+            'mime' => $file->getMimeType(),
+            'size' => $file->getSize(),
+        ];
+
+        $this->session()->put(self::PASSPORT_DRAFT_SESSION_KEY, $drafts);
+
+        return ['token' => $token] + $drafts[$token];
+    }
+
+    private function firstErrorStep(Validator $validator): int
+    {
+        $field = (string) collect($validator->errors()->keys())->first();
+
+        foreach ($this->stepFields() as $step => $patterns) {
+            foreach ($patterns as $pattern) {
+                if ($field === $pattern || Str::is($pattern.'.*', $field)) {
+                    return $step;
+                }
+            }
+        }
+
+        return 1;
+    }
+
+    /**
+     * @return array<int, array<int, string>>
+     */
+    private function stepFields(): array
+    {
+        return [
+            1 => [
+                'family_name_en', 'first_name_en', 'middle_initial', 'middle_name', 'chinese_legal_name',
+                'student_full_name', 'preferred_name', 'gender', 'date_of_birth', 'nationality',
+                'passport_number', 'passport_expiry_date', 'student_email', 'student_phone',
+                'current_school', 'grade', 'passport_file', 'passport_file_token', 'school_name',
+                'school_country', 'school_city', 'grade_level', 'graduation_year',
+            ],
+            2 => [
+                'parent_first_name', 'parent_last_name', 'parent_full_name', 'relationship',
+                'parent_email', 'parent_phone', 'mailing_address', 'mailing_city', 'postal_code',
+                'emergency_contact_name', 'emergency_contact_phone', 'emergency_contact_relationship',
+            ],
+            3 => ['exam_subject_uuids', 'exam_subject_ids', 'practice_exams', 'practice_exam_total'],
+            4 => ['needs_accommodations', 'ssd_code', 'accommodation_status', 'accommodations'],
+            5 => [
+                'payment_method', 'accurate_information', 'ap_policies', 'privacy_policy',
+                'terms_conditions', 'confirmed_review',
+            ],
+        ];
     }
 }

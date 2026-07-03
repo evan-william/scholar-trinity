@@ -10,6 +10,7 @@ use App\Services\PaymentFlowService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
@@ -124,6 +125,20 @@ class StudentRegistrationService
                     'passport_file_size' => $file->getSize(),
                     'passport_uploaded_at' => now(),
                 ]);
+            } elseif (! empty($data['passport_file_token'])) {
+                $draft = $this->consumePassportDraft((string) $data['passport_file_token']);
+
+                if ($draft) {
+                    $registration->update([
+                        'passport_upload_status' => 'pending_review',
+                        'passport_document_uuid' => (string) Str::uuid(),
+                        'passport_file_path' => $draft['path'],
+                        'passport_original_name' => $draft['name'],
+                        'passport_mime_type' => $draft['mime'],
+                        'passport_file_size' => $draft['size'],
+                        'passport_uploaded_at' => now(),
+                    ]);
+                }
             }
 
             $registration->contact()->create([
@@ -263,6 +278,35 @@ class StudentRegistrationService
             'online', 'credit_card' => 'credit_card',
             default => 'manual_bank_transfer',
         };
+    }
+
+    /**
+     * @return array{path: string, name: string, mime: string|null, size: int|null}|null
+     */
+    private function consumePassportDraft(string $token): ?array
+    {
+        $sessionKey = 'student_registration_passport_drafts';
+        $drafts = session($sessionKey, []);
+        $draft = $drafts[$token] ?? null;
+
+        if (! is_array($draft) || empty($draft['path']) || ! Storage::disk('local')->exists($draft['path'])) {
+            return null;
+        }
+
+        $extension = pathinfo((string) ($draft['name'] ?? $draft['path']), PATHINFO_EXTENSION) ?: 'upload';
+        $path = 'student-passports/'.Str::uuid().'.'.$extension;
+
+        Storage::disk('local')->move($draft['path'], $path);
+
+        unset($drafts[$token]);
+        session()->put($sessionKey, $drafts);
+
+        return [
+            'path' => $path,
+            'name' => (string) ($draft['name'] ?? basename($path)),
+            'mime' => $draft['mime'] ?? null,
+            'size' => isset($draft['size']) ? (int) $draft['size'] : Storage::disk('local')->size($path),
+        ];
     }
 
     /**

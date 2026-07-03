@@ -26,6 +26,7 @@ Route::post('/registrations', fn () => redirect('/student-registration'))->name(
 Route::redirect('/registrations/{registration}', '/student-registration')->name('registrations.show');
 
 Route::get('/student-registration', [StudentRegistrationController::class, 'create'])->name('student-registrations.create');
+Route::post('/student-registration/passport-draft', [StudentRegistrationController::class, 'storePassportDraft'])->middleware('throttle:12,1')->name('student-registrations.passport-draft');
 Route::post('/student-registration', [StudentRegistrationController::class, 'store'])->middleware('throttle:8,1')->name('student-registrations.store');
 Route::get('/student-registration/{registrationNumber}', [StudentRegistrationController::class, 'show'])->name('student-registrations.show');
 Route::get('/payments/{registrationNumber}', [PaymentController::class, 'show'])->name('payments.show');
