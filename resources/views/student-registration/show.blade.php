@@ -1,83 +1,80 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ __('student_registration.successful') }} | {{ $registration->registration_number }}</title>
-    <style>
-        :root{--primary:#1a3a6b;--accent:#c9a84c;--success:#237a4f;--gray-50:#f8f9fa;--gray-200:#e9ecef;--gray-600:#6c757d;--gray-800:#343a40;--radius:8px;--shadow:0 2px 16px rgba(0,0,0,.09)}*{box-sizing:border-box}body{margin:0;background:var(--gray-50);color:var(--gray-800);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft JhengHei","PingFang TC",Arial,sans-serif}.header{background:var(--primary);color:#fff;padding:16px 24px}.head{max-width:920px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}.head h1{font-size:17px;margin:0}.head p{font-size:12px;margin:3px 0 0;opacity:.78}.badge{background:var(--accent);color:#4b3200;padding:5px 14px;border-radius:20px;font-size:12px;font-weight:800}.wrap{max-width:900px;margin:0 auto;padding:28px 16px}.card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:26px 24px;margin-bottom:16px}.confirm{text-align:center}.ok{width:66px;height:66px;border-radius:50%;display:grid;place-items:center;background:#e8f6ef;color:var(--success);font-size:20px;font-weight:900;margin:0 auto 14px}h1,h2{color:var(--primary)}h1{font-size:24px;margin:0 0 8px}h2{font-size:17px;border-bottom:2px solid var(--accent);padding-bottom:8px;margin:0 0 14px}.ref{display:inline-block;background:var(--gray-50);border:1px solid var(--gray-200);border-radius:8px;padding:13px 18px;margin:14px 0}.muted{color:var(--gray-600);font-size:12px;line-height:1.6}table{width:100%;border-collapse:collapse}td{padding:8px 0;border-bottom:1px solid #edf0f5;font-size:13px;vertical-align:top}td:first-child{color:var(--gray-600);width:38%;padding-right:12px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.steps{background:var(--gray-50);border-radius:8px;padding:14px 18px}.steps li{font-size:13px;margin-bottom:7px;line-height:1.5}.btn{display:inline-flex;background:var(--primary);color:#fff;text-decoration:none;padding:11px 16px;border-radius:6px;font-weight:900}.btn.light{background:#fff;color:var(--primary);border:1.5px solid var(--gray-200)}@media(max-width:720px){.grid{grid-template-columns:1fr}.card{padding:22px 16px}}
-    </style>
-</head>
-<body>
-<header class="header">
-    <div class="head">
-        <div><h1>AP Exam Registration / AP 考試報名</h1><p>Step 6 - Confirmation / 第 6 步 - 完成確認</p></div>
-        <span class="badge">Submitted / 已送出</span>
-    </div>
-</header>
-<main class="wrap">
-    <div class="card confirm">
-        <div class="ok">OK</div>
-        <h1>Registration Submitted! / 報名已送出</h1>
-        <p>Your AP Exam registration has been received. The AP Coordinator will review it and contact you to confirm payment.<br><br>您的 AP 考試報名已收到。AP 協調員將審核並聯繫您確認付款。</p>
-        <div class="ref">Registration Reference No. / 報名參考編號<br><strong>{{ $registration->registration_number }}</strong></div>
-        <p class="muted">Confirmation email sent to / 確認信已寄至 <strong>{{ $registration->student_email }}</strong>@if($registration->contact?->parent_email) and / 以及 <strong>{{ $registration->contact->parent_email }}</strong>@endif</p>
-        <p><a class="btn" href="{{ route('payments.show', $registration->registration_number) }}">Continue to Payment / 前往付款</a> <a class="btn light" href="{{ route('landing') }}">Back to Landing / 回首頁</a></p>
-    </div>
-
-    <div class="grid">
-        <div class="card">
-            <h2>Student Information / 學生資料</h2>
-            <table>
-                <tr><td>Student / 學生</td><td>{{ $registration->student_full_name }}</td></tr>
-                <tr><td>Legal Name / 法定姓名</td><td>{{ collect([$registration->family_name_en, $registration->first_name_en, $registration->middle_name])->filter()->implode(' ') ?: '-' }} @if($registration->chinese_legal_name)<br>{{ $registration->chinese_legal_name }}@endif</td></tr>
-                <tr><td>DOB / Nationality</td><td>{{ optional($registration->date_of_birth)->format('Y-m-d') ?: '-' }} / {{ $registration->nationality ?: '-' }}</td></tr>
-                <tr><td>Email / 電子郵件</td><td>{{ $registration->student_email }}</td></tr>
-                <tr><td>Phone / 電話</td><td>{{ $registration->student_phone ?: '-' }}</td></tr>
-                <tr><td>School / 學校</td><td>{{ $registration->school_name }}</td></tr>
-                <tr><td>Grade / 年級</td><td>{{ $registration->grade_level }}</td></tr>
-                <tr><td>Passport / 護照</td><td>{{ $registration->passport_number }}<br>{{ $registration->passport_upload_status === 'pending_review' ? 'Uploaded, pending review / 已上傳，待審核' : 'Pending coordinator review / 待協調員確認' }}</td></tr>
-            </table>
-        </div>
-        <div class="card">
-            <h2>Parent Information / 家長資料</h2>
-            <table>
-                <tr><td>Parent / 家長</td><td>{{ $registration->contact?->parent_full_name ?: '-' }}</td></tr>
-                <tr><td>Relationship / 關係</td><td>{{ $registration->contact?->relationship ?: '-' }}</td></tr>
-                <tr><td>Email / 電子郵件</td><td>{{ $registration->contact?->parent_email ?: '-' }}</td></tr>
-                <tr><td>Phone / 電話</td><td>{{ $registration->contact?->parent_phone ?: '-' }}</td></tr>
-                <tr><td>Mailing Address / 通訊地址</td><td>{{ collect([$registration->contact?->mailing_address, $registration->contact?->mailing_city, $registration->contact?->postal_code])->filter()->implode(', ') ?: '-' }}</td></tr>
-                <tr><td>Emergency / 緊急聯絡人</td><td>{{ $registration->contact?->emergency_contact_name ?: '-' }} {{ $registration->contact?->emergency_contact_phone ? '/ '.$registration->contact->emergency_contact_phone : '' }} @if($registration->contact?->emergency_contact_relationship)<br>{{ $registration->contact->emergency_contact_relationship }}@endif</td></tr>
-            </table>
-        </div>
-    </div>
-
-    <div class="card">
-        <h2>Selected Exams and Fee Summary / 已選考科與費用摘要</h2>
-        <table>
-            <tr><td>Selected Exams / 已選考科</td><td>{{ $registration->exams->pluck('name')->join(', ') ?: '-' }}</td></tr>
-            <tr><td>Practice Exams / 模擬考</td><td>{{ $registration->practiceExamSelections->pluck('exam_name')->join(', ') ?: '-' }}</td></tr>
-            <tr><td>Accommodations / 特殊需求</td><td>{{ $registration->needs_accommodations ? 'Yes' : 'No' }} @if($registration->ssd_code)<br>SSD {{ $registration->ssd_code }} / {{ $registration->accommodation_status ?: '-' }}@endif</td></tr>
-            <tr><td>Regular Exam Fee / 正式考試費</td><td>{{ $registration->currency }} {{ number_format($registration->exam_fee_total + $registration->service_fee_total) }}</td></tr>
-            <tr><td>Practice Exam Fee / 模擬考費</td><td>{{ $registration->currency }} {{ number_format($registration->practice_exam_total) }}</td></tr>
-            <tr><td>Late Fee / 逾期費</td><td>{{ $registration->currency }} {{ number_format($registration->late_fee_total) }}</td></tr>
-            <tr><td>Total Due / 應付總額</td><td><strong>{{ $registration->currency }} {{ number_format($registration->grand_total ?: $registration->total_fee) }}</strong></td></tr>
-            <tr><td>Payment Method / 付款方式</td><td>{{ str_replace('_', ' ', $registration->payment_method ?: 'manual_bank_transfer') }}</td></tr>
-            <tr><td>Status / 狀態</td><td>{{ str_replace('_', ' ', $registration->status) }}</td></tr>
+<x-public-flow-shell
+    :title="__('student_registration.successful').' | '.$registration->registration_number"
+    heading="Registration Submitted"
+    subtitle="The AP registration form has been received. Payment and admin verification are still required before the registration is complete."
+    badge="Submitted"
+>
+    <section class="card">
+        <h2>Registration Reference</h2>
+        <table class="summary-table">
+            <tr><td>Reference Number</td><td><strong>{{ $registration->registration_number }}</strong></td></tr>
+            <tr><td>Status</td><td><span class="status {{ $registration->status }}">{{ str_replace('_', ' ', $registration->status) }}</span></td></tr>
+            <tr><td>Submitted At</td><td>{{ optional($registration->submitted_at)->format('Y-m-d H:i') ?: '-' }}</td></tr>
+            <tr><td>Confirmation Email</td><td>{{ $registration->student_email }}@if($registration->contact?->parent_email)<br>{{ $registration->contact->parent_email }}@endif</td></tr>
         </table>
-    </div>
-
-    <div class="card">
-        <h2>Next Steps / 後續步驟</h2>
-        <div class="steps">
-            <ol>
-                <li>AP Coordinator verifies your registration. / AP 協調員審核您的報名資料。</li>
-                <li>Complete payment by the registration deadline. / 請於截止日前完成付款。</li>
-                <li>Confirm payment with the school cashier. / 請向學校出納確認付款。</li>
-                <li>Watch your email for exam schedule details. / 請留意電子郵件中的考試時程通知。</li>
-            </ol>
+        <div class="actions">
+            <a class="btn gold" href="{{ route('payments.show', $registration->registration_number) }}">Continue to Payment</a>
+            <a class="btn light" href="{{ route('landing') }}">Back to Landing</a>
         </div>
-    </div>
-</main>
-</body>
-</html>
+    </section>
+
+    <section class="grid-2">
+        <div class="card">
+            <h2>Student Information</h2>
+            <table class="summary-table">
+                <tr><td>Student</td><td>{{ $registration->student_full_name }}</td></tr>
+                <tr><td>Legal Name</td><td>{{ collect([$registration->family_name_en, $registration->first_name_en, $registration->middle_name])->filter()->implode(' ') ?: '-' }} @if($registration->chinese_legal_name)<br>{{ $registration->chinese_legal_name }}@endif</td></tr>
+                <tr><td>Date of Birth</td><td>{{ optional($registration->date_of_birth)->format('Y-m-d') ?: '-' }}</td></tr>
+                <tr><td>Nationality</td><td>{{ $registration->nationality ?: '-' }}</td></tr>
+                <tr><td>School</td><td>{{ $registration->school_name ?: '-' }}</td></tr>
+                <tr><td>Grade</td><td>{{ $registration->grade_level ?: '-' }}</td></tr>
+                <tr><td>Passport</td><td>{{ $registration->passport_number ?: '-' }}<br>{{ str_replace('_', ' ', $registration->passport_upload_status) }}</td></tr>
+            </table>
+        </div>
+
+        <div class="card">
+            <h2>Parent and Emergency Contact</h2>
+            <table class="summary-table">
+                <tr><td>Parent</td><td>{{ $registration->contact?->parent_full_name ?: '-' }}</td></tr>
+                <tr><td>Relationship</td><td>{{ $registration->contact?->relationship ?: '-' }}</td></tr>
+                <tr><td>Parent Email</td><td>{{ $registration->contact?->parent_email ?: '-' }}</td></tr>
+                <tr><td>Parent Phone</td><td>{{ $registration->contact?->parent_phone ?: '-' }}</td></tr>
+                <tr><td>Mailing Address</td><td>{{ collect([$registration->contact?->mailing_address, $registration->contact?->mailing_city, $registration->contact?->postal_code])->filter()->implode(', ') ?: '-' }}</td></tr>
+                <tr><td>Emergency Contact</td><td>{{ $registration->contact?->emergency_contact_name ?: '-' }} @if($registration->contact?->emergency_contact_phone)<br>{{ $registration->contact->emergency_contact_phone }}@endif @if($registration->contact?->emergency_contact_relationship)<br>{{ $registration->contact->emergency_contact_relationship }}@endif</td></tr>
+            </table>
+        </div>
+    </section>
+
+    <section class="grid-2">
+        <div class="card">
+            <h2>Exam Selection</h2>
+            <table class="summary-table">
+                <tr><td>Selected AP Exams</td><td>{{ $registration->exams->pluck('name')->join(', ') ?: '-' }}</td></tr>
+                <tr><td>Practice Exams</td><td>{{ $registration->practiceExamSelections->pluck('exam_name')->join(', ') ?: '-' }}</td></tr>
+                <tr><td>Accommodations</td><td>{{ $registration->needs_accommodations ? 'Requested' : 'Not requested' }} @if($registration->ssd_code)<br>SSD {{ $registration->ssd_code }} / {{ $registration->accommodation_status ?: '-' }}@endif</td></tr>
+                <tr><td>Registration Period</td><td>{{ str_replace('_', ' ', $registration->registration_period_type ?: $registration->registration_period) }}</td></tr>
+            </table>
+        </div>
+
+        <div class="card">
+            <h2>Fee Summary</h2>
+            <table class="summary-table">
+                <tr><td>AP Exam + Service Fee</td><td>{{ $registration->currency }} {{ number_format($registration->exam_fee_total + $registration->service_fee_total) }}</td></tr>
+                <tr><td>Practice Exam Fee</td><td>{{ $registration->currency }} {{ number_format($registration->practice_exam_total) }}</td></tr>
+                <tr><td>Late Fee</td><td>{{ $registration->currency }} {{ number_format($registration->late_fee_total) }}</td></tr>
+                <tr><td>Total Due</td><td class="amount">{{ $registration->currency }} {{ number_format($registration->grand_total ?: $registration->total_fee) }}</td></tr>
+                <tr><td>Payment Method</td><td>{{ str_replace('_', ' ', $registration->payment_method ?: 'manual bank transfer') }}</td></tr>
+            </table>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>Next Steps</h2>
+        <ol class="steps">
+            <li>Open the payment page and complete bank transfer or gateway payment.</li>
+            <li>Upload proof of payment if using bank transfer.</li>
+            <li>The admin team reviews passport, payment, and subject availability.</li>
+            <li>Final registration confirmation is sent by email after payment and verification are complete.</li>
+        </ol>
+    </section>
+</x-public-flow-shell>

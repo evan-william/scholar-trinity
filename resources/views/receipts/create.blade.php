@@ -1,10 +1,64 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>{{ __('receipt.title') }}</title><style>
-body{margin:0;background:#f5f7fb;color:#1f2a37;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}.wrap{max-width:900px;margin:0 auto;padding:28px 16px}.card{background:white;border:1px solid #d9dee8;border-radius:8px;padding:22px;margin-bottom:14px;box-shadow:0 4px 16px rgba(22,47,83,.05)}h1,h2{color:#153764}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}label{display:flex;flex-direction:column;gap:6px;font-weight:800;margin-bottom:10px}input,select,textarea{border:1.5px solid #cbd3df;border-radius:6px;padding:9px 11px;font:inherit}.btn{display:inline-flex;background:#153764;color:white;border:0;text-decoration:none;padding:11px 16px;border-radius:6px;font-weight:900;cursor:pointer}table{width:100%;border-collapse:collapse}td{padding:8px 0;border-bottom:1px solid #edf0f5;font-size:13px}td:first-child{color:#667085;width:40%}.error{background:#fff0ee;color:#b42318;padding:10px 12px;border-radius:8px;margin-bottom:12px}@media(max-width:720px){.grid{grid-template-columns:1fr}}</style></head><body><main class="wrap">
-@if($errors->any())<div class="error">{{ $errors->first() }}</div>@endif
-<div class="card"><h1>{{ __('receipt.title') }}</h1><p>{{ __('receipt.service_fee_only') }}</p><table><tr><td>Registration</td><td>{{ $payment->registration->registration_number }}</td></tr><tr><td>Exam Fee (No Receipt)</td><td>{{ $payment->currency }} {{ number_format($payment->exam_fee_amount) }}</td></tr><tr><td>Service Fee Receipt Amount</td><td>{{ $payment->currency }} {{ number_format($taxableAmount) }}</td></tr><tr><td>Non-receipt Amount</td><td>{{ $payment->currency }} {{ number_format($nonReceiptAmount) }}</td></tr></table></div>
-<form class="card" method="POST" action="{{ route('receipts.store',$payment) }}">@csrf
-<label>Receipt Type<select name="receipt_type" required><option value="personal" @selected(old('receipt_type',$receipt?->receipt_type)==='personal')>Personal receipt</option><option value="company" @selected(old('receipt_type',$receipt?->receipt_type)==='company')>Company receipt</option><option value="none" @selected(old('receipt_type',$receipt?->receipt_type)==='none')>No receipt required</option><option value="donation" @selected(old('receipt_type',$receipt?->receipt_type)==='donation')>Donation receipt (future)</option></select></label>
-<div class="grid"><label>Buyer Name<input name="buyer_name" value="{{ old('buyer_name',$receipt?->buyer_name ?: $payment->registration->contact?->parent_full_name) }}"></label><label>Email<input type="email" name="buyer_email" value="{{ old('buyer_email',$receipt?->buyer_email ?: $payment->registration->contact?->parent_email) }}"></label><label>Phone<input name="buyer_phone" value="{{ old('buyer_phone',$receipt?->buyer_phone ?: $payment->registration->contact?->parent_phone) }}"></label><label>Company Name<input name="company_name" value="{{ old('company_name',$receipt?->company_name) }}"></label><label>GUI / Tax ID<input name="gui_tax_id" value="{{ old('gui_tax_id',$receipt?->gui_tax_id) }}" maxlength="8"></label></div>
-<button class="btn" type="submit">Save Receipt Information</button>
-</form>
-</main></body></html>
+<x-public-flow-shell
+    :title="__('receipt.title')"
+    heading="Receipt / Fapiao Information"
+    subtitle="Receipt or fapiao data applies only to the taxable service fee. AP exam fees are excluded from receipt issuance."
+    badge="Service fee only"
+>
+    <section class="grid-2">
+        <div class="card">
+            <h2>Receipt Amount</h2>
+            <p>{{ __('receipt.service_fee_only') }}</p>
+            <table class="summary-table">
+                <tr><td>Registration</td><td>{{ $payment->registration->registration_number }}</td></tr>
+                <tr><td>AP Exam Fee</td><td>{{ $payment->currency }} {{ number_format($payment->exam_fee_amount) }} <span class="status">No receipt</span></td></tr>
+                <tr><td>Service Fee Receipt Amount</td><td class="amount">{{ $payment->currency }} {{ number_format($taxableAmount) }}</td></tr>
+                <tr><td>Non-receipt Amount</td><td>{{ $payment->currency }} {{ number_format($nonReceiptAmount) }}</td></tr>
+                <tr><td>Payment Status</td><td><span class="status {{ $payment->payment_status }}">{{ str_replace('_', ' ', $payment->payment_status) }}</span></td></tr>
+            </table>
+        </div>
+
+        <div class="card">
+            <h2>Receipt Rules</h2>
+            <ol class="steps">
+                <li>Personal receipt needs buyer name, email, and phone.</li>
+                <li>Company receipt needs company name and GUI / Tax ID.</li>
+                <li>Fapiao is issued after payment is verified by admin.</li>
+                <li>Choose no receipt required if the family does not need one.</li>
+            </ol>
+        </div>
+    </section>
+
+    <form class="card" method="POST" action="{{ route('receipts.store', $payment) }}">
+        @csrf
+        <h2>Buyer Information</h2>
+        <div class="grid-2">
+            <label>Receipt Type
+                <select name="receipt_type" required>
+                    <option value="personal" @selected(old('receipt_type', $receipt?->receipt_type) === 'personal')>Personal receipt</option>
+                    <option value="company" @selected(old('receipt_type', $receipt?->receipt_type) === 'company')>Company receipt</option>
+                    <option value="none" @selected(old('receipt_type', $receipt?->receipt_type) === 'none')>No receipt required</option>
+                    <option value="donation" @selected(old('receipt_type', $receipt?->receipt_type) === 'donation')>Donation receipt (future)</option>
+                </select>
+            </label>
+            <label>Buyer Name
+                <input name="buyer_name" value="{{ old('buyer_name', $receipt?->buyer_name ?: $payment->registration->contact?->parent_full_name) }}">
+            </label>
+            <label>Email
+                <input type="email" name="buyer_email" value="{{ old('buyer_email', $receipt?->buyer_email ?: $payment->registration->contact?->parent_email) }}">
+            </label>
+            <label>Phone
+                <input name="buyer_phone" value="{{ old('buyer_phone', $receipt?->buyer_phone ?: $payment->registration->contact?->parent_phone) }}">
+            </label>
+            <label>Company Name
+                <input name="company_name" value="{{ old('company_name', $receipt?->company_name) }}">
+            </label>
+            <label>GUI / Tax ID
+                <input name="gui_tax_id" value="{{ old('gui_tax_id', $receipt?->gui_tax_id) }}" maxlength="8" inputmode="numeric">
+            </label>
+        </div>
+        <div class="actions">
+            <button class="btn" type="submit">Save Receipt Information</button>
+            <a class="btn light" href="{{ route('payments.show', $payment->registration->registration_number) }}">Back to Payment</a>
+        </div>
+    </form>
+</x-public-flow-shell>

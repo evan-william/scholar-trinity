@@ -72,6 +72,18 @@ Current local template pass:
   - Preserved the Edification MIT license in the copied public asset folder.
 - Backend template review:
   - Reviewed the provided backend zip and deferred Filament installation because it needs a Composer/PHP dependency path, not raw file copy.
+- Public registration/payment flow polish:
+  - Added shared `public-flow-shell` Blade component for student-facing confirmation, payment, gateway, and receipt pages.
+  - Reworked submitted registration confirmation page to match the AP registration flow and show reference number, student/parent details, exam selections, fee summary, and next steps.
+  - Reworked payment instruction page with payment reference, deadline, amount breakdown, bank transfer instructions, proof upload, and gateway fallback.
+  - Reworked gateway start page so configured providers submit to the endpoint and unconfigured providers clearly show sandbox payload preview.
+  - Reworked payment success/failed pages with clear next steps and manual fallback.
+  - Reworked receipt/fapiao create/status pages to emphasize service-fee-only receipt handling and buyer/company fields.
+  - Cleaned admin dashboard unlimited quota display from symbol-only output to `Unlimited`.
+- Admin surface polish:
+  - Added shared `admin-shell` Blade component with sidebar navigation, top actions, responsive layout, and admin route shortcuts.
+  - Reworked admin dashboard to show Word-aligned metrics, filters, operations queue, quick actions, daily registration chart, payment status breakdown, and subject quota/fee summary.
+  - Reworked admin login page into a branded secure operations login surface while keeping existing auth routes and validation untouched.
 
 2026-07-02
 - Confirmed direction from team chat: Laravel + Vue.
@@ -183,20 +195,23 @@ Current local template pass:
 - Submission Confirmation:
   - `PARTIAL`: confirmation page and email exist.
   - DONE: confirmation page now includes more complete student/guardian/exam/payment summary.
+  - DONE: confirmation page now uses the student-facing public shell and clearer next-step payment CTA.
   - DONE: registration completed email is implemented for paid + verified registrations.
-  - TODO: final visual polish and bilingual email rendering QA.
+  - TODO: bilingual email rendering QA.
 
 ### Phase 2 - Admin Management System
 
 - Admin Login:
   - `MOSTLY DONE`: login, forgot password, session timeout, admin guard exist.
-  - TODO: apply admin template layout.
+  - DONE: login page has branded admin UI polish.
+  - TODO: apply the final selected admin template across forgot/reset pages too.
 
 - Registration Dashboard:
   - `PARTIAL`: metrics exist.
   - DONE: operations queue metrics added for document, verification, payment, receipt, and quota follow-up.
   - DONE: dashboard counts uploaded/pending-review passports instead of a hardcoded placeholder.
-  - TODO: redesign dashboard using selected admin template.
+  - DONE: dashboard now uses a reusable admin shell with sidebar, filters, metrics, operations queue, quick actions, chart, and subject summary.
+  - TODO: apply final selected admin template styling to every admin management page.
 
 - Registration Management:
   - `PARTIAL`: list/search/filter/detail/edit/verify/notes exist.
@@ -234,11 +249,13 @@ Current local template pass:
 
 - Manual Payment:
   - `MOSTLY DONE`: bank instruction, proof upload, admin verify/reject exist.
-  - TODO: polish UI and email text.
+  - DONE: public payment instruction UI now shows amount breakdown, bank transfer details, proof upload, and gateway fallback clearly.
+  - TODO: polish email text after final bilingual copy review.
 
 - Payment Confirmation:
   - `PARTIAL`: success page, email, admin record, transaction ID fields exist.
   - DONE: failed page route/view exists.
+  - DONE: public success/failed pages now show clearer status, reference, next steps, and fallback actions.
   - TODO: real gateway failure states after provider sandbox testing.
 
 ### Phase 4 - Receipt / Fapiao Management
@@ -249,7 +266,7 @@ Current local template pass:
 
 - Receipt Information Form:
   - `MOSTLY DONE`: buyer/company/GUI/type fields exist.
-  - TODO: visual polish.
+  - DONE: public receipt/fapiao form now explains service-fee-only receipt rules and amount breakdown.
 
 - Admin Receipt Management:
   - `PARTIAL`: list/filter/export/issue/manual receipt number exist.
@@ -270,6 +287,7 @@ Current local template pass:
 
 - Form UX:
   - `PARTIAL`: mobile, progress, validation, confirmation exist.
+  - DONE: post-submit confirmation/payment/receipt pages now share a consistent responsive shell.
   - TODO: polish layout with selected template.
   - TODO: browser QA on desktop/mobile.
 
@@ -300,7 +318,7 @@ Current local template pass:
 
 - Audit Log:
   - `PARTIAL`: login/edit/payment/passport/receipt audit logs exist.
-  - TODO: re-audit coverage after admin template integration.
+  - TODO: re-audit coverage after full admin template integration across all admin pages.
 
 ### Phase 7 - Annual / Future Use
 
@@ -341,6 +359,10 @@ Current local template pass:
 - Static check: no merge conflict markers found.
 - Static check: no `.agent` or `.agents` folder found in repo root.
 - Static check: `template-source/` is ignored and raw template zip files are not staged by default.
+- Static check: `git diff --check` passed after public confirmation/payment/receipt page polish.
+- Static check: no obvious mojibake markers found in newly touched public flow views.
+- Static check: `git diff --check` passed after admin dashboard/login shell polish.
+- Static check: no obvious mojibake markers found in newly touched admin shell/dashboard/login views.
 - Blocked: `php -v` failed because PHP is not in PATH.
 - Blocked: `composer --version` failed because Composer is not in PATH.
 

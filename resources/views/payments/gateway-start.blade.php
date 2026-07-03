@@ -1,40 +1,54 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gateway Payment</title>
-    <style>
-        body{margin:0;background:#f5f7fb;color:#1f2a37;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}.wrap{max-width:820px;margin:0 auto;padding:28px 16px}.card{background:white;border:1px solid #d9dee8;border-radius:8px;padding:22px}.btn{display:inline-flex;background:#153764;color:white;border:0;text-decoration:none;padding:11px 16px;border-radius:6px;font-weight:900;cursor:pointer}.btn.light{background:white;color:#153764;border:1.5px solid #d9dee8}table{width:100%;border-collapse:collapse}td{padding:8px;border-bottom:1px solid #edf0f5;font-size:13px;vertical-align:top}.notice{background:#fff8e1;border:1px solid #f0c040;border-radius:8px;padding:12px;margin-bottom:16px}
-    </style>
-</head>
-<body>
-<main class="wrap">
-    <div class="card">
-        <h1>Taiwan Gateway Checkout</h1>
+<x-public-flow-shell
+    title="Taiwan Gateway Checkout"
+    heading="Taiwan Gateway Checkout"
+    subtitle="This page prepares the payment handoff for the selected Taiwan payment provider."
+    :badge="$gatewayActionUrl ? 'Ready to submit' : 'Sandbox preview'"
+>
+    <section class="grid-2">
+        <div class="card">
+            <h2>Checkout Summary</h2>
+            <table class="summary-table">
+                <tr><td>Registration</td><td>{{ $payment->registration->registration_number }}</td></tr>
+                <tr><td>Student</td><td>{{ $payment->registration->student_full_name }}</td></tr>
+                <tr><td>Payment Reference</td><td>{{ $payment->payment_reference }}</td></tr>
+                <tr><td>Method</td><td>{{ str_replace('_', ' ', $payment->payment_method ?: 'manual') }}</td></tr>
+                <tr><td>Total</td><td class="amount">{{ $payment->currency }} {{ number_format($payment->grand_total) }}</td></tr>
+            </table>
+        </div>
 
-        @if($gatewayActionUrl)
-            <p>This payment is ready to submit to the configured Taiwan gateway endpoint.</p>
-            <form method="POST" action="{{ $gatewayActionUrl }}">
-                @foreach($payload as $key => $value)
-                    <input type="hidden" name="{{ $key }}" value="{{ $value }}">
-                @endforeach
-                <button class="btn" type="submit">Continue to Gateway</button>
-                <a class="btn light" href="{{ route('payments.show', $payment->registration->registration_number) }}">Back to Payment</a>
-            </form>
-        @else
-            <div class="notice">
-                <strong>Sandbox payload preview.</strong><br>
-                Set <code>PAYMENT_GATEWAY_ENDPOINT</code> in the production `.env` after ECPay or NewebPay is chosen and verified.
-            </div>
-            <table>
+        <div class="card">
+            <h2>Provider Status</h2>
+            @if($gatewayActionUrl)
+                <div class="notice success">Gateway endpoint is configured. Submit when ready to continue to the provider checkout page.</div>
+                <form method="POST" action="{{ $gatewayActionUrl }}">
+                    @foreach($payload as $key => $value)
+                        <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+                    @endforeach
+                    <div class="actions">
+                        <button class="btn" type="submit">Continue to Gateway</button>
+                        <a class="btn light" href="{{ route('payments.show', $payment->registration->registration_number) }}">Back to Payment</a>
+                    </div>
+                </form>
+            @else
+                <div class="notice">
+                    <strong>Sandbox payload preview.</strong><br>
+                    Set <code>PAYMENT_GATEWAY_ENDPOINT</code> after ECPay or NewebPay is chosen and verified. Real signature/webhook validation is still required before production.
+                </div>
+                <div class="actions">
+                    <a class="btn light" href="{{ route('payments.show', $payment->registration->registration_number) }}">Back to Payment</a>
+                </div>
+            @endif
+        </div>
+    </section>
+
+    @unless($gatewayActionUrl)
+        <section class="card">
+            <h2>Gateway Payload</h2>
+            <table class="summary-table">
                 @foreach($payload as $key => $value)
                     <tr><td>{{ $key }}</td><td>{{ $value }}</td></tr>
                 @endforeach
             </table>
-            <p><a class="btn light" href="{{ route('payments.show', $payment->registration->registration_number) }}">Back to Payment</a></p>
-        @endif
-    </div>
-</main>
-</body>
-</html>
+        </section>
+    @endunless
+</x-public-flow-shell>

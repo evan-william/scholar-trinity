@@ -1,1 +1,44 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>{{ $receipt->registration->registration_number }} Receipt</title><style>body{margin:0;background:#f5f7fb;color:#1f2a37;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}.wrap{max-width:820px;margin:0 auto;padding:28px 16px}.card{background:white;border:1px solid #d9dee8;border-radius:8px;padding:22px}.notice{background:#e8f6ef;color:#237a4f;padding:10px 12px;border-radius:8px;margin-bottom:12px}h1{color:#153764}table{width:100%;border-collapse:collapse}td{padding:8px 0;border-bottom:1px solid #edf0f5}td:first-child{color:#667085;width:38%}.btn{display:inline-flex;background:#153764;color:white;text-decoration:none;padding:11px 16px;border-radius:6px;font-weight:900}</style></head><body><main class="wrap">@if(session('status'))<div class="notice">{{ session('status') }}</div>@endif<div class="card"><h1>Receipt Request</h1><table><tr><td>Registration</td><td>{{ $receipt->registration->registration_number }}</td></tr><tr><td>Buyer</td><td>{{ $receipt->buyer_name ?: '-' }}</td></tr><tr><td>Type</td><td>{{ $receipt->receipt_type }}</td></tr><tr><td>Receipt Amount</td><td>{{ $receipt->currency }} {{ number_format($receipt->taxable_receipt_amount) }}</td></tr><tr><td>Status</td><td>{{ $receipt->status }}</td></tr><tr><td>Receipt Number</td><td>{{ $receipt->receipt_number ?: '-' }}</td></tr></table><p><a class="btn" href="{{ route('landing') }}">Back to Landing</a></p></div></main></body></html>
+<x-public-flow-shell
+    title="Receipt Request"
+    heading="Receipt Request Status"
+    subtitle="The admin team can issue or update fapiao details from the receipt dashboard after payment verification."
+    :badge="str_replace('_', ' ', $receipt->status)"
+>
+    <section class="grid-2">
+        <div class="card">
+            <h2>Receipt Request</h2>
+            <table class="summary-table">
+                <tr><td>Registration</td><td>{{ $receipt->registration->registration_number }}</td></tr>
+                <tr><td>Buyer</td><td>{{ $receipt->buyer_name ?: '-' }}</td></tr>
+                <tr><td>Email</td><td>{{ $receipt->buyer_email ?: '-' }}</td></tr>
+                <tr><td>Phone</td><td>{{ $receipt->buyer_phone ?: '-' }}</td></tr>
+                <tr><td>Type</td><td>{{ str_replace('_', ' ', $receipt->receipt_type) }}</td></tr>
+                <tr><td>Status</td><td><span class="status {{ $receipt->status }}">{{ str_replace('_', ' ', $receipt->status) }}</span></td></tr>
+            </table>
+        </div>
+
+        <div class="card">
+            <h2>Amount and Issuance</h2>
+            <table class="summary-table">
+                <tr><td>Receipt Amount</td><td class="amount">{{ $receipt->currency }} {{ number_format($receipt->taxable_receipt_amount) }}</td></tr>
+                <tr><td>Non-receipt Amount</td><td>{{ $receipt->currency }} {{ number_format($receipt->non_receipt_amount) }}</td></tr>
+                <tr><td>Receipt Number</td><td>{{ $receipt->receipt_number ?: '-' }}</td></tr>
+                <tr><td>Issued At</td><td>{{ optional($receipt->issued_at)->format('Y-m-d H:i') ?: '-' }}</td></tr>
+                <tr><td>Sent At</td><td>{{ optional($receipt->sent_at)->format('Y-m-d H:i') ?: '-' }}</td></tr>
+            </table>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>Next Steps</h2>
+        <ol class="steps">
+            <li>If status is pending, the admin team still needs to review or issue the receipt.</li>
+            <li>If details are incorrect, go back to the payment page and resubmit receipt information before issuance.</li>
+            <li>Issued receipt/fapiao information will be sent to the buyer email when configured.</li>
+        </ol>
+        <div class="actions">
+            <a class="btn" href="{{ route('payments.show', $receipt->registration->registration_number) }}">Back to Payment</a>
+            <a class="btn light" href="{{ route('landing') }}">Back to Landing</a>
+        </div>
+    </section>
+</x-public-flow-shell>

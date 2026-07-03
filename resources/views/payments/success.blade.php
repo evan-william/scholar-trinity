@@ -1,1 +1,34 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>{{ __('payment.success') }}</title><style>body{margin:0;background:#f5f7fb;color:#1f2a37;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}.wrap{max-width:820px;margin:0 auto;padding:28px 16px}.card{background:white;border:1px solid #d9dee8;border-radius:8px;padding:24px;box-shadow:0 4px 16px rgba(22,47,83,.05)}h1{color:#237a4f}table{width:100%;border-collapse:collapse}td{padding:8px 0;border-bottom:1px solid #edf0f5}td:first-child{color:#667085;width:36%}.btn{display:inline-flex;background:#153764;color:white;text-decoration:none;padding:11px 16px;border-radius:6px;font-weight:900}.btn.light{background:white;color:#153764;border:1.5px solid #d9dee8}</style></head><body><main class="wrap"><div class="card"><h1>{{ __('payment.success') }}</h1><table><tr><td>Registration</td><td>{{ $payment->registration->registration_number }}</td></tr><tr><td>Student</td><td>{{ $payment->registration->student_full_name }}</td></tr><tr><td>Exams</td><td>{{ $payment->registration->exams->pluck('name')->join(', ') }}</td></tr><tr><td>Amount</td><td>{{ $payment->currency }} {{ number_format($payment->grand_total) }}</td></tr><tr><td>Method</td><td>{{ $payment->payment_method }}</td></tr><tr><td>Transaction ID</td><td>{{ $payment->transaction_id ?: '-' }}</td></tr><tr><td>Payment Date</td><td>{{ optional($payment->paid_at)->format('Y-m-d H:i') ?: '-' }}</td></tr></table><p>Next steps: submit receipt/fapiao information for the service fee, then wait for final exam coordinator confirmation.</p><a class="btn" href="{{ route('receipts.create',$payment) }}">Submit Receipt Info</a> <a class="btn light" href="{{ route('landing') }}">Back to Landing</a></div></main></body></html>
+<x-public-flow-shell
+    :title="__('payment.success')"
+    heading="Payment Successful"
+    subtitle="The payment record has been marked paid. Submit receipt/fapiao details for the taxable service fee if needed."
+    badge="Paid"
+>
+    <section class="grid-2">
+        <div class="card">
+            <h2>Payment Record</h2>
+            <table class="summary-table">
+                <tr><td>Registration</td><td>{{ $payment->registration->registration_number }}</td></tr>
+                <tr><td>Student</td><td>{{ $payment->registration->student_full_name }}</td></tr>
+                <tr><td>Exams</td><td>{{ $payment->registration->exams->pluck('name')->join(', ') ?: '-' }}</td></tr>
+                <tr><td>Total Paid</td><td class="amount">{{ $payment->currency }} {{ number_format($payment->grand_total) }}</td></tr>
+                <tr><td>Method</td><td>{{ str_replace('_', ' ', $payment->payment_method ?: 'manual') }}</td></tr>
+                <tr><td>Transaction ID</td><td>{{ $payment->transaction_id ?: '-' }}</td></tr>
+                <tr><td>Payment Date</td><td>{{ optional($payment->paid_at)->format('Y-m-d H:i') ?: '-' }}</td></tr>
+            </table>
+        </div>
+
+        <div class="card">
+            <h2>Next Steps</h2>
+            <ol class="steps">
+                <li>Submit receipt/fapiao information if the family needs a receipt for the service fee.</li>
+                <li>Wait for the admin team to verify payment and complete registration.</li>
+                <li>Watch student and parent email for final exam coordinator confirmation.</li>
+            </ol>
+            <div class="actions">
+                <a class="btn" href="{{ route('receipts.create', $payment) }}">Submit Receipt Info</a>
+                <a class="btn light" href="{{ route('student-registrations.show', $payment->registration->registration_number) }}">View Registration</a>
+            </div>
+        </div>
+    </section>
+</x-public-flow-shell>

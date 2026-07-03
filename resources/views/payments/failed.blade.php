@@ -1,1 +1,22 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>{{ __('payment.failed') }}</title><style>body{margin:0;background:#f5f7fb;color:#1f2a37;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}.wrap{max-width:760px;margin:0 auto;padding:28px 16px}.card{background:white;border:1px solid #d9dee8;border-radius:8px;padding:24px}.btn{display:inline-flex;background:#153764;color:white;text-decoration:none;padding:11px 16px;border-radius:6px;font-weight:900}.btn.light{background:white;color:#153764;border:1.5px solid #d9dee8}</style></head><body><main class="wrap"><div class="card"><h1>{{ __('payment.failed') }}</h1><p>{{ $payment->rejected_reason ?: 'The payment could not be confirmed.' }}</p><p>Registration: <strong>{{ $payment->registration->registration_number }}</strong></p><a class="btn" href="{{ route('payments.gateway.start',$payment) }}">Retry Payment</a> <a class="btn light" href="{{ route('payments.show',$payment->registration->registration_number) }}">Manual Payment Option</a></div></main></body></html>
+<x-public-flow-shell
+    :title="__('payment.failed')"
+    heading="Payment Could Not Be Confirmed"
+    subtitle="The registration is still saved. Retry the gateway flow or use manual bank transfer."
+    badge="Action required"
+>
+    <section class="card">
+        <div class="notice error">{{ $payment->rejected_reason ?: 'The payment could not be confirmed.' }}</div>
+        <table class="summary-table">
+            <tr><td>Registration</td><td><strong>{{ $payment->registration->registration_number }}</strong></td></tr>
+            <tr><td>Student</td><td>{{ $payment->registration->student_full_name }}</td></tr>
+            <tr><td>Payment Reference</td><td>{{ $payment->payment_reference }}</td></tr>
+            <tr><td>Total Due</td><td class="amount">{{ $payment->currency }} {{ number_format($payment->grand_total) }}</td></tr>
+            <tr><td>Status</td><td><span class="status {{ $payment->payment_status }}">{{ str_replace('_', ' ', $payment->payment_status) }}</span></td></tr>
+        </table>
+        <div class="actions">
+            <a class="btn" href="{{ route('payments.gateway.start', $payment) }}">Retry Gateway</a>
+            <a class="btn light" href="{{ route('payments.show', $payment->registration->registration_number) }}">Manual Payment Option</a>
+            <a class="btn light" href="{{ route('landing') }}">Back to Landing</a>
+        </div>
+    </section>
+</x-public-flow-shell>
