@@ -24,12 +24,56 @@
         .intro-list{margin:0;padding-left:18px;color:var(--gray-800);font-size:13px;line-height:1.65}
         .intro-poster{width:100%;border:1px solid var(--gray-200);border-radius:6px}
         @media(max-width:640px){.form-intro{grid-template-columns:1fr}.intro-poster{max-width:320px}}
+        /* Current visual pass: softer registration form styling per client feedback. */
+        body{background:#eef4fb}
+        .header{background:linear-gradient(90deg,#102d52,#1d477d);box-shadow:0 12px 34px rgba(16,45,82,.16)}
+        .head-inner{max-width:980px}
+        .header-logos{gap:10px}
+        .logo-pill{width:46px;height:46px;display:grid;place-items:center;background:#fff;color:var(--primary);border-radius:10px;font-size:12px;box-shadow:0 8px 22px rgba(0,0,0,.12)}
+        .logo-divider{display:none}
+        .brand-copy{display:flex;flex-direction:column;line-height:1.1}
+        .brand-copy strong{font-size:13px;letter-spacing:.08em}
+        .brand-copy span{font-size:10px;opacity:.78}
+        .header-title h1{font-size:18px}
+        .header-title p{font-size:12px}
+        .header-badge{border-radius:999px;box-shadow:0 8px 18px rgba(201,168,76,.2)}
+        .progress-wrap{background:rgba(255,255,255,.94);border-bottom:1px solid #dce6f2;box-shadow:0 6px 20px rgba(26,58,107,.06)}
+        .step-item{padding:16px 8px}
+        .step-circle{width:34px;height:34px;border-color:#d8e3f0;background:#f7faff;color:#6b7a90}
+        .step-item.active .step-circle,.step-item.completed .step-circle{background:linear-gradient(135deg,var(--primary),var(--primary-light));border-color:transparent}
+        .main{max-width:980px;padding-top:28px}
+        .card{border:1px solid #dfe8f4;border-radius:14px;box-shadow:0 18px 48px rgba(26,58,107,.1);padding:28px;margin-bottom:18px}
+        .section-title{border-bottom:1px solid #dfe8f4;padding-bottom:14px;margin-bottom:22px;font-size:18px}
+        .section-title::after{content:"";display:block;width:62px;height:3px;background:var(--accent);border-radius:999px;margin-top:10px}
+        .row{gap:16px;margin-bottom:16px}
+        .fg{gap:7px}
+        .lbl{font-size:12px;text-transform:none;letter-spacing:0;color:#263850}
+        .lbl .zh{font-size:11px;margin-top:2px;color:#708197}
+        input[type=text],input[type=email],input[type=tel],input[type=search],input[type=date],select,textarea{min-height:44px;border:1.5px solid #d8e4f2;border-radius:8px;padding:11px 13px;background:#f3f7fd;color:#1f2a37;box-shadow:inset 0 1px 0 rgba(255,255,255,.72);transition:border-color .15s ease,box-shadow .15s ease,background .15s ease}
+        input[type=text]:hover,input[type=email]:hover,input[type=tel]:hover,input[type=search]:hover,input[type=date]:hover,select:hover,textarea:hover{background:#eef5ff;border-color:#c9d8ea}
+        input:focus,select:focus,textarea:focus{background:#fff;border-color:#6f96c9;box-shadow:0 0 0 3px rgba(42,82,152,.13),0 8px 22px rgba(26,58,107,.08)}
+        input[aria-invalid=true],select[aria-invalid=true],textarea[aria-invalid=true]{border-color:var(--danger);background:#fff7f6;box-shadow:0 0 0 3px rgba(180,35,24,.08)}
+        .hint{font-size:12px}
+        .upload-area{border-color:#c9d8ea;border-radius:12px;background:#f3f7fd}
+        .upload-area:hover{background:#edf5ff;border-color:#6f96c9}
+        .notice{border-radius:12px;background:#fffaf0}
+        .exam-sticky{top:0;border-radius:10px;background:rgba(255,255,255,.95);border:1px solid #dfe8f4;padding:12px 14px;box-shadow:0 10px 24px rgba(26,58,107,.08)}
+        .exam-cb,.pay-opt,.sig-box,.price-box,.next-steps{border-radius:12px}
+        .exam-cb{border-color:#dbe6f3;background:#f9fbff}
+        .exam-cb.checked,.pay-opt.selected{border-color:#6f96c9;background:#eef5ff;box-shadow:0 8px 20px rgba(26,58,107,.08)}
+        .btn{border-radius:8px}
+        .nav-footer{border-top:1px solid #dbe6f3;box-shadow:0 -12px 34px rgba(26,58,107,.12)}
+        .form-intro{border:1px solid #dfe8f4;border-top:0;background:linear-gradient(135deg,#fff,#f3f7fd);grid-template-columns:minmax(0,1fr) 260px}
+        .form-intro h2{font-size:28px}
+        .intro-poster{border-radius:10px;background:#102d52;padding:6px;border:0;box-shadow:0 14px 34px rgba(16,45,82,.18)}
+        .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+        @media(max-width:640px){.main{padding-top:18px}.header-title{min-width:180px}.brand-copy{display:none}.form-intro{grid-template-columns:1fr}.intro-poster{max-width:360px}}
     </style>
 </head>
 <body>
 <header class="header">
     <div class="head-inner">
-        <div class="header-logos"><div class="logo-pill">AP<br>EXAM</div><div class="logo-divider"></div><div class="logo-pill">REG<br>FORM</div></div>
+        <div class="header-logos"><div class="logo-pill">TS</div><div class="brand-copy"><strong>TRINITY SCHOLAR</strong><span>AP Registration</span></div></div>
         <div class="header-title"><h1>{{ __('student_registration.title') }}</h1><p>{{ __('student_registration.subtitle') }}</p></div>
         <div class="header-actions"><x-language-switcher /><a class="btn btn-outline" href="{{ route('landing') }}">Landing</a><span class="header-badge">2026-2027</span></div>
     </div>

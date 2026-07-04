@@ -68,9 +68,9 @@
         .hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
         .hero-note{margin-top:18px;display:grid;gap:8px;color:rgba(255,255,255,.88);font-size:13px}
         .hero-note strong{color:#fff}
-        .poster-card{background:#fff;border-radius:8px;box-shadow:var(--shadow);padding:14px;color:var(--ink)}
-        .poster-card img{display:block;width:100%;border-radius:6px;border:1px solid var(--line)}
-        .poster-caption{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:12px;font-size:13px;color:var(--muted)}
+        .poster-card{background:linear-gradient(145deg,rgba(255,255,255,.16),rgba(255,255,255,.07));border:1px solid rgba(255,255,255,.26);border-radius:12px;box-shadow:var(--shadow);padding:14px;color:#fff;backdrop-filter:blur(8px)}
+        .poster-card img{display:block;width:100%;border-radius:8px;border:1px solid rgba(255,255,255,.26);background:#102d52}
+        .poster-caption{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:12px;font-size:13px;color:rgba(255,255,255,.84)}
         .status-pill{display:inline-flex;align-items:center;border-radius:999px;background:#fff3cf;color:#6b4700;font-weight:950;padding:5px 10px;white-space:nowrap}
         .quick{background:#fff;border-bottom:1px solid var(--line)}
         .quick-grid{max-width:1180px;margin:0 auto;padding:18px 20px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
@@ -130,7 +130,7 @@
 </div>
 <nav class="nav" aria-label="Primary navigation">
     <div class="nav-inner">
-        <a class="brand" href="{{ route('landing') }}"><span class="brand-mark">TS<br>AP</span><span>{{ $platformName }}</span></a>
+        <a class="brand" href="{{ route('landing') }}"><span class="brand-mark">TS</span><span>{{ $platformName }}</span></a>
         <div class="nav-links">
             <a href="#overview">Overview</a>
             <a href="#late-registration">Late Registration</a>
@@ -159,7 +159,7 @@
         </div>
         <aside class="poster-card" aria-label="Provided AP registration poster">
             <img src="{{ asset('images/ap-late-registration-2026.jpeg') }}" alt="2026 AP Exam Registration late registration announcement">
-            <div class="poster-caption"><span>Provided announcement content</span><span class="status-pill">Late Registration</span></div>
+            <div class="poster-caption"><span>Official announcement poster</span><span class="status-pill">Late Registration</span></div>
         </aside>
     </div>
 </header>

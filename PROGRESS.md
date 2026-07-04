@@ -1,6 +1,6 @@
 # Trinity Scholar Progress Tracker
 
-Last updated: 2026-07-03, Asia/Bangkok
+Last updated: 2026-07-04, Asia/Bangkok
 
 This file is the working source of truth for project status. Every implementation pass must update:
 - `Current Progress` for what changed.
@@ -60,6 +60,19 @@ Current local template pass:
 - Raw downloaded templates are ignored through `template-source/` in `.gitignore`.
 
 ## Current Progress
+
+2026-07-04
+- Teammate update review:
+  - Reviewed `ricky.md` and the files changed by Ricky.
+  - Preserved his registration behavior work: validation returns to the relevant step, old form data is restored, browser draft autosave exists, passport draft upload exists, and inline toast messages replace blocking alerts.
+- Client/boss feedback pass for Monday demo:
+  - Removed the repo-local `.agents` folder from the project directory.
+  - Polished the no-login student registration form without changing Ricky's flow logic.
+  - Updated registration form inputs/selects/textareas to use softer filled fields, rounded corners, clearer hover/focus/invalid states, and card spacing closer to the client-highlighted textbox style.
+  - Cleaned the registration header placeholder branding from generic AP/FORM pills to a Trinity Scholar/AP Registration placeholder that can later be replaced by real logos.
+  - Improved the registration intro poster treatment so the provided AP announcement looks more like an intended poster, not a plain white placeholder.
+  - Updated the landing hero poster panel from a white card to a dark/glass poster frame and changed the caption to `Official announcement poster`.
+  - Simplified the landing brand mark to `TS` so the top logo area is less placeholder-heavy until official logo assets arrive.
 
 2026-07-03
 - Frontend template integration:
@@ -166,6 +179,10 @@ Current local template pass:
   - Confirm mobile layout.
   - DONE: added no-login AP registration intro with poster/deadline/payment-completion reminders.
   - DONE: pre-submit review now includes the newly required fields and accommodations summary.
+  - DONE: textbox/input style now has the softer filled look requested in the client screenshot.
+  - DONE: Ricky's validation-step return, autosave, passport draft upload, and toast improvements were reviewed and preserved.
+  - TODO: replace temporary TS/AP Registration text branding with official Trinity Scholar/logo assets.
+  - TODO: browser QA on desktop/mobile after PHP server can run locally or on staging.
 
 - Decide template:
   - DONE: current frontend/compro pass uses local Edification template assets.
@@ -300,6 +317,8 @@ Current local template pass:
 - Form UX:
   - `PARTIAL`: mobile, progress, validation, confirmation exist.
   - DONE: post-submit confirmation/payment/receipt pages now share a consistent responsive shell.
+  - DONE: registration form visual style updated with softer inputs, clearer focus/invalid states, improved header, and poster treatment.
+  - DONE: Ricky's draft autosave/passport draft/validation-step-return improvements are present.
   - TODO: polish layout with selected template.
   - TODO: browser QA on desktop/mobile.
 
@@ -364,6 +383,14 @@ Current local template pass:
 - Server credentials were shared in chat but must stay out of Git.
 
 ## Verification Log
+
+2026-07-04
+- Static check: `git diff --check` passed after boss-feedback visual pass.
+- Static check: no merge conflict markers found.
+- Static check: no `.agent` or `.agents` folder found in repo after cleanup.
+- Static check: changed files are limited to `PROGRESS.md`, `resources/views/landing/index.blade.php`, and `resources/views/student-registration/create.blade.php`.
+- Static review: Ricky's validation/autosave/passport draft/toast registration changes were left intact.
+- Not run: PHP/Laravel browser QA or automated tests in this pass.
 
 2026-07-03
 - Static/template review: local Edification frontend zip inspected and usable assets copied.
