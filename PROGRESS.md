@@ -73,6 +73,19 @@ Current local template pass:
   - Improved the registration intro poster treatment so the provided AP announcement looks more like an intended poster, not a plain white placeholder.
   - Updated the landing hero poster panel from a white card to a dark/glass poster frame and changed the caption to `Official announcement poster`.
   - Simplified the landing brand mark to `TS` so the top logo area is less placeholder-heavy until official logo assets arrive.
+- Word requirement re-audit:
+  - Re-read `Reference/Trinity Scholar - Features.docx` and matched the current code against all phases/modules.
+  - Fixed a critical registration gap: passport upload is now required server-side through either an uploaded file or a saved passport draft token.
+  - Added a service-level guard so an expired/fake passport draft token cannot create a registration without a passport file.
+  - Added test coverage for rejecting registration submissions without passport upload/draft.
+  - Limited the demo admin seeder account to local/testing environments so accidental production `db:seed` does not create `test@example.com`.
+  - Reconfirmed the largest remaining production gaps are real payment provider integration, real e-invoice/fapiao integration, MySQL production backup automation, full bilingual hardcoded text cleanup, final admin template coverage, and browser/test QA.
+- Admin template and bilingual pass:
+  - Converted remaining admin management pages to the shared `admin-shell`: registration detail/edit, landing content editor, AP subject index/form, exam season index/form, security audit index/detail.
+  - Left print and auth screens standalone intentionally because print needs a clean printable document layout and auth screens are not dashboard management pages.
+  - Added shared English and Traditional Chinese admin language files at `lang/en/admin.php` and `lang/zh_TW/admin.php`.
+  - Updated admin shell navigation/top actions to use bilingual labels and show the language switcher across admin pages.
+  - Replaced major headings, actions, and table labels in the newly converted management pages with `__('admin.*')` keys.
 
 2026-07-03
 - Frontend template integration:
@@ -214,6 +227,8 @@ Current local template pass:
 - Passport Upload:
   - `MOSTLY DONE`: upload, validation, private storage, admin access, replacement exist.
   - DONE: `.env.example` now aligns `SECURITY_FILE_MAX_KB=10240` with the 10MB registration form limit.
+  - DONE: server-side validation now requires either passport upload or a saved passport draft token.
+  - DONE: service layer rejects missing/expired passport draft tokens before creating a registration.
 
 - Submission Confirmation:
   - `PARTIAL`: confirmation page and email exist.
@@ -241,7 +256,7 @@ Current local template pass:
   - DONE: exam replacement quota recalculation fixed.
   - DONE: new registration fields appear on admin show/edit/print pages.
   - DONE: registration management index now uses the backend/admin shell with full filters and export controls.
-  - TODO: apply admin shell to registration detail/edit pages.
+  - DONE: registration detail/edit pages now use the backend/admin shell.
 
 - Passport Management:
   - `MOSTLY DONE`: preview, download, replace, valid/invalid, reupload request exist.
@@ -271,6 +286,8 @@ Current local template pass:
   - TODO: choose provider: ECPay or NewebPay.
   - TODO: configure and verify real checkout endpoint.
   - TODO: implement provider-specific signature algorithm exactly.
+  - TODO: complete NewebPay checkout/callback adapter if NewebPay is chosen.
+  - TODO: verify ECPay CheckMacValue/signature against official sandbox examples before enabling production.
   - TODO: webhook security/IP/provider validation.
   - TODO: success and failed handling with real provider response.
 
@@ -306,11 +323,13 @@ Current local template pass:
   - DONE: provider adapter structure added for manual sandbox, ECPay placeholder, and NewebPay placeholder.
   - TODO: choose Taiwan e-invoice provider.
   - TODO: implement real issue/cancel/resend API.
+  - TODO: replace placeholder e-invoice providers with verified provider API calls before using auto issue.
 
 ### Phase 5 - Multi-language & UX
 
 - Language System:
   - `PARTIAL`: English and Traditional Chinese files exist.
+  - DONE: admin shell navigation/top actions and newly converted admin management pages use shared bilingual keys.
   - TODO: remove hardcoded text from Blade pages.
   - TODO: make language switch consistent across landing/register/admin where required.
 
@@ -340,6 +359,8 @@ Current local template pass:
   - TODO: define DB name/user/password on server.
   - DONE: backup checklist documented in `SERVER_CHECKLIST.md`.
   - DONE: `security:backup-storage` creates a private storage manifest or optional zip and logs it.
+  - DONE: local/testing demo admin seeder is restricted away from production environment.
+  - TODO: implement or document the actual production MySQL/MariaDB backup command/job; built-in `security:backup-database` only supports local SQLite.
   - TODO: configure actual backup job and restricted DB access on server.
 
 - File Security:
@@ -377,8 +398,11 @@ Current local template pass:
 - PHP and Composer are not available in the current Codex environment, so tests have not been run here.
 - `resources/views/student-registration/create.blade.php` still contains a lot of inline CSS/JS and should be replaced or refactored after template choice.
 - Backend template zip is Filament source/package code, not a safe raw drop-in template. It should be installed through Composer when the environment supports it.
+- Word re-audit 2026-07-04: core MVP registration/admin/manual-payment features are mostly represented, but the app is not production-complete until real payment gateway, real e-invoice/fapiao, and server QA are done.
 - Gateway page now supports configured endpoint handoff, but real provider signature and sandbox verification are still pending.
+- NewebPay payment adapter still throws `LogicException`; only ECPay skeleton has a payload/signature path.
 - Receipt auto issue is still not production-ready; manual sandbox and provider placeholder adapters exist, but real issue/cancel/resend APIs are pending.
+- Built-in database backup command only supports local SQLite; production MySQL/MariaDB needs a server backup job.
 - Language coverage is incomplete because many view strings are hardcoded.
 - Server credentials were shared in chat but must stay out of Git.
 
@@ -391,6 +415,15 @@ Current local template pass:
 - Static check: changed files are limited to `PROGRESS.md`, `resources/views/landing/index.blade.php`, and `resources/views/student-registration/create.blade.php`.
 - Static review: Ricky's validation/autosave/passport draft/toast registration changes were left intact.
 - Not run: PHP/Laravel browser QA or automated tests in this pass.
+- Static/Word audit: re-read `Trinity Scholar - Features.docx` and mapped the current app against each module.
+- Static check: `git diff --check` passed after passport-required and seeder-safety fixes.
+- Static check: no merge conflict markers found after the re-audit fixes.
+- Static check: passport-required validation keys exist in English and Traditional Chinese language files.
+- Blocked: `php -v` failed because PHP is not in PATH, so Laravel tests still have not been run here.
+- Static check: `git diff --check` passed after admin-shell/bilingual pass.
+- Static check: no merge conflict markers found after admin-shell/bilingual pass.
+- Static check: all admin management pages now use `x-admin-shell`; only auth screens and print layout remain standalone by design.
+- Static check: admin management raw `<!DOCTYPE>` scan is clean when excluding auth and print views.
 
 2026-07-03
 - Static/template review: local Edification frontend zip inspected and usable assets copied.

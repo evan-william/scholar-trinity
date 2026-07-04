@@ -47,8 +47,8 @@ class StoreStudentRegistrationRequest extends FormRequest
             'student_phone' => ['required', 'string', 'max:40', 'regex:/^\\+?[0-9\\s().-]{6,40}$/'],
             'current_school' => ['nullable', 'string', 'max:160'],
             'grade' => ['nullable', 'string', 'max:40'],
-            'passport_file' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:10240'],
-            'passport_file_token' => ['nullable', 'string', 'regex:/^[A-Za-z0-9]{40}$/'],
+            'passport_file' => ['required_without:passport_file_token', 'nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:10240'],
+            'passport_file_token' => ['required_without:passport_file', 'nullable', 'string', 'regex:/^[A-Za-z0-9]{40}$/'],
             'school_name' => ['required', 'string', 'max:160'],
             'school_country' => ['required', 'string', 'max:80'],
             'school_city' => ['nullable', 'string', 'max:100'],
@@ -97,6 +97,8 @@ class StoreStudentRegistrationRequest extends FormRequest
             'exam_subject_ids.required_without' => __('student_registration.validation.exam_required'),
             'exam_subject_uuids.required_without' => __('student_registration.validation.exam_required'),
             'confirmed_review.accepted' => __('ap_registration.form.review_form'),
+            'passport_file.required_without' => __('student_registration.validation.passport_required'),
+            'passport_file_token.required_without' => __('student_registration.validation.passport_required'),
         ];
     }
 

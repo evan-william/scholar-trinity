@@ -55,11 +55,11 @@ class StudentRegistrationTest extends TestCase
         Mail::fake();
         $this->seed(ApExamSubjectSeeder::class);
         $subject = ApExamSubject::query()->firstOrFail();
-        $payload = $this->validPayload(['exam_subject_ids' => [$subject->id]]);
+        $payload = ['exam_subject_ids' => [$subject->id]];
 
-        $this->post('/student-registration', $payload)->assertRedirect();
+        $this->post('/student-registration', $this->validPayload($payload))->assertRedirect();
 
-        $this->post('/student-registration', $payload)
+        $this->post('/student-registration', $this->validPayload($payload))
             ->assertSessionHasErrors(['student_email', 'passport_number']);
     }
 
@@ -128,6 +128,20 @@ class StudentRegistrationTest extends TestCase
 
         $response->assertSessionHasErrors(['exam_subject_uuids', 'exam_subject_ids']);
         $response->assertSessionHas('student_registration_error_step', 3);
+    }
+
+    public function test_registration_requires_passport_upload_or_saved_draft(): void
+    {
+        $this->seed(ApExamSubjectSeeder::class);
+        $subject = ApExamSubject::query()->firstOrFail();
+        $payload = $this->validPayload([
+            'exam_subject_ids' => [$subject->id],
+            'passport_file' => null,
+            'passport_file_token' => null,
+        ]);
+
+        $this->post('/student-registration', $payload)
+            ->assertSessionHasErrors(['passport_file']);
     }
 
     public function test_passport_draft_can_be_saved_before_final_submission(): void
@@ -204,6 +218,7 @@ class StudentRegistrationTest extends TestCase
             'nationality' => 'Taiwan',
             'passport_number' => 'A12345678',
             'passport_expiry_date' => '2030-01-15',
+            'passport_file' => UploadedFile::fake()->image('passport.jpg'),
             'student_email' => 'alex@example.com',
             'student_phone' => '+886 912 345 678',
             'school_name' => 'Taipei International School',

@@ -1,15 +1,72 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Exam Seasons</title><style>
-body{margin:0;background:#f5f7fb;color:#1f2a37;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}header{background:#153764;color:white;padding:18px 24px}.wrap{max-width:1240px;margin:0 auto;padding:22px 16px}.card{background:white;border:1px solid #d9dee8;border-radius:8px;padding:18px;box-shadow:0 4px 16px rgba(22,47,83,.05)}.top{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:14px}.btn{border:0;border-radius:6px;padding:9px 12px;font-weight:900;text-decoration:none;display:inline-flex;background:#153764;color:white;cursor:pointer}.btn.light{background:white;color:#153764;border:1.5px solid #d9dee8}.btn.danger{background:#b42318}table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:10px 8px;border-bottom:1px solid #edf0f5;font-size:13px;vertical-align:top}th{color:#153764}.badge{padding:3px 8px;border-radius:999px;background:#eef3f9;color:#153764;font-size:11px;font-weight:900;white-space:nowrap}.notice{background:#e8f6ef;color:#237a4f;padding:10px 12px;border-radius:8px;margin-bottom:12px}.muted{color:#667085;font-size:12px}.actions{display:flex;flex-wrap:wrap;gap:6px}.mini{display:grid;grid-template-columns:1fr 90px 90px;gap:6px}input{min-height:34px;border:1.5px solid #cbd3df;border-radius:6px;padding:6px 8px}@media(max-width:980px){table{display:block;overflow-x:auto}.mini{grid-template-columns:1fr}}</style></head><body>
-<header><h1>AP Registration Seasons</h1><p>Manage yearly registration periods, active season, duplication, and archive state.</p></header>
-<main class="wrap">@if(session('status'))<div class="notice">{{ session('status') }}</div>@endif
-<div class="card"><div class="top"><h2>Exam Seasons</h2><div><a class="btn light" href="{{ route('admin.reports.annual') }}">Reports</a> <a class="btn" href="{{ route('admin.exam-seasons.create') }}">Create Season</a></div></div>
-<table><thead><tr><th>Season</th><th>Period</th><th>Status</th><th>Subjects</th><th>Registrations</th><th>Duplicate</th><th>Actions</th></tr></thead><tbody>
-@foreach($seasons as $season)<tr>
-<td><strong>{{ $season->season_name }}</strong><br><span class="muted">{{ $season->academic_year }} / {{ $season->exam_year }} {{ $season->is_active ? 'Active' : '' }}</span></td>
-<td>Main: {{ optional($season->main_registration_start_at)->format('Y-m-d H:i') ?? '-' }} to {{ optional($season->main_registration_end_at)->format('Y-m-d H:i') ?? '-' }}<br>Late: {{ optional($season->late_registration_start_at)->format('Y-m-d H:i') ?? '-' }} to {{ optional($season->late_registration_end_at)->format('Y-m-d H:i') ?? '-' }}<br><span class="muted">{{ $season->timezone }}</span></td>
-<td><span class="badge">{{ $season->publicStatus() }}</span><br><span class="muted">{{ $season->status }}</span></td>
-<td>{{ $season->subjects_count }}</td><td>{{ $season->registrations_count }}</td>
-<td><form method="POST" action="{{ route('admin.exam-seasons.duplicate',$season) }}">@csrf<div class="mini"><input name="season_name" value="AP Exam {{ $season->exam_year + 1 }}"><input name="academic_year" value="{{ $season->exam_year }}-{{ $season->exam_year + 1 }}"><input name="exam_year" value="{{ $season->exam_year + 1 }}" type="number"></div><button class="btn light" type="submit">Duplicate</button></form></td>
-<td><div class="actions"><a class="btn light" href="{{ route('admin.exam-seasons.edit',$season) }}">Edit</a><form method="POST" action="{{ route('admin.exam-seasons.activate',$season) }}">@csrf<button class="btn" type="submit">Set Active</button></form><form method="POST" action="{{ route('admin.exam-seasons.archive',$season) }}">@csrf<input name="close_reason" placeholder="Archive reason"><button class="btn danger" type="submit">Archive</button></form></div></td>
-</tr>@endforeach
-</tbody></table>{{ $seasons->links() }}</div></main></body></html>
+<x-admin-shell
+    :title="__('admin.registration_seasons')"
+    :subtitle="__('admin.registration_seasons_subtitle')"
+>
+    <div class="card">
+        <div class="section-title">
+            <h2>{{ __('admin.exam_seasons') }}</h2>
+            <div class="actions">
+                <a class="btn light" href="{{ route('admin.reports.annual') }}">{{ __('admin.annual_report') }}</a>
+                <a class="btn" href="{{ route('admin.exam-seasons.create') }}">{{ __('admin.create_season') }}</a>
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>{{ __('admin.season') }}</th>
+                    <th>{{ __('admin.period') }}</th>
+                    <th>{{ __('admin.status') }}</th>
+                    <th>{{ __('admin.subjects') }}</th>
+                    <th>{{ __('admin.registrations') }}</th>
+                    <th>{{ __('admin.duplicate') }}</th>
+                    <th>{{ __('admin.actions') }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($seasons as $season)
+                    <tr>
+                        <td>
+                            <strong>{{ $season->season_name }}</strong><br>
+                            <span class="mini">{{ $season->academic_year }} / {{ $season->exam_year }} {{ $season->is_active ? __('admin.active') : '' }}</span>
+                        </td>
+                        <td>
+                            Main: {{ optional($season->main_registration_start_at)->format('Y-m-d H:i') ?? '-' }} to {{ optional($season->main_registration_end_at)->format('Y-m-d H:i') ?? '-' }}<br>
+                            Late: {{ optional($season->late_registration_start_at)->format('Y-m-d H:i') ?? '-' }} to {{ optional($season->late_registration_end_at)->format('Y-m-d H:i') ?? '-' }}<br>
+                            <span class="mini">{{ $season->timezone }}</span>
+                        </td>
+                        <td><span class="status">{{ $season->publicStatus() }}</span><br><span class="mini">{{ $season->status }}</span></td>
+                        <td>{{ $season->subjects_count }}</td>
+                        <td>{{ $season->registrations_count }}</td>
+                        <td>
+                            <form method="POST" action="{{ route('admin.exam-seasons.duplicate',$season) }}">
+                                @csrf
+                                <div class="grid-3">
+                                    <input class="compact-input" name="season_name" value="AP Exam {{ $season->exam_year + 1 }}">
+                                    <input class="compact-input" name="academic_year" value="{{ $season->exam_year }}-{{ $season->exam_year + 1 }}">
+                                    <input class="compact-input" name="exam_year" value="{{ $season->exam_year + 1 }}" type="number">
+                                </div>
+                                <button class="btn light" type="submit">{{ __('admin.duplicate') }}</button>
+                            </form>
+                        </td>
+                        <td>
+                            <div class="actions">
+                                <a class="btn light" href="{{ route('admin.exam-seasons.edit',$season) }}">{{ __('admin.edit') }}</a>
+                                <form method="POST" action="{{ route('admin.exam-seasons.activate',$season) }}">
+                                    @csrf
+                                    <button class="btn" type="submit">{{ __('admin.set_active') }}</button>
+                                </form>
+                                <form method="POST" action="{{ route('admin.exam-seasons.archive',$season) }}">
+                                    @csrf
+                                    <input class="compact-input" name="close_reason" placeholder="{{ __('admin.archive_reason') }}">
+                                    <button class="btn danger" type="submit">{{ __('admin.archive') }}</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+        {{ $seasons->links() }}
+    </div>
+</x-admin-shell>

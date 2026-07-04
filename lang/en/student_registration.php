@@ -27,6 +27,7 @@ return [
     'next_steps' => 'Your registration has been submitted. Payment instructions will be provided in a future phase after review.',
     'validation' => [
         'passport_format' => 'Passport number may contain letters, numbers, and hyphens only.',
+        'passport_required' => 'Please upload a passport copy before submitting the registration.',
         'duplicate_email' => 'A registration with this student email already exists.',
         'duplicate_passport' => 'A registration with this passport number already exists.',
         'exam_required' => 'Please select at least one available AP exam.',

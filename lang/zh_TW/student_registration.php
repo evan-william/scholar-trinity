@@ -27,6 +27,7 @@ return [
     'next_steps' => '您的報名資料已送出，請依付款說明完成後續流程。',
     'validation' => [
         'passport_format' => '護照號碼只能包含英文字母、數字與連字號。',
+        'passport_required' => '請先上傳護照影本後再送出報名資料。',
         'duplicate_email' => '此學生 Email 已經建立過報名資料。',
         'duplicate_passport' => '此護照號碼已經建立過報名資料。',
         'exam_required' => '請至少選擇一個可報名的 AP 考試。',

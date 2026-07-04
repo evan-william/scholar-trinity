@@ -21,14 +21,16 @@ class DatabaseSeeder extends Seeder
         $this->call(ApExamSubjectSeeder::class);
         $this->call(PaymentSettingSeeder::class);
 
-        User::query()->updateOrCreate(
-            ['email' => 'test@example.com'],
-            [
-                'name' => 'Test User',
-                'password' => Hash::make('StrongPass!123'),
-                'is_admin' => true,
-                'email_verified_at' => now(),
-            ]
-        );
+        if (app()->environment(['local', 'testing'])) {
+            User::query()->updateOrCreate(
+                ['email' => 'test@example.com'],
+                [
+                    'name' => 'Test User',
+                    'password' => Hash::make('StrongPass!123'),
+                    'is_admin' => true,
+                    'email_verified_at' => now(),
+                ]
+            );
+        }
     }
 }

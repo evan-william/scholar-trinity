@@ -1,44 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit {{ $registration->registration_number }}</title>
-    <style>
-        body{margin:0;background:#f5f7fb;color:#1f2a37;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}.wrap{max-width:980px;margin:0 auto;padding:22px 16px}.card{background:white;border:1px solid #d9dee8;border-radius:8px;padding:20px;margin-bottom:14px}h1,h2{color:#153764}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}label{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:800}input,select,textarea{border:1.5px solid #cbd3df;border-radius:6px;padding:9px 11px;font:inherit}.btn{border:0;border-radius:6px;padding:10px 14px;font-weight:900;text-decoration:none;display:inline-flex;background:#153764;color:white}.light{background:white;color:#153764;border:1.5px solid #d9dee8}.error{background:#fff0ee;color:#b42318;padding:10px 12px;border-radius:8px;margin-bottom:12px}.mini{font-size:12px;color:#667085}@media(max-width:760px){.grid{grid-template-columns:1fr}}
-    </style>
-</head>
-<body>
-<main class="wrap">
-    @if($errors->any())<div class="error"><ul>@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div>@endif
+<x-admin-shell
+    :title="__('admin.edit_registration')"
+    :subtitle="__('admin.edit_registration_subtitle')"
+>
     <form method="POST" action="{{ route('admin.student-registrations.manage-update',$registration) }}">
         @csrf
         @method('PATCH')
         <div class="card">
-            <h1>Edit {{ $registration->registration_number }}</h1>
+            <div class="section-title"><h2>{{ __('admin.edit') }} {{ $registration->registration_number }}</h2></div>
             <p>Reason is required when changing critical fields: passport, email, exam selection, or payment fields.</p>
         </div>
 
         <div class="card">
-            <h2>Student</h2>
+            <div class="section-title"><h2>{{ __('admin.student_information') }}</h2></div>
             <div class="grid">
-                <label>Full Name<input name="student_full_name" value="{{ old('student_full_name',$registration->student_full_name) }}" required></label>
-                <label>Preferred Name<input name="preferred_name" value="{{ old('preferred_name',$registration->preferred_name) }}"></label>
+                <label>{{ __('admin.full_name') }}<input name="student_full_name" value="{{ old('student_full_name',$registration->student_full_name) }}" required></label>
+                <label>{{ __('admin.preferred_name') }}<input name="preferred_name" value="{{ old('preferred_name',$registration->preferred_name) }}"></label>
                 <label>English Family Name<input name="family_name_en" value="{{ old('family_name_en',$registration->family_name_en) }}"></label>
                 <label>English First Name<input name="first_name_en" value="{{ old('first_name_en',$registration->first_name_en) }}"></label>
                 <label>Middle Initial<input name="middle_initial" value="{{ old('middle_initial',$registration->middle_initial) }}"></label>
                 <label>Middle Name<input name="middle_name" value="{{ old('middle_name',$registration->middle_name) }}"></label>
-                <label>Chinese Legal Name<input name="chinese_legal_name" value="{{ old('chinese_legal_name',$registration->chinese_legal_name) }}"></label>
+                <label>{{ __('admin.chinese_legal_name') }}<input name="chinese_legal_name" value="{{ old('chinese_legal_name',$registration->chinese_legal_name) }}"></label>
                 <label>DOB<input type="date" name="date_of_birth" value="{{ old('date_of_birth',optional($registration->date_of_birth)->format('Y-m-d')) }}" required></label>
-                <label>Nationality<input name="nationality" value="{{ old('nationality',$registration->nationality) }}" required></label>
-                <label>Passport<input name="passport_number" value="{{ old('passport_number',$registration->passport_number) }}" required></label>
-                <label>Email<input type="email" name="student_email" value="{{ old('student_email',$registration->student_email) }}" required></label>
-                <label>Phone<input name="student_phone" value="{{ old('student_phone',$registration->student_phone) }}"></label>
+                <label>{{ __('admin.nationality') }}<input name="nationality" value="{{ old('nationality',$registration->nationality) }}" required></label>
+                <label>{{ __('admin.passport') }}<input name="passport_number" value="{{ old('passport_number',$registration->passport_number) }}" required></label>
+                <label>{{ __('admin.email') }}<input type="email" name="student_email" value="{{ old('student_email',$registration->student_email) }}" required></label>
+                <label>{{ __('admin.phone') }}<input name="student_phone" value="{{ old('student_phone',$registration->student_phone) }}"></label>
             </div>
         </div>
 
         <div class="card">
-            <h2>School</h2>
+            <div class="section-title"><h2>{{ __('admin.school') }}</h2></div>
             <div class="grid">
                 <label>School<input name="school_name" value="{{ old('school_name',$registration->school_name) }}" required></label>
                 <label>Country<input name="school_country" value="{{ old('school_country',$registration->school_country) }}" required></label>
@@ -48,7 +39,7 @@
         </div>
 
         <div class="card">
-            <h2>Guardian</h2>
+            <div class="section-title"><h2>{{ __('admin.parent') }}</h2></div>
             <div class="grid">
                 <label>Parent First Name<input name="parent_first_name" value="{{ old('parent_first_name',$registration->contact?->parent_first_name) }}"></label>
                 <label>Parent Last Name<input name="parent_last_name" value="{{ old('parent_last_name',$registration->contact?->parent_last_name) }}"></label>
@@ -66,7 +57,7 @@
         </div>
 
         <div class="card">
-            <h2>Accommodations</h2>
+            <div class="section-title"><h2>{{ __('admin.accommodations') }}</h2></div>
             <div class="grid">
                 <label>Needs Accommodations<select name="needs_accommodations"><option value="0" @selected(!old('needs_accommodations',$registration->needs_accommodations))>No</option><option value="1" @selected(old('needs_accommodations',$registration->needs_accommodations))>Yes</option></select></label>
                 <label>SSD Code<input name="ssd_code" value="{{ old('ssd_code',$registration->ssd_code) }}"></label>
@@ -76,7 +67,7 @@
         </div>
 
         <div class="card">
-            <h2>Status & Payment</h2>
+            <div class="section-title"><h2>{{ __('admin.payment_documents') }}</h2></div>
             <div class="grid">
                 <label>Registration Status<select name="status">@foreach($statuses as $status)<option value="{{ $status }}" @selected(old('status',$registration->status)===$status)>{{ $status }}</option>@endforeach</select></label>
                 <label>Payment Status<select name="payment_status">@foreach($paymentStatuses as $status)<option value="{{ $status }}" @selected(old('payment_status',$registration->payment_status)===$status)>{{ $status }}</option>@endforeach</select></label>
@@ -89,7 +80,7 @@
 
         @if(!in_array($registration->payment_status, ['paid','refunded'], true))
             <div class="card">
-                <h2>Selected Exams</h2>
+                <div class="section-title"><h2>{{ __('admin.exam_selection') }}</h2></div>
                 <div class="grid">
                     @foreach($subjects as $subject)
                         <label style="flex-direction:row;align-items:center"><input type="checkbox" name="exam_subject_uuids[]" value="{{ $subject->uuid }}" @checked($registration->exams->contains('id',$subject->id))> {{ $subject->name }} ({{ $subject->code }})</label>
@@ -100,11 +91,9 @@
         @endif
 
         <div class="card">
-            <label>Reason<textarea name="reason">{{ old('reason') }}</textarea></label>
-            <button class="btn" type="submit">Save</button>
-            <a class="btn light" href="{{ route('admin.student-registrations.show',$registration) }}">Cancel</a>
+            <label>{{ __('admin.reason') }}<textarea name="reason">{{ old('reason') }}</textarea></label>
+            <button class="btn" type="submit">{{ __('admin.save') }}</button>
+            <a class="btn light" href="{{ route('admin.student-registrations.show',$registration) }}">{{ __('admin.cancel') }}</a>
         </div>
     </form>
-</main>
-</body>
-</html>
+</x-admin-shell>

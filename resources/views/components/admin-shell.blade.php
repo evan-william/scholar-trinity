@@ -43,6 +43,20 @@
         .metric span{color:var(--muted);font-size:12px;line-height:1.45}
         .metric .label{color:var(--navy);font-weight:950;font-size:13px}
         .grid-2{display:grid;grid-template-columns:1.2fr .8fr;gap:14px}
+        .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+        .grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+        .actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+        .btn.danger{background:var(--red);color:#fff}
+        .mini{font-size:12px;color:var(--muted)}
+        .list{margin:0;padding-left:18px}
+        .list li{margin-bottom:6px}
+        .timeline{border-left:3px solid var(--line);padding-left:14px}
+        .timeline div{margin-bottom:12px}
+        .note{background:#fbfcfe;border:1px solid #edf0f5;border-radius:8px;padding:12px;margin-bottom:10px}
+        .row-card{padding:14px;border:1px solid #edf0f5;border-radius:8px;background:#fbfcfe;margin-bottom:10px}
+        .hint{color:var(--muted);font-size:12px;font-weight:400;line-height:1.5}
+        .form-inline{display:inline}
+        .compact-input{min-height:34px;padding:6px 8px}
         table{width:100%;border-collapse:collapse}
         th,td{text-align:left;padding:10px 8px;border-bottom:1px solid #edf0f5;font-size:13px;vertical-align:top}
         th{color:var(--navy);font-size:12px;text-transform:uppercase;letter-spacing:.04em}
@@ -55,8 +69,9 @@
         .notice{background:#fff8e1;color:#5a4000;border:1px solid #f0c040;padding:11px 13px;border-radius:8px;margin-bottom:14px}
         .notice.error{background:#fff0ee;color:var(--red);border-color:#ffc9c4}
         form{margin:0}
-        @media(max-width:1050px){.shell{grid-template-columns:1fr}.side{position:static;height:auto}.nav-group{grid-template-columns:repeat(2,minmax(0,1fr))}.filters,.metrics,.grid-2{grid-template-columns:1fr 1fr}.top{position:static}}
-        @media(max-width:680px){.top{align-items:flex-start;flex-direction:column}.top-actions{justify-content:flex-start}.filters,.metrics,.grid-2,.nav-group{grid-template-columns:1fr}table{display:block;overflow-x:auto}.wrap{padding-inline:12px}}
+        pre{white-space:pre-wrap;background:#f8fafc;border:1px solid #edf0f5;border-radius:8px;padding:14px;overflow:auto}
+        @media(max-width:1050px){.shell{grid-template-columns:1fr}.side{position:static;height:auto}.nav-group{grid-template-columns:repeat(2,minmax(0,1fr))}.filters,.metrics,.grid-2,.grid,.grid-3{grid-template-columns:1fr 1fr}.top{position:static}}
+        @media(max-width:680px){.top{align-items:flex-start;flex-direction:column}.top-actions{justify-content:flex-start}.filters,.metrics,.grid-2,.grid,.grid-3,.nav-group{grid-template-columns:1fr}table{display:block;overflow-x:auto}.wrap{padding-inline:12px}}
     </style>
 </head>
 <body>
@@ -64,20 +79,20 @@
     <aside class="side">
         <a class="brand" href="{{ route('admin.dashboard') }}">
             <span class="mark">TS<br>AP</span>
-            <span>Trinity Admin</span>
+            <span>{{ __('admin.app_name') }}</span>
         </a>
         <nav class="nav-group" aria-label="Admin navigation">
             @foreach([
-                'admin.dashboard' => 'Dashboard',
-                'admin.student-registrations.index' => 'Registrations',
-                'admin.payments.index' => 'Payments',
-                'admin.receipts.index' => 'Receipts',
-                'admin.exports.index' => 'Exports',
-                'admin.reports.annual' => 'Annual Report',
-                'admin.exam-seasons.index' => 'Exam Seasons',
-                'admin.ap-exam-subjects.index' => 'AP Subjects',
-                'admin.landing.edit' => 'Landing Content',
-                'admin.security.audit.index' => 'Audit Log',
+                'admin.dashboard' => __('admin.dashboard'),
+                'admin.student-registrations.index' => __('admin.registrations'),
+                'admin.payments.index' => __('admin.payments'),
+                'admin.receipts.index' => __('admin.receipts'),
+                'admin.exports.index' => __('admin.exports'),
+                'admin.reports.annual' => __('admin.annual_report'),
+                'admin.exam-seasons.index' => __('admin.exam_seasons'),
+                'admin.ap-exam-subjects.index' => __('admin.ap_subjects'),
+                'admin.landing.edit' => __('admin.landing_content'),
+                'admin.security.audit.index' => __('admin.audit_log'),
             ] as $route => $label)
                 <a class="nav-link {{ request()->routeIs($route) ? 'active' : '' }}" href="{{ route($route) }}">{{ $label }}</a>
             @endforeach
@@ -91,10 +106,11 @@
                 @if($subtitle)<p>{{ $subtitle }}</p>@endif
             </div>
             <div class="top-actions">
-                <a class="btn light" href="{{ route('landing') }}">Public Site</a>
+                <x-language-switcher />
+                <a class="btn light" href="{{ route('landing') }}">{{ __('admin.public_site') }}</a>
                 <form method="POST" action="{{ route('admin.logout') }}">
                     @csrf
-                    <button class="btn" type="submit">Logout</button>
+                    <button class="btn" type="submit">{{ __('admin.logout') }}</button>
                 </form>
             </div>
         </header>

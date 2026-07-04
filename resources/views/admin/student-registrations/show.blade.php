@@ -1,60 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $registration->registration_number }}</title>
-    <style>
-        body{margin:0;background:#f5f7fb;color:#1f2a37;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}.wrap{max-width:1180px;margin:0 auto;padding:22px 16px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.card{background:white;border:1px solid #d9dee8;border-radius:8px;padding:20px;margin-bottom:14px;box-shadow:0 4px 16px rgba(22,47,83,.05)}h1,h2,h3{color:#153764}.actions{display:flex;gap:8px;flex-wrap:wrap}.btn{border:0;border-radius:6px;padding:10px 14px;font-weight:900;text-decoration:none;display:inline-flex;background:#153764;color:white;cursor:pointer}.btn.light{background:white;color:#153764;border:1.5px solid #d9dee8}.btn.danger{background:#b42318}table{width:100%;border-collapse:collapse}td,th{padding:8px 0;border-bottom:1px solid #edf0f5;font-size:13px;vertical-align:top;text-align:left}td:first-child{width:34%;color:#667085}.timeline{border-left:3px solid #d9dee8;padding-left:14px}.timeline div{margin-bottom:12px}.notice{background:#e8f6ef;color:#237a4f;padding:10px 12px;border-radius:8px;margin-bottom:12px}label{display:flex;flex-direction:column;gap:6px;margin-bottom:10px;font-weight:800}input,textarea,select{border:1.5px solid #cbd3df;border-radius:6px;padding:9px 11px;font:inherit}textarea{min-height:74px}.note{background:#fbfcfe;border:1px solid #edf0f5;border-radius:8px;padding:12px;margin-bottom:10px}.status{display:inline-flex;border:1px solid #d9dee8;border-radius:999px;padding:4px 9px;background:#fbfcfe;font-weight:900}.mini{font-size:12px;color:#667085}.list{margin:0;padding-left:18px}.list li{margin-bottom:6px}@media(max-width:820px){.grid{grid-template-columns:1fr}}
-    </style>
-</head>
-<body>
-<main class="wrap">
-    @if(session('status'))<div class="notice">{{ session('status') }}</div>@endif
-    @if($errors->any())<div class="card">{{ $errors->first() }}</div>@endif
-
+<x-admin-shell
+    :title="$registration->registration_number"
+    :subtitle="__('admin.registration_detail_subtitle')"
+>
     <div class="card">
         <h1>{{ $registration->registration_number }}</h1>
         <div class="actions">
-            <a class="btn light" href="{{ route('admin.student-registrations.index') }}">Back</a>
-            <a class="btn light" href="{{ route('admin.student-registrations.edit',$registration) }}">Edit</a>
-            <a class="btn light" href="{{ route('admin.student-registrations.print',$registration) }}">Print</a>
-            <form method="POST" action="{{ route('admin.student-registrations.destroy',$registration) }}">@csrf @method('DELETE')<button class="btn danger" type="submit">Delete</button></form>
+            <a class="btn light" href="{{ route('admin.student-registrations.index') }}">{{ __('admin.back') }}</a>
+            <a class="btn light" href="{{ route('admin.student-registrations.edit',$registration) }}">{{ __('admin.edit') }}</a>
+            <a class="btn light" href="{{ route('admin.student-registrations.print',$registration) }}">{{ __('admin.print') }}</a>
+            <form method="POST" action="{{ route('admin.student-registrations.destroy',$registration) }}">@csrf @method('DELETE')<button class="btn danger" type="submit">{{ __('admin.delete') }}</button></form>
         </div>
     </div>
 
     <div class="grid">
         <div class="card">
-            <h2>Student Information</h2>
+            <div class="section-title"><h2>{{ __('admin.student_information') }}</h2></div>
             <table>
-                <tr><td>Full name</td><td>{{ $registration->student_full_name }}</td></tr>
-                <tr><td>English legal name</td><td>{{ collect([$registration->family_name_en, $registration->first_name_en, $registration->middle_name])->filter()->implode(' ') ?: '-' }}</td></tr>
-                <tr><td>Chinese legal name</td><td>{{ $registration->chinese_legal_name ?: '-' }}</td></tr>
-                <tr><td>Preferred name</td><td>{{ $registration->preferred_name ?: '-' }}</td></tr>
-                <tr><td>DOB / Gender</td><td>{{ optional($registration->date_of_birth)->format('Y-m-d') ?: '-' }} / {{ $registration->gender ?: '-' }}</td></tr>
-                <tr><td>Nationality</td><td>{{ $registration->nationality }}</td></tr>
-                <tr><td>Passport</td><td>{{ $registration->passport_number }} @if($registration->passport_expiry_date)<br><span class="mini">Expires {{ $registration->passport_expiry_date->format('Y-m-d') }}</span>@endif</td></tr>
-                <tr><td>Email</td><td>{{ $registration->student_email }}</td></tr>
-                <tr><td>Phone</td><td>{{ $registration->student_phone ?: '-' }}</td></tr>
+                <tr><td>{{ __('admin.full_name') }}</td><td>{{ $registration->student_full_name }}</td></tr>
+                <tr><td>{{ __('admin.english_legal_name') }}</td><td>{{ collect([$registration->family_name_en, $registration->first_name_en, $registration->middle_name])->filter()->implode(' ') ?: '-' }}</td></tr>
+                <tr><td>{{ __('admin.chinese_legal_name') }}</td><td>{{ $registration->chinese_legal_name ?: '-' }}</td></tr>
+                <tr><td>{{ __('admin.preferred_name') }}</td><td>{{ $registration->preferred_name ?: '-' }}</td></tr>
+                <tr><td>{{ __('admin.dob_gender') }}</td><td>{{ optional($registration->date_of_birth)->format('Y-m-d') ?: '-' }} / {{ $registration->gender ?: '-' }}</td></tr>
+                <tr><td>{{ __('admin.nationality') }}</td><td>{{ $registration->nationality }}</td></tr>
+                <tr><td>{{ __('admin.passport') }}</td><td>{{ $registration->passport_number }} @if($registration->passport_expiry_date)<br><span class="mini">Expires {{ $registration->passport_expiry_date->format('Y-m-d') }}</span>@endif</td></tr>
+                <tr><td>{{ __('admin.email') }}</td><td>{{ $registration->student_email }}</td></tr>
+                <tr><td>{{ __('admin.phone') }}</td><td>{{ $registration->student_phone ?: '-' }}</td></tr>
             </table>
         </div>
 
         <div class="card">
-            <h2>School & Guardian</h2>
+            <div class="section-title"><h2>{{ __('admin.school_guardian') }}</h2></div>
             <table>
-                <tr><td>School</td><td>{{ $registration->school_name }}</td></tr>
-                <tr><td>Location</td><td>{{ collect([$registration->school_city, $registration->school_country])->filter()->implode(', ') ?: '-' }}</td></tr>
-                <tr><td>Grade / Graduation</td><td>{{ $registration->grade_level }} / {{ $registration->graduation_year ?: '-' }}</td></tr>
-                <tr><td>Parent</td><td>{{ $registration->contact?->parent_full_name }}<br><span class="mini">{{ $registration->contact?->relationship }}</span></td></tr>
-                <tr><td>Parent Email</td><td>{{ $registration->contact?->parent_email }}</td></tr>
-                <tr><td>Parent Phone</td><td>{{ $registration->contact?->parent_phone }}</td></tr>
-                <tr><td>Mailing Address</td><td>{{ collect([$registration->contact?->mailing_address, $registration->contact?->mailing_city, $registration->contact?->postal_code])->filter()->implode(', ') ?: '-' }}</td></tr>
-                <tr><td>Emergency</td><td>{{ $registration->contact?->emergency_contact_name }} / {{ $registration->contact?->emergency_contact_phone }}<br><span class="mini">{{ $registration->contact?->emergency_contact_relationship }}</span></td></tr>
+                <tr><td>{{ __('admin.school') }}</td><td>{{ $registration->school_name }}</td></tr>
+                <tr><td>{{ __('admin.location') }}</td><td>{{ collect([$registration->school_city, $registration->school_country])->filter()->implode(', ') ?: '-' }}</td></tr>
+                <tr><td>{{ __('admin.grade_graduation') }}</td><td>{{ $registration->grade_level }} / {{ $registration->graduation_year ?: '-' }}</td></tr>
+                <tr><td>{{ __('admin.parent') }}</td><td>{{ $registration->contact?->parent_full_name }}<br><span class="mini">{{ $registration->contact?->relationship }}</span></td></tr>
+                <tr><td>{{ __('admin.parent_email') }}</td><td>{{ $registration->contact?->parent_email }}</td></tr>
+                <tr><td>{{ __('admin.parent_phone') }}</td><td>{{ $registration->contact?->parent_phone }}</td></tr>
+                <tr><td>{{ __('admin.mailing_address') }}</td><td>{{ collect([$registration->contact?->mailing_address, $registration->contact?->mailing_city, $registration->contact?->postal_code])->filter()->implode(', ') ?: '-' }}</td></tr>
+                <tr><td>{{ __('admin.emergency') }}</td><td>{{ $registration->contact?->emergency_contact_name }} / {{ $registration->contact?->emergency_contact_phone }}<br><span class="mini">{{ $registration->contact?->emergency_contact_relationship }}</span></td></tr>
             </table>
         </div>
 
         <div class="card">
-            <h2>Exam Selection</h2>
+            <div class="section-title"><h2>{{ __('admin.exam_selection') }}</h2></div>
             <table>
                 @foreach($registration->exams as $exam)
                     <tr>
@@ -65,18 +54,18 @@
                 @forelse($registration->practiceExamSelections as $selection)
                     <tr><td>{{ $selection->exam_name }}<br><span class="mini">Practice exam</span></td><td>{{ $selection->currency }} {{ number_format($selection->practice_fee) }}</td></tr>
                 @empty
-                    <tr><td>Practice exams</td><td>None</td></tr>
+                    <tr><td>Practice exams</td><td>{{ __('admin.none') }}</td></tr>
                 @endforelse
-                <tr><td>Grand Total</td><td><strong>{{ $registration->currency }} {{ number_format($registration->grand_total ?: $registration->total_fee) }}</strong></td></tr>
+                <tr><td>{{ __('admin.grand_total') }}</td><td><strong>{{ $registration->currency }} {{ number_format($registration->grand_total ?: $registration->total_fee) }}</strong></td></tr>
             </table>
         </div>
 
         <div class="card">
-            <h2>Accommodations</h2>
+            <div class="section-title"><h2>{{ __('admin.accommodations') }}</h2></div>
             <table>
-                <tr><td>Needs accommodations</td><td>{{ $registration->needs_accommodations ? 'Yes' : 'No' }}</td></tr>
-                <tr><td>SSD Code</td><td>{{ $registration->ssd_code ?: '-' }}</td></tr>
-                <tr><td>Approval Status</td><td>{{ $registration->accommodation_status ?: '-' }}</td></tr>
+                <tr><td>{{ __('admin.needs_accommodations') }}</td><td>{{ $registration->needs_accommodations ? __('admin.yes') : __('admin.no') }}</td></tr>
+                <tr><td>{{ __('admin.ssd_code') }}</td><td>{{ $registration->ssd_code ?: '-' }}</td></tr>
+                <tr><td>{{ __('admin.approval_status') }}</td><td>{{ $registration->accommodation_status ?: '-' }}</td></tr>
             </table>
             @if(!empty($registration->accommodations_payload))
                 <ul class="list">
@@ -90,42 +79,42 @@
         </div>
 
         <div class="card">
-            <h2>Payment & Documents</h2>
+            <div class="section-title"><h2>{{ __('admin.payment_documents') }}</h2></div>
             <table>
-                <tr><td>Payment Status</td><td>{{ $registration->payment_status }}</td></tr>
-                <tr><td>Amount</td><td>{{ $registration->currency }} {{ number_format($registration->payment_amount ?: ($registration->grand_total ?: $registration->total_fee)) }}</td></tr>
-                <tr><td>Method</td><td>{{ $registration->payment_method }}</td></tr>
-                <tr><td>Reference</td><td>{{ $registration->payment_reference ?: '-' }}</td></tr>
-                <tr><td>Payment Date</td><td>{{ optional($registration->payment_date)->format('Y-m-d') ?: '-' }}</td></tr>
-                <tr><td>Passport Status</td><td>{{ $registration->passport_upload_status }}</td></tr>
+                <tr><td>{{ __('admin.payment_status') }}</td><td>{{ $registration->payment_status }}</td></tr>
+                <tr><td>{{ __('admin.amount') }}</td><td>{{ $registration->currency }} {{ number_format($registration->payment_amount ?: ($registration->grand_total ?: $registration->total_fee)) }}</td></tr>
+                <tr><td>{{ __('admin.method') }}</td><td>{{ $registration->payment_method }}</td></tr>
+                <tr><td>{{ __('admin.reference') }}</td><td>{{ $registration->payment_reference ?: '-' }}</td></tr>
+                <tr><td>{{ __('admin.payment_date') }}</td><td>{{ optional($registration->payment_date)->format('Y-m-d') ?: '-' }}</td></tr>
+                <tr><td>{{ __('admin.passport_status') }}</td><td>{{ $registration->passport_upload_status }}</td></tr>
             </table>
         </div>
 
         <div class="card">
-            <h2>Submission & Verification</h2>
+            <div class="section-title"><h2>{{ __('admin.submission_verification') }}</h2></div>
             <table>
-                <tr><td>Submitted At</td><td>{{ optional($registration->submitted_at)->format('Y-m-d H:i') ?: '-' }}</td></tr>
-                <tr><td>Review Confirmed At</td><td>{{ optional($registration->review_confirmed_at)->format('Y-m-d H:i') ?: '-' }}</td></tr>
-                <tr><td>Confirmation Sent At</td><td>{{ optional($registration->confirmation_sent_at)->format('Y-m-d H:i') ?: '-' }}</td></tr>
-                <tr><td>Verification Status</td><td>{{ $registration->verification_status }}</td></tr>
-                <tr><td>Verified By</td><td>{{ $registration->verifier?->name ?: '-' }}</td></tr>
-                <tr><td>Verified At</td><td>{{ optional($registration->verified_at)->format('Y-m-d H:i') ?: '-' }}</td></tr>
-                <tr><td>Note</td><td>{{ $registration->verification_note ?: '-' }}</td></tr>
+                <tr><td>{{ __('admin.submitted_at') }}</td><td>{{ optional($registration->submitted_at)->format('Y-m-d H:i') ?: '-' }}</td></tr>
+                <tr><td>{{ __('admin.review_confirmed_at') }}</td><td>{{ optional($registration->review_confirmed_at)->format('Y-m-d H:i') ?: '-' }}</td></tr>
+                <tr><td>{{ __('admin.confirmation_sent_at') }}</td><td>{{ optional($registration->confirmation_sent_at)->format('Y-m-d H:i') ?: '-' }}</td></tr>
+                <tr><td>{{ __('admin.verification_status') }}</td><td>{{ $registration->verification_status }}</td></tr>
+                <tr><td>{{ __('admin.verified_by') }}</td><td>{{ $registration->verifier?->name ?: '-' }}</td></tr>
+                <tr><td>{{ __('admin.verified_at') }}</td><td>{{ optional($registration->verified_at)->format('Y-m-d H:i') ?: '-' }}</td></tr>
+                <tr><td>{{ __('admin.note') }}</td><td>{{ $registration->verification_note ?: '-' }}</td></tr>
             </table>
         </div>
     </div>
 
     <div class="card">
-        <h2>Verification Action</h2>
+        <div class="section-title"><h2>{{ __('admin.verification_action') }}</h2></div>
         <form method="POST" action="{{ route('admin.student-registrations.verify',$registration) }}">@csrf
-            <label>Status<select name="verification_status"><option value="verified">Verified</option><option value="needs_review">Needs Review</option><option value="rejected">Rejected</option><option value="unverified">Unverified</option></select></label>
-            <label>Verification Note<textarea name="verification_note"></textarea></label>
-            <button class="btn" type="submit">Update Verification</button>
+            <label>{{ __('admin.status') }}<select name="verification_status"><option value="verified">Verified</option><option value="needs_review">Needs Review</option><option value="rejected">Rejected</option><option value="unverified">Unverified</option></select></label>
+            <label>{{ __('admin.verification_note') }}<textarea name="verification_note"></textarea></label>
+            <button class="btn" type="submit">{{ __('admin.update_verification') }}</button>
         </form>
     </div>
 
     <div class="card">
-        <h2>Passport Management</h2>
+        <div class="section-title"><h2>{{ __('admin.passport_management') }}</h2></div>
         <div class="grid">
             <div>
                 <table>
@@ -144,23 +133,23 @@
                 @endif
             </div>
             <div>
-                <form method="POST" enctype="multipart/form-data" action="{{ route('admin.student-registrations.passport.replace',$registration) }}">@csrf<h3>Replace Passport</h3><label>New File<input type="file" name="passport" accept=".pdf,.jpg,.jpeg,.png" required></label><label>Reason<textarea name="reason" required></textarea></label><button class="btn" type="submit">Replace File</button></form>
-                <form method="POST" action="{{ route('admin.student-registrations.passport.status',$registration) }}">@csrf<h3>Mark Status</h3><label>Status<select name="status"><option value="verified">Valid</option><option value="invalid">Invalid</option></select></label><label>Verification Note<textarea name="verification_note"></textarea></label><label>Invalid Reason<textarea name="invalid_reason"></textarea></label><button class="btn" type="submit">Update Passport</button></form>
+                <form method="POST" enctype="multipart/form-data" action="{{ route('admin.student-registrations.passport.replace',$registration) }}">@csrf<h3>{{ __('admin.replace_passport') }}</h3><label>{{ __('admin.new_file') }}<input type="file" name="passport" accept=".pdf,.jpg,.jpeg,.png" required></label><label>{{ __('admin.reason') }}<textarea name="reason" required></textarea></label><button class="btn" type="submit">{{ __('admin.replace_file') }}</button></form>
+                <form method="POST" action="{{ route('admin.student-registrations.passport.status',$registration) }}">@csrf<h3>{{ __('admin.mark_status') }}</h3><label>{{ __('admin.status') }}<select name="status"><option value="verified">Valid</option><option value="invalid">Invalid</option></select></label><label>{{ __('admin.verification_note') }}<textarea name="verification_note"></textarea></label><label>{{ __('admin.invalid_reason') }}<textarea name="invalid_reason"></textarea></label><button class="btn" type="submit">{{ __('admin.update_passport') }}</button></form>
             </div>
         </div>
-        <form method="POST" action="{{ route('admin.student-registrations.passport.reupload',$registration) }}">@csrf<h3>Request Re-upload</h3><div class="grid"><label>Reason<textarea name="reason" required></textarea></label><label>Deadline<input type="date" name="deadline" required></label></div><button class="btn" type="submit">Send Re-upload Email</button></form>
+        <form method="POST" action="{{ route('admin.student-registrations.passport.reupload',$registration) }}">@csrf<h3>{{ __('admin.request_reupload') }}</h3><div class="grid"><label>{{ __('admin.reason') }}<textarea name="reason" required></textarea></label><label>{{ __('admin.deadline') }}<input type="date" name="deadline" required></label></div><button class="btn" type="submit">{{ __('admin.send_reupload_email') }}</button></form>
     </div>
 
     <div class="grid">
         <div class="card">
-            <h2>Internal Notes</h2>
-            <form method="POST" action="{{ route('admin.student-registrations.notes.store',$registration) }}">@csrf<label>Type<select name="note_type">@foreach(['general','payment','document','student_contact','school_communication','issue','follow_up'] as $type)<option value="{{ $type }}">{{ $type }}</option>@endforeach</select></label><label>Note<textarea name="note" required></textarea></label><label><span><input type="checkbox" name="is_pinned" value="1"> Pin note</span></label><button class="btn" type="submit">Add Note</button></form>
+            <div class="section-title"><h2>{{ __('admin.internal_notes') }}</h2></div>
+            <form method="POST" action="{{ route('admin.student-registrations.notes.store',$registration) }}">@csrf<label>Type<select name="note_type">@foreach(['general','payment','document','student_contact','school_communication','issue','follow_up'] as $type)<option value="{{ $type }}">{{ $type }}</option>@endforeach</select></label><label>{{ __('admin.note') }}<textarea name="note" required></textarea></label><label><span><input type="checkbox" name="is_pinned" value="1"> {{ __('admin.pin_note') }}</span></label><button class="btn" type="submit">{{ __('admin.add_note') }}</button></form>
             @foreach($registration->adminNotes->sortByDesc('created_at') as $note)
                 <div class="note"><strong>{{ $note->note_type }}</strong> @if($note->is_pinned)<span>PINNED</span>@endif<br>{{ $note->note }}<br><small>{{ $note->author?->name }} / {{ $note->created_at->format('Y-m-d H:i') }}</small></div>
             @endforeach
         </div>
         <div class="card">
-            <h2>Activity Log</h2>
+            <div class="section-title"><h2>{{ __('admin.activity_log') }}</h2></div>
             <div class="timeline">
                 @foreach($registration->auditLogs->sortByDesc('performed_at') as $log)
                     <div><strong>{{ $log->action }}</strong> {{ $log->field_name }}<br><small>{{ $log->old_value }} -> {{ $log->new_value }}</small><br><small>{{ $log->performed_at->format('Y-m-d H:i') }} / {{ $log->reason }}</small></div>
@@ -171,6 +160,4 @@
             </div>
         </div>
     </div>
-</main>
-</body>
-</html>
+</x-admin-shell>

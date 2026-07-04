@@ -1,1 +1,34 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Audit Detail</title><style>body{margin:0;background:#f5f7fb;color:#1f2a37;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}.wrap{max-width:960px;margin:0 auto;padding:22px 16px}.card{background:white;border:1px solid #d9dee8;border-radius:8px;padding:20px;margin-bottom:14px}.btn{border:0;border-radius:6px;padding:10px 14px;font-weight:900;text-decoration:none;display:inline-flex;background:white;color:#153764;border:1.5px solid #d9dee8}pre{white-space:pre-wrap;background:#f8fafc;border:1px solid #edf0f5;border-radius:8px;padding:14px}</style></head><body><main class="wrap"><div class="card"><h1>{{ $log->event_type }}</h1><a class="btn" href="{{ route('admin.security.audit.index') }}">Back</a></div><div class="card"><p><strong>Module:</strong> {{ $log->module }}</p><p><strong>Action:</strong> {{ $log->action }}</p><p><strong>User:</strong> {{ $log->user_id ?: 'guest' }}</p><p><strong>IP:</strong> {{ $log->ip_address }}</p><p><strong>Status:</strong> {{ $log->status }}</p><h2>Old Values</h2><pre>{{ json_encode($log->old_values, JSON_PRETTY_PRINT) }}</pre><h2>New Values</h2><pre>{{ json_encode($log->new_values, JSON_PRETTY_PRINT) }}</pre><h2>Metadata</h2><pre>{{ json_encode($log->metadata, JSON_PRETTY_PRINT) }}</pre></div></main></body></html>
+<x-admin-shell
+    :title="__('admin.audit_detail')"
+    :subtitle="$log->event_type"
+>
+    <div class="card">
+        <div class="section-title">
+            <h2>{{ $log->event_type }}</h2>
+            <a class="btn light" href="{{ route('admin.security.audit.index') }}">{{ __('admin.back') }}</a>
+        </div>
+        <table>
+            <tr><td>{{ __('admin.module') }}</td><td>{{ $log->module }}</td></tr>
+            <tr><td>{{ __('admin.actions') }}</td><td>{{ $log->action }}</td></tr>
+            <tr><td>{{ __('admin.user') }}</td><td>{{ $log->user_id ?: 'guest' }}</td></tr>
+            <tr><td>{{ __('admin.ip') }}</td><td>{{ $log->ip_address }}</td></tr>
+            <tr><td>{{ __('admin.status') }}</td><td><span class="status">{{ $log->status }}</span></td></tr>
+        </table>
+    </div>
+
+    <div class="grid">
+        <div class="card">
+            <div class="section-title"><h2>{{ __('admin.old_values') }}</h2></div>
+            <pre>{{ json_encode($log->old_values, JSON_PRETTY_PRINT) }}</pre>
+        </div>
+        <div class="card">
+            <div class="section-title"><h2>{{ __('admin.new_values') }}</h2></div>
+            <pre>{{ json_encode($log->new_values, JSON_PRETTY_PRINT) }}</pre>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="section-title"><h2>{{ __('admin.metadata') }}</h2></div>
+        <pre>{{ json_encode($log->metadata, JSON_PRETTY_PRINT) }}</pre>
+    </div>
+</x-admin-shell>

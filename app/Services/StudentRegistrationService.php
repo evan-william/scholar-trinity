@@ -55,6 +55,19 @@ class StudentRegistrationService
         }
 
         return DB::transaction(function () use ($data, $subjects, $ipAddress, $userAgent): StudentRegistration {
+            $passportDraft = null;
+            if (! isset($data['passport_file'])) {
+                $passportDraft = ! empty($data['passport_file_token'])
+                    ? $this->consumePassportDraft((string) $data['passport_file_token'])
+                    : null;
+
+                if (! $passportDraft) {
+                    throw ValidationException::withMessages([
+                        'passport_file' => __('student_registration.validation.passport_required'),
+                    ]);
+                }
+            }
+
             $season = $subjects->first(fn ($subject) => $subject->examSeason)?->examSeason;
             $period = $season?->currentPeriod() === 'late' ? 'late' : 'main';
             $examTotal = $subjects->sum('exam_fee');
@@ -125,20 +138,16 @@ class StudentRegistrationService
                     'passport_file_size' => $file->getSize(),
                     'passport_uploaded_at' => now(),
                 ]);
-            } elseif (! empty($data['passport_file_token'])) {
-                $draft = $this->consumePassportDraft((string) $data['passport_file_token']);
-
-                if ($draft) {
-                    $registration->update([
-                        'passport_upload_status' => 'pending_review',
-                        'passport_document_uuid' => (string) Str::uuid(),
-                        'passport_file_path' => $draft['path'],
-                        'passport_original_name' => $draft['name'],
-                        'passport_mime_type' => $draft['mime'],
-                        'passport_file_size' => $draft['size'],
-                        'passport_uploaded_at' => now(),
-                    ]);
-                }
+            } elseif ($passportDraft) {
+                $registration->update([
+                    'passport_upload_status' => 'pending_review',
+                    'passport_document_uuid' => (string) Str::uuid(),
+                    'passport_file_path' => $passportDraft['path'],
+                    'passport_original_name' => $passportDraft['name'],
+                    'passport_mime_type' => $passportDraft['mime'],
+                    'passport_file_size' => $passportDraft['size'],
+                    'passport_uploaded_at' => now(),
+                ]);
             }
 
             $registration->contact()->create([
