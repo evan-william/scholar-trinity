@@ -86,6 +86,11 @@ Current local template pass:
   - Added shared English and Traditional Chinese admin language files at `lang/en/admin.php` and `lang/zh_TW/admin.php`.
   - Updated admin shell navigation/top actions to use bilingual labels and show the language switcher across admin pages.
   - Replaced major headings, actions, and table labels in the newly converted management pages with `__('admin.*')` keys.
+- Deep static admin re-audit:
+  - Fixed AP subject active/inactive select handling so an old submitted value of `0` no longer incorrectly selects `Yes`.
+  - Fixed exam season active/inactive select handling to use explicit string comparisons.
+  - Moved long Blade title expressions in AP subject and exam season forms into local variables for safer template parsing.
+  - Improved admin sidebar active states so create/edit/detail routes highlight the correct parent section.
 
 2026-07-03
 - Frontend template integration:
@@ -330,6 +335,7 @@ Current local template pass:
 - Language System:
   - `PARTIAL`: English and Traditional Chinese files exist.
   - DONE: admin shell navigation/top actions and newly converted admin management pages use shared bilingual keys.
+  - DONE: admin language key audit confirms all used `admin.*` translation keys exist in both English and Traditional Chinese files.
   - TODO: remove hardcoded text from Blade pages.
   - TODO: make language switch consistent across landing/register/admin where required.
 
@@ -404,6 +410,7 @@ Current local template pass:
 - Receipt auto issue is still not production-ready; manual sandbox and provider placeholder adapters exist, but real issue/cancel/resend APIs are pending.
 - Built-in database backup command only supports local SQLite; production MySQL/MariaDB needs a server backup job.
 - Language coverage is incomplete because many view strings are hardcoded.
+- Deep admin static audit 2026-07-04 found and fixed a boolean select bug in AP subject/exam season active status fields.
 - Server credentials were shared in chat but must stay out of Git.
 
 ## Verification Log
@@ -424,6 +431,11 @@ Current local template pass:
 - Static check: no merge conflict markers found after admin-shell/bilingual pass.
 - Static check: all admin management pages now use `x-admin-shell`; only auth screens and print layout remain standalone by design.
 - Static check: admin management raw `<!DOCTYPE>` scan is clean when excluding auth and print views.
+- Static check: `git diff --check` passed after deep admin re-audit fixes.
+- Static check: no merge conflict markers found after deep admin re-audit fixes.
+- Static check: old unsafe active-select boolean patterns are no longer present in admin views.
+- Static check: all 59 admin route calls found in admin views/components match the route names defined in `routes/web.php`.
+- Static check: all used `__('admin.*')` keys exist in both `lang/en/admin.php` and `lang/zh_TW/admin.php`.
 
 2026-07-03
 - Static/template review: local Edification frontend zip inspected and usable assets copied.

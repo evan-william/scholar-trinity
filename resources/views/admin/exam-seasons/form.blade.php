@@ -1,7 +1,9 @@
-<x-admin-shell
-    :title="$season->exists ? __('admin.edit').' '.__('admin.exam_seasons') : __('admin.create_season')"
-    :subtitle="__('admin.registration_seasons_subtitle')"
->
+@php
+    $pageTitle = $season->exists ? __('admin.edit').' '.__('admin.exam_seasons') : __('admin.create_season');
+    $isActive = (string) old('is_active', (int) $season->is_active);
+@endphp
+
+<x-admin-shell :title="$pageTitle" :subtitle="__('admin.registration_seasons_subtitle')">
     <form method="POST" action="{{ $season->exists ? route('admin.exam-seasons.update',$season) : route('admin.exam-seasons.store') }}">
         @csrf
         @if($season->exists)
@@ -38,8 +40,8 @@
                 <label>{{ __('admin.reopen_reason') }}<textarea name="reopen_reason">{{ old('reopen_reason',$season->reopen_reason) }}</textarea></label>
                 <label>{{ __('admin.active_season') }}
                     <select name="is_active">
-                        <option value="0" @selected(! old('is_active',$season->is_active))>{{ __('admin.no') }}</option>
-                        <option value="1" @selected(old('is_active',$season->is_active))>{{ __('admin.yes') }}</option>
+                        <option value="0" @selected($isActive === '0')>{{ __('admin.no') }}</option>
+                        <option value="1" @selected($isActive === '1')>{{ __('admin.yes') }}</option>
                     </select>
                 </label>
             </div>

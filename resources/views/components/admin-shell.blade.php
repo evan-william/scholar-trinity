@@ -83,18 +83,18 @@
         </a>
         <nav class="nav-group" aria-label="Admin navigation">
             @foreach([
-                'admin.dashboard' => __('admin.dashboard'),
-                'admin.student-registrations.index' => __('admin.registrations'),
-                'admin.payments.index' => __('admin.payments'),
-                'admin.receipts.index' => __('admin.receipts'),
-                'admin.exports.index' => __('admin.exports'),
-                'admin.reports.annual' => __('admin.annual_report'),
-                'admin.exam-seasons.index' => __('admin.exam_seasons'),
-                'admin.ap-exam-subjects.index' => __('admin.ap_subjects'),
-                'admin.landing.edit' => __('admin.landing_content'),
-                'admin.security.audit.index' => __('admin.audit_log'),
-            ] as $route => $label)
-                <a class="nav-link {{ request()->routeIs($route) ? 'active' : '' }}" href="{{ route($route) }}">{{ $label }}</a>
+                ['route' => 'admin.dashboard', 'active' => 'admin.dashboard', 'label' => __('admin.dashboard')],
+                ['route' => 'admin.student-registrations.index', 'active' => 'admin.student-registrations.*', 'label' => __('admin.registrations')],
+                ['route' => 'admin.payments.index', 'active' => 'admin.payments.*', 'label' => __('admin.payments')],
+                ['route' => 'admin.receipts.index', 'active' => 'admin.receipts.*', 'label' => __('admin.receipts')],
+                ['route' => 'admin.exports.index', 'active' => 'admin.exports.*', 'label' => __('admin.exports')],
+                ['route' => 'admin.reports.annual', 'active' => 'admin.reports.*', 'label' => __('admin.annual_report')],
+                ['route' => 'admin.exam-seasons.index', 'active' => 'admin.exam-seasons.*', 'label' => __('admin.exam_seasons')],
+                ['route' => 'admin.ap-exam-subjects.index', 'active' => 'admin.ap-exam-subjects.*', 'label' => __('admin.ap_subjects')],
+                ['route' => 'admin.landing.edit', 'active' => 'admin.landing.*', 'label' => __('admin.landing_content')],
+                ['route' => 'admin.security.audit.index', 'active' => 'admin.security.audit.*', 'label' => __('admin.audit_log')],
+            ] as $item)
+                <a class="nav-link {{ request()->routeIs($item['active']) ? 'active' : '' }}" href="{{ route($item['route']) }}">{{ $item['label'] }}</a>
             @endforeach
         </nav>
     </aside>

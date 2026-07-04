@@ -1,7 +1,9 @@
-<x-admin-shell
-    :title="$subject->exists ? __('admin.edit').' '.__('admin.exam_subject') : __('admin.add').' '.__('admin.exam_subject')"
-    :subtitle="__('admin.exam_management_subtitle')"
->
+@php
+    $pageTitle = $subject->exists ? __('admin.edit').' '.__('admin.exam_subject') : __('admin.add').' '.__('admin.exam_subject');
+    $isActive = (string) old('is_active', (int) $subject->is_active);
+@endphp
+
+<x-admin-shell :title="$pageTitle" :subtitle="__('admin.exam_management_subtitle')">
     <form method="POST" action="{{ $subject->exists ? route('admin.ap-exam-subjects.update',$subject) : route('admin.ap-exam-subjects.store') }}">
         @csrf
         @if($subject->exists)
@@ -50,8 +52,8 @@
                 <label>{{ __('admin.late_end') }}<input type="datetime-local" name="late_registration_end_at" value="{{ old('late_registration_end_at', optional($subject->late_registration_end_at)->format('Y-m-d\TH:i')) }}"></label>
                 <label>{{ __('admin.active_subject') }}
                     <select name="is_active">
-                        <option value="1" @selected(old('is_active',$subject->is_active)!==false)>{{ __('admin.yes') }}</option>
-                        <option value="0" @selected(old('is_active',$subject->is_active)===false)>{{ __('admin.no') }}</option>
+                        <option value="1" @selected($isActive === '1')>{{ __('admin.yes') }}</option>
+                        <option value="0" @selected($isActive === '0')>{{ __('admin.no') }}</option>
                     </select>
                 </label>
             </div>
