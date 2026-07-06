@@ -1,16 +1,20 @@
 <?php
 
 use App\Http\Controllers\Admin\LandingPageAdminController;
+use App\Http\Controllers\Admin\AdminNotificationController;
 use App\Http\Controllers\Admin\AnnualReportController;
 use App\Http\Controllers\Admin\ApExamSubjectAdminController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ExamSeasonAdminController;
+use App\Http\Controllers\Admin\EmailTemplateAdminController;
 use App\Http\Controllers\Admin\PassportManagementController;
 use App\Http\Controllers\Admin\PaymentAdminController;
+use App\Http\Controllers\Admin\PracticeExamOptionAdminController;
 use App\Http\Controllers\Admin\ReceiptAdminController;
 use App\Http\Controllers\Admin\RegistrationExportController;
 use App\Http\Controllers\Admin\SecurityAuditController;
 use App\Http\Controllers\Admin\StudentRegistrationAdminController;
+use App\Http\Controllers\Admin\SystemSettingAdminController;
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\LocaleController;
@@ -54,6 +58,20 @@ Route::post('/admin/logout', [AdminAuthController::class, 'logout'])->middleware
 Route::middleware(['auth', 'admin', 'admin.timeout'])->prefix('admin')->name('admin.')->group(function (): void {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
+    Route::prefix('notifications')->name('notifications.')->group(function (): void {
+        Route::get('/', [AdminNotificationController::class, 'index'])->name('index');
+        Route::post('/read-all', [AdminNotificationController::class, 'markAllRead'])->middleware('throttle:20,1')->name('read-all');
+        Route::post('/{adminNotification}/read', [AdminNotificationController::class, 'markRead'])->middleware('throttle:60,1')->name('read');
+    });
+
+    Route::get('/email-templates', [EmailTemplateAdminController::class, 'index'])->name('email-templates.index');
+    Route::post('/email-templates', [EmailTemplateAdminController::class, 'store'])->middleware('throttle:30,1')->name('email-templates.store');
+    Route::delete('/email-templates/{emailTemplate}', [EmailTemplateAdminController::class, 'destroy'])->name('email-templates.destroy');
+
+    Route::get('/system-settings', [SystemSettingAdminController::class, 'index'])->name('system-settings.index');
+    Route::post('/system-settings', [SystemSettingAdminController::class, 'store'])->middleware('throttle:30,1')->name('system-settings.store');
+    Route::delete('/system-settings/{systemSetting}', [SystemSettingAdminController::class, 'destroy'])->name('system-settings.destroy');
+
     Route::get('/reports/annual', [AnnualReportController::class, 'index'])->name('reports.annual');
     Route::get('/reports/annual/export', [AnnualReportController::class, 'export'])->name('reports.annual.export');
 
@@ -72,6 +90,7 @@ Route::middleware(['auth', 'admin', 'admin.timeout'])->prefix('admin')->name('ad
     Route::prefix('student-registrations')->name('student-registrations.')->group(function (): void {
         Route::get('/', [StudentRegistrationAdminController::class, 'index'])->name('index');
         Route::get('/export', [StudentRegistrationAdminController::class, 'export'])->name('export');
+        Route::get('/passport-zip', [StudentRegistrationAdminController::class, 'passportZip'])->name('passport.zip');
         Route::get('/{studentRegistration}', [StudentRegistrationAdminController::class, 'show'])->name('show');
         Route::get('/{studentRegistration}/edit', [StudentRegistrationAdminController::class, 'edit'])->name('edit');
         Route::put('/{studentRegistration}', [StudentRegistrationAdminController::class, 'update'])->middleware('throttle:30,1')->name('update');
@@ -96,6 +115,7 @@ Route::middleware(['auth', 'admin', 'admin.timeout'])->prefix('admin')->name('ad
         Route::get('/settings', [PaymentAdminController::class, 'settings'])->name('settings');
         Route::put('/settings', [PaymentAdminController::class, 'updateSettings'])->middleware('throttle:20,1')->name('settings.update');
         Route::get('/{registrationPayment}', [PaymentAdminController::class, 'show'])->name('show');
+        Route::post('/{registrationPayment}/remind', [PaymentAdminController::class, 'remind'])->middleware('throttle:20,1')->name('remind');
         Route::post('/{registrationPayment}/verify', [PaymentAdminController::class, 'verify'])->middleware('throttle:30,1')->name('verify');
         Route::get('/{registrationPayment}/proof/preview', [PaymentAdminController::class, 'proofPreview'])->name('proof.preview');
         Route::get('/{registrationPayment}/proof/download', [PaymentAdminController::class, 'proofDownload'])->name('proof.download');
@@ -122,4 +142,9 @@ Route::middleware(['auth', 'admin', 'admin.timeout'])->prefix('admin')->name('ad
     Route::resource('ap-exam-subjects', ApExamSubjectAdminController::class)
         ->names('ap-exam-subjects')
         ->except(['show']);
+
+    Route::resource('practice-exams', PracticeExamOptionAdminController::class)
+        ->names('practice-exams')
+        ->parameters(['practice-exams' => 'practiceExam'])
+        ->only(['index', 'store', 'update', 'destroy']);
 });

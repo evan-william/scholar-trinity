@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Mail\StudentRegistrationConfirmation;
+use App\Models\PracticeExamOption;
 use App\Models\RegistrationExamSelection;
 use App\Models\StudentRegistration;
 use App\Repositories\StudentRegistrationRepository;
@@ -74,8 +75,7 @@ class StudentRegistrationService
             $serviceTotal = $subjects->sum('service_fee');
             $lateTotal = $subjects->sum(fn ($subject) => $subject->lateFeeApplies() ? $subject->late_registration_fee : 0);
             $practiceExams = $this->practiceExams($data['practice_exams'] ?? []);
-            $practiceFee = (int) config('registration.practice_exam_fee', 1800);
-            $practiceTotal = count($practiceExams) * $practiceFee;
+            $practiceTotal = collect($practiceExams)->sum('fee');
             $accommodations = $this->accommodations($data['accommodations'] ?? []);
             $currency = $subjects->first()?->currency ?? 'NTD';
             $grandTotal = $examTotal + $serviceTotal + $lateTotal + $practiceTotal;
@@ -121,6 +121,12 @@ class StudentRegistrationService
                 'accommodations_payload' => $accommodations,
                 'practice_exam_count' => count($practiceExams),
                 'practice_exam_total' => $practiceTotal,
+                'preparation_interest' => (bool) ($data['preparation_interest'] ?? false),
+                'group_class_interest' => (bool) ($data['group_class_interest'] ?? false),
+                'private_tutoring_interest' => (bool) ($data['private_tutoring_interest'] ?? false),
+                'preferred_tutoring_schedule' => $data['preferred_tutoring_schedule'] ?? null,
+                'preferred_tutoring_language' => $data['preferred_tutoring_language'] ?? null,
+                'preparation_notes' => $data['preparation_notes'] ?? null,
                 'review_confirmed_at' => now(),
                 'submitted_at' => now(),
             ]);
@@ -188,9 +194,9 @@ class StudentRegistrationService
                     'student_registration_id' => $registration->id,
                     'ap_exam_subject_id' => null,
                     'selection_type' => 'practice',
-                    'exam_name' => $practiceExam,
-                    'practice_fee' => $practiceFee,
-                    'total_amount' => $practiceFee,
+                    'exam_name' => $practiceExam['name'],
+                    'practice_fee' => $practiceExam['fee'],
+                    'total_amount' => $practiceExam['fee'],
                     'currency' => $currency,
                     'status' => 'selected',
                     'metadata' => json_encode(['source' => 'student_registration_form']),
@@ -235,6 +241,15 @@ class StudentRegistrationService
             $registration->update(['confirmation_sent_at' => now()]);
 
             app(PaymentFlowService::class)->ensurePayment($registration->fresh(['contact', 'exams']), $paymentMethod);
+
+            app(AdminNotificationService::class)->create(
+                'registration_submitted',
+                'New AP registration submitted',
+                $registration->registration_number.' - '.$registration->student_full_name,
+                'info',
+                route('admin.student-registrations.show', $registration),
+                $registration,
+            );
 
             Log::info('Student registration confirmation email sent.', [
                 'registration_number' => $registration->registration_number,
@@ -320,14 +335,45 @@ class StudentRegistrationService
 
     /**
      * @param array<int, mixed> $practiceExams
-     * @return array<int, string>
+     * @return array<int, array{name: string, fee: int}>
      */
     private function practiceExams(array $practiceExams): array
     {
-        return collect($practiceExams)
+        $values = collect($practiceExams)
             ->filter(fn ($value) => is_string($value) && trim($value) !== '')
             ->map(fn (string $value) => trim($value))
             ->unique()
+            ->values()
+            ->all();
+
+        if ($values === []) {
+            return [];
+        }
+
+        $activeOptionsExist = PracticeExamOption::query()->where('is_active', true)->exists();
+        $options = PracticeExamOption::query()
+            ->whereIn('uuid', $values)
+            ->where('is_active', true)
+            ->get()
+            ->keyBy('uuid');
+
+        if ($activeOptionsExist && $options->count() !== count($values)) {
+            throw ValidationException::withMessages([
+                'practice_exams' => 'One or more selected practice exams are no longer available.',
+            ]);
+        }
+
+        $fallbackFee = (int) config('registration.practice_exam_fee', 1800);
+
+        return collect($values)
+            ->map(function (string $value) use ($options, $fallbackFee): array {
+                $option = $options->get($value);
+
+                return [
+                    'name' => $option?->name ?? $value,
+                    'fee' => $option ? (int) $option->fee : $fallbackFee,
+                ];
+            })
             ->values()
             ->all();
     }

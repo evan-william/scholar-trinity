@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use App\Models\BackupLog;
+use App\Models\RegistrationPayment;
+use App\Services\PaymentFlowService;
 
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
@@ -122,3 +124,29 @@ Artisan::command('security:backup-storage {--zip : Create a zip archive when Zip
         return self::FAILURE;
     }
 })->purpose('Create a private storage backup manifest or optional zip and log the result');
+
+Artisan::command('payments:send-reminders {--days=2 : Only remind payments due within this many days} {--limit=50 : Maximum reminders to send}', function (): int {
+    $service = app(PaymentFlowService::class);
+    $days = max((int) $this->option('days'), 0);
+    $limit = max((int) $this->option('limit'), 1);
+
+    $payments = RegistrationPayment::query()
+        ->with(['registration.contact', 'registration.exams'])
+        ->whereIn('payment_status', ['pending', 'proof_uploaded', 'waiting_verification'])
+        ->where(function ($query) use ($days): void {
+            $query->whereNull('payment_deadline_at')
+                ->orWhere('payment_deadline_at', '<=', now()->addDays($days));
+        })
+        ->latest('payment_deadline_at')
+        ->limit($limit)
+        ->get();
+
+    foreach ($payments as $payment) {
+        $service->sendReminder($payment);
+        $this->line('Reminder sent: '.$payment->payment_reference);
+    }
+
+    $this->info('Payment reminders sent: '.$payments->count());
+
+    return self::SUCCESS;
+})->purpose('Send payment reminder emails for pending AP registration payments');

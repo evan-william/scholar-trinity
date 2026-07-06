@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Mail\PaymentConfirmationMail;
 use App\Mail\PaymentInstructionMail;
+use App\Mail\PaymentReminderMail;
 use App\Models\PaymentLog;
 use App\Models\PaymentSetting;
 use App\Models\RegistrationPayment;
@@ -91,6 +92,14 @@ class PaymentFlowService
         ]);
         $this->log($payment, 'manual_proof_uploaded', $old, 'waiting_verification', null, $ipAddress);
         app(SecurityAuditService::class)->log('payment', 'manual_proof_uploaded', 'Manual proof uploaded.', $payment, ['payment_status' => $old], ['payment_status' => 'waiting_verification']);
+        app(AdminNotificationService::class)->create(
+            'payment_proof_uploaded',
+            'Payment proof uploaded',
+            $payment->payment_reference.' is waiting for verification.',
+            'warning',
+            route('admin.payments.show', $payment),
+            payment: $payment,
+        );
 
         return $payment->fresh(['registration.contact', 'registration.exams']);
     }
@@ -116,9 +125,40 @@ class PaymentFlowService
         $payment->registration()->update(['payment_status' => 'failed']);
         $this->log($payment, 'manual_payment_rejected', $old, 'rejected', $adminId, $ipAddress, ['reason' => $reason]);
         app(SecurityAuditService::class)->log('payment', 'manual_payment_rejected', 'Manual payment rejected.', $payment, ['payment_status' => $old], ['payment_status' => 'rejected'], ['reason' => $reason]);
+        app(AdminNotificationService::class)->create(
+            'payment_rejected',
+            'Payment rejected',
+            $payment->payment_reference.' was rejected: '.$reason,
+            'danger',
+            route('admin.payments.show', $payment),
+            payment: $payment,
+        );
         $this->sendConfirmation($payment->fresh(['registration.contact', 'registration.exams']));
 
         return $payment->fresh();
+    }
+
+    public function sendReminder(RegistrationPayment $payment, ?int $adminId = null, ?string $ipAddress = null): void
+    {
+        abort_if(in_array($payment->payment_status, ['paid', 'refunded', 'cancelled'], true), 422);
+
+        $setting = $this->activeSetting();
+        $payment->load(['registration.contact', 'registration.exams']);
+
+        Mail::to($payment->registration->student_email)
+            ->cc($payment->registration->contact?->parent_email)
+            ->send(new PaymentReminderMail($payment, $setting));
+
+        $this->log($payment, 'payment_reminder_sent', $payment->payment_status, $payment->payment_status, $adminId, $ipAddress);
+        app(SecurityAuditService::class)->log('payment', 'payment_reminder_sent', 'Payment reminder sent.', $payment, [], [], [], 'success', request(), $adminId);
+        app(AdminNotificationService::class)->create(
+            'payment_reminder_sent',
+            'Payment reminder sent',
+            $payment->payment_reference.' reminder email sent.',
+            'info',
+            route('admin.payments.show', $payment),
+            payment: $payment,
+        );
     }
 
     /**
@@ -200,6 +240,14 @@ class PaymentFlowService
         ]);
         $this->log($payment, $event, $old, 'paid', $adminId, $ipAddress);
         app(SecurityAuditService::class)->log('payment', $event, 'Payment status changed.', $payment, ['payment_status' => $old], ['payment_status' => 'paid'], [], 'success', request(), $adminId);
+        app(AdminNotificationService::class)->create(
+            'payment_paid',
+            'Payment marked paid',
+            $payment->payment_reference.' is paid.',
+            'success',
+            route('admin.payments.show', $payment),
+            payment: $payment,
+        );
         $this->sendConfirmation($payment->fresh(['registration.contact', 'registration.exams']));
 
         return $payment->fresh();

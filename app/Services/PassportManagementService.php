@@ -94,6 +94,15 @@ class PassportManagementService
             ]);
             $this->audit($registration, 'passport_marked_invalid', 'passport_upload_status', null, 'invalid', $adminId, $data['invalid_reason']);
             app(SecurityAuditService::class)->log('documents', 'passport_marked_invalid', 'Passport marked invalid.', $registration, [], ['passport_upload_status' => 'invalid'], ['reason' => $data['invalid_reason']]);
+            app(AdminNotificationService::class)->create(
+                'passport_invalid',
+                'Passport marked invalid',
+                $registration->registration_number.' needs document follow-up.',
+                'danger',
+                route('admin.student-registrations.show', $registration),
+                $registration,
+                payload: ['reason' => $data['invalid_reason']],
+            );
         }
 
         Log::info('Passport status updated.', ['registration' => $registration->registration_number, 'status' => $data['status']]);
@@ -111,6 +120,15 @@ class PassportManagementService
         ]);
         $this->audit($registration, 'passport_reupload_requested', 'passport_upload_status', null, 'reupload_requested', $adminId, $data['reason']);
         app(SecurityAuditService::class)->log('documents', 'passport_reupload_requested', 'Passport re-upload requested.', $registration, [], ['passport_upload_status' => 'reupload_requested'], ['reason' => $data['reason']]);
+        app(AdminNotificationService::class)->create(
+            'passport_reupload_requested',
+            'Passport re-upload requested',
+            $registration->registration_number.' has a re-upload deadline.',
+            'warning',
+            route('admin.student-registrations.show', $registration),
+            $registration,
+            payload: ['deadline' => $data['deadline'], 'reason' => $data['reason']],
+        );
 
         Mail::to($registration->student_email)
             ->cc($registration->contact?->parent_email)

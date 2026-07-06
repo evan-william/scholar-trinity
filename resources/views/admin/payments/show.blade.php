@@ -55,6 +55,12 @@
 
         <div class="card">
             <h2>Manual Verification</h2>
+            @if(! in_array($payment->payment_status, ['paid','refunded','cancelled'], true))
+                <form method="POST" action="{{ route('admin.payments.remind', $payment) }}" style="margin-bottom:14px">
+                    @csrf
+                    <button class="btn light" type="submit">Send Payment Reminder</button>
+                </form>
+            @endif
             <form method="POST" action="{{ route('admin.payments.verify', $payment) }}">
                 @csrf
                 <label>Action

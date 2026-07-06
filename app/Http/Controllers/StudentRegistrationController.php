@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreStudentRegistrationRequest;
+use App\Models\PracticeExamOption;
 use App\Models\StudentRegistration;
 use App\Repositories\StudentRegistrationRepository;
 use App\Services\FileSecurityService;
@@ -22,6 +23,11 @@ class StudentRegistrationController extends Controller
         return view('student-registration.create', [
             'subjects' => $repository->availableSubjects(),
             'gradeLevels' => config('registration.grade_levels'),
+            'practiceExamOptions' => PracticeExamOption::query()
+                ->where('is_active', true)
+                ->orderBy('sort_order')
+                ->orderBy('name')
+                ->get(),
         ]);
     }
 

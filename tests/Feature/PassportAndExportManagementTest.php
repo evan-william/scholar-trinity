@@ -50,6 +50,25 @@ class PassportAndExportManagementTest extends TestCase
         ]);
     }
 
+    public function test_admin_can_download_filtered_passport_zip(): void
+    {
+        if (! class_exists(\ZipArchive::class)) {
+            $this->markTestSkipped('ZipArchive extension is required for passport ZIP downloads.');
+        }
+
+        Storage::fake('local');
+        [$registration] = $this->registrationWithPassport();
+        $admin = $this->adminUser();
+
+        $this->actingAs($admin)
+            ->get(route('admin.student-registrations.passport.zip', ['search' => $registration->registration_number]))
+            ->assertOk();
+
+        $registration->refresh();
+        $this->assertNotNull($registration->passport_last_downloaded_at);
+        $this->assertSame($admin->id, $registration->passport_last_downloaded_by);
+    }
+
     public function test_admin_can_replace_mark_invalid_and_request_passport_reupload(): void
     {
         Storage::fake('local');

@@ -220,8 +220,9 @@
                 <div class="section-title" style="margin-top:24px">Practice Exams (Optional) <span>模擬考（選填） / NT$1,800 per exam</span></div>
                 <div class="notice"><h4>Practice Exam Info / 模擬考說明</h4><p>NT$1,800 per practice exam. Dates subject to change. / 每科模擬考 NT$1,800，日期可能調整。</p></div>
                 <div class="exam-grid">
-                    @foreach(['Biology 生物','English Language and Composition 英文語言與寫作','Physics 1 物理 1','Computer Science A 電腦科學 A','Calculus AB/BC 微積分','Macroeconomics 總體經濟','Precalculus 預備微積分'] as $practice)
-                        <label class="exam-cb"><input type="checkbox" name="practice_exams[]" value="{{ $practice }}" data-type="practice" data-p="1800" data-name="Practice: {{ $practice }}" @checked(in_array($practice, old('practice_exams', [])))><div><div class="exam-name">{{ $practice }}</div><div class="exam-sub">Practice / 模擬考</div></div><div class="exam-price-tag">NT$1,800</div></label>
+                    @php($fallbackPracticeExams = collect(['Biology 生物','English Language and Composition 英文語言與寫作','Physics 1 物理 1','Computer Science A 電腦科學 A','Calculus AB/BC 微積分','Macroeconomics 總體經濟','Precalculus 預備微積分'])->map(fn ($name) => (object) ['uuid' => $name, 'name' => $name, 'fee' => config('registration.practice_exam_fee', 1800), 'currency' => 'NTD', 'practice_date' => null, 'location' => null]))
+                    @foreach(($practiceExamOptions ?? collect())->isNotEmpty() ? $practiceExamOptions : $fallbackPracticeExams as $practice)
+                        <label class="exam-cb"><input type="checkbox" name="practice_exams[]" value="{{ $practice->uuid }}" data-type="practice" data-p="{{ $practice->fee }}" data-name="Practice: {{ $practice->name }}" @checked(in_array($practice->uuid, old('practice_exams', [])))><div><div class="exam-name">{{ $practice->name }}</div><div class="exam-sub">Practice / 模擬考 @if($practice->practice_date) / {{ $practice->practice_date->format('M d, Y') }} @endif @if($practice->location) / {{ $practice->location }} @endif</div></div><div class="exam-price-tag">{{ $practice->currency }} {{ number_format($practice->fee) }}</div></label>
                     @endforeach
                 </div>
                 <input type="hidden" name="practice_exam_total" id="practiceExamTotal" value="0">
@@ -251,6 +252,22 @@
                     <button type="button" class="ghost-btn" id="addAccomRow">+ Add row / 新增一列</button>
                 </div>
             </div>
+            <div class="card">
+                <div class="section-title">AP Preparation Interest <span>AP tutoring survey</span></div>
+                <div class="notice"><h4>Optional tutoring survey</h4><p>This does not affect AP exam registration. It helps the team follow up if the student is interested in AP preparation support.</p></div>
+                <label class="check-line" style="margin-bottom:12px"><input type="checkbox" name="preparation_interest" value="1" id="prepInterest" @checked(old('preparation_interest'))><span>I am interested in AP preparation / tutoring information.</span></label>
+                <div class="row row-2">
+                    <label class="check-line"><input type="checkbox" name="group_class_interest" value="1" @checked(old('group_class_interest'))><span>Group class interest</span></label>
+                    <label class="check-line"><input type="checkbox" name="private_tutoring_interest" value="1" @checked(old('private_tutoring_interest'))><span>Private tutoring interest</span></label>
+                </div>
+                <div class="row row-2">
+                    <div class="fg"><label class="lbl">Preferred Schedule</label><input name="preferred_tutoring_schedule" value="{{ old('preferred_tutoring_schedule') }}" placeholder="Weekday evening, weekend morning, flexible"></div>
+                    <div class="fg"><label class="lbl">Preferred Language</label><select name="preferred_tutoring_language"><option value="">Select</option><option value="English" @selected(old('preferred_tutoring_language') === 'English')>English</option><option value="Mandarin" @selected(old('preferred_tutoring_language') === 'Mandarin')>Mandarin</option><option value="Bilingual" @selected(old('preferred_tutoring_language') === 'Bilingual')>Bilingual</option></select></div>
+                </div>
+                <div class="row row-1">
+                    <div class="fg"><label class="lbl">Preparation Notes</label><textarea name="preparation_notes" placeholder="Subjects, goals, availability, or questions">{{ old('preparation_notes') }}</textarea></div>
+                </div>
+            </div>
         </section>
 
         <section class="hidden" data-step="5">
@@ -263,6 +280,8 @@
                 <div class="rev-section"><h3>Selected Exams / 已選考科</h3><div id="rExams" class="hint" style="margin-top:8px">-</div></div>
                 <hr class="div">
                 <div class="rev-section"><h3>Accommodations / 特殊需求</h3><div id="rAccom" class="hint" style="margin-top:8px">-</div></div>
+                <hr class="div">
+                <div class="rev-section"><h3>AP Preparation Interest / Tutoring</h3><div id="rPrep" class="hint" style="margin-top:8px">-</div></div>
                 <hr class="div">
                 <div class="rev-section"><h3>Fee Summary / 費用摘要</h3><table class="rev-table"><tr><td>Regular Exams / 正式考試</td><td id="rReg">-</td></tr><tr><td>Practice Exams / 模擬考</td><td id="rPra">-</td></tr><tr><td>Late Fee / 逾期費</td><td id="rLate">-</td></tr><tr style="font-weight:800;color:var(--primary)"><td>Total / 總計</td><td id="rTot">-</td></tr></table></div>
             </div>
@@ -501,6 +520,13 @@
         document.getElementById('rAccom').textContent = document.getElementById('needsAccom').checked
             ? [field('ssd_code'), field('accommodation_status')].filter(Boolean).join(' / ') || 'Requested'
             : 'No accommodations requested';
+        const prepChoices = [];
+        if (document.getElementById('prepInterest')?.checked) prepChoices.push('Interested in AP preparation');
+        if (form.elements.group_class_interest?.checked) prepChoices.push('Group class');
+        if (form.elements.private_tutoring_interest?.checked) prepChoices.push('Private tutoring');
+        if (field('preferred_tutoring_schedule')) prepChoices.push(`Schedule: ${field('preferred_tutoring_schedule')}`);
+        if (field('preferred_tutoring_language')) prepChoices.push(`Language: ${field('preferred_tutoring_language')}`);
+        document.getElementById('rPrep').textContent = prepChoices.length ? prepChoices.join(' / ') : 'Not requested';
         document.getElementById('rReg').textContent = `${totals.regCt} exams / NT$ ${money(totals.regTot)}`;
         document.getElementById('rPra').textContent = `${totals.praCt} exams / NT$ ${money(totals.praTot)}`;
         document.getElementById('rLate').textContent = `NT$ ${money(totals.lateTot)}`;

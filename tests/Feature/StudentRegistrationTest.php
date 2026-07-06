@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Mail\StudentRegistrationConfirmation;
 use App\Models\ApExamSubject;
+use App\Models\PracticeExamOption;
 use App\Models\StudentRegistration;
 use App\Models\User;
 use Database\Seeders\ApExamSubjectSeeder;
@@ -61,6 +62,63 @@ class StudentRegistrationTest extends TestCase
 
         $this->post('/student-registration', $this->validPayload($payload))
             ->assertSessionHasErrors(['student_email', 'passport_number']);
+    }
+
+    public function test_registration_uses_active_practice_exam_options_and_saves_preparation_interest(): void
+    {
+        Mail::fake();
+        $this->seed(ApExamSubjectSeeder::class);
+        $subject = ApExamSubject::query()->firstOrFail();
+        $practice = PracticeExamOption::query()->create([
+            'name' => 'AP Calculus AB Mock Exam',
+            'category' => 'Mathematics',
+            'practice_date' => '2027-03-15',
+            'fee' => 2500,
+            'currency' => 'NTD',
+            'is_active' => true,
+        ]);
+
+        $this->post('/student-registration', $this->validPayload([
+            'exam_subject_ids' => [$subject->id],
+            'practice_exams' => [$practice->uuid],
+            'preparation_interest' => '1',
+            'group_class_interest' => '1',
+            'private_tutoring_interest' => '1',
+            'preferred_tutoring_schedule' => 'Weekend morning',
+            'preferred_tutoring_language' => 'English',
+            'preparation_notes' => 'Needs calculus review.',
+        ]))->assertRedirect();
+
+        $registration = StudentRegistration::query()->with('practiceExamSelections')->firstOrFail();
+        $this->assertSame(1, $registration->practice_exam_count);
+        $this->assertSame(2500, $registration->practice_exam_total);
+        $this->assertSame(11500, $registration->total_fee);
+        $this->assertTrue($registration->preparation_interest);
+        $this->assertTrue($registration->group_class_interest);
+        $this->assertTrue($registration->private_tutoring_interest);
+        $this->assertSame('Weekend morning', $registration->preferred_tutoring_schedule);
+        $this->assertSame('English', $registration->preferred_tutoring_language);
+        $this->assertSame('Needs calculus review.', $registration->preparation_notes);
+        $this->assertSame('AP Calculus AB Mock Exam', $registration->practiceExamSelections->first()->exam_name);
+        $this->assertSame(2500, $registration->practiceExamSelections->first()->practice_fee);
+    }
+
+    public function test_unavailable_practice_exam_option_is_rejected_when_master_data_exists(): void
+    {
+        Mail::fake();
+        $this->seed(ApExamSubjectSeeder::class);
+        $subject = ApExamSubject::query()->firstOrFail();
+        PracticeExamOption::query()->create([
+            'name' => 'Active Practice Exam',
+            'fee' => 2500,
+            'currency' => 'NTD',
+            'is_active' => true,
+        ]);
+
+        $this->post('/student-registration', $this->validPayload([
+            'exam_subject_ids' => [$subject->id],
+            'practice_exams' => ['Fake practice option'],
+        ]))->assertSessionHasErrors(['practice_exams']);
     }
 
     public function test_closed_exam_cannot_be_selected(): void

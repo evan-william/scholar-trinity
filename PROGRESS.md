@@ -1,6 +1,6 @@
 # Trinity Scholar Progress Tracker
 
-Last updated: 2026-07-04, Asia/Bangkok
+Last updated: 2026-07-06, Asia/Bangkok
 
 This file is the working source of truth for project status. Every implementation pass must update:
 - `Current Progress` for what changed.
@@ -60,6 +60,144 @@ Current local template pass:
 - Raw downloaded templates are ignored through `template-source/` in `.gitignore`.
 
 ## Current Progress
+
+2026-07-06
+- New PDF checklist audit:
+  - Read `Reference/Trinity Scholar - Features.pdf` with `pdfplumber`; extracted all 7 pages successfully.
+  - PDF contains a broader feature checklist than the earlier MVP notes: Phase 1 Core Registration, Phase 2 Administration Portal, Phase 3 Optional Advanced Features, and Phase 4 Future Online Practice Exam Platform.
+  - Re-audited the current Laravel/Vue codebase against every PDF module and sub-module.
+  - Added explicit TODO coverage for new missing areas: AP preparation interest survey, tutoring CRM, bulk passport ZIP download, admin practice exam schedule management, payment reminders, admin notifications, email template management UI, general system configuration UI, and online practice exam platform.
+  - Confirmed current repo was clean before this audit pass.
+- PDF checklist implementation pass:
+  - Added AP preparation/tutoring interest fields to student registrations, student form, validation, persistence, admin detail, registration list filter, and exports.
+  - Added admin-managed practice exam options with schedule, location, fee, currency, active status, and student-form integration.
+  - Practice exam fee is now calculated server-side from selected active practice exam options; legacy fallback is only used when no active practice exam master data exists.
+  - Added admin passport ZIP download using current registration filters and private local passport files.
+  - Added payment reminder email, admin send-reminder action, payment log/audit entry, notification entry, and `payments:send-reminders` artisan command.
+  - Added admin notification module with notification table, service, list page, read/all-read actions, sidebar entry, and event hooks for registration, payment, passport, and receipt events.
+  - Added email template management UI backed by the existing `EmailTemplateSetting` table.
+  - Added general system settings table/model/admin UI for non-payment/non-e-invoice app preferences.
+  - Fixed the practice exam admin page to avoid invalid table/form nesting.
+  - Added passport ZIP cleanup when selected registrations have no readable files.
+  - Added feature test coverage for AP prep persistence, active practice exam option fee calculation, invalid practice exam rejection, and admin passport ZIP download.
+
+### PDF Checklist Audit - 2026-07-06
+
+Source: `Reference/Trinity Scholar - Features.pdf`
+
+Legend:
+- `DONE`: implemented in code at a usable MVP level.
+- `PARTIAL`: represented in code, but incomplete, unverified, or missing an expected sub-flow.
+- `NOT DONE`: no meaningful implementation found.
+- `FUTURE`: explicitly future scope in the PDF.
+
+### Phase 1 - Core Registration Platform
+
+| Module | Sub Module | Status | Evidence / Notes |
+| --- | --- | --- | --- |
+| Landing Website | Landing Page | DONE | `LandingPageController`, `resources/views/landing/index.blade.php`, landing CMS tables/seeders. |
+| Landing Website | Program Information | PARTIAL | Program/AP registration copy exists, but final official client content still pending. |
+| Landing Website | Registration Timeline | DONE | Landing timeline model/seeder/view exists. |
+| Landing Website | FAQ | DONE | Landing FAQ model/seeder/view exists. |
+| Landing Website | Contact Information | DONE | Landing contact model/seeder/view exists. |
+| Landing Website | Announcement Banner | DONE | Landing page uses announcement/poster/status content. |
+| Student Registration | Student Information | DONE | `student_registrations` fields, form, request validation, service persistence. |
+| Student Registration | Parent / Guardian Information | DONE | `RegistrationContact`, form fields, persistence, admin display/export. |
+| Student Registration | Address Information | DONE | Mailing address/city/district/postal code stored in contact record. |
+| Student Registration | Emergency Contact | DONE | Emergency contact fields stored and shown/exported. |
+| Student Registration | Registration Validation | DONE | `StoreStudentRegistrationRequest` validates required registration fields and passport requirement. Runtime tests still blocked here by missing PHP. |
+| Document Management | Passport Upload | DONE | Student form + draft upload + final storage. |
+| Document Management | File Validation | DONE | MIME/size validation and `FileSecurityService`. |
+| Document Management | File Preview | PARTIAL | Admin preview exists. Student-side pre-submit visual preview is not fully implemented beyond selected/draft file handling. |
+| Document Management | Secure Storage | DONE | Private Laravel local disk, authenticated admin preview/download. |
+| Exam Registration | Official AP Exam | DONE | AP subject model, selection, persistence, admin management. |
+| Exam Registration | Practice Exam | DONE | Student optional practice exams, server-side total, persistence, export/report. |
+| Exam Registration | Subject Availability | DONE | Subject status/open/full/closed handling exists. |
+| Exam Registration | Seat Availability | DONE | Quota/registered count/remaining seats displayed and enforced. |
+| Exam Registration | Fee Calculation | DONE | Server-side totals for exam/service/late/practice fees. |
+| AP Preparation Interest | Preparation Survey | DONE | Preparation/tutoring interest fields are stored on `student_registrations` and collected in the student form. |
+| AP Preparation Interest | Group Class Interest | DONE | Group class interest checkbox persists and exports. |
+| AP Preparation Interest | Private Tutoring | DONE | Private tutoring interest checkbox persists and exports. |
+| AP Preparation Interest | Preferred Schedule | DONE | Preferred tutoring schedule field persists and exports. |
+| AP Preparation Interest | Preferred Language | DONE | Preferred tutoring language field persists and exports. |
+| Registration Confirmation | Registration Summary | DONE | Review step + confirmation page. |
+| Registration Confirmation | Confirmation Checkbox | DONE | Agreement checkboxes and agreement records exist. |
+| Registration Confirmation | Registration Lock | PARTIAL | Public flow has no edit route after submit, but there is no explicit lock flag/policy beyond admin-only edits. |
+| Registration Confirmation | Registration Number | DONE | Unique registration number generated. |
+| Registration Confirmation | Confirmation Page | DONE | `student-registration/show.blade.php`. |
+| Basic Payment | Payment Summary | DONE | Payment instruction/status pages show totals and references. |
+| Basic Payment | Manual Bank Transfer | DONE | Payment settings/instructions/proof upload/manual verify flow. |
+| Basic Payment | Upload Payment Slip | DONE | `payments.proof.upload`, private storage, admin preview/download. |
+| Basic Payment | Payment Status | DONE | Registration and payment status fields/workflows exist. |
+| Email Notification | Registration Email | DONE | `StudentRegistrationConfirmation`. |
+| Email Notification | Payment Reminder | DONE | `PaymentReminderMail`, admin remind action, and `payments:send-reminders` command exist. |
+| Email Notification | Missing Document Email | DONE | Passport re-upload request email exists. |
+
+### Phase 2 - Administration Portal
+
+| Module | Sub Module | Status | Evidence / Notes |
+| --- | --- | --- | --- |
+| Dashboard | Dashboard Overview | DONE | `AdminDashboardService`, admin dashboard view. |
+| Dashboard | Registration Statistics | DONE | Metrics, filters, chart data. |
+| Dashboard | Revenue Summary | DONE | Revenue/payment metrics and annual report. |
+| Dashboard | Practice Exam Statistics | DONE | Practice exam counts/revenue in dashboard/report services. |
+| Registration Management | Registration List | DONE | Admin registration index. |
+| Registration Management | Search & Filter | DONE | Repository filters include search/status/payment/document/subject/season/date/accommodation. |
+| Registration Management | Registration Detail | DONE | Admin detail page. |
+| Registration Management | Edit Registration | DONE | Admin edit/manage update exists. |
+| Registration Management | Internal Notes | DONE | Admin notes model/request/action. |
+| Registration Management | Registration Status | DONE | Verification/status workflow exists. |
+| Exam Management | Subject Management | DONE | AP subject CRUD exists. |
+| Exam Management | Practice Exam Management | DONE | `PracticeExamOption` CRUD manages optional practice exam schedule, location, fee, and active status. |
+| Exam Management | Seat Quota | DONE | Quota and registered count are tracked. |
+| Exam Management | Subject Pricing | DONE | Exam/service/late fees editable per subject. |
+| Payment Management | Payment Verification | DONE | Manual verify/reject flow exists. |
+| Payment Management | Payment History | DONE | Payment logs/records exist. |
+| Payment Management | Payment Filter | DONE | Payment admin search/status/method filters exist. |
+| Passport Management | Passport Preview | DONE | Admin preview route/service. |
+| Passport Management | Download Passport | DONE | Admin download route/service. |
+| Passport Management | Download ZIP | DONE | Admin registration list has filtered private passport ZIP download with audit logging. |
+| Passport Management | Document Verification | DONE | Valid/invalid/reupload status flow exists. |
+| Export & Reports | Excel Export | DONE | XLS Blade export route exists. |
+| Export & Reports | CSV Export | DONE | CSV export service/routes exist. |
+| Export & Reports | Export by Subject | DONE | Subject filters exist. |
+| Export & Reports | Export by Payment | DONE | Payment status filters exist. |
+| Export & Reports | Annual Report | DONE | Annual report service/view/export exists. |
+| Tutoring CRM | Lead Dashboard | NOT DONE | No CRM lead dashboard found. |
+| Tutoring CRM | Lead Assignment | NOT DONE | No counselor assignment model/flow found. |
+| Tutoring CRM | Lead Status | NOT DONE | No tutoring lead status workflow found. |
+| Tutoring CRM | CRM Report | NOT DONE | No lead conversion report found. |
+
+### Phase 3 - Advanced Features / Optional Add-ons
+
+| Module | Sub Module | Status | Evidence / Notes |
+| --- | --- | --- | --- |
+| Payment Gateway | ECPay / NewebPay Integration | PARTIAL | Adapter skeleton exists. ECPay has basic payload/signature path; NewebPay throws `LogicException`. Not production-ready. |
+| Payment Gateway | Payment Callback | PARTIAL | Callback route/service exists, but provider-specific validation/security is not complete. |
+| Payment Gateway | Payment Notification | PARTIAL | Payment confirmation email exists, but real-time provider notification handling is not production-verified. |
+| Receipt / Fapiao | Receipt Information | DONE | Public receipt/fapiao form and request persistence. |
+| Receipt / Fapiao | Receipt Management | DONE | Admin list/detail/settings/issue/status/send. |
+| Receipt / Fapiao | Receipt Export | DONE | Receipt CSV export exists. |
+| Receipt / Fapiao | E-Invoice Integration | PARTIAL | Provider interfaces/placeholders exist; real Taiwan e-invoice API not implemented. |
+| System Enhancement | Admin Notification | DONE | Admin notification table/service/page exists, with hooks for important registration/payment/passport/receipt events. |
+| System Enhancement | Email Template Management | PARTIAL | Admin CRUD UI exists for template overrides; current mailables still render Blade views until dynamic rendering is QA-tested. |
+| System Enhancement | System Configuration | DONE | General `system_settings` table/model/admin UI exists. |
+| System Enhancement | Activity Log | DONE | Security audit logs and registration audit logs exist. |
+
+### Phase 4 - Online Practice Exam Platform
+
+| Module | Status | Notes |
+| --- | --- | --- |
+| Question Bank | FUTURE / NOT DONE | No online exam platform implementation found. |
+| Multiple Choice Engine | FUTURE / NOT DONE | No online exam engine found. |
+| Exam Timer | FUTURE / NOT DONE | No exam timer found. |
+| Auto Scoring | FUTURE / NOT DONE | No scoring engine found. |
+| Result Dashboard | FUTURE / NOT DONE | No result dashboard found. |
+| Analytics | FUTURE / NOT DONE | No online practice analytics found. |
+| Certificate Generation | FUTURE / NOT DONE | No certificate generation found. |
+| Student Exam History | FUTURE / NOT DONE | No student online exam history found. |
+
+### Earlier Progress
 
 2026-07-04
 - Teammate update review:
@@ -172,6 +310,56 @@ Current local template pass:
 - Re-audit status: easy backend correctness fixes above are done; production payment/e-invoice/template redesign remain.
 
 ## TODO
+
+### PDF Checklist Delta - Added 2026-07-06
+
+These items come directly from `Reference/Trinity Scholar - Features.pdf` and were not fully covered by the earlier MVP work.
+
+- AP Preparation Interest:
+  - DONE: add registration fields/migration/model support for preparation interest survey.
+  - DONE: collect group class interest.
+  - DONE: collect private tutoring interest.
+  - DONE: collect preferred tutoring schedule.
+  - DONE: collect preferred tutoring language.
+  - DONE: show/export these fields in admin registration detail, list filter, and CSV/XLSX exports.
+
+- Student-side document preview:
+  - TODO: add clearer student-side uploaded passport preview or draft preview before final submit.
+  - DONE: admin passport preview exists.
+
+- Practice Exam Management:
+  - DONE: create admin CRUD for practice exam schedule/subjects/pricing.
+  - DONE: added dedicated `practice_exam_options` table while keeping selected rows in `registration_exam_selections`.
+
+- Passport bulk download:
+  - DONE: add admin bulk ZIP download for passport files with audit logging.
+  - DONE: ZIP is created from private local disk and skips missing unreadable files.
+
+- Payment reminder:
+  - DONE: add scheduled/manual payment reminder email for unpaid or waiting-verification registrations.
+  - DONE: initial payment instruction email exists.
+
+- Tutoring CRM:
+  - TODO: build lead dashboard for students interested in AP preparation/tutoring.
+  - TODO: add counselor assignment.
+  - TODO: add lead status/follow-up workflow.
+  - TODO: add CRM conversion report.
+
+- System enhancement:
+  - DONE: add admin notification mechanism for important events such as new registration, payment proof upload, invalid passport, and receipt request.
+  - DONE: build admin email template management UI using existing `EmailTemplateSetting` model/table.
+  - DONE: add general system configuration module for app-level preferences that are not payment/e-invoice/landing settings.
+  - TODO: wire saved email template overrides into actual mailable rendering after copy QA.
+
+- Online Practice Exam Platform:
+  - FUTURE TODO: question bank.
+  - FUTURE TODO: multiple choice engine.
+  - FUTURE TODO: exam timer.
+  - FUTURE TODO: auto scoring.
+  - FUTURE TODO: result dashboard.
+  - FUTURE TODO: analytics.
+  - FUTURE TODO: certificate generation.
+  - FUTURE TODO: student exam history.
 
 ### Immediate Update Needed For Tomorrow
 
@@ -411,9 +599,27 @@ Current local template pass:
 - Built-in database backup command only supports local SQLite; production MySQL/MariaDB needs a server backup job.
 - Language coverage is incomplete because many view strings are hardcoded.
 - Deep admin static audit 2026-07-04 found and fixed a boolean select bug in AP subject/exam season active status fields.
+- PDF checklist implementation 2026-07-06 resolved the no-credential PDF gaps for AP preparation interest fields, passport ZIP download, practice exam schedule management, payment reminders, admin notifications, email template management UI, and system configuration UI.
+- Remaining PDF gaps that need product/client scope or credentials: tutoring CRM, real ECPay/NewebPay production integration, real Taiwan e-invoice/fapiao API, MySQL production backup job, and future online practice exam platform.
 - Server credentials were shared in chat but must stay out of Git.
 
 ## Verification Log
+
+2026-07-06
+- PDF audit: extracted all 7 pages from `Reference/Trinity Scholar - Features.pdf` with `pdfplumber`.
+- Static audit: mapped every PDF checklist module/sub-module against routes, controllers, services, models, migrations, views, tests, docs, config, and language files.
+- Static audit: confirmed AP Preparation Interest and Tutoring CRM features are not meaningfully implemented yet.
+- Static audit: confirmed bulk passport ZIP download is not implemented yet.
+- Static audit: confirmed payment/e-invoice provider work remains placeholder/partial, not production-ready.
+- Static audit: repo was clean before this audit pass.
+- Static check: `git diff --check` passed after the PDF implementation pass.
+- Static check: no merge conflict markers found after the PDF implementation pass.
+- Static check: no `.agent` or `.agents` folder found in repo root after the PDF implementation pass.
+- Static check: confirmed new admin routes for notifications, email templates, system settings, practice exams, payment reminders, and passport ZIP are present.
+- Static check: confirmed practice exam update forms no longer use invalid table/form nesting.
+- Static check: added targeted PHPUnit coverage for the new no-credential PDF features, but it is not executed here yet.
+- Static check: confirmed PHP and Composer are still not available in PATH.
+- Blocked: PHP/Laravel tests and browser QA still were not run because PHP/Composer are not available in this Codex environment.
 
 2026-07-04
 - Static check: `git diff --check` passed after boss-feedback visual pass.
@@ -464,8 +670,11 @@ Current local template pass:
 
 ## Suggested Next Work Order
 
-1. Choose template today.
+1. For Monday/demo scope: keep compro + no-login registration + admin can view data stable; run PHP/browser QA on a real PHP environment.
 2. Get client/team approval on current Edification compro pass or replace with the approved premium frontend template.
-3. Apply final admin template shell to dashboard/list/detail pages.
+3. Choose final admin template path: keep current Blade admin shell, install Filament by Composer, or use a Laravel admin template.
 4. Server deploy execution: fill `.env`, DB credentials, `npm run build`, Laravel migrate.
-5. Payment provider decision and real integration.
+5. Payment provider decision and real ECPay/NewebPay integration.
+6. Fapiao provider decision and real Taiwan e-invoice integration.
+7. Build tutoring CRM only if AP preparation interest is confirmed as in-scope for the first paid milestone.
+8. Keep Phase 4 online practice exam platform as future scope unless the client explicitly moves it into this project.

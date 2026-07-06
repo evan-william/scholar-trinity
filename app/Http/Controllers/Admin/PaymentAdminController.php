@@ -57,6 +57,13 @@ class PaymentAdminController extends Controller
         return redirect()->route('admin.payments.show', $registrationPayment)->with('status', 'Payment rejected.');
     }
 
+    public function remind(Request $request, RegistrationPayment $registrationPayment, PaymentFlowService $service): RedirectResponse
+    {
+        $service->sendReminder($registrationPayment, $request->user()->id, $request->ip());
+
+        return redirect()->route('admin.payments.show', $registrationPayment)->with('status', 'Payment reminder sent.');
+    }
+
     public function proofPreview(RegistrationPayment $registrationPayment): StreamedResponse
     {
         abort_unless($registrationPayment->proof_file_path && Storage::disk('local')->exists($registrationPayment->proof_file_path), 404);

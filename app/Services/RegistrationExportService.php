@@ -100,6 +100,7 @@ class RegistrationExportService
             ->when($filters['receipt_status'] ?? null, fn (Builder $query, string $status) => $query->whereHas('receiptRequests', fn (Builder $receipt) => $receipt->where('status', $status)))
             ->when(isset($filters['needs_accommodations']) && $filters['needs_accommodations'] !== '', fn (Builder $query) => $query->where('needs_accommodations', (bool) $filters['needs_accommodations']))
             ->when($filters['accommodation_status'] ?? null, fn (Builder $query, string $status) => $query->where('accommodation_status', $status))
+            ->when(isset($filters['preparation_interest']) && $filters['preparation_interest'] !== '', fn (Builder $query) => $query->where('preparation_interest', (bool) $filters['preparation_interest']))
             ->when(trim((string) ($filters['school'] ?? '')), fn (Builder $query, string $school) => $query->where('school_name', 'like', '%'.trim($school).'%'))
             ->latest('submitted_at');
     }
@@ -159,6 +160,12 @@ class RegistrationExportService
                     'SSD Code' => $registration->ssd_code,
                     'Accommodation Status' => $registration->accommodation_status,
                     'Accommodation Requests' => $this->accommodationSummary($registration),
+                    'AP Prep Interest' => $registration->preparation_interest ? 'Yes' : 'No',
+                    'Group Class Interest' => $registration->group_class_interest ? 'Yes' : 'No',
+                    'Private Tutoring Interest' => $registration->private_tutoring_interest ? 'Yes' : 'No',
+                    'Preferred Tutoring Schedule' => $registration->preferred_tutoring_schedule,
+                    'Preferred Tutoring Language' => $registration->preferred_tutoring_language,
+                    'Preparation Notes' => $registration->preparation_notes,
                     'Registration Period' => $registration->registration_period,
                     'Registration Status' => $registration->status,
                     'Payment Status' => $registration->payment_status,
@@ -181,7 +188,8 @@ class RegistrationExportService
                         'Chinese Legal Name', 'Date of Birth', 'Nationality', 'Student Email', 'Passport Number',
                         'Passport Expiry Date', 'School', 'Grade', 'Subject Code', 'Subject Name', 'Exam Date',
                         'Practice Exams', 'Payment Status', 'Document Status', 'Needs Accommodations',
-                        'SSD Code', 'Accommodation Requests',
+                        'SSD Code', 'Accommodation Requests', 'AP Prep Interest', 'Group Class Interest',
+                        'Private Tutoring Interest', 'Preferred Tutoring Schedule', 'Preferred Tutoring Language',
                     ]));
                 }
 
@@ -189,7 +197,9 @@ class RegistrationExportService
                     $row = array_intersect_key($row, array_flip([
                         'School', 'School City', 'Grade', 'Student Name', 'Chinese Legal Name', 'Student Email',
                         'Student Phone', 'Parent Name', 'Parent Email', 'Parent Phone', 'Subject Name',
-                        'Practice Exams', 'Registration Status', 'Payment Status', 'Verification Status',
+                        'Practice Exams', 'AP Prep Interest', 'Group Class Interest', 'Private Tutoring Interest',
+                        'Preferred Tutoring Schedule', 'Preferred Tutoring Language', 'Registration Status',
+                        'Payment Status', 'Verification Status',
                     ]));
                 }
 

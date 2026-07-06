@@ -20,15 +20,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use ZipArchive;
 
 class StudentRegistrationAdminController extends Controller
 {
     public function index(Request $request, StudentRegistrationRepository $repository): View
     {
         return view('admin.student-registrations.index', [
-            'registrations' => $repository->search($request->only(['search', 'status', 'payment_status', 'document_status', 'verification_status', 'receipt_status', 'needs_accommodations', 'accommodation_status', 'period', 'date_from', 'date_to', 'subject_id', 'season_id', 'sort', 'direction'])),
-            'filters' => $request->only(['search', 'status', 'payment_status', 'document_status', 'verification_status', 'receipt_status', 'needs_accommodations', 'accommodation_status', 'period', 'date_from', 'date_to', 'subject_id', 'season_id']),
+            'registrations' => $repository->search($request->only(['search', 'status', 'payment_status', 'document_status', 'verification_status', 'receipt_status', 'needs_accommodations', 'accommodation_status', 'preparation_interest', 'period', 'date_from', 'date_to', 'subject_id', 'season_id', 'sort', 'direction'])),
+            'filters' => $request->only(['search', 'status', 'payment_status', 'document_status', 'verification_status', 'receipt_status', 'needs_accommodations', 'accommodation_status', 'preparation_interest', 'period', 'date_from', 'date_to', 'subject_id', 'season_id']),
             'subjects' => ApExamSubject::query()->orderBy('name')->get(),
             'seasons' => ExamSeason::query()->orderByDesc('exam_year')->get(),
         ]);
@@ -111,10 +113,79 @@ class StudentRegistrationAdminController extends Controller
         );
     }
 
+    public function passportZip(Request $request): BinaryFileResponse
+    {
+        abort_unless(class_exists(ZipArchive::class), 422, 'ZipArchive extension is required for passport ZIP download.');
+
+        $registrations = StudentRegistration::query()
+            ->with('exams')
+            ->whereNotNull('passport_file_path')
+            ->when(trim((string) $request->query('search')), function ($query, string $search): void {
+                $search = trim($search);
+                $query->where(function ($inner) use ($search): void {
+                    $inner->where('registration_number', 'like', "%{$search}%")
+                        ->orWhere('student_full_name', 'like', "%{$search}%")
+                        ->orWhere('student_email', 'like', "%{$search}%")
+                        ->orWhere('passport_number', 'like', "%{$search}%");
+                });
+            })
+            ->when($request->query('status'), fn ($query, string $status) => $query->where('status', $status))
+            ->when($request->query('payment_status'), fn ($query, string $status) => $query->where('payment_status', $status))
+            ->when($request->query('document_status'), fn ($query, string $status) => $query->where('passport_upload_status', $status))
+            ->when($request->query('season_id'), fn ($query, $seasonId) => $query->where('exam_season_id', $seasonId))
+            ->when($request->query('subject_id'), fn ($query, $subjectId) => $query->whereHas('exams', fn ($exam) => $exam->where('ap_exam_subjects.id', $subjectId)))
+            ->latest('submitted_at')
+            ->get();
+
+        abort_if($registrations->isEmpty(), 404, 'No passport files found for the selected filters.');
+
+        $disk = Storage::disk('local');
+        $zipName = 'passport-files-'.now()->format('Ymd-His').'.zip';
+        $zipPath = storage_path('app/'.$zipName);
+        $zip = new ZipArchive();
+        abort_unless($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true, 500, 'Unable to create passport ZIP.');
+
+        $added = 0;
+        foreach ($registrations as $registration) {
+            if (! $registration->passport_file_path || ! $disk->exists($registration->passport_file_path)) {
+                continue;
+            }
+
+            $name = $this->safeZipName($registration->registration_number.'-'.$registration->id.'-'.($registration->passport_original_name ?: 'passport'));
+            $zip->addFile($disk->path($registration->passport_file_path), $name);
+            $registration->update([
+                'passport_last_downloaded_at' => now(),
+                'passport_last_downloaded_by' => $request->user()->id,
+            ]);
+            $added++;
+        }
+        $zip->close();
+
+        if ($added === 0) {
+            @unlink($zipPath);
+            abort(404, 'No readable passport files found for the selected filters.');
+        }
+
+        app(\App\Services\SecurityAuditService::class)->log('documents', 'passport_zip_downloaded', 'Passport ZIP downloaded.', null, [], [], [
+            'file_count' => $added,
+            'filters' => $request->query(),
+        ], 'success', $request, $request->user()->id);
+
+        return response()->download($zipPath, $zipName)->deleteFileAfterSend(true);
+    }
+
     public function print(StudentRegistration $studentRegistration): View
     {
         return view('admin.student-registrations.print', [
             'registration' => $studentRegistration->load(['contact', 'exams', 'practiceExamSelections', 'histories']),
         ]);
+    }
+
+    private function safeZipName(string $name): string
+    {
+        $name = basename(str_replace(["\r", "\n", '"', '\\'], '', $name));
+        $name = preg_replace('/[^A-Za-z0-9._ -]/', '_', $name) ?: 'passport';
+
+        return trim($name) !== '' ? $name : 'passport';
     }
 }

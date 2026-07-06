@@ -26,6 +26,7 @@ class ExportRegistrationsRequest extends FormRequest
             'receipt_status' => ['nullable', 'string', 'max:40'],
             'needs_accommodations' => ['nullable', 'boolean'],
             'accommodation_status' => ['nullable', 'string', 'max:40'],
+            'preparation_interest' => ['nullable', 'boolean'],
             'school' => ['nullable', 'string', 'max:120'],
             'format' => ['nullable', 'in:csv,xlsx,xls'],
             'template' => ['nullable', 'in:standard,tpca,school'],

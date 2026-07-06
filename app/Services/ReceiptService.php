@@ -76,6 +76,17 @@ class ReceiptService
                 'taxable_receipt_amount' => $receipt->taxable_receipt_amount,
             ]);
             app(SecurityAuditService::class)->log('receipt', 'receipt_requested', 'Receipt request saved.', $receipt, [], ['status' => $status], ['receipt_type' => $type]);
+            if ($type !== 'none') {
+                app(AdminNotificationService::class)->create(
+                    'receipt_requested',
+                    'Receipt/fapiao request received',
+                    $receipt->registration?->registration_number.' requested '.$type.' receipt handling.',
+                    'info',
+                    route('admin.receipts.show', $receipt),
+                    receipt: $receipt,
+                    payload: ['receipt_type' => $type],
+                );
+            }
 
             if ($type !== 'none') {
                 Mail::to($receipt->buyer_email)->send(new ReceiptRequestReceivedMail($receipt->load('registration')));

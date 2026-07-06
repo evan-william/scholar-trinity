@@ -65,6 +65,11 @@
                     <option value="{{ $status }}" @selected(($filters['accommodation_status'] ?? '') === $status)>{{ str_replace('_', ' ', $status) }}</option>
                 @endforeach
             </select>
+            <select name="preparation_interest">
+                <option value="">AP Prep Interest</option>
+                <option value="1" @selected(($filters['preparation_interest'] ?? '') === '1')>Interested</option>
+                <option value="0" @selected(($filters['preparation_interest'] ?? '') === '0')>Not interested</option>
+            </select>
             <select name="period">
                 <option value="">All periods</option>
                 <option value="main" @selected(($filters['period'] ?? '') === 'main')>Main</option>
@@ -83,6 +88,10 @@
                 <p>Create CSV/XLSX exports for standard, TPCA, or school templates.</p>
             </div>
             <a class="btn light" href="{{ route('admin.exports.index') }}">Export History</a>
+        </div>
+        <div class="actions" style="margin-bottom:14px">
+            <a class="btn light" href="{{ route('admin.student-registrations.passport.zip', request()->query()) }}">Download Passport ZIP</a>
+            <span class="mini">Uses the current registration filters and only includes stored private passport files.</span>
         </div>
         <form method="GET" action="{{ route('admin.student-registrations.export') }}">
             @foreach(request()->except(['format','template','include_notes','mask_passport','school']) as $key => $value)
@@ -133,7 +142,7 @@
         </div>
         <table>
             <thead>
-                <tr><th>Reference</th><th>Season</th><th>Student</th><th>Parent</th><th>Passport</th><th>School</th><th>Exams</th><th>Period</th><th>Payment</th><th>Registration</th><th>Submitted</th><th>Updated</th><th>Actions</th></tr>
+                <tr><th>Reference</th><th>Season</th><th>Student</th><th>Parent</th><th>Passport</th><th>School</th><th>Exams</th><th>AP Prep</th><th>Period</th><th>Payment</th><th>Registration</th><th>Submitted</th><th>Updated</th><th>Actions</th></tr>
             </thead>
             <tbody>
                 @forelse($registrations as $registration)
@@ -145,6 +154,7 @@
                         <td>{{ $registration->passport_number ?: '-' }}</td>
                         <td>{{ $registration->school_name }}<br><span class="muted">Grade {{ $registration->grade_level }}</span></td>
                         <td>{{ $registration->exams_count }}</td>
+                        <td>{{ $registration->preparation_interest ? 'Yes' : 'No' }}</td>
                         <td>{{ $registration->registration_period_type ? ucfirst($registration->registration_period_type) : ($registration->late_fee_total > 0 ? 'Late' : 'Main') }}</td>
                         <td><span class="status {{ $registration->payment_status }}">{{ str_replace('_', ' ', $registration->payment_status) }}</span></td>
                         <td><span class="status {{ $registration->status }}">{{ str_replace('_', ' ', $registration->status) }}</span></td>
@@ -158,7 +168,7 @@
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="13" class="muted">No registrations found.</td></tr>
+                    <tr><td colspan="14" class="muted">No registrations found.</td></tr>
                 @endforelse
             </tbody>
         </table>
