@@ -242,7 +242,7 @@
         </div>
     </section>
 
-    <section id="fees" class="course-area pt--100 pb--80">
+    <section id="fees" class="course-area pt--90 pb--40">
         <div class="container">
             <div class="row">
                 <div class="col-md-10 offset-md-1">
@@ -255,7 +255,7 @@
             </div>
             <div class="row">
                 @foreach ($displayFees as $fee)
-                    <div class="col-lg-4 col-md-6 mb-5">
+                    <div class="col-lg-3 col-md-6 mb-5">
                     <div class="card h-100">
                         <div class="card-body p-25">
                             <span class="primary-color text-uppercase d-block mb-3">{{ $fee->currency }}</span>
@@ -266,7 +266,7 @@
                     </div>
                 </div>
                 @endforeach
-                <div class="col-lg-4 col-md-6 mb-5">
+                <div class="col-lg-3 col-md-6 mb-5">
                     <div class="card h-100">
                         <div class="card-body p-25">
                             <span class="primary-color text-uppercase d-block mb-3">Estimated</span>
@@ -280,13 +280,14 @@
         </div>
     </section>
 
-    <section id="documents" class="feature-blog pt--80 pb--80">
+    <section id="documents" class="feature-blog pt--40 pb--60">
         <div class="container">
             <div class="row">
                 <div class="col-md-10 offset-md-1">
                     <div class="section-title-style2 black-title title-tb text-center">
                         <span>Required Documents</span>
                         <h2>Document Checklist</h2>
+                        <p>Prepare the core student, parent, passport, exam, and payment information before submitting the form.</p>
                     </div>
                 </div>
             </div>
@@ -306,7 +307,7 @@
         </div>
     </section>
 
-    <section id="faq" class="feature-blog pt--80 pb--80">
+    <section id="faq" class="feature-blog pt--50 pb--90">
         <div class="container">
             <div class="row">
                 <div class="col-md-10 offset-md-1">
@@ -314,15 +315,20 @@
                         <span>FAQ</span>
                         <h2 class="primary-color">Frequently Asked Questions</h2>
                     </div>
-                    @foreach ($displayFaqs as $faq)
-                        <div class="card mb-4">
+                </div>
+            </div>
+            <div class="row">
+                @foreach ($displayFaqs as $faq)
+                    <div class="col-lg-6 mb-4">
+                        <div class="card h-100">
                             <div class="card-body p-25">
+                                <i class="fa fa-question-circle primary-color mb-3"></i>
                                 <h4>{{ $faq->question }}</h4>
                                 <p>{{ $faq->answer }}</p>
                             </div>
                         </div>
-                    @endforeach
-                </div>
+                    </div>
+                @endforeach
             </div>
         </div>
     </section>

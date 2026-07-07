@@ -30,6 +30,16 @@
     <link rel="stylesheet" href="{{ asset($assetBase.'css/styles.css') }}">
     <link rel="stylesheet" href="{{ asset($assetBase.'css/responsive.css') }}">
     <script src="{{ asset($assetBase.'js/vendor/modernizr-2.8.3.min.js') }}"></script>
+    <style>
+        #header .header-bottom-right-style-2{margin-left:0}
+        #header .header-bottom-right-style-2 ul{display:flex;align-items:center;justify-content:flex-end;gap:10px;margin:0;padding:0}
+        #header .header-bottom-right-style-2 li{display:inline-flex;align-items:center}
+        #header .header-bottom-right-style-2 li a.btn{white-space:nowrap}
+        #header .language-switcher{margin:0}
+        #header .language-switcher label{display:block;margin:0}
+        #header .language-switcher select{height:47px;min-width:116px;border:1px solid #ccc;border-radius:50px;background:#fff;color:#252525;padding:0 18px;font-family:"Muli",sans-serif;font-size:14px;font-weight:700;text-transform:uppercase}
+        @media(max-width:991px){#header .header-bottom-right-style-2 ul{justify-content:flex-start;margin:12px 0}}
+    </style>
     {{ $styles ?? '' }}
     @stack('styles')
 </head>
@@ -43,32 +53,31 @@
                         <a href="{{ route('landing') }}"><img src="{{ asset($assetBase.'images/icon/logo.png') }}" alt="Trinity Scholar"></a>
                     </div>
                 </div>
-                <div class="col-lg-9 offset-lg-1 d-none d-lg-block">
+                <div class="col-lg-8 offset-lg-1 d-none d-lg-block">
                     <div class="main-menu menu-style2">
                         <nav>
                             <ul id="m_menu_active">
                                 <li class="{{ request()->routeIs('landing') ? 'active' : '' }}"><a href="{{ route('landing') }}">Home</a></li>
-                                <li><a href="{{ route('landing') }}#overview">About</a></li>
-                                <li><a href="{{ route('landing') }}#process">Courses</a></li>
-                                <li><a href="{{ route('landing') }}#timeline">Teacher</a></li>
+                                <li><a href="{{ route('landing') }}#overview">Program</a></li>
+                                <li><a href="{{ route('landing') }}#timeline">Timeline</a></li>
                                 <li class="middle-logo">
                                     <a href="{{ route('landing') }}">
                                         <img src="{{ asset($assetBase.'images/icon/logo-middle.png') }}" alt="Trinity Scholar">
                                         <img class="hb-bottom-shape" src="{{ asset($assetBase.'images/icon/hb-bottom-shape.png') }}" alt="">
                                     </a>
                                 </li>
-                                <li><a href="{{ route('landing') }}#fees">Events</a></li>
-                                <li><a href="{{ route('landing') }}#faq">Blog</a></li>
+                                <li><a href="{{ route('landing') }}#fees">Fees</a></li>
+                                <li><a href="{{ route('landing') }}#faq">FAQ</a></li>
                                 <li><a href="{{ route('landing') }}#contact">Contact</a></li>
                             </ul>
                         </nav>
                     </div>
                 </div>
-                <div class="col-lg-2 col-sm-5">
+                <div class="col-lg-3 col-sm-5">
                     <div class="header-bottom-right-style-2">
                         <ul>
-                            <li><a class="btn btn-light btn-round" href="{{ route('landing') }}#process">Form Info</a></li>
-                            <li><a class="btn btn-primary btn-round" href="{{ route('student-registrations.create') }}">Start Form</a></li>
+                            <li><x-language-switcher /></li>
+                            <li><a class="btn btn-primary btn-round {{ request()->routeIs('student-registrations.create') ? 'active' : '' }}" href="{{ route('student-registrations.create') }}">Start Form</a></li>
                         </ul>
                     </div>
                 </div>

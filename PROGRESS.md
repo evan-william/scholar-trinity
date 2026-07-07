@@ -62,6 +62,13 @@ Current local template pass:
 ## Current Progress
 
 2026-07-07
+- Public header and landing layout correction:
+  - Added the real Laravel language switcher to the shared public landing header, backed by the existing `/locale/{locale}` route, session, and cookie flow.
+  - Changed the shared public header to a single consistent nav set: `Home`, `Program`, `Timeline`, middle logo, `Fees`, `FAQ`, `Contact`, plus language switcher and `Start Form`.
+  - Fixed the home header right-side overlap by replacing the stacked `Form Info` / `Start Form` buttons with language selector + one primary `Start Form` CTA.
+  - Matched the student registration header to the same public header structure so the form page no longer has a different top navigation from the home page.
+  - Adjusted the registration page fixed-header spacing by removing the header wrap/height mismatch that could cover the first form intro line.
+  - Reduced the gap between fee and document sections, changed the fee total card into the same row as the fee cards, and rebuilt FAQ as a two-column card grid.
 - Public landing content fallback fix:
   - Added Blade-level fallback content for fee explanation, required documents, and FAQ so the live landing page no longer renders empty sections when the server database has not been seeded yet.
   - Fee section now shows AP Exam Fee, Trinity Service Fee, Late Registration Fee, and Base Total instead of only a single Base Total card.
@@ -568,8 +575,8 @@ These items come directly from `Reference/Trinity Scholar - Features.pdf` and we
   - `PARTIAL`: English and Traditional Chinese files exist.
   - DONE: admin shell navigation/top actions and newly converted admin management pages use shared bilingual keys.
   - DONE: admin language key audit confirms all used `admin.*` translation keys exist in both English and Traditional Chinese files.
+  - DONE: language switcher is now visible on landing, student registration, and admin headers; it uses the Laravel locale route/session/cookie flow.
   - TODO: remove hardcoded text from Blade pages.
-  - TODO: make language switch consistent across landing/register/admin where required.
 
 - Form UX:
   - `PARTIAL`: mobile, progress, validation, confirmation exist.

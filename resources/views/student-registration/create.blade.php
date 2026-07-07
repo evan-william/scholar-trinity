@@ -115,12 +115,15 @@
         #header .menu-style2.main-menu nav>ul>li>a{color:#151515;padding:54px 17px;position:relative}
         #header .menu-style2.main-menu nav ul li.middle-logo a{padding:0;transform:translateY(5px)}
         #header .middle-logo img:first-child{max-width:none}
-        #header .header-bottom-right-style-2{margin-left:-41px;text-align:right}
-        #header .header-bottom-right-style-2 ul{display:block;margin:0;padding:0}
-        #header .header-bottom-right-style-2 li{display:inline-block}
-        #header .header-bottom-right-style-2 li a.btn{padding:12px 20px;line-height:26px;border-radius:50px;text-transform:none;font-family:"Muli",sans-serif}
+        #header .header-bottom-right-style-2{margin-left:0;text-align:right}
+        #header .header-bottom-right-style-2 ul{display:flex;align-items:center;justify-content:flex-end;gap:10px;margin:0;padding:0}
+        #header .header-bottom-right-style-2 li{display:inline-flex;align-items:center}
+        #header .header-bottom-right-style-2 li a.btn{padding:12px 20px;line-height:26px;border-radius:50px;text-transform:uppercase;font-family:"Muli",sans-serif;white-space:nowrap}
         #header .header-bottom-right-style-2 li a.btn-primary{background:#fc9928!important;border-color:#fc9928!important;color:#fff!important}
         #header .header-bottom-right-style-2 li a.btn-light{background:#fff!important;color:#252525!important;border:1px solid #ccc!important}
+        #header .language-switcher{margin:0}
+        #header .language-switcher label{display:block;margin:0}
+        #header .language-switcher select{height:47px;min-width:116px;border:1px solid #ccc;border-radius:50px;background:#fff;color:#252525;padding:0 18px;font-family:"Muli",sans-serif;font-size:14px;font-weight:700;text-transform:uppercase}
         #header .main-menu nav ul li a:before{top:calc(50% - 1px)}
         .progress-wrap{margin-top:104px}
         footer .footer-top{padding-top:120px}
@@ -138,7 +141,7 @@
                         <a href="{{ route('landing') }}"><img src="{{ asset('theme/edification/images/icon/logo.png') }}" alt="Trinity Scholar"></a>
                     </div>
                 </div>
-                <div class="col-lg-9 offset-lg-1 d-none d-lg-block">
+                <div class="col-lg-8 offset-lg-1 d-none d-lg-block">
                     <div class="main-menu menu-style2">
                         <nav>
                             <ul id="m_menu_active">
@@ -153,16 +156,16 @@
                                 </li>
                                 <li><a href="{{ route('landing') }}#fees">Fees</a></li>
                                 <li><a href="{{ route('landing') }}#faq">FAQ</a></li>
-                                <li class="active"><a href="{{ route('student-registrations.create') }}">Register</a></li>
+                                <li><a href="{{ route('landing') }}#contact">Contact</a></li>
                             </ul>
                         </nav>
                     </div>
                 </div>
-                <div class="col-lg-2 col-sm-5">
+                <div class="col-lg-3 col-sm-5">
                     <div class="header-bottom-right-style-2">
                         <ul>
                             <li><x-language-switcher /></li>
-                            <li><a class="btn btn-primary btn-round" href="{{ route('landing') }}">Home</a></li>
+                            <li><a class="btn btn-primary btn-round active" href="{{ route('student-registrations.create') }}">Start Form</a></li>
                         </ul>
                     </div>
                 </div>
