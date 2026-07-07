@@ -10,7 +10,7 @@
         .header{background:var(--primary);color:#fff;padding:14px 24px}.head-inner{max-width:920px;margin:0 auto;display:flex;align-items:center;gap:16px;flex-wrap:wrap}.header-logos{display:flex;align-items:center;gap:12px}.logo-pill{background:#fff;color:var(--primary);font-size:10px;font-weight:800;padding:6px 10px;border-radius:6px;line-height:1.3;text-align:center;letter-spacing:.3px}.logo-divider{width:1px;height:36px;background:rgba(255,255,255,.25)}.header-title{flex:1;min-width:220px}.header-title h1{font-size:16px;font-weight:700;line-height:1.35;margin:0}.header-title p{font-size:11px;opacity:.76;margin:2px 0 0}.header-badge{background:var(--accent);color:#4b3200;padding:5px 14px;border-radius:20px;font-size:12px;font-weight:800;white-space:nowrap}.header-actions{display:flex;gap:10px;align-items:center}
         .progress-wrap{background:#fff;border-bottom:1px solid var(--gray-200);padding:0 16px;overflow-x:auto}.progress-steps{display:flex;min-width:max-content;max-width:840px;margin:0 auto}.step-item{flex:1;display:flex;flex-direction:column;align-items:center;padding:14px 6px;position:relative;min-width:118px}.step-item:not(:last-child)::after{content:"";position:absolute;top:28px;left:calc(50% + 17px);right:calc(-50% + 17px);height:2px;background:var(--gray-200)}.step-item.completed:not(:last-child)::after{background:var(--primary)}.step-circle{width:30px;height:30px;border-radius:50%;border:2px solid var(--gray-400);background:#fff;color:var(--gray-600);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;z-index:1}.step-item.active .step-circle,.step-item.completed .step-circle{border-color:var(--primary);background:var(--primary);color:#fff}.step-label{margin-top:5px;font-size:10px;text-align:center;color:var(--gray-600);line-height:1.3}.step-item.active .step-label{color:var(--primary);font-weight:700}
         .main{max-width:760px;margin:0 auto;padding:24px 16px 108px}.card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:26px 24px;margin-bottom:16px}.section-title{font-size:17px;font-weight:800;color:var(--primary);border-bottom:2px solid var(--accent);padding-bottom:9px;margin-bottom:20px}.section-title span{display:block;font-size:12px;font-weight:400;color:var(--gray-600);margin-top:2px}.row{display:grid;gap:14px;margin-bottom:14px}.row-2{grid-template-columns:1fr 1fr}.row-3{grid-template-columns:1fr 1fr .55fr}.row-1{grid-template-columns:1fr}.fg{display:flex;flex-direction:column;gap:5px}.fg.span2{grid-column:1/-1}.lbl{font-size:13px;font-weight:700;color:var(--gray-800)}.lbl .zh{display:block;font-size:11px;font-weight:400;color:var(--gray-600)}.req{color:var(--danger);margin-left:2px}
-        input[type=text],input[type=email],input[type=tel],input[type=search],input[type=file],select,textarea{border:1.5px solid var(--gray-400);border-radius:6px;padding:9px 12px;font:inherit;font-size:14px;color:var(--gray-800);background:#fff;width:100%}input:focus,select:focus,textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(26,58,107,.1)}input[aria-invalid=true],select[aria-invalid=true],textarea[aria-invalid=true]{border-color:var(--danger);background:#fffafa}.hint{font-size:11px;color:var(--gray-600);margin-top:3px}.error{color:var(--danger);font-size:12px}.error-box{background:#fff0ee;border:1px solid #ffc9c4;color:var(--danger);padding:12px 14px;border-radius:8px;margin-bottom:14px}.hidden{display:none!important}
+        input:not([type]),input[type=text],input[type=email],input[type=tel],input[type=search],input[type=file],select,textarea{border:1.5px solid var(--gray-400);border-radius:6px;padding:9px 12px;font:inherit;font-size:14px;color:var(--gray-800);background:#fff;width:100%}input:focus,select:focus,textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(26,58,107,.1)}input[aria-invalid=true],select[aria-invalid=true],textarea[aria-invalid=true]{border-color:var(--danger);background:#fffafa}.hint{font-size:11px;color:var(--gray-600);margin-top:3px}.error{color:var(--danger);font-size:12px}.error-box{background:#fff0ee;border:1px solid #ffc9c4;color:var(--danger);padding:12px 14px;border-radius:8px;margin-bottom:14px}.hidden{display:none!important}
         .upload-area{border:2px dashed var(--gray-400);border-radius:var(--radius);padding:22px 16px;text-align:center;cursor:pointer;background:var(--gray-50);position:relative}.upload-area:hover{border-color:var(--primary);background:rgba(26,58,107,.03)}.upload-area input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;height:100%}.upload-icon{font-size:30px;margin-bottom:6px}.upload-text{font-size:13px;color:var(--gray-600)}.upload-text strong{color:var(--primary)}.upload-sub{font-size:11px;color:var(--gray-600);margin-top:3px}.upload-selected{margin-top:8px;font-size:13px;color:var(--success);font-weight:700}
         .notice{background:#fff8e1;border:1px solid #f0c040;border-left:4px solid var(--accent);border-radius:var(--radius);padding:14px 16px;margin-bottom:18px}.notice h4{font-size:13px;font-weight:800;color:#745300;margin:0 0 7px}.notice p,.notice li{font-size:12px;color:#5a4000;line-height:1.65}.notice ul{padding-left:16px;margin:0}
         .exam-sticky{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid var(--gray-200);padding:10px 0;margin:0 0 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}.sel-badge{display:inline-flex;align-items:center;gap:6px;background:var(--primary);color:#fff;padding:4px 13px;border-radius:20px;font-size:12px;font-weight:800}.price-preview{font-size:14px;font-weight:900;color:var(--primary)}.filters{display:grid;grid-template-columns:1fr 220px;gap:10px;margin-bottom:14px}.cat-title{font-size:13px;font-weight:900;color:var(--primary);margin:18px 0 8px;padding-bottom:5px;border-bottom:1px solid var(--gray-200)}.exam-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.exam-cb{display:flex;align-items:flex-start;gap:10px;border:1.5px solid var(--gray-200);border-radius:8px;padding:10px 11px;cursor:pointer;background:#fff;min-height:58px}.exam-cb.checked{border-color:var(--primary);background:rgba(26,58,107,.05)}.exam-cb.disabled{opacity:.58;cursor:not-allowed;background:#f8fafc}.exam-cb input{width:16px;height:16px;min-height:auto;margin-top:2px;accent-color:var(--primary)}.exam-name{font-size:13px;font-weight:800;color:var(--gray-800);line-height:1.35}.exam-sub{font-size:11px;color:var(--gray-600);line-height:1.4}.exam-price-tag{margin-left:auto;font-size:12px;font-weight:900;color:var(--primary);white-space:nowrap}.price-box{background:var(--gray-50);border:1px solid var(--gray-200);border-radius:8px;padding:14px;margin-top:16px}.price-row{display:flex;justify-content:space-between;gap:12px;padding:5px 0;font-size:13px}.price-row.total{border-top:2px solid var(--primary);margin-top:8px;padding-top:10px;color:var(--primary);font-weight:900;font-size:16px}
@@ -18,12 +18,15 @@
         .nav-footer{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--gray-200);box-shadow:0 -2px 14px rgba(0,0,0,.06);padding:12px 18px;display:flex;align-items:center;justify-content:center;gap:18px;z-index:50}.btn{border:0;border-radius:6px;padding:11px 20px;font:inherit;font-size:14px;font-weight:900;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-light)}.btn-outline{background:#fff;color:var(--primary);border:1.5px solid var(--gray-400)}.btn-success{background:var(--success);color:#fff}.step-ind{font-size:12px;color:var(--gray-600);min-width:92px;text-align:center}.loading{opacity:.65;pointer-events:none}.toast{position:fixed;left:50%;bottom:82px;transform:translateX(-50%);z-index:80;max-width:min(520px,calc(100vw - 28px));background:#fff;border:1px solid #ffc9c4;border-left:5px solid var(--danger);box-shadow:0 12px 34px rgba(0,0,0,.16);border-radius:8px;padding:12px 16px;color:var(--danger);font-size:13px;font-weight:800;line-height:1.45}.toast.success{border-color:#b9e2ce;border-left-color:var(--success);color:var(--success)}
         @media(max-width:640px){.main{padding-inline:12px}.card{padding:20px 16px}.row-2,.row-3,.filters,.exam-grid,.sig-area{grid-template-columns:1fr}.header{padding-inline:16px}.header-actions{width:100%;justify-content:space-between}.nav-footer{justify-content:space-between;gap:10px}.btn{padding:10px 14px}.step-item{min-width:92px}}
         .main{max-width:900px}
-        .form-intro{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:22px;align-items:center;border-top:4px solid var(--accent);overflow:hidden}
+        .form-intro{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:22px;align-items:center;border-top:4px solid var(--accent);overflow:hidden}
         .form-intro h2{font-size:24px;line-height:1.2;color:var(--primary);margin:10px 0 8px}
         .form-intro p{font-size:14px;line-height:1.65;color:var(--gray-600);margin:0 0 12px}
         .intro-list{margin:0;padding-left:18px;color:var(--gray-800);font-size:13px;line-height:1.65}
-        .intro-poster{width:100%;border:1px solid var(--gray-200);border-radius:6px}
-        @media(max-width:640px){.form-intro{grid-template-columns:1fr}.intro-poster{max-width:320px}}
+        .intro-summary{border:1px solid #dbe6f3;border-radius:12px;background:#f7fbff;padding:16px}
+        .intro-summary strong{display:block;color:var(--primary);font-size:28px;line-height:1;margin-bottom:6px}
+        .intro-summary span{display:block;color:#6b4700;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
+        .intro-summary p{font-size:13px;margin:0;color:var(--gray-800)}
+        @media(max-width:640px){.form-intro{grid-template-columns:1fr}}
         /* Current visual pass: softer registration form styling per client feedback. */
         body{background:#eef4fb}
         .header{background:linear-gradient(90deg,#102d52,#1d477d);box-shadow:0 12px 34px rgba(16,45,82,.16)}
@@ -49,8 +52,8 @@
         .fg{gap:7px}
         .lbl{font-size:12px;text-transform:none;letter-spacing:0;color:#263850}
         .lbl .zh{font-size:11px;margin-top:2px;color:#708197}
-        input[type=text],input[type=email],input[type=tel],input[type=search],input[type=date],select,textarea{min-height:44px;border:1.5px solid #d8e4f2;border-radius:8px;padding:11px 13px;background:#f3f7fd;color:#1f2a37;box-shadow:inset 0 1px 0 rgba(255,255,255,.72);transition:border-color .15s ease,box-shadow .15s ease,background .15s ease}
-        input[type=text]:hover,input[type=email]:hover,input[type=tel]:hover,input[type=search]:hover,input[type=date]:hover,select:hover,textarea:hover{background:#eef5ff;border-color:#c9d8ea}
+        input:not([type]),input[type=text],input[type=email],input[type=tel],input[type=search],input[type=date],select,textarea{min-height:44px;border:1.5px solid #d8e4f2;border-radius:8px;padding:11px 13px;background:#f3f7fd;color:#1f2a37;box-shadow:inset 0 1px 0 rgba(255,255,255,.72);transition:border-color .15s ease,box-shadow .15s ease,background .15s ease}
+        input:not([type]):hover,input[type=text]:hover,input[type=email]:hover,input[type=tel]:hover,input[type=search]:hover,input[type=date]:hover,select:hover,textarea:hover{background:#eef5ff;border-color:#c9d8ea}
         input:focus,select:focus,textarea:focus{background:#fff;border-color:#6f96c9;box-shadow:0 0 0 3px rgba(42,82,152,.13),0 8px 22px rgba(26,58,107,.08)}
         input[aria-invalid=true],select[aria-invalid=true],textarea[aria-invalid=true]{border-color:var(--danger);background:#fff7f6;box-shadow:0 0 0 3px rgba(180,35,24,.08)}
         .hint{font-size:12px}
@@ -61,13 +64,22 @@
         .exam-cb,.pay-opt,.sig-box,.price-box,.next-steps{border-radius:12px}
         .exam-cb{border-color:#dbe6f3;background:#f9fbff}
         .exam-cb.checked,.pay-opt.selected{border-color:#6f96c9;background:#eef5ff;box-shadow:0 8px 20px rgba(26,58,107,.08)}
+        .rev-section{border:1px solid #dbe6f3;border-radius:12px;background:#f7fbff;padding:16px;margin-bottom:14px;overflow:hidden}
+        .rev-section h3{font-size:14px;color:var(--primary);margin:0 0 12px}
+        .rev-table{border-collapse:separate;border-spacing:0;width:100%;overflow:hidden;border-radius:10px;border:1px solid #dbe6f3;background:#fff}
+        .rev-table tr:nth-child(odd){background:#f1f7ff}
+        .rev-table tr:nth-child(even){background:#fbfdff}
+        .rev-table td{border-bottom:1px solid #dbe6f3;padding:10px 12px;font-size:13px;vertical-align:top}
+        .rev-table tr:last-child td{border-bottom:0}
+        .rev-table td:first-child{width:38%;color:#375476;font-weight:800;background:rgba(219,230,243,.42);padding-right:12px}
+        .rev-table td:last-child{color:#1f2a37;font-weight:700}
         .btn{border-radius:8px}
         .nav-footer{border-top:1px solid #dbe6f3;box-shadow:0 -12px 34px rgba(26,58,107,.12)}
-        .form-intro{border:1px solid #dfe8f4;border-top:0;background:linear-gradient(135deg,#fff,#f3f7fd);grid-template-columns:minmax(0,1fr) 260px}
+        .form-intro{border:1px solid #dfe8f4;border-top:0;background:linear-gradient(135deg,#fff,#f3f7fd);grid-template-columns:minmax(0,1fr) 280px}
         .form-intro h2{font-size:28px}
-        .intro-poster{border-radius:10px;background:#102d52;padding:6px;border:0;box-shadow:0 14px 34px rgba(16,45,82,.18)}
+        .intro-summary{box-shadow:0 14px 34px rgba(16,45,82,.1)}
         .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-        @media(max-width:640px){.main{padding-top:18px}.header-title{min-width:180px}.brand-copy{display:none}.form-intro{grid-template-columns:1fr}.intro-poster{max-width:360px}}
+        @media(max-width:640px){.main{padding-top:18px}.header-title{min-width:180px}.brand-copy{display:none}.form-intro{grid-template-columns:1fr}}
     </style>
 </head>
 <body>
@@ -113,12 +125,17 @@
             <h2 id="registration-intro-title">2026 AP Exam Registration</h2>
             <p>Students can submit registration details, passport upload, exam selections, accommodations, and payment method in one guided flow.</p>
             <ul class="intro-list">
-                <li>Late registration deadline shown in the announcement: February 10, 2026.</li>
+                <li>Late registration deadline: February 10, 2026.</li>
                 <li>Registration is complete only after the form and payment are received.</li>
-                <li>Some Taipei test-center subjects may already be full; final availability is confirmed by the admin team.</li>
+                <li>AP Chinese, AP Calculus, and AP Macro/Micro are marked full in the shared Taipei test-center notice.</li>
+                <li>Final subject availability is confirmed by the admin team after submission.</li>
             </ul>
         </div>
-        <img class="intro-poster" src="{{ asset('images/ap-late-registration-2026.jpeg') }}" alt="2026 AP Exam late registration announcement">
+        <aside class="intro-summary" aria-label="Late registration summary">
+            <span>Late Registration</span>
+            <strong>Feb. 10</strong>
+            <p>Extra late registration fees may apply. Submit early because registration can close before the deadline when seats are full.</p>
+        </aside>
     </section>
 
     <form id="studentForm" method="POST" action="{{ route('student-registrations.store') }}" enctype="multipart/form-data">
@@ -152,7 +169,7 @@
                 <input type="hidden" name="school_country" value="{{ old('school_country', 'Taiwan') }}">
                 <div class="row row-2">
                     <div class="fg"><label class="lbl">Student Email <span class="req">*</span><span class="zh">學生電子郵件</span></label><input type="email" name="student_email" value="{{ old('student_email') }}" placeholder="student@example.com" required @error('student_email') aria-invalid="true" @enderror>@error('student_email')<span class="error">{{ $message }}</span>@enderror</div>
-                    <div class="fg"><label class="lbl">Student Phone <span class="req">*</span><span class="zh">學生電話</span></label><input type="tel" name="student_phone" value="{{ old('student_phone') }}" placeholder="0912345678" required></div>
+                    <div class="fg"><label class="lbl">Student Phone <span class="req">*</span><span class="zh">學生電話</span></label><input type="tel" name="student_phone" value="{{ old('student_phone') }}" placeholder="0912345678" inputmode="numeric" pattern="[0-9]{6,20}" maxlength="20" data-numeric="digits" data-numeric-label="Student Phone" required></div>
                 </div>
                 <div class="row row-1">
                     <div class="fg">
@@ -183,13 +200,13 @@
                 <div class="section-title">Parent / Guardian Information <span>家長 / 監護人資料</span></div>
                 <div class="row row-2"><div class="fg"><label class="lbl">Parent First Name <span class="req">*</span><span class="zh">家長名字</span></label><input name="parent_first_name" value="{{ old('parent_first_name') }}" required></div><div class="fg"><label class="lbl">Parent Last Name <span class="req">*</span><span class="zh">家長姓氏</span></label><input name="parent_last_name" value="{{ old('parent_last_name') }}" required></div></div>
                 <div class="row row-1"><div class="fg"><label class="lbl">Relationship to Student <span class="req">*</span><span class="zh">與學生關係</span></label><input name="relationship" value="{{ old('relationship') }}" placeholder="Mother, Father, Guardian" required></div></div>
-                <div class="row row-2"><div class="fg"><label class="lbl">Parent Email <span class="req">*</span><span class="zh">家長電子郵件</span></label><input type="email" name="parent_email" value="{{ old('parent_email') }}" required></div><div class="fg"><label class="lbl">Parent Phone <span class="req">*</span><span class="zh">家長電話</span></label><input type="tel" name="parent_phone" value="{{ old('parent_phone') }}" required></div></div>
+                <div class="row row-2"><div class="fg"><label class="lbl">Parent Email <span class="req">*</span><span class="zh">家長電子郵件</span></label><input type="email" name="parent_email" value="{{ old('parent_email') }}" required></div><div class="fg"><label class="lbl">Parent Phone <span class="req">*</span><span class="zh">家長電話</span></label><input type="tel" name="parent_phone" value="{{ old('parent_phone') }}" inputmode="numeric" pattern="[0-9]{6,20}" maxlength="20" data-numeric="digits" data-numeric-label="Parent Phone" required></div></div>
                 <div class="row row-1"><div class="fg"><label class="lbl">Mailing Address <span class="req">*</span><span class="zh">通訊地址</span></label><input name="mailing_address" value="{{ old('mailing_address') }}" required></div></div>
-                <div class="row row-2"><div class="fg"><label class="lbl">City / District <span class="req">*</span><span class="zh">城市 / 區域</span></label><input name="mailing_city" value="{{ old('mailing_city') }}" required></div><div class="fg"><label class="lbl">Postal Code <span class="zh">郵遞區號</span></label><input name="postal_code" value="{{ old('postal_code') }}" maxlength="12"></div></div>
+                <div class="row row-2"><div class="fg"><label class="lbl">City / District <span class="req">*</span><span class="zh">城市 / 區域</span></label><input name="mailing_city" value="{{ old('mailing_city') }}" required></div><div class="fg"><label class="lbl">Postal Code <span class="zh">郵遞區號</span></label><input name="postal_code" value="{{ old('postal_code') }}" inputmode="numeric" pattern="[0-9]{3,12}" maxlength="12" data-numeric="digits" data-numeric-label="Postal Code"></div></div>
             </div>
             <div class="card">
                 <div class="section-title">Emergency Contact <span>緊急聯絡人</span></div>
-                <div class="row row-2"><div class="fg"><label class="lbl">Name <span class="req">*</span><span class="zh">姓名</span></label><input name="emergency_contact_name" value="{{ old('emergency_contact_name') }}" required></div><div class="fg"><label class="lbl">Phone <span class="req">*</span><span class="zh">電話</span></label><input type="tel" name="emergency_contact_phone" value="{{ old('emergency_contact_phone') }}" required></div></div>
+                <div class="row row-2"><div class="fg"><label class="lbl">Name <span class="req">*</span><span class="zh">姓名</span></label><input name="emergency_contact_name" value="{{ old('emergency_contact_name') }}" required></div><div class="fg"><label class="lbl">Phone <span class="req">*</span><span class="zh">電話</span></label><input type="tel" name="emergency_contact_phone" value="{{ old('emergency_contact_phone') }}" inputmode="numeric" pattern="[0-9]{6,20}" maxlength="20" data-numeric="digits" data-numeric-label="Emergency Contact Phone" required></div></div>
                 <div class="row row-1"><div class="fg"><label class="lbl">Emergency Contact Relationship <span class="req">*</span><span class="zh">緊急聯絡人關係</span></label><input name="emergency_contact_relationship" value="{{ old('emergency_contact_relationship') }}" placeholder="Father, Mother, Guardian" required></div></div>
             </div>
         </section>
@@ -452,9 +469,26 @@
         window.scrollTo({top:0, behavior:'smooth'});
     }
 
+    function validateNumericField(input) {
+        if (!input.dataset.numeric) return true;
+
+        input.value = input.value.replace(/\D/g, '');
+        input.setCustomValidity('');
+
+        if (input.value && !input.checkValidity()) {
+            const label = input.dataset.numericLabel || input.name;
+            input.setCustomValidity(`${label} must contain numbers only and use the required length.`);
+            return false;
+        }
+
+        return true;
+    }
+
     function validateStep() {
         const section = document.querySelector(`[data-step="${cur}"]`);
-        for (const input of section.querySelectorAll('[required]')) {
+        for (const input of section.querySelectorAll('input, select, textarea')) {
+            validateNumericField(input);
+
             if (!input.checkValidity()) {
                 input.reportValidity();
                 return false;
@@ -607,6 +641,15 @@
     document.getElementById('btnBack').addEventListener('click', () => {
         setStep(Math.max(1, cur - 1));
         saveFormDraft();
+    });
+    form.querySelectorAll('[data-numeric="digits"]').forEach(input => {
+        input.addEventListener('input', () => {
+            const cursor = input.selectionStart;
+            const before = input.value;
+            input.value = input.value.replace(/\D/g, '');
+            if (before !== input.value && cursor !== null) input.setSelectionRange(Math.max(0, cursor - 1), Math.max(0, cursor - 1));
+            input.setCustomValidity('');
+        });
     });
     form.addEventListener('input', saveFormDraft);
     form.addEventListener('change', saveFormDraft);

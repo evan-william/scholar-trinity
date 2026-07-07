@@ -2,6 +2,8 @@
 
 Run these on the server from the project directory after pulling the intended commit.
 
+For first-time upload choices, GitHub pull vs zip upload, and DB explanation, see `SERVER_UPLOAD_GUIDE.md`.
+
 ```bash
 cp .env.production.example .env
 php artisan key:generate

@@ -1,6 +1,6 @@
 # Trinity Scholar Progress Tracker
 
-Last updated: 2026-07-06, Asia/Bangkok
+Last updated: 2026-07-07, Asia/Bangkok
 
 This file is the working source of truth for project status. Every implementation pass must update:
 - `Current Progress` for what changed.
@@ -54,12 +54,26 @@ Template decision still pending. For tomorrow's update, prioritize a clean compr
 Current local template pass:
 - Frontend/compro selected for now: local Edification education template from `template-source/frontend/edification-main.zip`.
 - Frontend assets now live in `public/theme/edification/` with the original MIT license retained.
-- AP announcement image now lives in `public/images/ap-late-registration-2026.jpeg`.
+- AP announcement image remains in `public/images/ap-late-registration-2026.jpeg` as source/reference material only; current landing and registration pages use extracted text content instead of displaying the poster image.
 - Backend/admin source reviewed: `template-source/backend/filament-4.x.zip` is Filament framework/package source, not a drop-in admin HTML theme. Do not copy it into the app raw. Install/evaluate Filament later through Composer after PHP/Composer are available and admin redesign is approved.
 - Backend/admin current template pass: custom Blade `admin-shell` is being used as the temporary admin dashboard template until a final AdminLTE/Filament/Envato decision is approved.
 - Raw downloaded templates are ignored through `template-source/` in `.gitignore`.
 
 ## Current Progress
+
+2026-07-07
+- Client content correction pass:
+  - Removed the pasted AP announcement image from the landing hero and student registration intro.
+  - Converted the announcement into proper web content: late registration deadline, Taipei test-center support, extra late-fee warning, seat-full warning, full-subject notice, completion rule, and admin-confirmation rule.
+  - Preserved Ricky's latest registration form changes: numeric phone/postal input handling, no-type input styling, review table styling, and validation behavior.
+  - Removed the empty ignored `.agents` folder from the repo root.
+- Latest requirement re-check:
+  - Re-read `Reference/Trinity Scholar - Features.pdf`; it still maps to the 7-page checklist already tracked in this file.
+  - Re-read the Word feature breakdown; landing information page requires program overview, AP registration explanation, timeline, fees, required documents, FAQ, contact, and Register Now CTA.
+  - Confirmed the poster content belongs under Landing Website > Announcement Banner / Program Information and Student Registration intro guidance, not as a raw image block.
+- Deployment support:
+  - Added `SERVER_UPLOAD_GUIDE.md` explaining GitHub-pull deployment, zip-upload fallback, package reinstall, DB credential creation, `.env` handling, port `3014`, and smoke tests.
+  - Linked the new upload guide from `DEPLOYMENT.md` and `DEPLOY_COMMANDS.md`.
 
 2026-07-06
 - New PDF checklist audit:
@@ -100,7 +114,7 @@ Legend:
 | Landing Website | Registration Timeline | DONE | Landing timeline model/seeder/view exists. |
 | Landing Website | FAQ | DONE | Landing FAQ model/seeder/view exists. |
 | Landing Website | Contact Information | DONE | Landing contact model/seeder/view exists. |
-| Landing Website | Announcement Banner | DONE | Landing page uses announcement/poster/status content. |
+| Landing Website | Announcement Banner | DONE | Landing page uses extracted announcement text, deadline, full-subject status, and completion rules. |
 | Student Registration | Student Information | DONE | `student_registrations` fields, form, request validation, service persistence. |
 | Student Registration | Parent / Guardian Information | DONE | `RegistrationContact`, form fields, persistence, admin display/export. |
 | Student Registration | Address Information | DONE | Mailing address/city/district/postal code stored in contact record. |
@@ -208,8 +222,7 @@ Legend:
   - Polished the no-login student registration form without changing Ricky's flow logic.
   - Updated registration form inputs/selects/textareas to use softer filled fields, rounded corners, clearer hover/focus/invalid states, and card spacing closer to the client-highlighted textbox style.
   - Cleaned the registration header placeholder branding from generic AP/FORM pills to a Trinity Scholar/AP Registration placeholder that can later be replaced by real logos.
-  - Improved the registration intro poster treatment so the provided AP announcement looks more like an intended poster, not a plain white placeholder.
-  - Updated the landing hero poster panel from a white card to a dark/glass poster frame and changed the caption to `Official announcement poster`.
+  - Superseded on 2026-07-07: the provided AP announcement is no longer displayed as a poster image in the UI; its content is now extracted into normal web copy.
   - Simplified the landing brand mark to `TS` so the top logo area is less placeholder-heavy until official logo assets arrive.
 - Word requirement re-audit:
   - Re-read `Reference/Trinity Scholar - Features.docx` and matched the current code against all phases/modules.
@@ -233,10 +246,10 @@ Legend:
 2026-07-03
 - Frontend template integration:
   - Integrated the Edification education template assets into `public/theme/edification/`.
-  - Added the supplied 2026 AP late registration announcement poster to `public/images/ap-late-registration-2026.jpeg`.
-  - Rebuilt the public landing/compro page with an education-style hero, poster panel, quick facts, AP late registration announcement copy, overview cards, process, timeline, fees, required documents, FAQ, contact, privacy, and registration CTA.
+  - Added the supplied 2026 AP late registration announcement image to `public/images/ap-late-registration-2026.jpeg` as source/reference material.
+  - Rebuilt the public landing/compro page with an education-style hero, quick facts, AP late registration announcement copy, overview cards, process, timeline, fees, required documents, FAQ, contact, privacy, and registration CTA.
   - Kept backend-managed landing content (`hero`, `overview`, `process`, `fees`, `documents`, `faqs`, `contact`, `privacy`) rendering inside the new layout.
-  - Added a poster/context intro card above the no-login student registration form.
+  - Added a context intro card above the no-login student registration form.
 - Template source hygiene:
   - Added `template-source/` to `.gitignore` so raw zip/template downloads are not accidentally committed.
   - Preserved the Edification MIT license in the copied public asset folder.
@@ -373,9 +386,9 @@ These items come directly from `Reference/Trinity Scholar - Features.pdf` and we
   - Contact info.
   - Register Now CTA.
   - DONE: Edification template assets are integrated for the current compro pass.
-  - DONE: public landing page now uses the supplied AP announcement poster and education-style visual layout.
+  - DONE: public landing page now uses extracted AP announcement content and education-style visual layout.
   - DONE: temporary landing content/module already exists and CTA now points to `/student-registration`.
-  - TODO: final client content review once Trinity sends official copy beyond the poster/site reference.
+  - TODO: final client content review once Trinity sends official copy beyond the announcement/site reference.
   - TODO: replace/expand visual assets if the team approves a different premium template.
 
 - Polish registration form:
@@ -383,7 +396,7 @@ These items come directly from `Reference/Trinity Scholar - Features.pdf` and we
   - Clean visual design to match chosen template.
   - Make required fields obvious.
   - Confirm mobile layout.
-  - DONE: added no-login AP registration intro with poster/deadline/payment-completion reminders.
+  - DONE: added no-login AP registration intro with deadline/payment-completion reminders.
   - DONE: pre-submit review now includes the newly required fields and accommodations summary.
   - DONE: textbox/input style now has the softer filled look requested in the client screenshot.
   - DONE: Ricky's validation-step return, autosave, passport draft upload, and toast improvements were reviewed and preserved.
@@ -400,7 +413,7 @@ These items come directly from `Reference/Trinity Scholar - Features.pdf` and we
 - Landing / Information Page:
   - `PARTIAL`: Edification-styled page exists and still supports backend-managed content.
   - DONE: CTA no longer points to legacy `/register`.
-  - DONE: current homepage/compro layout implemented with template assets and poster content.
+  - DONE: current homepage/compro layout implemented with template assets and extracted announcement content.
   - TODO: final content approval and image replacement if client provides more assets.
   - TODO: verify bilingual content.
 
@@ -408,7 +421,7 @@ These items come directly from `Reference/Trinity Scholar - Features.pdf` and we
   - `PARTIAL`: form and backend exist.
   - DONE: important hidden/missing data persistence fixed.
   - DONE: review step now includes DOB, nationality, passport number, relationship, emergency contact, and accommodations.
-  - DONE: top-of-form intro now uses the supplied announcement poster and no-login registration guidance.
+  - DONE: top-of-form intro now uses extracted announcement content and no-login registration guidance.
   - TODO: deeper visual refactor after final frontend/admin template decision.
   - DONE: new submitted fields appear in admin detail/edit/print and exports.
 
@@ -530,7 +543,7 @@ These items come directly from `Reference/Trinity Scholar - Features.pdf` and we
 - Form UX:
   - `PARTIAL`: mobile, progress, validation, confirmation exist.
   - DONE: post-submit confirmation/payment/receipt pages now share a consistent responsive shell.
-  - DONE: registration form visual style updated with softer inputs, clearer focus/invalid states, improved header, and poster treatment.
+  - DONE: registration form visual style updated with softer inputs, clearer focus/invalid states, improved header, and text-based announcement treatment.
   - DONE: Ricky's draft autosave/passport draft/validation-step-return improvements are present.
   - TODO: polish layout with selected template.
   - TODO: browser QA on desktop/mobile.
@@ -604,6 +617,16 @@ These items come directly from `Reference/Trinity Scholar - Features.pdf` and we
 - Server credentials were shared in chat but must stay out of Git.
 
 ## Verification Log
+
+2026-07-07
+- Static check: re-read `Reference/Trinity Scholar - Features.pdf`; extracted all 7 pages successfully with `pdfplumber`.
+- Static check: re-read `Reference/Trinity Scholar - Features.docx`; confirmed landing/content/form/admin/payment/security requirements are still the same feature breakdown.
+- Static check: `resources/views/landing/index.blade.php` no longer references the supplied AP announcement image, poster card, or poster caption.
+- Static check: `resources/views/student-registration/create.blade.php` no longer references the supplied AP announcement image or intro poster class.
+- Static check: no `.agent` or `.agents` folder remains in the repo root.
+- Build check: direct Vite build passed with bundled Node using `node node_modules/vite/bin/vite.js build`.
+- Blocked: `npm run build` fails in this Windows path because the npm `.cmd` wrapper resolves Vite as `D:\vite\bin\vite.js`; direct Vite build works.
+- Blocked: PHP and Composer are still not available in PATH, so Laravel/PHPUnit tests were not run here.
 
 2026-07-06
 - PDF audit: extracted all 7 pages from `Reference/Trinity Scholar - Features.pdf` with `pdfplumber`.

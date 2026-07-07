@@ -1,8 +1,10 @@
 # Trinity Scholar Deployment Notes
 
-Last updated: 2026-07-02
+Last updated: 2026-07-07
 
 Do not commit real credentials. Put production values only in the server `.env`.
+
+For step-by-step GitHub pull and zip upload options, see `SERVER_UPLOAD_GUIDE.md`.
 
 ## Current Server Target
 

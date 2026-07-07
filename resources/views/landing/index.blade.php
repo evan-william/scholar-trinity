@@ -68,9 +68,12 @@
         .hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
         .hero-note{margin-top:18px;display:grid;gap:8px;color:rgba(255,255,255,.88);font-size:13px}
         .hero-note strong{color:#fff}
-        .poster-card{background:linear-gradient(145deg,rgba(255,255,255,.16),rgba(255,255,255,.07));border:1px solid rgba(255,255,255,.26);border-radius:12px;box-shadow:var(--shadow);padding:14px;color:#fff;backdrop-filter:blur(8px)}
-        .poster-card img{display:block;width:100%;border-radius:8px;border:1px solid rgba(255,255,255,.26);background:#102d52}
-        .poster-caption{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:12px;font-size:13px;color:rgba(255,255,255,.84)}
+        .hero-panel{background:rgba(255,255,255,.94);border:1px solid rgba(255,255,255,.36);border-radius:10px;box-shadow:var(--shadow);padding:22px;color:var(--ink)}
+        .hero-panel h2{margin:0 0 10px;color:var(--navy);font-size:24px;line-height:1.2}
+        .hero-panel p{margin:0 0 12px;color:var(--muted);line-height:1.7;font-size:14px}
+        .hero-panel .deadline{display:flex;align-items:center;justify-content:space-between;gap:14px;border:1px solid #ead28a;background:#fff8df;border-radius:8px;padding:14px;margin-bottom:14px}
+        .hero-panel .deadline strong{display:block;color:#6b4700;font-size:28px;line-height:1}
+        .hero-panel ul{margin:12px 0 0;padding-left:18px;color:var(--ink);font-size:14px;line-height:1.7}
         .status-pill{display:inline-flex;align-items:center;border-radius:999px;background:#fff3cf;color:#6b4700;font-weight:950;padding:5px 10px;white-space:nowrap}
         .quick{background:#fff;border-bottom:1px solid var(--line)}
         .quick-grid{max-width:1180px;margin:0 auto;padding:18px 20px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
@@ -91,7 +94,9 @@
         .card p,.card li{color:var(--muted);font-size:14px;line-height:1.7}
         .info-strip{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:18px}
         .announcement{border-left:5px solid var(--gold);background:#fffaf0;padding:18px;border-radius:8px}
+        .announcement h3{margin:0 0 10px;color:var(--navy);font-size:18px}
         .announcement p{margin:0 0 10px;color:#5b430a;line-height:1.7}
+        .announcement ul{margin:8px 0 0;padding-left:18px;color:#5b430a;line-height:1.7}
         .announcement strong{color:#2a2108}
         .timeline{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
         .timeline-group{padding:20px}
@@ -117,7 +122,7 @@
         .cta p{margin:0;color:rgba(255,255,255,.82);line-height:1.7}
         .footer{background:#0f2c50;color:#dbe8f8;padding:24px 20px}
         .footer-inner{max-width:1180px;margin:0 auto;display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;font-size:13px}
-        @media(max-width:900px){.hero-inner,.grid-2,.timeline,.info-strip{grid-template-columns:1fr}.grid-3,.process,.quick-grid{grid-template-columns:1fr 1fr}.nav-links a:not(.btn):not(.language-switcher a){display:none}.hero-inner{padding-top:42px}.poster-card{max-width:620px}}
+        @media(max-width:900px){.hero-inner,.grid-2,.timeline,.info-strip{grid-template-columns:1fr}.grid-3,.process,.quick-grid{grid-template-columns:1fr 1fr}.nav-links a:not(.btn):not(.language-switcher a){display:none}.hero-inner{padding-top:42px}.hero-panel{max-width:620px}}
         @media(max-width:560px){.topbar-inner,.nav-inner,.wrap{padding-left:14px;padding-right:14px}.grid-3,.process,.quick-grid{grid-template-columns:1fr}.brand{min-width:0}.hero-inner{grid-template-columns:1fr;padding-left:14px;padding-right:14px}h1{font-size:38px}.timeline-item{grid-template-columns:1fr}.cta{align-items:flex-start;flex-direction:column}}
     </style>
 </head>
@@ -153,20 +158,32 @@
                 <a class="btn btn-light" href="#late-registration">{{ $secondaryButton }}</a>
             </div>
             <div class="hero-note">
-                <span><strong>Late registration deadline:</strong> February 10, 2026, based on the provided announcement.</span>
+                <span><strong>Late registration deadline:</strong> February 10, 2026.</span>
                 <span><strong>Completion rule:</strong> registration is complete only after the filled-out form and payment are received.</span>
             </div>
         </div>
-        <aside class="poster-card" aria-label="Provided AP registration poster">
-            <img src="{{ asset('images/ap-late-registration-2026.jpeg') }}" alt="2026 AP Exam Registration late registration announcement">
-            <div class="poster-caption"><span>Official announcement poster</span><span class="status-pill">Late Registration</span></div>
+        <aside class="hero-panel" aria-label="Late registration summary">
+            <div class="deadline">
+                <div>
+                    <span class="status-pill">Late Registration</span>
+                    <p style="margin-top:8px">Taipei test center support</p>
+                </div>
+                <strong>Feb. 10</strong>
+            </div>
+            <h2>2026 AP Exam Registration Support</h2>
+            <p>Trinity Scholar accepts AP Late Registration requests on behalf of students for the Taipei test center until the deadline or until seats are full.</p>
+            <ul>
+                <li>Extra late registration fees may apply.</li>
+                <li>AP Chinese, AP Calculus, and AP Macro/Micro are marked full in the shared announcement.</li>
+                <li>Students should submit early because available seats can close before the deadline.</li>
+            </ul>
         </aside>
     </div>
 </header>
 
 <section class="quick" aria-label="Quick registration facts">
     <div class="quick-grid">
-        <div class="quick-item"><strong>Feb. 10</strong><span>Late registration deadline from poster</span></div>
+        <div class="quick-item"><strong>Feb. 10</strong><span>Late registration deadline</span></div>
         <div class="quick-item"><strong>Taipei</strong><span>Test-center registration support</span></div>
         <div class="quick-item"><strong>Form + Payment</strong><span>Both required before completion</span></div>
         <div class="quick-item"><strong>No Login</strong><span>Student can fill registration directly</span></div>
@@ -201,21 +218,30 @@
     <section id="late-registration" style="margin-top:44px">
         <div class="section-head">
             <div>
-                <div class="eyebrow">Announcement Content</div>
+                <div class="eyebrow">Late Registration Notice</div>
                 <h2>2026 AP Late Registration Information</h2>
-                <p>Content below is based on the poster shared by the client/team for this update.</p>
+                <p>The shared announcement has been converted into web content so students can read the key rules before opening the form.</p>
             </div>
         </div>
         <div class="info-strip">
             <div class="announcement">
-                <p><strong>English:</strong> Trinity Scholar is now accepting AP Late Registrations on behalf of students until <strong>Feb. 10</strong> for the test center in Taipei.</p>
-                <p><strong>Note:</strong> There will be an extra late registration fee. Registration may close earlier if all available seats are filled.</p>
-                <p><strong>Completion:</strong> The registration is only considered completed when both the filled-out form and payment are received.</p>
+                <h3>For Students and Parents</h3>
+                <p>Trinity Scholar provides AP Exam registration support for students who need Taipei test-center registration assistance.</p>
+                <ul>
+                    <li>Late Registration is available until <strong>February 10, 2026</strong>.</li>
+                    <li>Late Registration has an additional fee.</li>
+                    <li>Seats are limited and registration may close early when subjects are full.</li>
+                    <li>A registration is complete only after both the form and payment are received.</li>
+                </ul>
             </div>
             <div class="announcement">
-                <p><strong>中文:</strong> 力可即日起開始接受台北考場 AP 考試 Late Registration 報名代辦，至 <strong>2/10</strong> 止。</p>
-                <p><strong>提醒:</strong> 台北考場 AP 考試 Late Registration 開放報名，會有額外的延遲報名費用，額滿為止。</p>
-                <p><strong>已額滿:</strong> AP Chinese、AP Calculus、AP Macro/Micro 已額滿。</p>
+                <h3>Current Taipei Test-Center Status</h3>
+                <p>The announcement notes that some subjects are already full at the Taipei test center.</p>
+                <ul>
+                    <li><strong>Marked full:</strong> AP Chinese, AP Calculus, and AP Macro/Micro.</li>
+                    <li>Other subjects are handled based on test-center availability.</li>
+                    <li>The admin team will confirm the final status after reviewing the submitted form.</li>
+                </ul>
             </div>
         </div>
     </section>
