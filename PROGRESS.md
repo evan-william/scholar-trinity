@@ -62,6 +62,9 @@ Current local template pass:
 ## Current Progress
 
 2026-07-07
+- Header template correction:
+  - Changed the public header labels and right-side buttons back to the original Edification header rhythm: `Home`, `About`, `Courses`, `Teacher`, middle logo, `Events`, `Blog`, `Contact`, plus `Log in` and `Sign Up`.
+  - The links still point to Trinity Scholar sections/admin login/student registration, but the visible header text length now matches the template much more closely so the nav no longer looks cramped.
 - Hero template correction:
   - Restored the landing hero markup to the original Edification structure: `col-lg-8 offset-lg-2`, centered `hero-content`, `h3`, split `h1`, intro paragraph, and `form-input mt-5`.
   - Removed the custom hero CTA button group and extra deadline paragraph from the hero so the first viewport matches the supplied template layout more closely; registration now uses the template search/form block as the CTA.

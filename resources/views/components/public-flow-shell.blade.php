@@ -48,16 +48,17 @@
                         <nav>
                             <ul id="m_menu_active">
                                 <li class="{{ request()->routeIs('landing') ? 'active' : '' }}"><a href="{{ route('landing') }}">Home</a></li>
-                                <li><a href="{{ route('landing') }}#overview">Program</a></li>
-                                <li><a href="{{ route('landing') }}#timeline">Timeline</a></li>
+                                <li><a href="{{ route('landing') }}#overview">About</a></li>
+                                <li><a href="{{ route('landing') }}#process">Courses</a></li>
+                                <li><a href="{{ route('landing') }}#timeline">Teacher</a></li>
                                 <li class="middle-logo">
                                     <a href="{{ route('landing') }}">
                                         <img src="{{ asset($assetBase.'images/icon/logo-middle.png') }}" alt="Trinity Scholar">
                                         <img class="hb-bottom-shape" src="{{ asset($assetBase.'images/icon/hb-bottom-shape.png') }}" alt="">
                                     </a>
                                 </li>
-                                <li><a href="{{ route('landing') }}#fees">Fees</a></li>
-                                <li><a href="{{ route('landing') }}#faq">FAQ</a></li>
+                                <li><a href="{{ route('landing') }}#fees">Events</a></li>
+                                <li><a href="{{ route('landing') }}#faq">Blog</a></li>
                                 <li><a href="{{ route('landing') }}#contact">Contact</a></li>
                             </ul>
                         </nav>
@@ -66,8 +67,8 @@
                 <div class="col-lg-2 col-sm-5">
                     <div class="header-bottom-right-style-2">
                         <ul>
-                            <li><a class="btn btn-light btn-round" href="{{ route('locale.switch', ['locale' => app()->getLocale() === 'zh-TW' ? 'en' : 'zh-TW', 'redirect' => url()->current()]) }}">{{ app()->getLocale() === 'zh-TW' ? 'English' : '中文' }}</a></li>
-                            <li><a class="btn btn-primary btn-round" href="{{ route('student-registrations.create') }}">Register</a></li>
+                            <li><a class="btn btn-light btn-round" href="{{ route('admin.login') }}">Log in</a></li>
+                            <li><a class="btn btn-primary btn-round" href="{{ route('student-registrations.create') }}">Sign Up</a></li>
                         </ul>
                     </div>
                 </div>
