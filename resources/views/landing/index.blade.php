@@ -12,7 +12,7 @@
     $assetBase = 'theme/edification/';
 @endphp
 
-<x-public-flow-shell :title="$metaTitle" :description="$metaDescription" content-class="">
+<x-public-flow-shell :title="$metaTitle" :description="$metaDescription" content-class="none">
     <x-slot:hero>
         <div class="hero-area has-color">
             <div class="container">
@@ -34,43 +34,18 @@
         </div>
     </x-slot:hero>
 
-    @push('styles')
-        <style>
-            .ts-stat-row{margin-top:-48px;position:relative;z-index:2}
-            .ts-stat{background:#fff;border:1px solid #efefef;padding:25px;text-align:center;box-shadow:0 2px 18.9px 8.1px rgba(204,204,223,.2);height:100%}
-            .ts-stat h3{color:#fc9928;font-size:32px;line-height:38px}
-            .ts-stat p{margin:8px 0 0;font-size:14px;color:#7d7d7d}
-            .ts-notice{border-left:5px solid #fc9928;background:#fff8ed;padding:28px 30px;height:100%;box-shadow:0 0 21px 11px rgba(204,204,223,.12)}
-            .ts-notice h4{margin-bottom:15px}
-            .ts-notice ul{padding-left:20px;margin-bottom:0}
-            .ts-notice li{margin-bottom:8px}
-            .ts-process .media{height:100%;background:#fff}
-            .ts-process .media-head{width:112px}
-            .ts-fee-card{height:100%;background:#fff;border:1px solid #efefef;padding:25px;transition:all .3s ease}
-            .ts-fee-card:hover{box-shadow:0 -6px 24px rgba(10,10,10,.09)}
-            .ts-fee-card .amount{font-size:28px;color:#252525;font-family:"Roboto Slab",serif;font-weight:700}
-            .ts-doc-card{display:flex;gap:15px;background:#fff;border:1px solid #efefef;padding:24px;height:100%}
-            .ts-doc-card i{font-size:26px;color:#fc9928;margin-top:3px}
-            .ts-faq details{background:#fff;border:1px solid #efefef;padding:18px 22px;margin-bottom:12px}
-            .ts-faq summary{cursor:pointer;font-family:"Roboto Slab",serif;font-weight:700;color:#252525}
-            .ts-faq p{margin:12px 0 0}
-            .ts-contact-card{background:#fff;border:1px solid #efefef;padding:30px;height:100%}
-            @media(max-width:767px){.ts-stat-row{margin-top:0}.ts-process .media{display:block}.ts-process .media-head{width:100%}.ts-process .media-body{padding:20px;text-align:left}}
-        </style>
-    @endpush
-
-    <section class="ts-stat-row">
+    <section class="course-area pt--80 pb--40">
         <div class="container">
             <div class="row">
-                <div class="col-md-3 col-sm-6 mb-4"><div class="ts-stat"><h3>Feb. 10</h3><p>Late registration deadline</p></div></div>
-                <div class="col-md-3 col-sm-6 mb-4"><div class="ts-stat"><h3>Taipei</h3><p>Test-center support</p></div></div>
-                <div class="col-md-3 col-sm-6 mb-4"><div class="ts-stat"><h3>Form + Pay</h3><p>Both required to complete</p></div></div>
-                <div class="col-md-3 col-sm-6 mb-4"><div class="ts-stat"><h3>No Login</h3><p>Students register directly</p></div></div>
+                <div class="col-md-3 col-sm-6 mb-5"><div class="card text-center"><div class="card-body p-25"><h3 class="primary-color">Feb. 10</h3><p>Late registration deadline</p></div></div></div>
+                <div class="col-md-3 col-sm-6 mb-5"><div class="card text-center"><div class="card-body p-25"><h3 class="primary-color">Taipei</h3><p>Test-center support</p></div></div></div>
+                <div class="col-md-3 col-sm-6 mb-5"><div class="card text-center"><div class="card-body p-25"><h3 class="primary-color">Form + Pay</h3><p>Both required to complete</p></div></div></div>
+                <div class="col-md-3 col-sm-6 mb-5"><div class="card text-center"><div class="card-body p-25"><h3 class="primary-color">No Login</h3><p>Students register directly</p></div></div></div>
             </div>
         </div>
     </section>
 
-    <section id="overview" class="course-area pt--80 pb--100">
+    <section id="overview" class="course-area pt--40 pb--100">
         <div class="container">
             <div class="row">
                 <div class="col-md-10 offset-md-1">
@@ -116,7 +91,8 @@
             </div>
             <div class="row">
                 <div class="col-lg-6 mb-4">
-                    <div class="ts-notice">
+                    <div class="card h-100">
+                        <div class="card-body p-25">
                         <h4>For Students and Parents</h4>
                         <p>Trinity Scholar is accepting AP Late Registration requests for students who need Taipei test-center registration support.</p>
                         <ul>
@@ -125,10 +101,12 @@
                             <li>Seats are limited and may close before the deadline.</li>
                             <li>Registration is complete only after both the form and payment are received.</li>
                         </ul>
+                        </div>
                     </div>
                 </div>
                 <div class="col-lg-6 mb-4">
-                    <div class="ts-notice">
+                    <div class="card h-100">
+                        <div class="card-body p-25">
                         <h4>Taipei Test-Center Status</h4>
                         <p>The shared announcement notes that some subjects are already full at the Taipei test center.</p>
                         <ul>
@@ -136,6 +114,7 @@
                             <li>Other subjects are processed based on final test-center availability.</li>
                             <li>The admin team confirms the final status after reviewing the submitted registration.</li>
                         </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -152,7 +131,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row ts-process">
+            <div class="row">
                 @forelse ($timelines as $round => $items)
                     @foreach ($items as $item)
                         <div class="col-md-6 mb-5">
@@ -221,20 +200,24 @@
             <div class="row">
                 @foreach ($fees as $fee)
                     <div class="col-lg-4 col-md-6 mb-5">
-                        <div class="ts-fee-card">
-                            <span class="trinity-meta">{{ $fee->currency }}</span>
+                    <div class="card h-100">
+                        <div class="card-body p-25">
+                            <span class="primary-color text-uppercase d-block mb-3">{{ $fee->currency }}</span>
                             <h4>{{ $fee->name }}</h4>
                             <p>{{ $fee->description }}</p>
-                            <div class="amount">{{ number_format($fee->amount) }}</div>
+                            <h3>{{ number_format($fee->amount) }}</h3>
                         </div>
                     </div>
+                </div>
                 @endforeach
                 <div class="col-lg-4 col-md-6 mb-5">
-                    <div class="ts-fee-card">
-                        <span class="trinity-meta">Estimated</span>
-                        <h4>Base Total</h4>
-                        <p>Before subject-specific adjustment, late fees, or practice exam options.</p>
-                        <div class="amount">NTD {{ number_format($feeTotal) }}</div>
+                    <div class="card h-100">
+                        <div class="card-body p-25">
+                            <span class="primary-color text-uppercase d-block mb-3">Estimated</span>
+                            <h4>Base Total</h4>
+                            <p>Before subject-specific adjustment, late fees, or practice exam options.</p>
+                            <h3>NTD {{ number_format($feeTotal) }}</h3>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -254,9 +237,12 @@
             <div class="row">
                 @foreach ($documents as $document)
                     <div class="col-lg-4 col-md-6 mb-4">
-                        <div class="ts-doc-card">
-                            <i class="fa fa-check-circle"></i>
-                            <div><h4>{{ $document->name }}</h4><p>{{ $document->description }}</p></div>
+                        <div class="card h-100">
+                            <div class="card-body p-25">
+                                <i class="fa fa-check-circle primary-color mb-3"></i>
+                                <h4>{{ $document->name }}</h4>
+                                <p>{{ $document->description }}</p>
+                            </div>
                         </div>
                     </div>
                 @endforeach
@@ -264,7 +250,7 @@
         </div>
     </section>
 
-    <section id="faq" class="pt--80 pb--80 ts-faq">
+    <section id="faq" class="feature-blog pt--80 pb--80">
         <div class="container">
             <div class="row">
                 <div class="col-md-10 offset-md-1">
@@ -273,10 +259,12 @@
                         <h2 class="primary-color">Frequently Asked Questions</h2>
                     </div>
                     @foreach ($faqs as $faq)
-                        <details>
-                            <summary>{{ $faq->question }}</summary>
-                            <p>{{ $faq->answer }}</p>
-                        </details>
+                        <div class="card mb-4">
+                            <div class="card-body p-25">
+                                <h4>{{ $faq->question }}</h4>
+                                <p>{{ $faq->answer }}</p>
+                            </div>
+                        </div>
                     @endforeach
                 </div>
             </div>
@@ -287,24 +275,28 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-6 mb-4">
-                    <div class="ts-contact-card">
-                        <span class="trinity-meta">Contact Information</span>
-                        <h3>{{ $contact?->organization ?: 'Trinity Scholar' }}</h3>
-                        <p><i class="fa fa-envelope primary-color"></i> {{ $contact?->email ?: 'info@trinityscholar.com' }}</p>
-                        <p><i class="fa fa-phone primary-color"></i> {{ $contact?->phone ?: '886-2-2771-6002' }}</p>
-                        <p><i class="fa fa-clock-o primary-color"></i> {{ $contact?->office_hours ?: 'Mon-Fri 9:00-18:00' }}</p>
+                    <div class="card h-100">
+                        <div class="card-body p-25">
+                            <span class="primary-color text-uppercase d-block mb-3">Contact Information</span>
+                            <h3>{{ $contact?->organization ?: 'Trinity Scholar' }}</h3>
+                            <p><i class="fa fa-envelope primary-color"></i> {{ $contact?->email ?: 'info@trinityscholar.com' }}</p>
+                            <p><i class="fa fa-phone primary-color"></i> {{ $contact?->phone ?: '886-2-2771-6002' }}</p>
+                            <p><i class="fa fa-clock-o primary-color"></i> {{ $contact?->office_hours ?: 'Mon-Fri 9:00-18:00' }}</p>
+                        </div>
                     </div>
                 </div>
                 <div class="col-lg-6 mb-4">
-                    <div class="ts-contact-card">
-                        <span class="trinity-meta">{{ $privacy?->eyebrow ?: 'Privacy' }}</span>
-                        <h3>{{ $privacy?->title ?: 'Private documents stay protected' }}</h3>
-                        <p>{{ $privacy?->body ?: 'Passport and payment documents are stored privately and only available to authorized administrators.' }}</p>
-                        <ul>
-                            @foreach (($privacy?->items ?? ['Private passport upload', 'Admin-only document review', 'Audit logging']) as $item)
-                                <li>{{ $item }}</li>
-                            @endforeach
-                        </ul>
+                    <div class="card h-100">
+                        <div class="card-body p-25">
+                            <span class="primary-color text-uppercase d-block mb-3">{{ $privacy?->eyebrow ?: 'Privacy' }}</span>
+                            <h3>{{ $privacy?->title ?: 'Private documents stay protected' }}</h3>
+                            <p>{{ $privacy?->body ?: 'Passport and payment documents are stored privately and only available to authorized administrators.' }}</p>
+                            <ul>
+                                @foreach (($privacy?->items ?? ['Private passport upload', 'Admin-only document review', 'Audit logging']) as $item)
+                                    <li>{{ $item }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>

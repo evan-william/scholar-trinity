@@ -62,6 +62,11 @@ Current local template pass:
 ## Current Progress
 
 2026-07-07
+- Edification copy-paste correction pass:
+  - Removed the large custom CSS block from the shared public shell so the public header, middle logo, hero, cards, footer, fonts, and spacing come from the original Edification CSS files.
+  - Changed the landing page to use Edification/Bootstrap cards and sections directly; removed the temporary `ts-*` custom classes and the landing-only style block.
+  - Fixed the registration page visual break where form-level `.row`, `.card`, `.btn`, and body styles were overriding the copied Edification header/footer. Header/footer rows now reset to the original template layout, and the form progress starts below the fixed template header.
+  - Kept the existing registration form fields, autosave, validation, upload draft, payment review, and JavaScript flow intact.
 - HTTPS asset URL fix:
   - Added `ASSET_URL` support to Laravel config and forced HTTPS URL generation when `APP_URL` is HTTPS.
   - Reason: on CloudPanel/nginx proxy, the app may see upstream requests as HTTP and generate HTTP asset links, which can make browsers block the original Edification CSS on the HTTPS page.
@@ -630,6 +635,9 @@ These items come directly from `Reference/Trinity Scholar - Features.pdf` and we
 ## Verification Log
 
 2026-07-07
+- Static check: shared public shell no longer contains custom inline CSS; it loads the original Edification CSS/JS stack and exposes optional named slots only.
+- Static check: landing page no longer contains `@push('styles')`, `ts-*`, or `trinity-meta` template override classes.
+- Static check: registration page now resets copied Edification header/footer rows after the form stylesheet so the form grid CSS no longer breaks the template header/footer.
 - Static check: `git diff --check` passed after Edification shared-layout pass.
 - Static check: no merge conflict markers found in changed public Blade views.
 - Static check: landing and student registration views do not reference `public/images/ap-late-registration-2026.jpeg`.

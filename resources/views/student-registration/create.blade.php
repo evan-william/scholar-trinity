@@ -108,6 +108,24 @@
         .footer-top .widget a{color:#edf1ff}
         @media(max-width:991px){#header .header-two{padding-top:20px}#header .header-bottom-right-style-2 ul{justify-content:flex-start;margin:10px 0}}
         @media(max-width:640px){.main{padding-top:18px}.header-title{min-width:180px}.brand-copy{display:none}.form-intro{grid-template-columns:1fr}}
+        /* Keep the copied Edification shell from being affected by the form's grid/card/button styles. */
+        #header .row,footer .row{display:flex;flex-wrap:wrap;margin-right:-15px;margin-left:-15px;margin-bottom:0;gap:0}
+        #header .header-two{position:fixed;left:0;top:0;z-index:9998;width:100%;background:#fff;padding-top:0}
+        #header .menu-style2{text-align:center}
+        #header .menu-style2.main-menu nav>ul>li>a{color:#151515;padding:54px 17px;position:relative}
+        #header .menu-style2.main-menu nav ul li.middle-logo a{padding:0;transform:translateY(5px)}
+        #header .middle-logo img:first-child{max-width:none}
+        #header .header-bottom-right-style-2{margin-left:-41px;text-align:right}
+        #header .header-bottom-right-style-2 ul{display:block;margin:0;padding:0}
+        #header .header-bottom-right-style-2 li{display:inline-block}
+        #header .header-bottom-right-style-2 li a.btn{padding:12px 20px;line-height:26px;border-radius:50px;text-transform:none;font-family:"Muli",sans-serif}
+        #header .header-bottom-right-style-2 li a.btn-primary{background:#fc9928!important;border-color:#fc9928!important;color:#fff!important}
+        #header .header-bottom-right-style-2 li a.btn-light{background:#fff!important;color:#252525!important;border:1px solid #ccc!important}
+        #header .main-menu nav ul li a:before{top:calc(50% - 1px)}
+        .progress-wrap{margin-top:104px}
+        footer .footer-top{padding-top:120px}
+        footer .widget p,footer .widget li{color:rgba(255,255,255,.75)}
+        footer .widget a{color:rgba(255,255,255,.8)}
     </style>
 </head>
 <body>

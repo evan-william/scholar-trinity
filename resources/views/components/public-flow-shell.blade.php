@@ -30,64 +30,7 @@
     <link rel="stylesheet" href="{{ asset($assetBase.'css/styles.css') }}">
     <link rel="stylesheet" href="{{ asset($assetBase.'css/responsive.css') }}">
     <script src="{{ asset($assetBase.'js/vendor/modernizr-2.8.3.min.js') }}"></script>
-    <style>
-        :root{--ts-primary:#fc9928;--ts-dark:#14171d;--ts-blue:#1e2c39;--ts-muted:#7d7d7d;--ts-border:#e6e9f2;--ts-soft:#f6f7fb;--ts-success:#237a4f;--ts-danger:#b42318}
-        html{scroll-behavior:smooth}
-        body.trinity-public{background:#fff;color:var(--ts-muted)}
-        body.trinity-public .header-two{background:#212121}
-        body.trinity-public .main-menu nav ul li a{padding:43px 15px}
-        body.trinity-public .middle-logo img:first-child{max-width:118px}
-        body.trinity-public .header-bottom-right-style-2 ul{margin:0;padding:0;display:flex;gap:10px;align-items:center;justify-content:flex-end}
-        body.trinity-public .header-bottom-right-style-2 li{display:inline-block}
-        body.trinity-public .header-bottom-right-style-2 .btn{padding:13px 18px}
-        body.trinity-public .language-switcher label{margin:0}
-        body.trinity-public .language-switcher select{height:42px;border:1px solid #efefef;border-radius:50px;padding:0 13px;background:#fff;color:#252525;font-size:12px;font-weight:700;text-transform:uppercase}
-        body.trinity-public .hero-area{background:url('{{ asset($assetBase.'images/bg/hero-bg.jpg') }}') center/cover no-repeat;position:relative;z-index:1}
-        body.trinity-public .hero-area:before{content:"";position:absolute;inset:0;background:#14171d;opacity:.74;z-index:-1}
-        body.trinity-public .hero-content h1{font-size:58px;line-height:70px}
-        body.trinity-public .hero-content p{font-size:21px;line-height:34px}
-        body.trinity-public .trinity-content{background:#fff}
-        body.trinity-public .trinity-card{border:1px solid var(--ts-border);background:#fff;transition:all .3s ease}
-        body.trinity-public .trinity-card:hover{box-shadow:0 -6px 24px rgba(10,10,10,.09)}
-        body.trinity-public .trinity-card-body{padding:25px}
-        body.trinity-public .trinity-card h3,
-        body.trinity-public .trinity-card h4{letter-spacing:0}
-        body.trinity-public .trinity-meta{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ts-primary);margin-bottom:8px;display:block}
-        body.trinity-public .summary-table{width:100%;border-collapse:collapse}
-        body.trinity-public .summary-table td{border-bottom:1px solid #ebebeb;padding:11px 0;vertical-align:top}
-        body.trinity-public .summary-table td:first-child{width:40%;font-weight:700;color:#252525;padding-right:18px}
-        body.trinity-public .status{display:inline-block;border-radius:50px;padding:5px 11px;background:#f6f7fb;color:#252525;font-size:12px;font-weight:700;text-transform:capitalize}
-        body.trinity-public .status.paid,
-        body.trinity-public .status.completed,
-        body.trinity-public .status.issued,
-        body.trinity-public .status.sent{background:#e8f6ef;color:var(--ts-success)}
-        body.trinity-public .status.failed,
-        body.trinity-public .status.rejected,
-        body.trinity-public .status.cancelled{background:#fff0ee;color:var(--ts-danger)}
-        body.trinity-public .amount{font-size:24px;font-weight:700;color:#252525}
-        body.trinity-public .steps{padding-left:20px}
-        body.trinity-public .steps li{margin-bottom:8px}
-        body.trinity-public .notice{border-left:4px solid var(--ts-primary);background:#fff8ed;padding:16px 18px;margin-bottom:18px;color:#6f4a11}
-        body.trinity-public .notice.success{border-color:var(--ts-success);background:#e8f6ef;color:var(--ts-success)}
-        body.trinity-public .notice.error{border-color:var(--ts-danger);background:#fff0ee;color:var(--ts-danger)}
-        body.trinity-public .footer-top{padding-top:90px}
-        body.trinity-public .footer-bottom{margin-top:55px}
-        body.trinity-public .footer-top .widget p,
-        body.trinity-public .footer-top .widget li{color:#b7bdca}
-        body.trinity-public .footer-top .widget a{color:#edf1ff}
-        @media(max-width:991px){
-            body.trinity-public .header-two{padding-top:20px}
-            body.trinity-public .hero-area{margin-top:0}
-            body.trinity-public .hero-content h1{font-size:40px;line-height:52px}
-        }
-        @media(max-width:767px){
-            body.trinity-public .header-bottom-right-style-2 ul{justify-content:flex-start;margin:10px 0}
-            body.trinity-public .hero-content h1{font-size:31px;line-height:42px}
-            body.trinity-public .hero-content p{font-size:16px;line-height:28px}
-            body.trinity-public .summary-table td{display:block;width:100%;padding:8px 0}
-            body.trinity-public .summary-table td:first-child{width:100%;border-bottom:0;padding-bottom:0}
-        }
-    </style>
+    {{ $styles ?? '' }}
     @stack('styles')
 </head>
 <body class="trinity-public {{ $bodyClass }}">
@@ -123,7 +66,7 @@
                 <div class="col-lg-2 col-sm-5">
                     <div class="header-bottom-right-style-2">
                         <ul>
-                            <li><x-language-switcher /></li>
+                            <li><a class="btn btn-light btn-round" href="{{ route('locale.switch', ['locale' => app()->getLocale() === 'zh-TW' ? 'en' : 'zh-TW', 'redirect' => url()->current()]) }}">{{ app()->getLocale() === 'zh-TW' ? 'English' : '中文' }}</a></li>
                             <li><a class="btn btn-primary btn-round" href="{{ route('student-registrations.create') }}">Register</a></li>
                         </ul>
                     </div>
@@ -156,15 +99,21 @@
 @endif
 {{ $progress ?? '' }}
 
-<main class="trinity-content {{ $contentClass }}">
-    @if(session('status'))
-        <div class="container"><div class="notice success">{{ session('status') }}</div></div>
-    @endif
-    @if($errors->any())
-        <div class="container"><div class="notice error">{{ $errors->first() }}</div></div>
-    @endif
+@if($contentClass === 'none')
     {{ $slot }}
-</main>
+@else
+    <main class="{{ $contentClass }}">
+        @if(session('status'))
+            <div class="container"><div class="alert alert-success">{{ session('status') }}</div></div>
+        @endif
+        @if($errors->any())
+            <div class="container"><div class="alert alert-danger">{{ $errors->first() }}</div></div>
+        @endif
+        <div class="container">
+            {{ $slot }}
+        </div>
+    </main>
+@endif
 
 <footer>
     <div class="footer-top has-color pt--120 pb--30">
@@ -224,6 +173,7 @@
 <script src="{{ asset($assetBase.'js/jquery.slicknav.min.js') }}"></script>
 <script src="{{ asset($assetBase.'js/plugins.js') }}"></script>
 <script src="{{ asset($assetBase.'js/scripts.js') }}"></script>
+{{ $scripts ?? '' }}
 @stack('scripts')
 </body>
 </html>
