@@ -67,6 +67,39 @@
 @endphp
 
 <x-public-flow-shell :title="$metaTitle" :description="$metaDescription" content-class="none">
+    <x-slot:styles>
+        <style>
+            #late-registration,
+            #timeline,
+            #process,
+            #fees,
+            #documents,
+            #faq,
+            #contact{scroll-margin-top:130px}
+            .late-notice-area{background:#14171d;padding:72px 0 58px;position:relative;overflow:hidden}
+            .late-notice-area:before{content:"";position:absolute;right:-120px;top:-120px;width:340px;height:340px;border:55px solid rgba(252,153,40,.08);border-radius:50%}
+            .late-notice-area:after{content:"";position:absolute;left:-90px;bottom:-110px;width:260px;height:260px;background:rgba(255,255,255,.035);border-radius:50%}
+            .late-notice-area .container{position:relative;z-index:1}
+            .notice-card{height:100%;background:#fff;border:0!important;border-radius:4px;box-shadow:0 18px 45px rgba(0,0,0,.18)}
+            .notice-card .card-body{padding:30px}
+            .notice-kicker{display:inline-block;color:#fc9928;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+            .notice-list{margin:18px 0 0;padding:0}
+            .notice-list li{display:flex;gap:10px;font-size:14px;font-weight:700;line-height:1.55;padding:5px 0;color:#5e6573}
+            .notice-list li i{color:#fc9928;margin-top:4px}
+            .late-stat{display:flex;align-items:center;gap:18px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);padding:18px 20px;margin-top:24px}
+            .late-stat strong{display:block;color:#fff;font-size:28px;line-height:1;font-family:"Roboto Slab",serif}
+            .late-stat span{display:block;color:rgba(255,255,255,.75);font-size:13px;text-transform:uppercase;letter-spacing:.06em}
+            .late-stat i{display:grid;place-items:center;width:48px;height:48px;border-radius:50%;background:#fc9928;color:#fff;font-size:20px}
+            .compact-section-title{margin-bottom:34px}
+            .faq-card .card-body p{margin-bottom:0}
+            @media(max-width:767px){
+                .late-notice-area{padding:56px 0 42px}
+                .notice-card .card-body{padding:24px}
+                .late-stat{margin-top:14px}
+            }
+        </style>
+    </x-slot:styles>
+
     <x-slot:hero>
         <div class="slider-area owl-carousel has-color">
             <div class="slider_item" style="background: url({{ asset($assetBase.'images/bg/slider-bg1.jpg') }}) center/cover no-repeat;">
@@ -159,49 +192,61 @@
         </div>
     </section>
 
-    <section id="late-registration" class="take-toure-area ptb--120">
+    <section id="late-registration" class="late-notice-area">
         <div class="container">
             <div class="row">
                 <div class="col-md-10 offset-md-1">
-                    <div class="section-title-style2 white-title text-center">
+                    <div class="section-title-style2 white-title text-center compact-section-title">
                         <span>Late Registration Notice</span>
                         <h2>2026 AP Late Registration Information</h2>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-lg-6 mb-4">
-                    <div class="card h-100">
+            <div class="row align-items-stretch">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <div class="card notice-card">
                         <div class="card-body p-25">
-                        <h4>For Students and Parents</h4>
-                        <p>Trinity Scholar is accepting AP Late Registration requests for students who need Taipei test-center registration support.</p>
-                        <ul>
-                            <li>Late registration is available until <strong>February 10, 2026</strong>.</li>
-                            <li>There is an extra fee for late registration.</li>
-                            <li>Seats are limited and may close before the deadline.</li>
-                            <li>Registration is complete only after both the form and payment are received.</li>
-                        </ul>
+                            <span class="notice-kicker">For Students and Parents</span>
+                            <h4>Registration requests are still open for Taipei support.</h4>
+                            <p>Trinity Scholar is accepting AP Late Registration requests for students who need Taipei test-center registration support.</p>
+                            <ul class="notice-list">
+                                <li><i class="fa fa-check-circle"></i><span>Late registration is available until <strong>February 10, 2026</strong>.</span></li>
+                                <li><i class="fa fa-check-circle"></i><span>Extra late registration fees may apply.</span></li>
+                                <li><i class="fa fa-check-circle"></i><span>Registration is complete only after both the form and payment are received.</span></li>
+                            </ul>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-6 mb-4">
-                    <div class="card h-100">
+                <div class="col-lg-6">
+                    <div class="card notice-card">
                         <div class="card-body p-25">
-                        <h4>Taipei Test-Center Status</h4>
-                        <p>The shared announcement notes that some subjects are already full at the Taipei test center.</p>
-                        <ul>
-                            <li><strong>Marked full:</strong> AP Chinese, AP Calculus, and AP Macro/Micro.</li>
-                            <li>Other subjects are processed based on final test-center availability.</li>
-                            <li>The admin team confirms the final status after reviewing the submitted registration.</li>
-                        </ul>
+                            <span class="notice-kicker">Taipei Test-Center Status</span>
+                            <h4>Some subjects are already marked full.</h4>
+                            <p>The shared announcement notes that availability is limited and can close before the listed deadline.</p>
+                            <ul class="notice-list">
+                                <li><i class="fa fa-exclamation-circle"></i><span><strong>Marked full:</strong> AP Chinese, AP Calculus, and AP Macro/Micro.</span></li>
+                                <li><i class="fa fa-exclamation-circle"></i><span>Other subjects are processed based on final test-center availability.</span></li>
+                                <li><i class="fa fa-exclamation-circle"></i><span>The admin team confirms final status after reviewing the submitted registration.</span></li>
+                            </ul>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="late-stat"><i class="fa fa-calendar"></i><div><span>Deadline</span><strong>Feb. 10</strong></div></div>
+                </div>
+                <div class="col-md-4">
+                    <div class="late-stat"><i class="fa fa-file-text-o"></i><div><span>Required</span><strong>Form + Pay</strong></div></div>
+                </div>
+                <div class="col-md-4">
+                    <div class="late-stat"><i class="fa fa-user"></i><div><span>Review</span><strong>Admin Check</strong></div></div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="timeline" class="event-area pt--120 pb--80">
+    <section id="timeline" class="event-area pt--70 pb--60">
         <div class="container">
             <div class="row">
                 <div class="col-md-10 offset-md-1">

@@ -62,6 +62,10 @@ Current local template pass:
 ## Current Progress
 
 2026-07-07
+- Landing spacing and late notice polish:
+  - Replaced the `take-toure-area` late-registration section because its built-in white pseudo block created a large empty gap before the timeline.
+  - Added a compact dark late-notice section with two white notice cards and three quick status bars: deadline, form/payment requirement, and admin review.
+  - Reduced the timeline top padding and added scroll-margin offsets so fixed/transparent headers do not crowd section titles when navigating by anchors.
 - Home 2 public template switch:
   - Replaced the shared public header with the Edification Home 2 structure: orange `header-top`, transparent/dark overlay `header-bottom`, left logo, centered nav, and right-side language switcher plus `Start Form` CTA.
   - Rebuilt the landing hero using Home 2 `slider-area` / `slider_item` markup with the original template background images and Trinity Scholar AP registration copy.
