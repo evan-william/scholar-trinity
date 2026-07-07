@@ -62,6 +62,9 @@ Current local template pass:
 ## Current Progress
 
 2026-07-07
+- Hero font/render correction:
+  - Added explicit Google Fonts loading for the template fonts used by Edification: Muli, Quicksand, and Roboto Slab.
+  - Reworked the landing hero copy to match the template rhythm more closely: short uppercase eyebrow, long orange first headline line, long white second headline line, and concise supporting text.
 - Header template correction:
   - Changed the public header labels and right-side buttons back to the original Edification header rhythm: `Home`, `About`, `Courses`, `Teacher`, middle logo, `Events`, `Blog`, `Contact`, plus `Log in` and `Sign Up`.
   - The links still point to Trinity Scholar sections/admin login/student registration, but the visible header text length now matches the template much more closely so the nav no longer looks cramped.

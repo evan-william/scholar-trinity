@@ -19,9 +19,9 @@
                 <div class="row">
                 <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1">
                     <div class="hero-content">
-                        <h3>Taipei Test Center Support</h3>
-                        <h1 class="mb-5"><span class="primary-color">2026 AP Exam</span><b class="line-break"></b>Registration Support</h1>
-                        <p class="text-white-50">{{ $heroIntro }}</p>
+                        <h3>AP Registration'26</h3>
+                        <h1 class="mb-5"><span class="primary-color">Start Your 2026 AP</span><b class="line-break"></b>Registration with Trinity Scholar</h1>
+                        <p class="text-white-50">Guided exam registration support for students in Taipei.</p>
                         <form action="{{ route('student-registrations.create') }}" method="GET">
                             <div class="form-input mt-5">
                                 <input type="text" name="registration" value="Start your AP registration" readonly>

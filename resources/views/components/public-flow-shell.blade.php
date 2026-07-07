@@ -20,6 +20,9 @@
     <meta name="description" content="{{ $description }}">
     <title>{{ $title }}</title>
     <link rel="shortcut icon" type="image/png" href="{{ asset('favicon.ico') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli:300,400,600,700,800,900|Quicksand:300,400,500,700|Roboto+Slab:300,400,700&display=swap">
     <link rel="stylesheet" href="{{ asset($assetBase.'css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset($assetBase.'css/font-awesome.min.css') }}">
     <link rel="stylesheet" href="{{ asset($assetBase.'css/owl.carousel.min.css') }}">
