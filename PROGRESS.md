@@ -62,6 +62,9 @@ Current local template pass:
 ## Current Progress
 
 2026-07-07
+- Hero template correction:
+  - Restored the landing hero markup to the original Edification structure: `col-lg-8 offset-lg-2`, centered `hero-content`, `h3`, split `h1`, intro paragraph, and `form-input mt-5`.
+  - Removed the custom hero CTA button group and extra deadline paragraph from the hero so the first viewport matches the supplied template layout more closely; registration now uses the template search/form block as the CTA.
 - Edification copy-paste correction pass:
   - Removed the large custom CSS block from the shared public shell so the public header, middle logo, hero, cards, footer, fonts, and spacing come from the original Edification CSS files.
   - Changed the landing page to use Edification/Bootstrap cards and sections directly; removed the temporary `ts-*` custom classes and the landing-only style block.

@@ -17,18 +17,20 @@
         <div class="hero-area has-color">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-9 offset-lg-1 col-md-10 offset-md-1">
-                        <div class="hero-content">
-                            <h3>Taipei Test Center Support</h3>
-                            <h1 class="mb-5"><span class="primary-color">2026 AP Exam</span><b class="line-break"></b>Registration Support</h1>
-                            <p class="text-white-50">{{ $heroIntro }}</p>
-                            <div class="mt-5">
-                                <a class="btn btn-primary btn-round mr-3 mb-3" href="{{ route('student-registrations.create') }}">Start Student Registration</a>
-                                <a class="btn btn-light btn-round mb-3" href="#late-registration">Learn More</a>
+                <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1">
+                    <div class="hero-content">
+                        <h3>Taipei Test Center Support</h3>
+                        <h1 class="mb-5"><span class="primary-color">2026 AP Exam</span><b class="line-break"></b>Registration Support</h1>
+                        <p class="text-white-50">{{ $heroIntro }}</p>
+                        <form action="{{ route('student-registrations.create') }}" method="GET">
+                            <div class="form-input mt-5">
+                                <input type="text" name="registration" value="Start your AP registration" readonly>
+                                <button class="btn btn-primary btn-round" type="submit">Register</button>
+                                <i class="fa fa-search"></i>
                             </div>
-                            <p class="text-white-50 mb-0">Late registration deadline: <strong class="text-white">February 10, 2026</strong>. Registration is complete only after the form and payment are received.</p>
-                        </div>
+                        </form>
                     </div>
+                </div>
                 </div>
             </div>
         </div>
