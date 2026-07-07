@@ -4,9 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ __('student_registration.title') }}</title>
+    <link rel="shortcut icon" type="image/png" href="{{ asset('favicon.ico') }}">
+    <link rel="stylesheet" href="{{ asset('theme/edification/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('theme/edification/css/font-awesome.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('theme/edification/css/owl.carousel.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('theme/edification/css/magnific-popup.css') }}">
+    <link rel="stylesheet" href="{{ asset('theme/edification/css/slicknav.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('theme/edification/css/typography.css') }}">
+    <link rel="stylesheet" href="{{ asset('theme/edification/css/default-css.css') }}">
+    <link rel="stylesheet" href="{{ asset('theme/edification/css/styles.css') }}">
+    <link rel="stylesheet" href="{{ asset('theme/edification/css/responsive.css') }}">
+    <script src="{{ asset('theme/edification/js/vendor/modernizr-2.8.3.min.js') }}"></script>
     <style>
         :root{--primary:#1a3a6b;--primary-light:#2a5298;--accent:#c9a84c;--success:#237a4f;--danger:#b42318;--gray-50:#f8f9fa;--gray-100:#f1f3f5;--gray-200:#e9ecef;--gray-400:#ced4da;--gray-600:#6c757d;--gray-800:#343a40;--white:#fff;--radius:8px;--shadow:0 2px 16px rgba(0,0,0,.09)}
-        *{box-sizing:border-box}body{margin:0;background:var(--gray-50);color:var(--gray-800);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft JhengHei","PingFang TC",Arial,sans-serif;min-height:100vh}
+        *{box-sizing:border-box}body{margin:0;background:var(--gray-50);color:var(--gray-800);font-family:"Muli","Microsoft JhengHei","PingFang TC",Arial,sans-serif;min-height:100vh}
         .header{background:var(--primary);color:#fff;padding:14px 24px}.head-inner{max-width:920px;margin:0 auto;display:flex;align-items:center;gap:16px;flex-wrap:wrap}.header-logos{display:flex;align-items:center;gap:12px}.logo-pill{background:#fff;color:var(--primary);font-size:10px;font-weight:800;padding:6px 10px;border-radius:6px;line-height:1.3;text-align:center;letter-spacing:.3px}.logo-divider{width:1px;height:36px;background:rgba(255,255,255,.25)}.header-title{flex:1;min-width:220px}.header-title h1{font-size:16px;font-weight:700;line-height:1.35;margin:0}.header-title p{font-size:11px;opacity:.76;margin:2px 0 0}.header-badge{background:var(--accent);color:#4b3200;padding:5px 14px;border-radius:20px;font-size:12px;font-weight:800;white-space:nowrap}.header-actions{display:flex;gap:10px;align-items:center}
         .progress-wrap{background:#fff;border-bottom:1px solid var(--gray-200);padding:0 16px;overflow-x:auto}.progress-steps{display:flex;min-width:max-content;max-width:840px;margin:0 auto}.step-item{flex:1;display:flex;flex-direction:column;align-items:center;padding:14px 6px;position:relative;min-width:118px}.step-item:not(:last-child)::after{content:"";position:absolute;top:28px;left:calc(50% + 17px);right:calc(-50% + 17px);height:2px;background:var(--gray-200)}.step-item.completed:not(:last-child)::after{background:var(--primary)}.step-circle{width:30px;height:30px;border-radius:50%;border:2px solid var(--gray-400);background:#fff;color:var(--gray-600);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;z-index:1}.step-item.active .step-circle,.step-item.completed .step-circle{border-color:var(--primary);background:var(--primary);color:#fff}.step-label{margin-top:5px;font-size:10px;text-align:center;color:var(--gray-600);line-height:1.3}.step-item.active .step-label{color:var(--primary);font-weight:700}
         .main{max-width:760px;margin:0 auto;padding:24px 16px 108px}.card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:26px 24px;margin-bottom:16px}.section-title{font-size:17px;font-weight:800;color:var(--primary);border-bottom:2px solid var(--accent);padding-bottom:9px;margin-bottom:20px}.section-title span{display:block;font-size:12px;font-weight:400;color:var(--gray-600);margin-top:2px}.row{display:grid;gap:14px;margin-bottom:14px}.row-2{grid-template-columns:1fr 1fr}.row-3{grid-template-columns:1fr 1fr .55fr}.row-1{grid-template-columns:1fr}.fg{display:flex;flex-direction:column;gap:5px}.fg.span2{grid-column:1/-1}.lbl{font-size:13px;font-weight:700;color:var(--gray-800)}.lbl .zh{display:block;font-size:11px;font-weight:400;color:var(--gray-600)}.req{color:var(--danger);margin-left:2px}
@@ -79,15 +90,69 @@
         .form-intro h2{font-size:28px}
         .intro-summary{box-shadow:0 14px 34px rgba(16,45,82,.1)}
         .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+        #header .header-two{background:#212121}
+        #header .main-menu nav ul li a{padding:43px 15px}
+        #header .middle-logo img:first-child{max-width:118px}
+        #header .header-bottom-right-style-2 ul{margin:0;padding:0;display:flex;gap:10px;align-items:center;justify-content:flex-end}
+        #header .header-bottom-right-style-2 li{display:inline-block}
+        #header .header-bottom-right-style-2 .btn{padding:13px 18px;line-height:12px;border-radius:50px;text-transform:uppercase}
+        #header .header-bottom-right-style-2 .btn-primary{background:#fc9928!important;border-color:#fc9928!important;color:#fff!important}
+        #header .header-bottom-right-style-2 .btn-primary:hover{background:#fff!important;color:#fc9928!important}
+        #header .language-switcher label{margin:0}
+        #header .language-switcher select{height:42px;border:1px solid #efefef;border-radius:50px;padding:0 13px;background:#fff;color:#252525;font-size:12px;font-weight:700;text-transform:uppercase}
+        .progress-wrap{border-top:1px solid rgba(255,255,255,.08);box-shadow:0 6px 20px rgba(0,0,0,.05)}
+        .main{max-width:1140px}
+        .form-intro{margin-top:18px}
+        .footer-top{padding-top:80px}
+        .footer-top .widget p,.footer-top .widget li{color:#b7bdca}
+        .footer-top .widget a{color:#edf1ff}
+        @media(max-width:991px){#header .header-two{padding-top:20px}#header .header-bottom-right-style-2 ul{justify-content:flex-start;margin:10px 0}}
         @media(max-width:640px){.main{padding-top:18px}.header-title{min-width:180px}.brand-copy{display:none}.form-intro{grid-template-columns:1fr}}
     </style>
 </head>
 <body>
-<header class="header">
-    <div class="head-inner">
-        <div class="header-logos"><div class="logo-pill">TS</div><div class="brand-copy"><strong>TRINITY SCHOLAR</strong><span>AP Registration</span></div></div>
-        <div class="header-title"><h1>{{ __('student_registration.title') }}</h1><p>{{ __('student_registration.subtitle') }}</p></div>
-        <div class="header-actions"><x-language-switcher /><a class="btn btn-outline" href="{{ route('landing') }}">Landing</a><span class="header-badge">2026-2027</span></div>
+<header id="header">
+    <div class="header-two">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-3 col-sm-6 d-block d-lg-none">
+                    <div class="logo">
+                        <a href="{{ route('landing') }}"><img src="{{ asset('theme/edification/images/icon/logo.png') }}" alt="Trinity Scholar"></a>
+                    </div>
+                </div>
+                <div class="col-lg-9 offset-lg-1 d-none d-lg-block">
+                    <div class="main-menu menu-style2">
+                        <nav>
+                            <ul id="m_menu_active">
+                                <li><a href="{{ route('landing') }}">Home</a></li>
+                                <li><a href="{{ route('landing') }}#overview">Program</a></li>
+                                <li><a href="{{ route('landing') }}#timeline">Timeline</a></li>
+                                <li class="middle-logo">
+                                    <a href="{{ route('landing') }}">
+                                        <img src="{{ asset('theme/edification/images/icon/logo-middle.png') }}" alt="Trinity Scholar">
+                                        <img class="hb-bottom-shape" src="{{ asset('theme/edification/images/icon/hb-bottom-shape.png') }}" alt="">
+                                    </a>
+                                </li>
+                                <li><a href="{{ route('landing') }}#fees">Fees</a></li>
+                                <li><a href="{{ route('landing') }}#faq">FAQ</a></li>
+                                <li class="active"><a href="{{ route('student-registrations.create') }}">Register</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-sm-5">
+                    <div class="header-bottom-right-style-2">
+                        <ul>
+                            <li><x-language-switcher /></li>
+                            <li><a class="btn btn-primary btn-round" href="{{ route('landing') }}">Home</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-12 d-block d-lg-none">
+                    <div id="mobile_menu"></div>
+                </div>
+            </div>
+        </div>
     </div>
 </header>
 <div class="progress-wrap" aria-label="Registration progress">
@@ -337,6 +402,54 @@
     <button class="btn btn-primary" id="btnNext" type="button">Next / 下一步</button>
 </div>
 <div class="toast hidden" id="formToast" role="status" aria-live="polite"></div>
+<footer>
+    <div class="footer-top has-color pt--120 pb--30">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="widget widget-company">
+                        <a href="{{ route('landing') }}"><img src="{{ asset('theme/edification/images/icon/logo.png') }}" alt="Trinity Scholar"></a>
+                        <div class="address"><h6>Office Address</h6><p>Taipei test-center AP registration support.</p></div>
+                        <div class="address"><h6>Business Phone</h6><p>886-2-2771-6002</p></div>
+                        <div class="address"><h6>Business Email</h6><p>info@trinityscholar.com</p></div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="widget footer-link">
+                        <h4 class="fwidget-title mb-5 pb-3 primary-color">Registration</h4>
+                        <ul>
+                            <li><a href="{{ route('landing') }}#overview"><i class="fa fa-angle-right"></i>Program Information</a></li>
+                            <li><a href="{{ route('landing') }}#timeline"><i class="fa fa-angle-right"></i>Timeline</a></li>
+                            <li><a href="{{ route('landing') }}#fees"><i class="fa fa-angle-right"></i>Fees</a></li>
+                            <li><a href="{{ route('student-registrations.create') }}"><i class="fa fa-angle-right"></i>Register Now</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="widget widget-opening">
+                        <h4 class="fwidget-title mb-5 pb-3 primary-color">Important Notice</h4>
+                        <p>Registration is complete only after the filled-out form and payment are received. Available seats may close before the listed deadline.</p>
+                        <ul>
+                            <li><span>Main Period :</span>August - October</li>
+                            <li><span>Late Period :</span>January - March</li>
+                            <li><span>Deadline :</span>February 10, 2026 for the current late-registration notice</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>Copyright &copy; 2026 <span><a class="primary-color" href="{{ route('landing') }}">Trinity Scholar</a></span> - AP Exam Registration Platform.</p>
+            </div>
+        </div>
+    </div>
+</footer>
+<script src="{{ asset('theme/edification/js/vendor/jquery-2.2.4.min.js') }}"></script>
+<script src="{{ asset('theme/edification/js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('theme/edification/js/owl.carousel.min.js') }}"></script>
+<script src="{{ asset('theme/edification/js/jquery.magnific-popup.min.js') }}"></script>
+<script src="{{ asset('theme/edification/js/jquery.slicknav.min.js') }}"></script>
+<script src="{{ asset('theme/edification/js/plugins.js') }}"></script>
+<script src="{{ asset('theme/edification/js/scripts.js') }}"></script>
 <script>
     const initialStep = Number(@json(session('student_registration_error_step', 1)));
     const preservedPassportName = @json($passportDraft['name'] ?? null);

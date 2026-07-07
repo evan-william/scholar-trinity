@@ -62,6 +62,12 @@ Current local template pass:
 ## Current Progress
 
 2026-07-07
+- Edification template alignment pass:
+  - Rebuilt `resources/views/components/public-flow-shell.blade.php` as the shared public Edification shell using the original template CSS/JS stack, `header-two` navigation, middle logo, register CTA, and footer structure.
+  - Converted the landing page to render inside the shared Edification shell instead of using a separate custom head/body/header layout.
+  - Reworked the landing sections to follow the approved education-template structure while keeping Word/PDF-required content: program overview, AP registration explanation, late-registration announcement, timeline, process, fees, required documents, FAQ, contact, and Register Now CTA.
+  - Updated the student registration page head/header/footer to use the same Edification CSS, header navigation, logo treatment, content width, and footer as the landing page while preserving the existing multi-step form logic.
+  - Kept the AP announcement as extracted web copy only; no raw poster image is displayed in the landing or registration page.
 - Client content correction pass:
   - Removed the pasted AP announcement image from the landing hero and student registration intro.
   - Converted the announcement into proper web content: late registration deadline, Taipei test-center support, extra late-fee warning, seat-full warning, full-subject notice, completion rule, and admin-confirmation rule.
@@ -543,9 +549,10 @@ These items come directly from `Reference/Trinity Scholar - Features.pdf` and we
 - Form UX:
   - `PARTIAL`: mobile, progress, validation, confirmation exist.
   - DONE: post-submit confirmation/payment/receipt pages now share a consistent responsive shell.
+  - DONE: landing and student registration now share the same Edification header/footer/template CSS instead of visually separate custom layouts.
   - DONE: registration form visual style updated with softer inputs, clearer focus/invalid states, improved header, and text-based announcement treatment.
   - DONE: Ricky's draft autosave/passport draft/validation-step-return improvements are present.
-  - TODO: polish layout with selected template.
+  - TODO: browser QA the Edification-aligned landing/register pages on staging after deploy.
   - TODO: browser QA on desktop/mobile.
 
 - Email Templates:
@@ -619,6 +626,10 @@ These items come directly from `Reference/Trinity Scholar - Features.pdf` and we
 ## Verification Log
 
 2026-07-07
+- Static check: `git diff --check` passed after Edification shared-layout pass.
+- Static check: no merge conflict markers found in changed public Blade views.
+- Static check: landing and student registration views do not reference `public/images/ap-late-registration-2026.jpeg`.
+- Build check: direct Vite build passed with bundled Node using `node node_modules/vite/bin/vite.js build`.
 - Static check: re-read `Reference/Trinity Scholar - Features.pdf`; extracted all 7 pages successfully with `pdfplumber`.
 - Static check: re-read `Reference/Trinity Scholar - Features.docx`; confirmed landing/content/form/admin/payment/security requirements are still the same feature breakdown.
 - Static check: `resources/views/landing/index.blade.php` no longer references the supplied AP announcement image, poster card, or poster caption.
