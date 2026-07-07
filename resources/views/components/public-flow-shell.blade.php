@@ -38,6 +38,7 @@
         #header .main-menu nav ul li a{padding:43px 15px}
         #header .public-header-actions{display:flex;align-items:center;justify-content:flex-end;gap:12px}
         #header .public-header-actions .btn{white-space:nowrap;padding:16px 25px}
+        #header .public-header-actions .btn.btn-round{border-radius:50px!important;line-height:12px}
         #header .language-switcher{margin:0}
         #header .language-switcher label{display:block;margin:0}
         #header .language-switcher select{height:48px;min-width:126px;border:1px solid rgba(255,255,255,.55);border-radius:50px;background:rgba(255,255,255,.96);color:#252525;padding:0 18px;font-family:"Muli",sans-serif;font-size:14px;font-weight:700;text-transform:uppercase}

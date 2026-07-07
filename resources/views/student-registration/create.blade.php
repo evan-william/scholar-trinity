@@ -102,6 +102,7 @@
         #header .main-menu nav ul li a{padding:43px 15px}
         #header .public-header-actions{display:flex;align-items:center;justify-content:flex-end;gap:12px}
         #header .public-header-actions .btn{white-space:nowrap;padding:16px 25px}
+        #header .public-header-actions .btn.btn-round{border-radius:50px!important;line-height:12px}
         #header .public-header-actions .btn-primary{background:#fc9928!important;border-color:#fc9928!important;color:#fff!important}
         #header .language-switcher{margin:0}
         #header .language-switcher label{display:block;margin:0}

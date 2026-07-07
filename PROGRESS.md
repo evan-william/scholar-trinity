@@ -71,6 +71,9 @@ Current local template pass:
   - Rebuilt the landing hero using Home 2 `slider-area` / `slider_item` markup with the original template background images and Trinity Scholar AP registration copy.
   - Replaced the student registration header with the same Home 2 public header structure and added a template-image top band so the transparent header works on the form page without covering the progress stepper.
   - Removed the middle-logo/header-two layout from the form page so landing and registration no longer use different public header systems.
+- Public template bugfix pass:
+  - Fixed the Edification slider next/previous controls by pointing the original `angle-left.png` and `angle-right.png` paths to the Laravel public theme asset path.
+  - Locked the public header `Start Form` CTA to the template pill radius so the registration form page's local `.btn` rules no longer make it square.
 - Public header and landing layout correction:
   - Added the real Laravel language switcher to the shared public landing header, backed by the existing `/locale/{locale}` route, session, and cookie flow.
   - Changed the shared public header to a single consistent nav set: `Home`, `Program`, `Timeline`, middle logo, `Fees`, `FAQ`, `Contact`, plus language switcher and `Start Form`.
