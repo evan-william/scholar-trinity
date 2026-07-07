@@ -62,6 +62,10 @@ Current local template pass:
 ## Current Progress
 
 2026-07-07
+- HTTPS asset URL fix:
+  - Added `ASSET_URL` support to Laravel config and forced HTTPS URL generation when `APP_URL` is HTTPS.
+  - Reason: on CloudPanel/nginx proxy, the app may see upstream requests as HTTP and generate HTTP asset links, which can make browsers block the original Edification CSS on the HTTPS page.
+  - No custom replacement CSS was added; public pages must continue to rely on the original Edification template CSS/JS.
 - Edification template alignment pass:
   - Rebuilt `resources/views/components/public-flow-shell.blade.php` as the shared public Edification shell using the original template CSS/JS stack, `header-two` navigation, middle logo, register CTA, and footer structure.
   - Converted the landing page to render inside the shared Edification shell instead of using a separate custom head/body/header layout.
@@ -630,6 +634,7 @@ These items come directly from `Reference/Trinity Scholar - Features.pdf` and we
 - Static check: no merge conflict markers found in changed public Blade views.
 - Static check: landing and student registration views do not reference `public/images/ap-late-registration-2026.jpeg`.
 - Build check: direct Vite build passed with bundled Node using `node node_modules/vite/bin/vite.js build`.
+- Server deploy finding from manual check: `bootstrap.min.css` and `styles.css` return `200 text/css`; added HTTPS asset URL fix to avoid mixed-content stylesheet links behind proxy.
 - Static check: re-read `Reference/Trinity Scholar - Features.pdf`; extracted all 7 pages successfully with `pdfplumber`.
 - Static check: re-read `Reference/Trinity Scholar - Features.docx`; confirmed landing/content/form/admin/payment/security requirements are still the same feature breakdown.
 - Static check: `resources/views/landing/index.blade.php` no longer references the supplied AP announcement image, poster card, or poster caption.
