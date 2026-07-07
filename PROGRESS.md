@@ -62,6 +62,11 @@ Current local template pass:
 ## Current Progress
 
 2026-07-07
+- Home 2 public template switch:
+  - Replaced the shared public header with the Edification Home 2 structure: orange `header-top`, transparent/dark overlay `header-bottom`, left logo, centered nav, and right-side language switcher plus `Start Form` CTA.
+  - Rebuilt the landing hero using Home 2 `slider-area` / `slider_item` markup with the original template background images and Trinity Scholar AP registration copy.
+  - Replaced the student registration header with the same Home 2 public header structure and added a template-image top band so the transparent header works on the form page without covering the progress stepper.
+  - Removed the middle-logo/header-two layout from the form page so landing and registration no longer use different public header systems.
 - Public header and landing layout correction:
   - Added the real Laravel language switcher to the shared public landing header, backed by the existing `/locale/{locale}` route, session, and cookie flow.
   - Changed the shared public header to a single consistent nav set: `Home`, `Program`, `Timeline`, middle logo, `Fees`, `FAQ`, `Contact`, plus language switcher and `Start Form`.
@@ -74,19 +79,17 @@ Current local template pass:
   - Fee section now shows AP Exam Fee, Trinity Service Fee, Late Registration Fee, and Base Total instead of only a single Base Total card.
   - Required Documents now shows passport, student information, parent information, AP exam selection, payment proof, and accommodation documents.
   - FAQ now shows AP overview, eligibility, late deadline, completion rule, change request, and accommodation guidance.
-  - Updated public header CTA labels from template login/signup wording to form-oriented links: `Form Info` and `Start Form`, while keeping the original Edification button/header classes.
+  - Earlier header CTA test used `Form Info` and `Start Form`; this has since been superseded by the Home 2 header with language switcher plus one `Start Form` CTA.
   - Removed the extra manual Google Fonts link from the public shell so fonts load through Edification's original `default-css.css` import order.
 - Hero font/render correction:
   - Confirmed the Edification font stack uses `Muli`, `Quicksand`, and `Roboto Slab`; the public shell now lets the original template CSS load those fonts instead of adding a separate manual font link.
   - Reworked the landing hero copy to match the template rhythm more closely: short uppercase eyebrow, long orange first headline line, long white second headline line, and concise supporting text.
 - Header template correction:
-  - Changed the public header labels back to the original Edification navigation rhythm: `Home`, `About`, `Courses`, `Teacher`, middle logo, `Events`, `Blog`, `Contact`.
-  - Kept the original two-button header structure, but changed the visible CTAs to form-related labels because student registration must not look like a login-first/signup flow.
+  - Earlier Home 1/Home 2 alignment attempts used the middle-logo `header-two` layout; this is now superseded by the Home 2 transparent header.
 - Hero template correction:
-  - Restored the landing hero markup to the original Edification structure: `col-lg-8 offset-lg-2`, centered `hero-content`, `h3`, split `h1`, intro paragraph, and `form-input mt-5`.
-  - Removed the custom hero CTA button group and extra deadline paragraph from the hero so the first viewport matches the supplied template layout more closely; registration now uses the template search/form block as the CTA.
+  - Earlier Home 2-style hero tests used `hero-content`; this is now superseded by the Home 2 `slider-area` hero.
 - Edification copy-paste correction pass:
-  - Removed the large custom CSS block from the shared public shell so the public header, middle logo, hero, cards, footer, fonts, and spacing come from the original Edification CSS files.
+  - Removed the large custom CSS block from the shared public shell so the public header, hero, cards, footer, fonts, and spacing come from the original Edification CSS files.
   - Changed the landing page to use Edification/Bootstrap cards and sections directly; removed the temporary `ts-*` custom classes and the landing-only style block.
   - Fixed the registration page visual break where form-level `.row`, `.card`, `.btn`, and body styles were overriding the copied Edification header/footer. Header/footer rows now reset to the original template layout, and the form progress starts below the fixed template header.
   - Kept the existing registration form fields, autosave, validation, upload draft, payment review, and JavaScript flow intact.
@@ -95,7 +98,7 @@ Current local template pass:
   - Reason: on CloudPanel/nginx proxy, the app may see upstream requests as HTTP and generate HTTP asset links, which can make browsers block the original Edification CSS on the HTTPS page.
   - No custom replacement CSS was added; public pages must continue to rely on the original Edification template CSS/JS.
 - Edification template alignment pass:
-  - Rebuilt `resources/views/components/public-flow-shell.blade.php` as the shared public Edification shell using the original template CSS/JS stack, `header-two` navigation, middle logo, register CTA, and footer structure.
+  - Earlier shell used the original `header-two` navigation and middle logo; this has since been replaced by the Home 2 transparent header structure.
   - Converted the landing page to render inside the shared Edification shell instead of using a separate custom head/body/header layout.
   - Reworked the landing sections to follow the approved education-template structure while keeping Word/PDF-required content: program overview, AP registration explanation, late-registration announcement, timeline, process, fees, required documents, FAQ, contact, and Register Now CTA.
   - Updated the student registration page head/header/footer to use the same Edification CSS, header navigation, logo treatment, content width, and footer as the landing page while preserving the existing multi-step form logic.

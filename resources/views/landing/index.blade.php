@@ -68,23 +68,47 @@
 
 <x-public-flow-shell :title="$metaTitle" :description="$metaDescription" content-class="none">
     <x-slot:hero>
-        <div class="hero-area has-color">
-            <div class="container">
-                <div class="row">
-                <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1">
-                    <div class="hero-content">
-                        <h3>AP Registration'26</h3>
-                        <h1 class="mb-5"><span class="primary-color">Start Your 2026 AP</span><b class="line-break"></b>Registration with Trinity Scholar</h1>
-                        <p class="text-white-50">Guided exam registration support for students in Taipei.</p>
-                        <form action="{{ route('student-registrations.create') }}" method="GET">
-                            <div class="form-input mt-5">
-                                <input type="text" name="registration" value="Start your AP registration" readonly>
-                                <button class="btn btn-primary btn-round" type="submit">Register</button>
-                                <i class="fa fa-search"></i>
+        <div class="slider-area owl-carousel has-color">
+            <div class="slider_item" style="background: url({{ asset($assetBase.'images/bg/slider-bg1.jpg') }}) center/cover no-repeat;">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-7 col-md-9">
+                            <div class="slider-content">
+                                <h3>AP Registration '26</h3>
+                                <h1><span class="primary-color">Taipei Test Center</span> Registration Support</h1>
+                                <p>Trinity Scholar offers guided AP Exam registration service for students who need Taipei test-center support.</p>
+                                <a class="btn btn-primary btn-round btn-lg mt-5" href="{{ route('student-registrations.create') }}">Start Student Registration</a>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
+            </div>
+            <div class="slider_item" style="background: url({{ asset($assetBase.'images/bg/slider-bg2.jpg') }}) center/cover no-repeat;">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-7 col-md-9">
+                            <div class="slider-content">
+                                <h3>Late Registration</h3>
+                                <h1><span class="primary-color">February 10</span> Deadline Notice</h1>
+                                <p>Registration is complete only after the filled-out form and payment are received. Seats may close early when full.</p>
+                                <a class="btn btn-primary btn-round btn-lg mt-5" href="#late-registration">View Notice</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slider_item" style="background: url({{ asset($assetBase.'images/bg/slider-bg3.jpg') }}) center/cover no-repeat;">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-7 col-md-9">
+                            <div class="slider-content">
+                                <h3>No Login Required</h3>
+                                <h1><span class="primary-color">Submit The Form</span> Then Admin Reviews</h1>
+                                <p>Students can submit passport, exam selections, accommodations, payment method, and preparation interest in one guided flow.</p>
+                                <a class="btn btn-primary btn-round btn-lg mt-5" href="#process">See Flow</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
