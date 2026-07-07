@@ -8,8 +8,62 @@
     $overview = $sections->get('overview');
     $process = $sections->get('process');
     $privacy = $sections->get('privacy');
-    $feeTotal = $fees->sum('amount');
     $assetBase = 'theme/edification/';
+    $displayFees = $fees->isNotEmpty() ? $fees : collect([
+        (object) [
+            'currency' => 'NTD',
+            'name' => 'AP Exam Fee',
+            'description' => 'Collected for official AP exam registration. Final subject pricing is confirmed by the admin team after review.',
+            'amount' => 7800,
+        ],
+        (object) [
+            'currency' => 'NTD',
+            'name' => 'Trinity Service Fee',
+            'description' => 'Service handling fee for registration coordination, document review, payment checking, and student follow-up.',
+            'amount' => 1200,
+        ],
+        (object) [
+            'currency' => 'NTD',
+            'name' => 'Late Registration Fee',
+            'description' => 'Applied during the late-registration period. Seats are limited and may close before the listed deadline.',
+            'amount' => 1500,
+        ],
+    ]);
+    $displayDocuments = $documents->isNotEmpty() ? $documents : collect([
+        (object) ['name' => 'Passport', 'description' => 'Clear passport photo page or PDF upload is required for exam registration verification.'],
+        (object) ['name' => 'Student Information', 'description' => 'Legal English name, school, grade, student email, phone, nationality, and date of birth.'],
+        (object) ['name' => 'Parent Information', 'description' => 'Parent or guardian name, relationship, email, phone, mailing address, city, and postal code.'],
+        (object) ['name' => 'AP Exam Selection', 'description' => 'Selected AP subjects, late-registration status, and any practice exam or preparation interest.'],
+        (object) ['name' => 'Payment Proof', 'description' => 'Payment must be submitted and verified before the registration can be marked completed.'],
+        (object) ['name' => 'Accommodation Documents', 'description' => 'Required only when requesting College Board approved accommodations or SSD support.'],
+    ]);
+    $displayFaqs = $faqs->isNotEmpty() ? $faqs : collect([
+        (object) [
+            'question' => 'What is AP?',
+            'answer' => 'AP stands for Advanced Placement. AP exams allow students to demonstrate college-level subject knowledge and may support university applications.',
+        ],
+        (object) [
+            'question' => 'Who can register through Trinity Scholar?',
+            'answer' => 'Students who need Taipei test-center registration support can submit the student registration form without logging in first.',
+        ],
+        (object) [
+            'question' => 'When is the late-registration deadline?',
+            'answer' => 'For the current 2026 late-registration notice, the deadline is February 10, 2026. Registration may close earlier if available seats are filled.',
+        ],
+        (object) [
+            'question' => 'When is registration considered complete?',
+            'answer' => 'Registration is complete only after the filled-out form and payment are received, then reviewed by the admin team.',
+        ],
+        (object) [
+            'question' => 'Can I change my exam selection?',
+            'answer' => 'Changes depend on deadline, subject availability, quota, and coordinator approval. Students should contact the admin team as early as possible.',
+        ],
+        (object) [
+            'question' => 'Can I request accommodations?',
+            'answer' => 'Yes. Students can mark accommodation needs and provide SSD or supporting documentation during registration when applicable.',
+        ],
+    ]);
+    $feeTotal = $displayFees->sum('amount');
 @endphp
 
 <x-public-flow-shell :title="$metaTitle" :description="$metaDescription" content-class="none">
@@ -200,7 +254,7 @@
                 </div>
             </div>
             <div class="row">
-                @foreach ($fees as $fee)
+                @foreach ($displayFees as $fee)
                     <div class="col-lg-4 col-md-6 mb-5">
                     <div class="card h-100">
                         <div class="card-body p-25">
@@ -237,7 +291,7 @@
                 </div>
             </div>
             <div class="row">
-                @foreach ($documents as $document)
+                @foreach ($displayDocuments as $document)
                     <div class="col-lg-4 col-md-6 mb-4">
                         <div class="card h-100">
                             <div class="card-body p-25">
@@ -260,7 +314,7 @@
                         <span>FAQ</span>
                         <h2 class="primary-color">Frequently Asked Questions</h2>
                     </div>
-                    @foreach ($faqs as $faq)
+                    @foreach ($displayFaqs as $faq)
                         <div class="card mb-4">
                             <div class="card-body p-25">
                                 <h4>{{ $faq->question }}</h4>

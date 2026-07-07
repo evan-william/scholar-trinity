@@ -62,12 +62,19 @@ Current local template pass:
 ## Current Progress
 
 2026-07-07
+- Public landing content fallback fix:
+  - Added Blade-level fallback content for fee explanation, required documents, and FAQ so the live landing page no longer renders empty sections when the server database has not been seeded yet.
+  - Fee section now shows AP Exam Fee, Trinity Service Fee, Late Registration Fee, and Base Total instead of only a single Base Total card.
+  - Required Documents now shows passport, student information, parent information, AP exam selection, payment proof, and accommodation documents.
+  - FAQ now shows AP overview, eligibility, late deadline, completion rule, change request, and accommodation guidance.
+  - Updated public header CTA labels from template login/signup wording to form-oriented links: `Form Info` and `Start Form`, while keeping the original Edification button/header classes.
+  - Removed the extra manual Google Fonts link from the public shell so fonts load through Edification's original `default-css.css` import order.
 - Hero font/render correction:
-  - Added explicit Google Fonts loading for the template fonts used by Edification: Muli, Quicksand, and Roboto Slab.
+  - Confirmed the Edification font stack uses `Muli`, `Quicksand`, and `Roboto Slab`; the public shell now lets the original template CSS load those fonts instead of adding a separate manual font link.
   - Reworked the landing hero copy to match the template rhythm more closely: short uppercase eyebrow, long orange first headline line, long white second headline line, and concise supporting text.
 - Header template correction:
-  - Changed the public header labels and right-side buttons back to the original Edification header rhythm: `Home`, `About`, `Courses`, `Teacher`, middle logo, `Events`, `Blog`, `Contact`, plus `Log in` and `Sign Up`.
-  - The links still point to Trinity Scholar sections/admin login/student registration, but the visible header text length now matches the template much more closely so the nav no longer looks cramped.
+  - Changed the public header labels back to the original Edification navigation rhythm: `Home`, `About`, `Courses`, `Teacher`, middle logo, `Events`, `Blog`, `Contact`.
+  - Kept the original two-button header structure, but changed the visible CTAs to form-related labels because student registration must not look like a login-first/signup flow.
 - Hero template correction:
   - Restored the landing hero markup to the original Edification structure: `col-lg-8 offset-lg-2`, centered `hero-content`, `h3`, split `h1`, intro paragraph, and `form-input mt-5`.
   - Removed the custom hero CTA button group and extra deadline paragraph from the hero so the first viewport matches the supplied template layout more closely; registration now uses the template search/form block as the CTA.

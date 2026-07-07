@@ -20,9 +20,6 @@
     <meta name="description" content="{{ $description }}">
     <title>{{ $title }}</title>
     <link rel="shortcut icon" type="image/png" href="{{ asset('favicon.ico') }}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli:300,400,600,700,800,900|Quicksand:300,400,500,700|Roboto+Slab:300,400,700&display=swap">
     <link rel="stylesheet" href="{{ asset($assetBase.'css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset($assetBase.'css/font-awesome.min.css') }}">
     <link rel="stylesheet" href="{{ asset($assetBase.'css/owl.carousel.min.css') }}">
@@ -70,8 +67,8 @@
                 <div class="col-lg-2 col-sm-5">
                     <div class="header-bottom-right-style-2">
                         <ul>
-                            <li><a class="btn btn-light btn-round" href="{{ route('admin.login') }}">Log in</a></li>
-                            <li><a class="btn btn-primary btn-round" href="{{ route('student-registrations.create') }}">Sign Up</a></li>
+                            <li><a class="btn btn-light btn-round" href="{{ route('landing') }}#process">Form Info</a></li>
+                            <li><a class="btn btn-primary btn-round" href="{{ route('student-registrations.create') }}">Start Form</a></li>
                         </ul>
                     </div>
                 </div>
