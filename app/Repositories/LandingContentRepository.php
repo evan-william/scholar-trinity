@@ -10,20 +10,25 @@ use App\Models\LandingSection;
 use App\Models\LandingSetting;
 use App\Models\LandingTimeline;
 use Illuminate\Support\Collection;
+use Throwable;
 
 class LandingContentRepository
 {
     public function payload(): array
     {
-        return [
-            'settings' => $this->settings(),
-            'sections' => LandingSection::query()->where('is_active', true)->orderBy('sort_order')->get()->keyBy('key'),
-            'timelines' => LandingTimeline::query()->where('is_active', true)->orderBy('sort_order')->get()->groupBy('round'),
-            'fees' => LandingFee::query()->where('is_active', true)->orderBy('sort_order')->get(),
-            'documents' => LandingRequiredDocument::query()->where('is_active', true)->orderBy('sort_order')->get(),
-            'faqs' => LandingFaq::query()->where('is_active', true)->orderBy('sort_order')->get(),
-            'contact' => LandingContact::query()->first(),
-        ];
+        try {
+            return [
+                'settings' => $this->settings(),
+                'sections' => LandingSection::query()->where('is_active', true)->orderBy('sort_order')->get()->keyBy('key'),
+                'timelines' => LandingTimeline::query()->where('is_active', true)->orderBy('sort_order')->get()->groupBy('round'),
+                'fees' => LandingFee::query()->where('is_active', true)->orderBy('sort_order')->get(),
+                'documents' => LandingRequiredDocument::query()->where('is_active', true)->orderBy('sort_order')->get(),
+                'faqs' => LandingFaq::query()->where('is_active', true)->orderBy('sort_order')->get(),
+                'contact' => LandingContact::query()->first(),
+            ];
+        } catch (Throwable) {
+            return $this->emptyPayload();
+        }
     }
 
     public function adminPayload(): array
@@ -45,5 +50,18 @@ class LandingContentRepository
             ->get()
             ->groupBy('group')
             ->map(fn (Collection $rows) => $rows->mapWithKeys(fn (LandingSetting $setting) => [$setting->key => $setting->value]));
+    }
+
+    private function emptyPayload(): array
+    {
+        return [
+            'settings' => collect(),
+            'sections' => collect(),
+            'timelines' => collect(),
+            'fees' => collect(),
+            'documents' => collect(),
+            'faqs' => collect(),
+            'contact' => null,
+        ];
     }
 }

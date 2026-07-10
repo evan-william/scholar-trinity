@@ -70,6 +70,9 @@ Current local template pass:
 - Registration form typography pass:
   - Added final form CSS overrides to use the Edification font system more consistently: `Muli` for body/form copy and `Roboto Slab` only for headings.
   - Softened label/input/button weights, restored rounded primary buttons, and tightened the form intro/card styling so the form looks closer to the public homepage theme.
+- Deployment config safety:
+  - Changed `.env.production.example` temporary defaults from empty MySQL/database cache settings to SQLite + file cache/session + sync queue so a no-credential deploy does not immediately hit a Laravel 500.
+  - Added no-DB read fallbacks for the public landing payload and student registration form subject list, so compro/form preview pages can still render while the real database is not configured yet.
 
 2026-07-10
 - Trinity Scholar branding pass:
