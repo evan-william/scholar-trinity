@@ -1,6 +1,6 @@
 # Trinity Scholar Progress Tracker
 
-Last updated: 2026-07-10, Asia/Bangkok
+Last updated: 2026-07-11, Asia/Bangkok
 
 This file is the working source of truth for project status. Every implementation pass must update:
 - `Current Progress` for what changed.
@@ -60,6 +60,16 @@ Current local template pass:
 - Raw downloaded templates are ignored through `template-source/` in `.gitignore`.
 
 ## Current Progress
+
+2026-07-11
+- Public UI repair pass:
+  - Repaired the broken `Registration Flow` section so the dark band wraps the full section, the title/subtitle stay inside the section, and the step cards no longer overflow or get cut off on the left/right edges.
+  - Reworked the registration-flow step cards with fixed card sizing, centered Bootstrap columns, cleaner spacing, and Trinity-blue step pills.
+  - Changed public text selection highlight from the Edification orange default to a readable Trinity-blue highlight.
+  - Reduced public header nav/language control font weight so the header reads closer to the Edification template instead of looking overly bold.
+- Registration form typography pass:
+  - Added final form CSS overrides to use the Edification font system more consistently: `Muli` for body/form copy and `Roboto Slab` only for headings.
+  - Softened label/input/button weights, restored rounded primary buttons, and tightened the form intro/card styling so the form looks closer to the public homepage theme.
 
 2026-07-10
 - Trinity Scholar branding pass:

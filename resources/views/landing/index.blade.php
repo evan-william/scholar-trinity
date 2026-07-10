@@ -85,7 +85,7 @@
             .late-notice-area .container{position:relative;z-index:1}
             .notice-card{height:100%;background:#fff;border:0!important;border-radius:4px;box-shadow:0 18px 45px rgba(0,0,0,.18)}
             .notice-card .card-body{padding:30px}
-            .notice-kicker{display:inline-block;color:var(--trinity-blue);font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+            .notice-kicker{display:inline-block;color:var(--trinity-blue);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
             .notice-list{margin:18px 0 0;padding:0}
             .notice-list li{display:flex;gap:10px;font-size:14px;font-weight:700;line-height:1.55;padding:5px 0;color:#5e6573}
             .notice-list li i{color:var(--trinity-blue);margin-top:4px}
@@ -103,9 +103,22 @@
             .landing-card:hover{transform:translateY(-4px);box-shadow:0 22px 44px rgba(18,43,82,.11)}
             .course-thumb img{height:190px;width:100%;object-fit:cover}
             #overview{padding-top:58px!important;padding-bottom:74px!important}
-            #timeline{padding-top:58px!important;padding-bottom:48px!important}
-            #process{padding-top:28px!important;padding-bottom:74px!important}
-            #fees{padding-top:62px!important;padding-bottom:28px!important}
+            #timeline{padding-top:58px!important;padding-bottom:56px!important}
+            #process{background:#12171f;padding-top:68px!important;padding-bottom:76px!important;overflow:hidden}
+            #process:before{display:none!important}
+            #process .container{position:relative;z-index:1}
+            #process .section-title-style2{margin-bottom:34px;padding-top:0}
+            #process .section-title-style2 span{color:rgba(255,255,255,.78)}
+            #process .section-title-style2 h2{color:#fff!important}
+            #process .section-title-style2 p{max-width:720px;margin:12px auto 0;color:rgba(255,255,255,.72)}
+            #process .process-grid{justify-content:center}
+            #process .process-col{display:flex}
+            #process .process-card{width:100%;min-height:220px;border:1px solid rgba(255,255,255,.12);border-radius:4px;box-shadow:0 18px 45px rgba(0,0,0,.18);overflow:hidden}
+            #process .process-card .teacher-content{padding:30px 24px!important}
+            #process .process-step{display:inline-flex;align-items:center;justify-content:center;min-width:72px;height:30px;margin-bottom:18px;border-radius:50px;background:var(--trinity-blue-soft);color:var(--trinity-blue);font-family:"Muli",sans-serif;font-size:13px;font-weight:700;letter-spacing:0}
+            #process .process-card h4{font-size:20px;line-height:30px;margin-bottom:10px!important;color:#1e2c39}
+            #process .process-card p{margin:0;color:#737f8d;line-height:28px}
+            #fees{padding-top:56px!important;padding-bottom:34px!important}
             #documents{padding-top:22px!important;padding-bottom:40px!important}
             #faq{padding-top:40px!important;padding-bottom:70px!important}
             #contact{padding-top:82px!important;padding-bottom:74px!important}
@@ -120,6 +133,7 @@
                 .section-title-style2 h2{font-size:32px;line-height:40px}
                 .section-title-style2 span:before,
                 .section-title-style2 span:after{display:none!important}
+                #process .process-card{min-height:auto}
                 #overview,#timeline,#process,#fees,#documents,#faq,#contact{padding-top:42px!important;padding-bottom:42px!important}
             }
         </style>
@@ -320,12 +334,12 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row process-grid">
                 @foreach (($process?->items ?: [$tx('Fill student form', '填寫學生資料'), $tx('Select AP exams', '選擇 AP 考試'), $tx('Upload passport', '上傳護照'), $tx('Submit payment proof', '提交付款資料')]) as $index => $item)
-                    <div class="col-lg-3 col-md-6 mb-5">
-                        <div class="card landing-card text-center">
+                    <div class="col-xl-3 col-lg-3 col-md-6 mb-5 process-col">
+                        <div class="card landing-card text-center process-card">
                             <div class="card-body teacher-content p-25">
-                                <span class="primary-color d-block mb-4">{{ $tx('Step', '步驟') }} {{ $index + 1 }}</span>
+                                <span class="process-step">{{ $tx('Step', '步驟') }} {{ $index + 1 }}</span>
                                 <h4 class="card-title mb-4">{{ $item }}</h4>
                                 <p>{{ $tx('Each step is reviewed by the AP registration admin team before completion.', '每個步驟都會由 AP 報名管理團隊審核後確認。') }}</p>
                             </div>

@@ -228,6 +228,57 @@
         @media(max-width:1199px){#header .main-menu nav ul li a{padding:43px 10px}#header .public-header-actions .btn{padding:15px 18px}}
         @media(max-width:991px){#header .header-bottom{background:rgba(15,18,24,.86)}#header .header-bottom-inner{min-height:auto;padding:18px 0}#header .public-header-actions{justify-content:flex-start;margin-top:10px}.slicknav_btn{margin-top:-39px}.form-top-band{min-height:176px}}
         @media(max-width:575px){#header .header-top{display:none}#header .logo img{width:190px}#header .public-header-actions{gap:8px;flex-wrap:wrap}#header .language-switcher select{height:42px;min-width:104px}#header .public-header-actions .btn{padding:13px 16px}.form-top-band{min-height:126px}}
+
+        body{font-family:"Muli","Microsoft JhengHei","PingFang TC",Arial,sans-serif;font-size:16px;font-weight:400;line-height:1.65;letter-spacing:0;color:#526071;background:#f5f8fc}
+        body *::selection{background:rgba(36,78,154,.88);color:#fff;text-shadow:none}
+        body *::-moz-selection{background:rgba(36,78,154,.88);color:#fff;text-shadow:none}
+        h1,h2,h3,h4,h5,h6,
+        .section-title,
+        .form-intro h2,
+        .intro-summary strong{font-family:"Roboto Slab","Microsoft JhengHei","PingFang TC",serif;letter-spacing:0}
+        p,li,label,input,select,textarea,button,.btn,.step-label,.hint,.notice{font-family:"Muli","Microsoft JhengHei","PingFang TC",Arial,sans-serif;letter-spacing:0}
+        #header .main-menu nav ul li a{font-family:"Muli",sans-serif;font-size:13px;font-weight:600;letter-spacing:.01em}
+        #header .language-switcher select{font-weight:600;letter-spacing:0}
+        #header .public-header-actions .btn{font-weight:700;letter-spacing:0}
+        .form-top-band{min-height:132px}
+        .main{max-width:1080px;padding-top:34px}
+        .card{border-radius:8px;border:1px solid #dfe8f2;box-shadow:0 16px 36px rgba(26,58,107,.08);padding:28px 30px;margin-bottom:20px}
+        .form-intro{grid-template-columns:minmax(0,1fr) 280px;margin-top:0;background:#fff;border:1px solid #dfe8f2;border-radius:8px;box-shadow:0 18px 40px rgba(26,58,107,.08)}
+        .form-intro h2{font-size:30px;line-height:40px;color:#1b3f7b;margin:12px 0 8px}
+        .form-intro p{font-size:16px;line-height:28px;color:#647386}
+        .intro-list{font-size:14px;line-height:1.7;color:#1f2f44}
+        .intro-summary{border-radius:8px;background:#f8fbff;border-color:#cddcee;box-shadow:none}
+        .intro-summary span{color:#1b3f7b;font-weight:700;letter-spacing:.08em}
+        .intro-summary p{font-size:14px;line-height:24px;color:#34455d}
+        .header-badge{background:#e6edf8;color:#1b3f7b;border-radius:50px;font-weight:700;box-shadow:none}
+        .section-title{font-size:20px;line-height:30px;font-weight:700;color:#1e2c39;border-bottom:1px solid #dfe8f2;padding-bottom:13px;margin-bottom:24px}
+        .section-title::after{width:48px;height:2px;background:var(--trinity-blue);margin-top:11px}
+        .section-title span{font-family:"Muli","Microsoft JhengHei","PingFang TC",Arial,sans-serif;font-size:13px;font-weight:400;color:#6b7a90}
+        .lbl{font-size:13px;font-weight:600;color:#2f4157;text-transform:none;letter-spacing:0}
+        .lbl .zh{font-size:12px;font-weight:400;color:#708197}
+        input:not([type]),input[type=text],input[type=email],input[type=tel],input[type=search],input[type=date],input[type=file],select,textarea{min-height:45px;border:1px solid #cfdcea;border-radius:6px;background:#fff;color:#253247;font-size:15px;font-weight:400;padding:11px 13px;box-shadow:none}
+        input:not([type]):hover,input[type=text]:hover,input[type=email]:hover,input[type=tel]:hover,input[type=search]:hover,input[type=date]:hover,select:hover,textarea:hover{background:#fff;border-color:#9fb6d7}
+        input:focus,select:focus,textarea:focus{border-color:var(--trinity-blue);box-shadow:0 0 0 3px rgba(36,78,154,.12)}
+        .notice{background:#f8fbff;border-color:#cddcee;border-left-color:var(--trinity-blue);border-radius:8px}
+        .notice h4,.pay-opt h4,.next-steps h4,.rev-section h3{font-family:"Roboto Slab","Microsoft JhengHei","PingFang TC",serif;font-weight:700;color:#1e2c39}
+        .sel-badge,
+        .price-preview,
+        .cat-title,
+        .exam-price-tag,
+        .price-row.total,
+        .check-line,
+        .toast,
+        .exam-name{font-weight:700}
+        .exam-cb,.pay-opt,.sig-box,.price-box,.next-steps,.rev-section{border-radius:8px}
+        .btn{border-radius:50px;font-family:"Muli",sans-serif;font-weight:700;letter-spacing:0}
+        .nav-footer .btn-primary{min-width:168px;border-radius:50px}
+        .nav-footer{box-shadow:0 -10px 28px rgba(26,58,107,.1)}
+        @media(max-width:767px){
+            .main{padding-top:22px}
+            .card{padding:22px 18px}
+            .form-intro{grid-template-columns:1fr}
+            .form-intro h2{font-size:26px;line-height:34px}
+        }
     </style>
 </head>
 <body>

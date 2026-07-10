@@ -87,6 +87,16 @@
     <style>
         :root{--trinity-blue:#244e9a;--trinity-blue-dark:#142f63;--trinity-blue-soft:#eaf2ff;--trinity-blue-bright:#9db9ff}
         html{scroll-behavior:smooth}
+        body.trinity-public{font-family:"Muli","Microsoft JhengHei","PingFang TC",Arial,sans-serif;font-weight:400;letter-spacing:0}
+        body.trinity-public h1,
+        body.trinity-public h2,
+        body.trinity-public h3,
+        body.trinity-public h4,
+        body.trinity-public h5,
+        body.trinity-public h6{font-family:"Roboto Slab","Microsoft JhengHei","PingFang TC",serif;letter-spacing:0}
+        body.trinity-public p{font-family:"Muli","Microsoft JhengHei","PingFang TC",Arial,sans-serif;font-weight:400;letter-spacing:0}
+        body.trinity-public *::selection{background:rgba(36,78,154,.88);color:#fff;text-shadow:none}
+        body.trinity-public *::-moz-selection{background:rgba(36,78,154,.88);color:#fff;text-shadow:none}
         .primary-color{color:var(--trinity-blue)!important}
         .primary-bg,.btn-primary,.media-head.primary-bg,.cs-price.primary-bg{background:var(--trinity-blue)!important;border-color:var(--trinity-blue)!important}
         .btn-primary:hover{background:var(--trinity-blue-dark)!important;border-color:var(--trinity-blue-dark)!important}
@@ -106,7 +116,7 @@
         #header .logo a{display:inline-flex;align-items:center;background:#fff;border-radius:8px;padding:9px 14px;box-shadow:0 12px 28px rgba(0,0,0,.16)}
         #header .logo img{width:230px;max-height:64px;object-fit:contain}
         #header .main-menu{text-align:center}
-        #header .main-menu nav ul li a{padding:43px 15px}
+        #header .main-menu nav ul li a{padding:43px 15px;font-family:"Muli",sans-serif;font-size:13px;font-weight:600;letter-spacing:.01em}
         #header .main-menu nav ul li.active a,#header .main-menu nav ul li a:hover{color:var(--trinity-blue-bright)}
         #header .public-header-actions{display:flex;align-items:center;justify-content:flex-end;gap:12px}
         #header .public-header-actions .btn{white-space:nowrap;padding:16px 25px}
@@ -114,7 +124,7 @@
         #header .public-header-actions .btn.btn-round{border-radius:50px!important;line-height:12px}
         #header .language-switcher{margin:0}
         #header .language-switcher label{display:block;margin:0}
-        #header .language-switcher select{height:48px;min-width:126px;border:1px solid rgba(255,255,255,.55);border-radius:50px;background:rgba(255,255,255,.96);color:#252525;padding:0 18px;font-family:"Muli",sans-serif;font-size:14px;font-weight:700;text-transform:uppercase}
+        #header .language-switcher select{height:48px;min-width:126px;border:1px solid rgba(255,255,255,.55);border-radius:50px;background:rgba(255,255,255,.96);color:#252525;padding:0 18px;font-family:"Muli",sans-serif;font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:0}
         #header .ht-social .language-switcher select{height:34px;min-width:105px;border:0}
         footer .widget-company img{background:#fff;border-radius:8px;padding:10px 14px;width:250px;max-width:100%;height:auto}
         footer .address h6,
