@@ -1,6 +1,6 @@
 # Trinity Scholar Progress Tracker
 
-Last updated: 2026-07-07, Asia/Bangkok
+Last updated: 2026-07-10, Asia/Bangkok
 
 This file is the working source of truth for project status. Every implementation pass must update:
 - `Current Progress` for what changed.
@@ -60,6 +60,19 @@ Current local template pass:
 - Raw downloaded templates are ignored through `template-source/` in `.gitignore`.
 
 ## Current Progress
+
+2026-07-10
+- Trinity Scholar branding pass:
+  - Generated and added `public/images/trinity-scholar-logo.png` and `public/images/trinity-scholar-favicon.png` from the provided Trinity Scholar logo reference.
+  - Replaced Edification logo usage in the public header/footer and student registration header/footer with the Trinity Scholar logo asset.
+  - Switched public header, CTA, section accents, menu hover/active accents, and form accent colors from Edification orange to Trinity blue.
+- Footer/copyright update:
+  - Changed the footer copyright format to match the Sophistec reference: `Copyright © 2026 Trinity Scholar. All Rights Reserved. Designed By Sophistec Dev House. Powered by Sophistec Global.`
+  - Added clickable footer links to `https://devhouse.sophistec.global/` and `https://sophistec.global/`.
+- Public UX polish:
+  - Added smooth scrolling for same-page hash navigation such as `#contact`.
+  - Localized the public header nav labels and the form step/header controls so English and Traditional Chinese no longer show together in those primary UI areas.
+  - Added form-side locale handling for next/back/submit labels, selected-exam count, upload status, review fallback text, and section/field labels that provide Traditional Chinese spans.
 
 2026-07-07
 - Landing spacing and late notice polish:

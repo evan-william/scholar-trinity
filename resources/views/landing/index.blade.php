@@ -77,19 +77,19 @@
             #faq,
             #contact{scroll-margin-top:130px}
             .late-notice-area{background:#14171d;padding:72px 0 58px;position:relative;overflow:hidden}
-            .late-notice-area:before{content:"";position:absolute;right:-120px;top:-120px;width:340px;height:340px;border:55px solid rgba(252,153,40,.08);border-radius:50%}
+            .late-notice-area:before{content:"";position:absolute;right:-120px;top:-120px;width:340px;height:340px;border:55px solid rgba(36,78,154,.14);border-radius:50%}
             .late-notice-area:after{content:"";position:absolute;left:-90px;bottom:-110px;width:260px;height:260px;background:rgba(255,255,255,.035);border-radius:50%}
             .late-notice-area .container{position:relative;z-index:1}
             .notice-card{height:100%;background:#fff;border:0!important;border-radius:4px;box-shadow:0 18px 45px rgba(0,0,0,.18)}
             .notice-card .card-body{padding:30px}
-            .notice-kicker{display:inline-block;color:#fc9928;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+            .notice-kicker{display:inline-block;color:var(--trinity-blue);font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
             .notice-list{margin:18px 0 0;padding:0}
             .notice-list li{display:flex;gap:10px;font-size:14px;font-weight:700;line-height:1.55;padding:5px 0;color:#5e6573}
-            .notice-list li i{color:#fc9928;margin-top:4px}
+            .notice-list li i{color:var(--trinity-blue);margin-top:4px}
             .late-stat{display:flex;align-items:center;gap:18px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);padding:18px 20px;margin-top:24px}
             .late-stat strong{display:block;color:#fff;font-size:28px;line-height:1;font-family:"Roboto Slab",serif}
             .late-stat span{display:block;color:rgba(255,255,255,.75);font-size:13px;text-transform:uppercase;letter-spacing:.06em}
-            .late-stat i{display:grid;place-items:center;width:48px;height:48px;border-radius:50%;background:#fc9928;color:#fff;font-size:20px}
+            .late-stat i{display:grid;place-items:center;width:48px;height:48px;border-radius:50%;background:var(--trinity-blue);color:#fff;font-size:20px}
             .compact-section-title{margin-bottom:34px}
             .faq-card .card-body p{margin-bottom:0}
             @media(max-width:767px){

@@ -1,10 +1,41 @@
+@php
+    $brandLogo = 'images/trinity-scholar-logo.png';
+    $brandFavicon = 'images/trinity-scholar-favicon.png';
+    $uiLocale = session('locale', str_replace('_', '-', app()->getLocale()));
+    $isZh = $uiLocale === 'zh-TW';
+    $navLabels = $isZh
+        ? ['home' => '首頁', 'program' => '課程資訊', 'timeline' => '時程', 'fees' => '費用', 'faq' => '常見問題', 'contact' => '聯絡我們', 'start' => '開始報名', 'support' => '台北 AP 報名支援']
+        : ['home' => 'Home', 'program' => 'Program', 'timeline' => 'Timeline', 'fees' => 'Fees', 'faq' => 'FAQ', 'contact' => 'Contact', 'start' => 'Start Form', 'support' => 'Taipei AP Registration Support'];
+    $stepLabels = $isZh
+        ? ['學生資料', '家長 / 監護人', '考試選擇', '特殊考試需求', '確認與付款', '完成報名']
+        : ['Student Information', 'Parent / Guardian', 'Exam Selection', 'Accommodations', 'Review & Payment', 'Confirmation'];
+    $introCopy = $isZh
+        ? [
+            'badge' => '不需登入',
+            'title' => '2026 AP 考試報名',
+            'body' => '學生可在同一個流程中提交報名資料、護照、考試選擇、特殊需求與付款方式。',
+            'items' => ['逾期報名截止日期：2026 年 2 月 10 日。', '報名需在表單與付款皆收到後才算完成。', 'AP Chinese、AP Calculus、AP Macro/Micro 已在台北考場公告中標示額滿。', '最終科目名額將由管理團隊審核後確認。'],
+            'summary_label' => '逾期報名',
+            'summary_title' => '2 月 10 日',
+            'summary_body' => '逾期報名可能會有額外費用。座位有限，額滿時可能提前關閉報名。',
+        ]
+        : [
+            'badge' => 'No login required',
+            'title' => '2026 AP Exam Registration',
+            'body' => 'Students can submit registration details, passport upload, exam selections, accommodations, and payment method in one guided flow.',
+            'items' => ['Late registration deadline: February 10, 2026.', 'Registration is complete only after the form and payment are received.', 'AP Chinese, AP Calculus, and AP Macro/Micro are marked full in the shared Taipei test-center notice.', 'Final subject availability is confirmed by the admin team after submission.'],
+            'summary_label' => 'Late Registration',
+            'summary_title' => 'Feb. 10',
+            'summary_body' => 'Extra late registration fees may apply. Submit early because registration can close before the deadline when seats are full.',
+        ];
+@endphp
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ __('student_registration.title') }}</title>
-    <link rel="shortcut icon" type="image/png" href="{{ asset('favicon.ico') }}">
+    <link rel="icon" type="image/png" href="{{ asset($brandFavicon) }}">
     <link rel="stylesheet" href="{{ asset('theme/edification/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('theme/edification/css/font-awesome.min.css') }}">
     <link rel="stylesheet" href="{{ asset('theme/edification/css/owl.carousel.min.css') }}">
@@ -16,14 +47,15 @@
     <link rel="stylesheet" href="{{ asset('theme/edification/css/responsive.css') }}">
     <script src="{{ asset('theme/edification/js/vendor/modernizr-2.8.3.min.js') }}"></script>
     <style>
-        :root{--primary:#1a3a6b;--primary-light:#2a5298;--accent:#c9a84c;--success:#237a4f;--danger:#b42318;--gray-50:#f8f9fa;--gray-100:#f1f3f5;--gray-200:#e9ecef;--gray-400:#ced4da;--gray-600:#6c757d;--gray-800:#343a40;--white:#fff;--radius:8px;--shadow:0 2px 16px rgba(0,0,0,.09)}
+        :root{--trinity-blue:#244e9a;--trinity-blue-dark:#142f63;--trinity-blue-soft:#eaf2ff;--trinity-blue-bright:#9db9ff;--primary:#244e9a;--primary-light:#142f63;--accent:#244e9a;--success:#237a4f;--danger:#b42318;--gray-50:#f8f9fa;--gray-100:#f1f3f5;--gray-200:#e9ecef;--gray-400:#ced4da;--gray-600:#6c757d;--gray-800:#343a40;--white:#fff;--radius:8px;--shadow:0 2px 16px rgba(0,0,0,.09)}
+        html{scroll-behavior:smooth}
         *{box-sizing:border-box}body{margin:0;background:var(--gray-50);color:var(--gray-800);font-family:"Muli","Microsoft JhengHei","PingFang TC",Arial,sans-serif;min-height:100vh}
-        .header{background:var(--primary);color:#fff;padding:14px 24px}.head-inner{max-width:920px;margin:0 auto;display:flex;align-items:center;gap:16px;flex-wrap:wrap}.header-logos{display:flex;align-items:center;gap:12px}.logo-pill{background:#fff;color:var(--primary);font-size:10px;font-weight:800;padding:6px 10px;border-radius:6px;line-height:1.3;text-align:center;letter-spacing:.3px}.logo-divider{width:1px;height:36px;background:rgba(255,255,255,.25)}.header-title{flex:1;min-width:220px}.header-title h1{font-size:16px;font-weight:700;line-height:1.35;margin:0}.header-title p{font-size:11px;opacity:.76;margin:2px 0 0}.header-badge{background:var(--accent);color:#4b3200;padding:5px 14px;border-radius:20px;font-size:12px;font-weight:800;white-space:nowrap}.header-actions{display:flex;gap:10px;align-items:center}
+        .header{background:var(--primary);color:#fff;padding:14px 24px}.head-inner{max-width:920px;margin:0 auto;display:flex;align-items:center;gap:16px;flex-wrap:wrap}.header-logos{display:flex;align-items:center;gap:12px}.logo-pill{background:#fff;color:var(--primary);font-size:10px;font-weight:800;padding:6px 10px;border-radius:6px;line-height:1.3;text-align:center;letter-spacing:.3px}.logo-divider{width:1px;height:36px;background:rgba(255,255,255,.25)}.header-title{flex:1;min-width:220px}.header-title h1{font-size:16px;font-weight:700;line-height:1.35;margin:0}.header-title p{font-size:11px;opacity:.76;margin:2px 0 0}.header-badge{background:var(--trinity-blue);color:#fff;padding:5px 14px;border-radius:20px;font-size:12px;font-weight:800;white-space:nowrap}.header-actions{display:flex;gap:10px;align-items:center}
         .progress-wrap{background:#fff;border-bottom:1px solid var(--gray-200);padding:0 16px;overflow-x:auto}.progress-steps{display:flex;min-width:max-content;max-width:840px;margin:0 auto}.step-item{flex:1;display:flex;flex-direction:column;align-items:center;padding:14px 6px;position:relative;min-width:118px}.step-item:not(:last-child)::after{content:"";position:absolute;top:28px;left:calc(50% + 17px);right:calc(-50% + 17px);height:2px;background:var(--gray-200)}.step-item.completed:not(:last-child)::after{background:var(--primary)}.step-circle{width:30px;height:30px;border-radius:50%;border:2px solid var(--gray-400);background:#fff;color:var(--gray-600);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;z-index:1}.step-item.active .step-circle,.step-item.completed .step-circle{border-color:var(--primary);background:var(--primary);color:#fff}.step-label{margin-top:5px;font-size:10px;text-align:center;color:var(--gray-600);line-height:1.3}.step-item.active .step-label{color:var(--primary);font-weight:700}
         .main{max-width:760px;margin:0 auto;padding:24px 16px 108px}.card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:26px 24px;margin-bottom:16px}.section-title{font-size:17px;font-weight:800;color:var(--primary);border-bottom:2px solid var(--accent);padding-bottom:9px;margin-bottom:20px}.section-title span{display:block;font-size:12px;font-weight:400;color:var(--gray-600);margin-top:2px}.row{display:grid;gap:14px;margin-bottom:14px}.row-2{grid-template-columns:1fr 1fr}.row-3{grid-template-columns:1fr 1fr .55fr}.row-1{grid-template-columns:1fr}.fg{display:flex;flex-direction:column;gap:5px}.fg.span2{grid-column:1/-1}.lbl{font-size:13px;font-weight:700;color:var(--gray-800)}.lbl .zh{display:block;font-size:11px;font-weight:400;color:var(--gray-600)}.req{color:var(--danger);margin-left:2px}
         input:not([type]),input[type=text],input[type=email],input[type=tel],input[type=search],input[type=file],select,textarea{border:1.5px solid var(--gray-400);border-radius:6px;padding:9px 12px;font:inherit;font-size:14px;color:var(--gray-800);background:#fff;width:100%}input:focus,select:focus,textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(26,58,107,.1)}input[aria-invalid=true],select[aria-invalid=true],textarea[aria-invalid=true]{border-color:var(--danger);background:#fffafa}.hint{font-size:11px;color:var(--gray-600);margin-top:3px}.error{color:var(--danger);font-size:12px}.error-box{background:#fff0ee;border:1px solid #ffc9c4;color:var(--danger);padding:12px 14px;border-radius:8px;margin-bottom:14px}.hidden{display:none!important}
         .upload-area{border:2px dashed var(--gray-400);border-radius:var(--radius);padding:22px 16px;text-align:center;cursor:pointer;background:var(--gray-50);position:relative}.upload-area:hover{border-color:var(--primary);background:rgba(26,58,107,.03)}.upload-area input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;height:100%}.upload-icon{font-size:30px;margin-bottom:6px}.upload-text{font-size:13px;color:var(--gray-600)}.upload-text strong{color:var(--primary)}.upload-sub{font-size:11px;color:var(--gray-600);margin-top:3px}.upload-selected{margin-top:8px;font-size:13px;color:var(--success);font-weight:700}
-        .notice{background:#fff8e1;border:1px solid #f0c040;border-left:4px solid var(--accent);border-radius:var(--radius);padding:14px 16px;margin-bottom:18px}.notice h4{font-size:13px;font-weight:800;color:#745300;margin:0 0 7px}.notice p,.notice li{font-size:12px;color:#5a4000;line-height:1.65}.notice ul{padding-left:16px;margin:0}
+        .notice{background:#f4f7ff;border:1px solid #c9d8f3;border-left:4px solid var(--accent);border-radius:var(--radius);padding:14px 16px;margin-bottom:18px}.notice h4{font-size:13px;font-weight:800;color:var(--trinity-blue-dark);margin:0 0 7px}.notice p,.notice li{font-size:12px;color:#334155;line-height:1.65}.notice ul{padding-left:16px;margin:0}
         .exam-sticky{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid var(--gray-200);padding:10px 0;margin:0 0 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}.sel-badge{display:inline-flex;align-items:center;gap:6px;background:var(--primary);color:#fff;padding:4px 13px;border-radius:20px;font-size:12px;font-weight:800}.price-preview{font-size:14px;font-weight:900;color:var(--primary)}.filters{display:grid;grid-template-columns:1fr 220px;gap:10px;margin-bottom:14px}.cat-title{font-size:13px;font-weight:900;color:var(--primary);margin:18px 0 8px;padding-bottom:5px;border-bottom:1px solid var(--gray-200)}.exam-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.exam-cb{display:flex;align-items:flex-start;gap:10px;border:1.5px solid var(--gray-200);border-radius:8px;padding:10px 11px;cursor:pointer;background:#fff;min-height:58px}.exam-cb.checked{border-color:var(--primary);background:rgba(26,58,107,.05)}.exam-cb.disabled{opacity:.58;cursor:not-allowed;background:#f8fafc}.exam-cb input{width:16px;height:16px;min-height:auto;margin-top:2px;accent-color:var(--primary)}.exam-name{font-size:13px;font-weight:800;color:var(--gray-800);line-height:1.35}.exam-sub{font-size:11px;color:var(--gray-600);line-height:1.4}.exam-price-tag{margin-left:auto;font-size:12px;font-weight:900;color:var(--primary);white-space:nowrap}.price-box{background:var(--gray-50);border:1px solid var(--gray-200);border-radius:8px;padding:14px;margin-top:16px}.price-row{display:flex;justify-content:space-between;gap:12px;padding:5px 0;font-size:13px}.price-row.total{border-top:2px solid var(--primary);margin-top:8px;padding-top:10px;color:var(--primary);font-weight:900;font-size:16px}
         .check-line{display:flex;align-items:flex-start;gap:10px;font-size:13px;font-weight:700;line-height:1.5}.check-line input{width:18px;height:18px;min-height:auto;margin-top:1px;accent-color:var(--primary)}.ghost-btn{background:#fff;border:1.5px dashed var(--gray-400);padding:8px 14px;border-radius:6px;cursor:pointer;font-size:12px;color:var(--gray-600);font-family:inherit}.rev-section h3{font-size:14px;color:var(--primary);margin:0 0 8px}.rev-table{width:100%;border-collapse:collapse}.rev-table td{padding:7px 0;border-bottom:1px solid #edf0f5;font-size:13px;vertical-align:top}.rev-table td:first-child{width:38%;color:var(--gray-600);padding-right:12px}.div{border:0;border-top:1px solid var(--gray-200);margin:16px 0}.pay-options{display:grid;gap:10px}.pay-opt{border:1.5px solid var(--gray-200);border-radius:8px;padding:12px;display:flex;gap:10px;cursor:pointer}.pay-opt.selected{border-color:var(--primary);background:rgba(26,58,107,.05)}.pay-opt input{width:18px;height:18px;margin-top:3px;accent-color:var(--primary)}.pay-opt h4{margin:0 0 4px;color:var(--primary);font-size:14px}.pay-opt p{margin:0;color:var(--gray-600);font-size:12px;line-height:1.55}.badge-soon{display:inline-flex;background:#eef3f9;color:var(--primary);border-radius:999px;padding:2px 7px;font-size:10px}.sig-area{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}.sig-box{border:1px solid var(--gray-200);border-radius:8px;padding:14px;background:var(--gray-50)}.sig-box p{font-size:12px;margin:0 0 8px}.sig-line{height:48px;border-bottom:1.5px solid var(--gray-400);margin-bottom:8px}.confirm-wrap{text-align:center;padding:10px 0}.confirm-icon{width:66px;height:66px;border-radius:50%;display:grid;place-items:center;background:#e8f6ef;color:var(--success);font-size:24px;font-weight:900;margin:0 auto 14px}.ref-box{display:inline-block;background:var(--gray-50);border:1px solid var(--gray-200);border-radius:8px;padding:13px 18px;margin:14px 0}.next-steps{text-align:left;background:var(--gray-50);border-radius:8px;padding:14px 18px;margin-top:16px}.next-steps h4{margin:0 0 8px;color:var(--primary)}.next-steps li{font-size:13px;margin-bottom:6px;line-height:1.5}
         .nav-footer{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--gray-200);box-shadow:0 -2px 14px rgba(0,0,0,.06);padding:12px 18px;display:flex;align-items:center;justify-content:center;gap:18px;z-index:50}.btn{border:0;border-radius:6px;padding:11px 20px;font:inherit;font-size:14px;font-weight:900;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-light)}.btn-outline{background:#fff;color:var(--primary);border:1.5px solid var(--gray-400)}.btn-success{background:var(--success);color:#fff}.step-ind{font-size:12px;color:var(--gray-600);min-width:92px;text-align:center}.loading{opacity:.65;pointer-events:none}.toast{position:fixed;left:50%;bottom:82px;transform:translateX(-50%);z-index:80;max-width:min(520px,calc(100vw - 28px));background:#fff;border:1px solid #ffc9c4;border-left:5px solid var(--danger);box-shadow:0 12px 34px rgba(0,0,0,.16);border-radius:8px;padding:12px 16px;color:var(--danger);font-size:13px;font-weight:800;line-height:1.45}.toast.success{border-color:#b9e2ce;border-left-color:var(--success);color:var(--success)}
@@ -50,7 +82,7 @@
         .brand-copy span{font-size:10px;opacity:.78}
         .header-title h1{font-size:18px}
         .header-title p{font-size:12px}
-        .header-badge{border-radius:999px;box-shadow:0 8px 18px rgba(201,168,76,.2)}
+        .header-badge{border-radius:999px;box-shadow:0 8px 18px rgba(36,78,154,.2)}
         .progress-wrap{background:rgba(255,255,255,.94);border-bottom:1px solid #dce6f2;box-shadow:0 6px 20px rgba(26,58,107,.06)}
         .step-item{padding:16px 8px}
         .step-circle{width:34px;height:34px;border-color:#d8e3f0;background:#f7faff;color:#6b7a90}
@@ -94,16 +126,24 @@
         .form-intro{margin-top:18px}
         @media(max-width:640px){.main{padding-top:18px}.header-title{min-width:180px}.brand-copy{display:none}.form-intro{grid-template-columns:1fr}}
         /* Keep the copied Edification shell from being affected by the form's grid/card/button styles. */
+        .primary-color{color:var(--trinity-blue)!important}
+        .primary-bg,.btn-primary,.media-head.primary-bg,.cs-price.primary-bg{background:var(--trinity-blue)!important;border-color:var(--trinity-blue)!important}
+        .btn-primary:hover{background:var(--trinity-blue-dark)!important;border-color:var(--trinity-blue-dark)!important}
+        .main-menu nav ul li a:before,.section-title-style2 span:before,.section-title-style2 span:after{background:var(--trinity-blue)!important}
+        .header-top{background:var(--trinity-blue)!important}
         #header .row,footer .row{display:flex;flex-wrap:wrap;margin-right:-15px;margin-left:-15px;margin-bottom:0;gap:0}
         #header .header-bottom{background:rgba(15,18,24,.62)}
         #header .ht-social li{color:#fff;font-size:14px;font-weight:400;letter-spacing:0}
         #header .header-bottom-inner{min-height:104px}
+        #header .logo a{display:inline-flex;align-items:center;background:#fff;border-radius:8px;padding:9px 14px;box-shadow:0 12px 28px rgba(0,0,0,.16)}
+        #header .logo img{width:230px;max-height:64px;object-fit:contain}
         #header .main-menu{text-align:center}
         #header .main-menu nav ul li a{padding:43px 15px}
+        #header .main-menu nav ul li.active a,#header .main-menu nav ul li a:hover{color:var(--trinity-blue-bright)}
         #header .public-header-actions{display:flex;align-items:center;justify-content:flex-end;gap:12px}
         #header .public-header-actions .btn{white-space:nowrap;padding:16px 25px}
         #header .public-header-actions .btn.btn-round{border-radius:50px!important;line-height:12px}
-        #header .public-header-actions .btn-primary{background:#fc9928!important;border-color:#fc9928!important;color:#fff!important}
+        #header .public-header-actions .btn-primary{background:var(--trinity-blue)!important;border-color:var(--trinity-blue)!important;color:#fff!important}
         #header .language-switcher{margin:0}
         #header .language-switcher label{display:block;margin:0}
         #header .language-switcher select{height:48px;min-width:126px;border:1px solid rgba(255,255,255,.55);border-radius:50px;background:rgba(255,255,255,.96);color:#252525;padding:0 18px;font-family:"Muli",sans-serif;font-size:14px;font-weight:700;text-transform:uppercase}
@@ -112,9 +152,14 @@
         footer .footer-top{padding-top:120px}
         footer .widget p,footer .widget li{color:rgba(255,255,255,.75)}
         footer .widget a{color:rgba(255,255,255,.8)}
+        footer .widget-company img{background:#fff;border-radius:8px;padding:10px 14px;width:250px;max-width:100%;height:auto}
+        footer .primary-color{color:var(--trinity-blue-bright)!important}
+        footer .footer-bottom a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+        footer .footer-bottom a:hover{color:var(--trinity-blue-bright)}
+        html[lang="en"] .zh{display:none!important}
         @media(max-width:1199px){#header .main-menu nav ul li a{padding:43px 10px}#header .public-header-actions .btn{padding:15px 18px}}
         @media(max-width:991px){#header .header-bottom{background:rgba(15,18,24,.86)}#header .header-bottom-inner{min-height:auto;padding:18px 0}#header .public-header-actions{justify-content:flex-start;margin-top:10px}.slicknav_btn{margin-top:-39px}.form-top-band{min-height:176px}}
-        @media(max-width:575px){#header .header-top{display:none}#header .public-header-actions{gap:8px;flex-wrap:wrap}#header .language-switcher select{height:42px;min-width:104px}#header .public-header-actions .btn{padding:13px 16px}.form-top-band{min-height:126px}}
+        @media(max-width:575px){#header .header-top{display:none}#header .logo img{width:190px}#header .public-header-actions{gap:8px;flex-wrap:wrap}#header .language-switcher select{height:42px;min-width:104px}#header .public-header-actions .btn{padding:13px 16px}.form-top-band{min-height:126px}}
     </style>
 </head>
 <body>
@@ -133,7 +178,7 @@
                 <div class="col-sm-4">
                     <div class="ht-social">
                         <ul>
-                            <li>Taipei AP Registration Support</li>
+                            <li>{{ $navLabels['support'] }}</li>
                         </ul>
                     </div>
                 </div>
@@ -146,19 +191,19 @@
                 <div class="row align-items-center">
                     <div class="col-lg-3 col-sm-8">
                         <div class="logo">
-                            <a href="{{ route('landing') }}"><img src="{{ asset('theme/edification/images/icon/logo.png') }}" alt="Trinity Scholar"></a>
+                            <a href="{{ route('landing') }}"><img src="{{ asset($brandLogo) }}" alt="Trinity Scholar"></a>
                         </div>
                     </div>
                     <div class="col-xl-6 col-lg-6 d-none d-lg-block">
                         <div class="main-menu">
                             <nav>
                                 <ul id="m_menu_active">
-                                    <li><a href="{{ route('landing') }}">Home</a></li>
-                                    <li><a href="{{ route('landing') }}#overview">Program</a></li>
-                                    <li><a href="{{ route('landing') }}#timeline">Timeline</a></li>
-                                    <li><a href="{{ route('landing') }}#fees">Fees</a></li>
-                                    <li><a href="{{ route('landing') }}#faq">FAQ</a></li>
-                                    <li><a href="{{ route('landing') }}#contact">Contact</a></li>
+                                    <li><a href="{{ route('landing') }}">{{ $navLabels['home'] }}</a></li>
+                                    <li><a href="{{ route('landing') }}#overview">{{ $navLabels['program'] }}</a></li>
+                                    <li><a href="{{ route('landing') }}#timeline">{{ $navLabels['timeline'] }}</a></li>
+                                    <li><a href="{{ route('landing') }}#fees">{{ $navLabels['fees'] }}</a></li>
+                                    <li><a href="{{ route('landing') }}#faq">{{ $navLabels['faq'] }}</a></li>
+                                    <li><a href="{{ route('landing') }}#contact">{{ $navLabels['contact'] }}</a></li>
                                 </ul>
                             </nav>
                         </div>
@@ -166,7 +211,7 @@
                     <div class="col-xl-3 col-lg-3 col-sm-4">
                         <div class="public-header-actions">
                             <x-language-switcher />
-                            <a class="btn btn-primary btn-round active" href="{{ route('student-registrations.create') }}">Start Form</a>
+                            <a class="btn btn-primary btn-round active" href="{{ route('student-registrations.create') }}">{{ $navLabels['start'] }}</a>
                         </div>
                     </div>
                     <div class="col-12 d-block d-lg-none">
@@ -180,17 +225,10 @@
 <div class="form-top-band"></div>
 <div class="progress-wrap" aria-label="Registration progress">
     <div class="progress-steps">
-        @foreach([
-            ['Student Information','學生資料'],
-            ['Parent / Guardian','家長 / 監護人'],
-            ['Exam Selection','考試選擇'],
-            ['Accommodations','特殊考試需求'],
-            ['Review & Payment','確認與付款'],
-            ['Confirmation','完成報名'],
-        ] as $index => $label)
+        @foreach($stepLabels as $index => $label)
             <div class="step-item {{ $index === 0 ? 'active' : '' }}" data-progress="{{ $index + 1 }}">
                 <div class="step-circle">{{ $index + 1 }}</div>
-                <div class="step-label">{{ $label[0] }}<br>{{ $label[1] }}</div>
+                <div class="step-label">{{ $label }}</div>
             </div>
         @endforeach
     </div>
@@ -209,20 +247,19 @@
 
     <section class="card form-intro" aria-labelledby="registration-intro-title">
         <div>
-            <span class="header-badge">No login required</span>
-            <h2 id="registration-intro-title">2026 AP Exam Registration</h2>
-            <p>Students can submit registration details, passport upload, exam selections, accommodations, and payment method in one guided flow.</p>
+            <span class="header-badge">{{ $introCopy['badge'] }}</span>
+            <h2 id="registration-intro-title">{{ $introCopy['title'] }}</h2>
+            <p>{{ $introCopy['body'] }}</p>
             <ul class="intro-list">
-                <li>Late registration deadline: February 10, 2026.</li>
-                <li>Registration is complete only after the form and payment are received.</li>
-                <li>AP Chinese, AP Calculus, and AP Macro/Micro are marked full in the shared Taipei test-center notice.</li>
-                <li>Final subject availability is confirmed by the admin team after submission.</li>
+                @foreach($introCopy['items'] as $item)
+                    <li>{{ $item }}</li>
+                @endforeach
             </ul>
         </div>
         <aside class="intro-summary" aria-label="Late registration summary">
-            <span>Late Registration</span>
-            <strong>Feb. 10</strong>
-            <p>Extra late registration fees may apply. Submit early because registration can close before the deadline when seats are full.</p>
+            <span>{{ $introCopy['summary_label'] }}</span>
+            <strong>{{ $introCopy['summary_title'] }}</strong>
+            <p>{{ $introCopy['summary_body'] }}</p>
         </aside>
     </section>
 
@@ -420,9 +457,9 @@
     </form>
 </main>
 <div class="nav-footer" id="navFooter">
-    <button class="btn btn-outline" id="btnBack" type="button" style="visibility:hidden">Back / 上一步</button>
-    <span class="step-ind" id="stepInd">Step 1 of 6</span>
-    <button class="btn btn-primary" id="btnNext" type="button">Next / 下一步</button>
+    <button class="btn btn-outline" id="btnBack" type="button" style="visibility:hidden">{{ $isZh ? '上一步' : 'Back' }}</button>
+    <span class="step-ind" id="stepInd">{{ $isZh ? '第 1 步，共 6 步' : 'Step 1 of 6' }}</span>
+    <button class="btn btn-primary" id="btnNext" type="button">{{ $isZh ? '下一步' : 'Next' }}</button>
 </div>
 <div class="toast hidden" id="formToast" role="status" aria-live="polite"></div>
 <footer>
@@ -431,7 +468,7 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="widget widget-company">
-                        <a href="{{ route('landing') }}"><img src="{{ asset('theme/edification/images/icon/logo.png') }}" alt="Trinity Scholar"></a>
+                        <a href="{{ route('landing') }}"><img src="{{ asset($brandLogo) }}" alt="Trinity Scholar"></a>
                         <div class="address"><h6>Office Address</h6><p>Taipei test-center AP registration support.</p></div>
                         <div class="address"><h6>Business Phone</h6><p>886-2-2771-6002</p></div>
                         <div class="address"><h6>Business Email</h6><p>info@trinityscholar.com</p></div>
@@ -461,7 +498,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>Copyright &copy; 2026 <span><a class="primary-color" href="{{ route('landing') }}">Trinity Scholar</a></span> - AP Exam Registration Platform.</p>
+                <p>Copyright &copy; 2026 Trinity Scholar. All Rights Reserved. Designed By <a href="https://devhouse.sophistec.global/" target="_blank" rel="noopener">Sophistec Dev House</a>. Powered by <a href="https://sophistec.global/" target="_blank" rel="noopener">Sophistec Global</a>.</p>
             </div>
         </div>
     </div>
@@ -474,6 +511,95 @@
 <script src="{{ asset('theme/edification/js/plugins.js') }}"></script>
 <script src="{{ asset('theme/edification/js/scripts.js') }}"></script>
 <script>
+    document.addEventListener('click', function (event) {
+        const link = event.target.closest('a[href*="#"]');
+        if (!link) return;
+
+        const url = new URL(link.href, window.location.href);
+        if (url.pathname !== window.location.pathname || !url.hash) return;
+
+        const target = document.getElementById(url.hash.slice(1));
+        if (!target) return;
+
+        event.preventDefault();
+        history.pushState(null, '', url.hash);
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    const isZhLocale = @json($isZh);
+    const uiText = {
+        back: isZhLocale ? '上一步' : 'Back',
+        next: isZhLocale ? '下一步' : 'Next',
+        submit: isZhLocale ? '送出' : 'Submit',
+        submitting: isZhLocale ? '送出中' : 'Submitting',
+        saving: isZhLocale ? '暫存中' : 'Saving',
+        selected: isZhLocale ? '已選擇' : 'Selected',
+        selectedCount: count => isZhLocale ? `已選 ${count} 科` : `${count} selected`,
+        step: (current, total) => isZhLocale ? `第 ${current} 步，共 ${total} 步` : `Step ${current} of ${total}`,
+        examRequired: isZhLocale ? '請至少選擇一科 AP 考試。' : 'Please select at least one AP exam.',
+        uploadedFile: isZhLocale ? '已選擇檔案' : 'Uploaded file',
+        noAccommodations: isZhLocale ? '未申請特殊考試需求' : 'No accommodations requested',
+        requested: isZhLocale ? '已申請' : 'Requested',
+        notRequested: isZhLocale ? '未申請' : 'Not requested',
+        prepInterest: isZhLocale ? '有 AP 準備課程興趣' : 'Interested in AP preparation',
+        groupClass: isZhLocale ? '團體課程' : 'Group class',
+        privateTutoring: isZhLocale ? '一對一家教' : 'Private tutoring',
+        schedule: isZhLocale ? '可上課時間' : 'Schedule',
+        language: isZhLocale ? '偏好語言' : 'Language',
+    };
+
+    function localizeStaticFormCopy() {
+        const cjk = /[\u3400-\u9fff]/;
+        const localizeTextNodes = root => {
+            if (!root) return;
+            const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+                acceptNode(node) {
+                    const text = node.nodeValue || '';
+                    return text.includes(' / ') && cjk.test(text) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+                }
+            });
+            const nodes = [];
+            while (walker.nextNode()) nodes.push(walker.currentNode);
+            nodes.forEach(node => {
+                const text = node.nodeValue || '';
+                const parts = text.split(' / ');
+                if (parts.length < 2) return;
+                node.nodeValue = isZhLocale ? parts.slice(1).join(' / ').trim() : parts[0].trim();
+            });
+        };
+
+        if (!isZhLocale) {
+            document.querySelectorAll('.section-title > span').forEach(span => {
+                if (cjk.test(span.textContent || '')) span.remove();
+            });
+            localizeTextNodes(document.querySelector('main'));
+            localizeTextNodes(document.getElementById('navFooter'));
+            return;
+        }
+
+        document.querySelectorAll('label.lbl').forEach(label => {
+            if (label.querySelector('input, select, textarea')) return;
+            const zh = label.querySelector('.zh');
+            if (!zh) return;
+            const required = Boolean(label.querySelector('.req'));
+            label.textContent = zh.textContent.trim();
+            if (required) {
+                const mark = document.createElement('span');
+                mark.className = 'req';
+                mark.textContent = ' *';
+                label.appendChild(mark);
+            }
+        });
+
+        document.querySelectorAll('.section-title').forEach(title => {
+            const zh = title.querySelector('span');
+            if (!zh || !zh.textContent.trim()) return;
+            title.textContent = zh.textContent.trim();
+        });
+        localizeTextNodes(document.querySelector('main'));
+        localizeTextNodes(document.getElementById('navFooter'));
+    }
+
     const initialStep = Number(@json(session('student_registration_error_step', 1)));
     const preservedPassportName = @json($passportDraft['name'] ?? null);
     const passportDraftUrl = @json(route('student-registrations.passport-draft'));
@@ -561,7 +687,7 @@
 
     function setPassportLabel(name, pending = false) {
         const label = document.getElementById('fileLabel');
-        label.textContent = name ? `${pending ? 'Saving / 暫存中' : 'Selected / 已選擇'}: ${name}` : '';
+        label.textContent = name ? `${pending ? uiText.saving : uiText.selected}: ${name}` : '';
         label.classList.toggle('hidden', !name);
     }
 
@@ -598,8 +724,8 @@
             item.querySelector('.step-circle').textContent = index < cur ? '✓' : index;
         });
         document.getElementById('btnBack').style.visibility = cur === 1 ? 'hidden' : 'visible';
-        document.getElementById('stepInd').textContent = `Step ${cur} of ${totalSteps}`;
-        document.getElementById('btnNext').textContent = cur === totalSteps ? 'Submit / 送出' : 'Next / 下一步';
+        document.getElementById('stepInd').textContent = uiText.step(cur, totalSteps);
+        document.getElementById('btnNext').textContent = cur === totalSteps ? uiText.submit : uiText.next;
         document.getElementById('btnNext').className = cur === totalSteps ? 'btn btn-success' : 'btn btn-primary';
         if (cur === 5 || cur === 6) buildReview();
         window.scrollTo({top:0, behavior:'smooth'});
@@ -633,7 +759,7 @@
         const selectedRegularExams = [...form.querySelectorAll('input[name="exam_subject_uuids[]"]')]
             .filter(input => input.checked && !input.disabled);
         if (cur === 3 && selectedRegularExams.length === 0) {
-            notify('Please select at least one AP exam. / 請至少選擇一科 AP 考試。');
+            notify(uiText.examRequired);
             return false;
         }
         return true;
@@ -660,7 +786,7 @@
         document.getElementById('praTot').textContent = money(praTot);
         document.getElementById('lateTot').textContent = money(lateTot);
         document.getElementById('grandTot').textContent = money(grand);
-        document.getElementById('selBadge').textContent = `${regCt + praCt} selected / 已選 ${regCt + praCt} 科`;
+        document.getElementById('selBadge').textContent = uiText.selectedCount(regCt + praCt);
         document.getElementById('pricePreview').textContent = `NT$ ${money(grand)}`;
         document.getElementById('practiceExamTotal').value = praTot;
         return {regCt, praCt, regTot, praTot, lateTot, grand};
@@ -669,7 +795,7 @@
     function buildReview() {
         const totals = calculate();
         const names = checkedExams().map(input => input.dataset.name);
-        const passport = document.getElementById('passportFile').files[0]?.name || document.getElementById('passportFileName').value || preservedPassportName || 'Uploaded file / 已選擇檔案';
+        const passport = document.getElementById('passportFile').files[0]?.name || document.getElementById('passportFileName').value || preservedPassportName || uiText.uploadedFile;
         document.getElementById('rName').textContent = [field('family_name_en'), field('first_name_en'), field('middle_name')].filter(Boolean).join(' ');
         document.getElementById('rCn').textContent = field('chinese_legal_name') || '-';
         document.getElementById('rDob').textContent = field('date_of_birth') || '-';
@@ -688,15 +814,15 @@
         document.getElementById('rEmergency').textContent = [field('emergency_contact_name'), field('emergency_contact_phone'), field('emergency_contact_relationship')].filter(Boolean).join(' / ') || '-';
         document.getElementById('rExams').textContent = names.length ? names.join(', ') : '-';
         document.getElementById('rAccom').textContent = document.getElementById('needsAccom').checked
-            ? [field('ssd_code'), field('accommodation_status')].filter(Boolean).join(' / ') || 'Requested'
-            : 'No accommodations requested';
+            ? [field('ssd_code'), field('accommodation_status')].filter(Boolean).join(' / ') || uiText.requested
+            : uiText.noAccommodations;
         const prepChoices = [];
-        if (document.getElementById('prepInterest')?.checked) prepChoices.push('Interested in AP preparation');
-        if (form.elements.group_class_interest?.checked) prepChoices.push('Group class');
-        if (form.elements.private_tutoring_interest?.checked) prepChoices.push('Private tutoring');
-        if (field('preferred_tutoring_schedule')) prepChoices.push(`Schedule: ${field('preferred_tutoring_schedule')}`);
-        if (field('preferred_tutoring_language')) prepChoices.push(`Language: ${field('preferred_tutoring_language')}`);
-        document.getElementById('rPrep').textContent = prepChoices.length ? prepChoices.join(' / ') : 'Not requested';
+        if (document.getElementById('prepInterest')?.checked) prepChoices.push(uiText.prepInterest);
+        if (form.elements.group_class_interest?.checked) prepChoices.push(uiText.groupClass);
+        if (form.elements.private_tutoring_interest?.checked) prepChoices.push(uiText.privateTutoring);
+        if (field('preferred_tutoring_schedule')) prepChoices.push(`${uiText.schedule}: ${field('preferred_tutoring_schedule')}`);
+        if (field('preferred_tutoring_language')) prepChoices.push(`${uiText.language}: ${field('preferred_tutoring_language')}`);
+        document.getElementById('rPrep').textContent = prepChoices.length ? prepChoices.join(' / ') : uiText.notRequested;
         document.getElementById('rReg').textContent = `${totals.regCt} exams / NT$ ${money(totals.regTot)}`;
         document.getElementById('rPra').textContent = `${totals.praCt} exams / NT$ ${money(totals.praTot)}`;
         document.getElementById('rLate').textContent = `NT$ ${money(totals.lateTot)}`;
@@ -770,7 +896,7 @@
         }
         const btn = document.getElementById('btnNext');
         btn.classList.add('loading');
-        btn.textContent = 'Submitting / 送出中';
+        btn.textContent = uiText.submitting;
         localStorage.removeItem(draftKey);
         form.requestSubmit();
     });
@@ -789,6 +915,7 @@
     });
     form.addEventListener('input', saveFormDraft);
     form.addEventListener('change', saveFormDraft);
+    localizeStaticFormCopy();
     const restoredStep = restoreFormDraft();
     if (!preservedPassportName && document.getElementById('passportFileName').value) {
         setPassportLabel(document.getElementById('passportFileName').value);
