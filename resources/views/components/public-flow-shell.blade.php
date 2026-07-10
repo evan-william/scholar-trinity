@@ -17,6 +17,53 @@
     $navLabels = $isZh
         ? ['home' => '首頁', 'program' => '課程資訊', 'timeline' => '時程', 'fees' => '費用', 'faq' => '常見問題', 'contact' => '聯絡我們', 'start' => '開始報名', 'support' => '台北 AP 報名支援']
         : ['home' => 'Home', 'program' => 'Program', 'timeline' => 'Timeline', 'fees' => 'Fees', 'faq' => 'FAQ', 'contact' => 'Contact', 'start' => 'Start Form', 'support' => 'Taipei AP Registration Support'];
+    $footerLabels = $isZh
+        ? [
+            'office' => '服務說明',
+            'office_body' => '台北考場 AP 報名支援。',
+            'phone' => '聯絡電話',
+            'email' => '電子郵件',
+            'registration' => '報名資訊',
+            'program' => '課程資訊',
+            'timeline' => '報名時程',
+            'fees' => '費用說明',
+            'register' => '立即報名',
+            'notice' => '重要提醒',
+            'notice_body' => '報名需在表單與付款皆收到後才算完成。名額有限，可能在公告截止日前額滿關閉。',
+            'main_period' => '一般時段：',
+            'late_period' => '逾期時段：',
+            'deadline' => '截止日期：',
+            'main_period_value' => '八月至十月',
+            'late_period_value' => '一月至三月',
+            'deadline_value' => '本次逾期報名公告為 2026 年 2 月 10 日',
+            'copyright' => '版權所有',
+            'rights' => '保留所有權利。',
+            'designed' => 'Designed By',
+            'powered' => 'Powered by',
+        ]
+        : [
+            'office' => 'Office Address',
+            'office_body' => 'Taipei test-center AP registration support.',
+            'phone' => 'Business Phone',
+            'email' => 'Business Email',
+            'registration' => 'Registration',
+            'program' => 'Program Information',
+            'timeline' => 'Timeline',
+            'fees' => 'Fees',
+            'register' => 'Register Now',
+            'notice' => 'Important Notice',
+            'notice_body' => 'Registration is complete only after the filled-out form and payment are received. Available seats may close before the listed deadline.',
+            'main_period' => 'Main Period :',
+            'late_period' => 'Late Period :',
+            'deadline' => 'Deadline :',
+            'main_period_value' => 'August - October',
+            'late_period_value' => 'January - March',
+            'deadline_value' => 'February 10, 2026 for the current late-registration notice',
+            'copyright' => 'Copyright',
+            'rights' => 'All Rights Reserved.',
+            'designed' => 'Designed By',
+            'powered' => 'Powered by',
+        ];
 @endphp
 <!doctype html>
 <html class="no-js" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
@@ -43,7 +90,15 @@
         .primary-color{color:var(--trinity-blue)!important}
         .primary-bg,.btn-primary,.media-head.primary-bg,.cs-price.primary-bg{background:var(--trinity-blue)!important;border-color:var(--trinity-blue)!important}
         .btn-primary:hover{background:var(--trinity-blue-dark)!important;border-color:var(--trinity-blue-dark)!important}
-        .main-menu nav ul li a:before,.section-title-style2 span:before,.section-title-style2 span:after{background:var(--trinity-blue)!important}
+        a:focus,a:hover{color:var(--trinity-blue)!important}
+        .btn-light:focus,.btn-light:hover{background:var(--trinity-blue)!important;color:#fff!important;border-color:var(--trinity-blue)!important}
+        .main-menu nav ul li a:before,.slider-content h3:before{background:var(--trinity-blue)!important}
+        .body_overlay{background-color:var(--trinity-blue)!important}
+        .section-title-style2 span:before,
+        .section-title-style2 span:after{background:var(--trinity-blue)!important;width:38px!important;height:2px!important;top:50%!important;transform:translateY(-50%);left:-54px!important;border-radius:99px}
+        .section-title-style2 span:after{left:auto!important;right:-54px!important}
+        .white-title span:before,
+        .white-title span:after{background:var(--trinity-blue-bright)!important}
         .header-top{background:var(--trinity-blue)!important}
         #header .header-bottom{background:rgba(15,18,24,.62)}
         #header .ht-social li{color:#fff;font-size:14px;font-weight:400;letter-spacing:0}
@@ -62,9 +117,21 @@
         #header .language-switcher select{height:48px;min-width:126px;border:1px solid rgba(255,255,255,.55);border-radius:50px;background:rgba(255,255,255,.96);color:#252525;padding:0 18px;font-family:"Muli",sans-serif;font-size:14px;font-weight:700;text-transform:uppercase}
         #header .ht-social .language-switcher select{height:34px;min-width:105px;border:0}
         footer .widget-company img{background:#fff;border-radius:8px;padding:10px 14px;width:250px;max-width:100%;height:auto}
+        footer .address h6,
+        footer .footer-link li i,
+        footer span.post-date i{color:var(--trinity-blue-bright)!important}
         footer .primary-color{color:var(--trinity-blue-bright)!important}
         footer .footer-bottom a{color:inherit;text-decoration:underline;text-underline-offset:2px}
         footer .footer-bottom a:hover{color:var(--trinity-blue-bright)}
+        .contact-info:before{background:linear-gradient(90deg,var(--trinity-blue-dark),var(--trinity-blue))!important}
+        .cnt-addres-single .icon{color:var(--trinity-blue)!important}
+        .contact-form form input:focus,
+        .contact-form form textarea:focus{border-color:var(--trinity-blue)!important}
+        .contact-form form button{background:var(--trinity-blue)!important}
+        .slider-area .owl-nav div img{display:none!important}
+        .slider-area .owl-nav div:before{font-family:FontAwesome;font-size:22px;color:#fff}
+        .slider-area .owl-nav .owl-prev:before{content:"\f104"}
+        .slider-area .owl-nav .owl-next:before{content:"\f105"}
         @media(max-width:1199px){#header .main-menu nav ul li a{padding:43px 10px}#header .public-header-actions .btn{padding:15px 18px}}
         @media(max-width:991px){#header .header-bottom{background:rgba(15,18,24,.86)}#header .header-bottom-inner{min-height:auto;padding:18px 0}#header .public-header-actions{justify-content:flex-start;margin-top:10px}.slicknav_btn{margin-top:-39px}}
         @media(max-width:575px){#header .header-top{display:none}#header .logo img{width:190px}#header .public-header-actions{gap:8px;flex-wrap:wrap}#header .language-switcher select{height:42px;min-width:104px}#header .public-header-actions .btn{padding:13px 16px}}
@@ -177,44 +244,44 @@
                     <div class="widget widget-company">
                         <a href="{{ route('landing') }}"><img src="{{ asset($brandLogo) }}" alt="Trinity Scholar"></a>
                         <div class="address">
-                            <h6>Office Address</h6>
-                            <p>Taipei test-center AP registration support.</p>
+                            <h6>{{ $footerLabels['office'] }}</h6>
+                            <p>{{ $footerLabels['office_body'] }}</p>
                         </div>
                         <div class="address">
-                            <h6>Business Phone</h6>
+                            <h6>{{ $footerLabels['phone'] }}</h6>
                             <p>886-2-2771-6002</p>
                         </div>
                         <div class="address">
-                            <h6>Business Email</h6>
+                            <h6>{{ $footerLabels['email'] }}</h6>
                             <p>info@trinityscholar.com</p>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="widget footer-link">
-                        <h4 class="fwidget-title mb-5 pb-3 primary-color">Registration</h4>
+                        <h4 class="fwidget-title mb-5 pb-3 primary-color">{{ $footerLabels['registration'] }}</h4>
                         <ul>
-                            <li><a href="{{ route('landing') }}#overview"><i class="fa fa-angle-right"></i>Program Information</a></li>
-                            <li><a href="{{ route('landing') }}#timeline"><i class="fa fa-angle-right"></i>Timeline</a></li>
-                            <li><a href="{{ route('landing') }}#fees"><i class="fa fa-angle-right"></i>Fees</a></li>
-                            <li><a href="{{ route('student-registrations.create') }}"><i class="fa fa-angle-right"></i>Register Now</a></li>
+                            <li><a href="{{ route('landing') }}#overview"><i class="fa fa-angle-right"></i>{{ $footerLabels['program'] }}</a></li>
+                            <li><a href="{{ route('landing') }}#timeline"><i class="fa fa-angle-right"></i>{{ $footerLabels['timeline'] }}</a></li>
+                            <li><a href="{{ route('landing') }}#fees"><i class="fa fa-angle-right"></i>{{ $footerLabels['fees'] }}</a></li>
+                            <li><a href="{{ route('student-registrations.create') }}"><i class="fa fa-angle-right"></i>{{ $footerLabels['register'] }}</a></li>
                         </ul>
                     </div>
                 </div>
                 <div class="col-md-5">
                     <div class="widget widget-opening">
-                        <h4 class="fwidget-title mb-5 pb-3 primary-color">Important Notice</h4>
-                        <p>Registration is complete only after the filled-out form and payment are received. Available seats may close before the listed deadline.</p>
+                        <h4 class="fwidget-title mb-5 pb-3 primary-color">{{ $footerLabels['notice'] }}</h4>
+                        <p>{{ $footerLabels['notice_body'] }}</p>
                         <ul>
-                            <li><span>Main Period :</span>August - October</li>
-                            <li><span>Late Period :</span>January - March</li>
-                            <li><span>Deadline :</span>February 10, 2026 for the current late-registration notice</li>
+                            <li><span>{{ $footerLabels['main_period'] }}</span>{{ $footerLabels['main_period_value'] }}</li>
+                            <li><span>{{ $footerLabels['late_period'] }}</span>{{ $footerLabels['late_period_value'] }}</li>
+                            <li><span>{{ $footerLabels['deadline'] }}</span>{{ $footerLabels['deadline_value'] }}</li>
                         </ul>
                     </div>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>Copyright &copy; 2026 Trinity Scholar. All Rights Reserved. Designed By <a href="https://devhouse.sophistec.global/" target="_blank" rel="noopener">Sophistec Dev House</a>. Powered by <a href="https://sophistec.global/" target="_blank" rel="noopener">Sophistec Global</a>.</p>
+                <p>{{ $footerLabels['copyright'] }} &copy; 2026 Trinity Scholar. {{ $footerLabels['rights'] }} {{ $footerLabels['designed'] }} <a href="https://devhouse.sophistec.global/" target="_blank" rel="noopener">Sophistec Dev House</a>. {{ $footerLabels['powered'] }} <a href="https://sophistec.global/" target="_blank" rel="noopener">Sophistec Global</a>.</p>
             </div>
         </div>
     </div>

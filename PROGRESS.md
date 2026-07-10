@@ -73,6 +73,12 @@ Current local template pass:
   - Added smooth scrolling for same-page hash navigation such as `#contact`.
   - Localized the public header nav labels and the form step/header controls so English and Traditional Chinese no longer show together in those primary UI areas.
   - Added form-side locale handling for next/back/submit labels, selected-exam count, upload status, review fallback text, and section/field labels that provide Traditional Chinese spans.
+- Trinity blue UI cleanup and bilingual pass:
+  - Fixed the oversized blue blocks beside Edification `section-title-style2` headings by restoring them as small line accents.
+  - Overrode remaining Edification orange hover, button, carousel, contact-strip, and footer accent colors to Trinity blue.
+  - Tightened landing section spacing and added consistent card polish for program, process, fee, document, FAQ, and contact areas.
+  - Converted the landing fallback content, public footer, registration intro, upload notice, practice exam copy, accommodation notes, preparation survey, acknowledgement, and confirmation copy to render as either English or Traditional Chinese instead of mixed bilingual text.
+  - Localized registration review totals, date fallback, dynamically added accommodation row placeholders, and footer links for the selected UI language.
 
 2026-07-07
 - Landing spacing and late notice polish:

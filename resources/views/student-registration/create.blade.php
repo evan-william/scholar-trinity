@@ -28,6 +28,54 @@
             'summary_title' => 'Feb. 10',
             'summary_body' => 'Extra late registration fees may apply. Submit early because registration can close before the deadline when seats are full.',
         ];
+    $footerLabels = $isZh
+        ? [
+            'office' => '服務說明',
+            'office_body' => '台北考場 AP 報名支援。',
+            'phone' => '聯絡電話',
+            'email' => '電子郵件',
+            'registration' => '報名資訊',
+            'program' => '課程資訊',
+            'timeline' => '報名時程',
+            'fees' => '費用說明',
+            'register' => '立即報名',
+            'notice' => '重要提醒',
+            'notice_body' => '報名需在表單與付款皆收到後才算完成。名額有限，可能在公告截止日前額滿關閉。',
+            'main_period' => '一般時段：',
+            'late_period' => '逾期時段：',
+            'deadline' => '截止日期：',
+            'main_period_value' => '八月至十月',
+            'late_period_value' => '一月至三月',
+            'deadline_value' => '本次逾期報名公告為 2026 年 2 月 10 日',
+            'copyright' => '版權所有',
+            'rights' => '保留所有權利。',
+            'designed' => 'Designed By',
+            'powered' => 'Powered by',
+        ]
+        : [
+            'office' => 'Office Address',
+            'office_body' => 'Taipei test-center AP registration support.',
+            'phone' => 'Business Phone',
+            'email' => 'Business Email',
+            'registration' => 'Registration',
+            'program' => 'Program Information',
+            'timeline' => 'Timeline',
+            'fees' => 'Fees',
+            'register' => 'Register Now',
+            'notice' => 'Important Notice',
+            'notice_body' => 'Registration is complete only after the filled-out form and payment are received. Available seats may close before the listed deadline.',
+            'main_period' => 'Main Period :',
+            'late_period' => 'Late Period :',
+            'deadline' => 'Deadline :',
+            'main_period_value' => 'August - October',
+            'late_period_value' => 'January - March',
+            'deadline_value' => 'February 10, 2026 for the current late-registration notice',
+            'copyright' => 'Copyright',
+            'rights' => 'All Rights Reserved.',
+            'designed' => 'Designed By',
+            'powered' => 'Powered by',
+        ];
+    $tx = fn (string $en, string $zh): string => $isZh ? $zh : $en;
 @endphp
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
@@ -67,7 +115,7 @@
         .intro-list{margin:0;padding-left:18px;color:var(--gray-800);font-size:13px;line-height:1.65}
         .intro-summary{border:1px solid #dbe6f3;border-radius:12px;background:#f7fbff;padding:16px}
         .intro-summary strong{display:block;color:var(--primary);font-size:28px;line-height:1;margin-bottom:6px}
-        .intro-summary span{display:block;color:#6b4700;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
+        .intro-summary span{display:block;color:var(--trinity-blue-dark);font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
         .intro-summary p{font-size:13px;margin:0;color:var(--gray-800)}
         @media(max-width:640px){.form-intro{grid-template-columns:1fr}}
         /* Current visual pass: softer registration form styling per client feedback. */
@@ -102,7 +150,7 @@
         .hint{font-size:12px}
         .upload-area{border-color:#c9d8ea;border-radius:12px;background:#f3f7fd}
         .upload-area:hover{background:#edf5ff;border-color:#6f96c9}
-        .notice{border-radius:12px;background:#fffaf0}
+        .notice{border-radius:12px;background:#f4f7ff}
         .exam-sticky{top:0;border-radius:10px;background:rgba(255,255,255,.95);border:1px solid #dfe8f4;padding:12px 14px;box-shadow:0 10px 24px rgba(26,58,107,.08)}
         .exam-cb,.pay-opt,.sig-box,.price-box,.next-steps{border-radius:12px}
         .exam-cb{border-color:#dbe6f3;background:#f9fbff}
@@ -129,7 +177,15 @@
         .primary-color{color:var(--trinity-blue)!important}
         .primary-bg,.btn-primary,.media-head.primary-bg,.cs-price.primary-bg{background:var(--trinity-blue)!important;border-color:var(--trinity-blue)!important}
         .btn-primary:hover{background:var(--trinity-blue-dark)!important;border-color:var(--trinity-blue-dark)!important}
-        .main-menu nav ul li a:before,.section-title-style2 span:before,.section-title-style2 span:after{background:var(--trinity-blue)!important}
+        a:focus,a:hover{color:var(--trinity-blue)!important}
+        .btn-light:focus,.btn-light:hover{background:var(--trinity-blue)!important;color:#fff!important;border-color:var(--trinity-blue)!important}
+        .main-menu nav ul li a:before,.slider-content h3:before{background:var(--trinity-blue)!important}
+        .body_overlay{background-color:var(--trinity-blue)!important}
+        .section-title-style2 span:before,
+        .section-title-style2 span:after{background:var(--trinity-blue)!important;width:38px!important;height:2px!important;top:50%!important;transform:translateY(-50%);left:-54px!important;border-radius:99px}
+        .section-title-style2 span:after{left:auto!important;right:-54px!important}
+        .white-title span:before,
+        .white-title span:after{background:var(--trinity-blue-bright)!important}
         .header-top{background:var(--trinity-blue)!important}
         #header .row,footer .row{display:flex;flex-wrap:wrap;margin-right:-15px;margin-left:-15px;margin-bottom:0;gap:0}
         #header .header-bottom{background:rgba(15,18,24,.62)}
@@ -153,9 +209,21 @@
         footer .widget p,footer .widget li{color:rgba(255,255,255,.75)}
         footer .widget a{color:rgba(255,255,255,.8)}
         footer .widget-company img{background:#fff;border-radius:8px;padding:10px 14px;width:250px;max-width:100%;height:auto}
+        footer .address h6,
+        footer .footer-link li i,
+        footer span.post-date i{color:var(--trinity-blue-bright)!important}
         footer .primary-color{color:var(--trinity-blue-bright)!important}
         footer .footer-bottom a{color:inherit;text-decoration:underline;text-underline-offset:2px}
         footer .footer-bottom a:hover{color:var(--trinity-blue-bright)}
+        .contact-info:before{background:linear-gradient(90deg,var(--trinity-blue-dark),var(--trinity-blue))!important}
+        .cnt-addres-single .icon{color:var(--trinity-blue)!important}
+        .contact-form form input:focus,
+        .contact-form form textarea:focus{border-color:var(--trinity-blue)!important}
+        .contact-form form button{background:var(--trinity-blue)!important}
+        .slider-area .owl-nav div img{display:none!important}
+        .slider-area .owl-nav div:before{font-family:FontAwesome;font-size:22px;color:#fff}
+        .slider-area .owl-nav .owl-prev:before{content:"\f104"}
+        .slider-area .owl-nav .owl-next:before{content:"\f105"}
         html[lang="en"] .zh{display:none!important}
         @media(max-width:1199px){#header .main-menu nav ul li a{padding:43px 10px}#header .public-header-actions .btn{padding:15px 18px}}
         @media(max-width:991px){#header .header-bottom{background:rgba(15,18,24,.86)}#header .header-bottom-inner{min-height:auto;padding:18px 0}#header .public-header-actions{justify-content:flex-start;margin-top:10px}.slicknav_btn{margin-top:-39px}.form-top-band{min-height:176px}}
@@ -242,7 +310,7 @@
     @endphp
 
     @if ($errors->any())
-        <div class="error-box" id="errorSummary"><strong>Please review the form / 請檢查表單</strong><ul>@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div>
+        <div class="error-box" id="errorSummary"><strong>{{ $tx('Please review the form', '請檢查表單') }}</strong><ul>@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div>
     @endif
 
     <section class="card form-intro" aria-labelledby="registration-intro-title">
@@ -302,22 +370,22 @@
                         <div class="upload-area">
                             <input type="file" name="passport_file" id="passportFile" accept=".pdf,.jpg,.jpeg,.png">
                             <div class="upload-icon">Upload</div>
-                            <div class="upload-text"><strong>Click to upload / 點選上傳</strong> or drag & drop</div>
-                            <div class="upload-sub">PDF, JPG, PNG / Max 10MB / 請上傳清楚的護照照片頁</div>
+                            <div class="upload-text"><strong>{{ $tx('Click to upload', '點選上傳') }}</strong> {{ $tx('or drag & drop', '或拖曳檔案') }}</div>
+                            <div class="upload-sub">{{ $tx('PDF, JPG, PNG / Max 10MB / clear passport photo page required', 'PDF、JPG、PNG / 最大 10MB / 請上傳清楚的護照照片頁') }}</div>
                             <div class="upload-selected {{ $passportDraft ? '' : 'hidden' }}" id="fileLabel">
                                 @if($passportDraft)
-                                    Selected / 已選擇: {{ $passportDraft['name'] }}
+                                    {{ $tx('Selected', '已選擇') }}: {{ $passportDraft['name'] }}
                                 @endif
                             </div>
                         </div>
                         @if($passportDraft)
-                            <span class="hint">This file is saved temporarily after the validation error. Upload a new file only if you want to replace it.</span>
+                            <span class="hint">{{ $tx('This file is saved temporarily after the validation error. Upload a new file only if you want to replace it.', '此檔案已在驗證錯誤後暫存；只有需要替換時才需重新上傳。') }}</span>
                         @endif
                         @error('passport_file')<span class="error">{{ $message }}</span>@enderror
                     </div>
                 </div>
             </div>
-            <div class="notice"><h4>Important Notice / 重要提醒</h4><ul><li>Except AP Chinese, late or exception exam sessions are not offered. / 除 AP 中文外，不提供補考或例外考試場次。</li><li>Once payment is submitted, cancelled exams are non-refundable. / 繳費後取消考試恕不退費。</li></ul></div>
+            <div class="notice"><h4>{{ $tx('Important Notice', '重要提醒') }}</h4><ul><li>{{ $tx('Except AP Chinese, late or exception exam sessions are not offered.', '除 AP 中文外，不提供補考或例外考試場次。') }}</li><li>{{ $tx('Once payment is submitted, cancelled exams are non-refundable.', '繳費後取消考試恕不退費。') }}</li></ul></div>
         </section>
 
         <section class="hidden" data-step="2">
@@ -352,28 +420,28 @@
                                 <input type="checkbox" name="exam_subject_uuids[]" value="{{ $subject->uuid }}" data-type="regular" data-p="{{ $subject->exam_fee + $subject->service_fee + $lateFee }}" data-exam-fee="{{ $subject->exam_fee }}" data-service-fee="{{ $subject->service_fee }}" data-late-fee="{{ $lateFee }}" data-name="{{ $subject->name }}" data-category="{{ $subject->category }}" @disabled(! $selectable) @checked(in_array($subject->uuid, old('exam_subject_uuids', [])))>
                                 <div>
                                     <div class="exam-name">{{ $subject->name }}</div>
-                                    <div class="exam-sub">{{ $subject->code }} / {{ optional($subject->exam_date)->format('M d, Y') ?? 'Date TBA' }} / {{ __('student_registration.statuses.'.$statusKey) }}</div>
-                                    <div class="exam-sub">Exam NT$ {{ number_format($subject->exam_fee) }} / Service NT$ {{ number_format($subject->service_fee) }} / Late NT$ {{ number_format($lateFee) }}</div>
+                                    <div class="exam-sub">{{ $subject->code }} / {{ optional($subject->exam_date)->format('M d, Y') ?? $tx('Date TBA', '日期待公告') }} / {{ __('student_registration.statuses.'.$statusKey) }}</div>
+                                    <div class="exam-sub">{{ $tx('Exam', '考試') }} NT$ {{ number_format($subject->exam_fee) }} / {{ $tx('Service', '服務') }} NT$ {{ number_format($subject->service_fee) }} / {{ $tx('Late', '逾期') }} NT$ {{ number_format($lateFee) }}</div>
                                 </div>
                             </label>
                         @endforeach
                     </div>
                 @endforeach
-                <div class="section-title" style="margin-top:24px">Practice Exams (Optional) <span>模擬考（選填） / NT$1,800 per exam</span></div>
-                <div class="notice"><h4>Practice Exam Info / 模擬考說明</h4><p>NT$1,800 per practice exam. Dates subject to change. / 每科模擬考 NT$1,800，日期可能調整。</p></div>
+                <div class="section-title" style="margin-top:24px">{{ $tx('Practice Exams (Optional)', '模擬考（選填）') }} <span>{{ $tx('NT$1,800 per exam', '每科 NT$1,800') }}</span></div>
+                <div class="notice"><h4>{{ $tx('Practice Exam Info', '模擬考說明') }}</h4><p>{{ $tx('NT$1,800 per practice exam. Dates subject to change.', '每科模擬考 NT$1,800，日期可能調整。') }}</p></div>
                 <div class="exam-grid">
                     @php($fallbackPracticeExams = collect(['Biology 生物','English Language and Composition 英文語言與寫作','Physics 1 物理 1','Computer Science A 電腦科學 A','Calculus AB/BC 微積分','Macroeconomics 總體經濟','Precalculus 預備微積分'])->map(fn ($name) => (object) ['uuid' => $name, 'name' => $name, 'fee' => config('registration.practice_exam_fee', 1800), 'currency' => 'NTD', 'practice_date' => null, 'location' => null]))
                     @foreach(($practiceExamOptions ?? collect())->isNotEmpty() ? $practiceExamOptions : $fallbackPracticeExams as $practice)
-                        <label class="exam-cb"><input type="checkbox" name="practice_exams[]" value="{{ $practice->uuid }}" data-type="practice" data-p="{{ $practice->fee }}" data-name="Practice: {{ $practice->name }}" @checked(in_array($practice->uuid, old('practice_exams', [])))><div><div class="exam-name">{{ $practice->name }}</div><div class="exam-sub">Practice / 模擬考 @if($practice->practice_date) / {{ $practice->practice_date->format('M d, Y') }} @endif @if($practice->location) / {{ $practice->location }} @endif</div></div><div class="exam-price-tag">{{ $practice->currency }} {{ number_format($practice->fee) }}</div></label>
+                        <label class="exam-cb"><input type="checkbox" name="practice_exams[]" value="{{ $practice->uuid }}" data-type="practice" data-p="{{ $practice->fee }}" data-name="{{ $tx('Practice:', '模擬考：') }} {{ $practice->name }}" @checked(in_array($practice->uuid, old('practice_exams', [])))><div><div class="exam-name">{{ $practice->name }}</div><div class="exam-sub">{{ $tx('Practice Exam', '模擬考') }} @if($practice->practice_date) / {{ $practice->practice_date->format('M d, Y') }} @endif @if($practice->location) / {{ $practice->location }} @endif</div></div><div class="exam-price-tag">{{ $practice->currency }} {{ number_format($practice->fee) }}</div></label>
                     @endforeach
                 </div>
                 <input type="hidden" name="practice_exam_total" id="practiceExamTotal" value="0">
                 <div class="price-box">
-                    <div class="price-row"><span>Regular AP Exams / 正式考試 (<span id="regCt">0</span>)</span><span>NT$ <span id="regTot">0</span></span></div>
-                    <div class="price-row"><span>Practice Exams / 模擬考 (<span id="praCt">0</span>)</span><span>NT$ <span id="praTot">0</span></span></div>
-                    <div class="price-row"><span>Late Registration Fee / 逾期報名費</span><span>NT$ <span id="lateTot">0</span></span></div>
-                    <div class="price-row total"><span>Total Due / 應付總額</span><span>NT$ <span id="grandTot">0</span></span></div>
-                    <p class="hint">Final pricing confirmed by AP Coordinator. / 最終費用由 AP 協調員確認。</p>
+                    <div class="price-row"><span>{{ $tx('Regular AP Exams', '正式考試') }} (<span id="regCt">0</span>)</span><span>NT$ <span id="regTot">0</span></span></div>
+                    <div class="price-row"><span>{{ $tx('Practice Exams', '模擬考') }} (<span id="praCt">0</span>)</span><span>NT$ <span id="praTot">0</span></span></div>
+                    <div class="price-row"><span>{{ $tx('Late Registration Fee', '逾期報名費') }}</span><span>NT$ <span id="lateTot">0</span></span></div>
+                    <div class="price-row total"><span>{{ $tx('Total Due', '應付總額') }}</span><span>NT$ <span id="grandTot">0</span></span></div>
+                    <p class="hint">{{ $tx('Final pricing confirmed by AP Coordinator.', '最終費用由 AP 協調員確認。') }}</p>
                 </div>
             </div>
         </section>
@@ -381,33 +449,33 @@
         <section class="hidden" data-step="4">
             <div class="card">
                 <div class="section-title">Testing Accommodations <span>特殊考試需求</span></div>
-                <div class="notice"><h4>About Accommodations / 關於特殊需求</h4><p>If you qualify for extra time, food/medication, reader/scribe, or other approved accommodations, please contact the AP Coordinator first. / 如需延長時間、藥物或其他核准協助，請先聯繫 AP 協調員。</p></div>
-                <label class="check-line" style="margin-bottom:18px"><input type="checkbox" name="needs_accommodations" value="1" id="needsAccom" @checked(old('needs_accommodations'))><span>I am requesting testing accommodations / 我需要申請特殊考試需求</span></label>
+                <div class="notice"><h4>{{ $tx('About Accommodations', '關於特殊需求') }}</h4><p>{{ $tx('If you qualify for extra time, food/medication, reader/scribe, or other approved accommodations, please contact the AP Coordinator first.', '如需延長時間、藥物或其他核准協助，請先聯繫 AP 協調員。') }}</p></div>
+                <label class="check-line" style="margin-bottom:18px"><input type="checkbox" name="needs_accommodations" value="1" id="needsAccom" @checked(old('needs_accommodations'))><span>{{ $tx('I am requesting testing accommodations', '我需要申請特殊考試需求') }}</span></label>
                 <div id="accomFields" class="hidden">
                     <div class="row row-2"><div class="fg"><label class="lbl">SSD Code <span class="zh">College Board SSD 代碼</span></label><input name="ssd_code" value="{{ old('ssd_code') }}" placeholder="SSD Code"></div><div class="fg"><label class="lbl">Approval Status <span class="zh">核准狀態</span></label><select name="accommodation_status"><option value="">Select / 請選擇</option><option value="approved" @selected(old('accommodation_status') === 'approved')>Already Approved / 已核准</option><option value="pending" @selected(old('accommodation_status') === 'pending')>Pending / 審核中</option><option value="new" @selected(old('accommodation_status') === 'new')>New Request / 新申請</option></select></div></div>
-                    <label class="lbl" style="margin-bottom:8px;display:block">Exam Name and Requested Accommodation Rows / 考科與申請內容</label>
+                    <label class="lbl" style="margin-bottom:8px;display:block">{{ $tx('Exam Name and Requested Accommodation Rows', '考科與申請內容') }}</label>
                     <div id="accomRows">
                         @for($i = 0; $i < $accommodationRows; $i++)
                             <div class="row row-2 accom-row"><div class="fg"><input name="accommodations[{{ $i }}][exam]" value="{{ old("accommodations.$i.exam") }}" placeholder="Exam name / 考科名稱"></div><div class="fg"><input name="accommodations[{{ $i }}][request]" value="{{ old("accommodations.$i.request") }}" placeholder="Accommodation requested / 申請項目"></div></div>
                         @endfor
                     </div>
-                    <button type="button" class="ghost-btn" id="addAccomRow">+ Add row / 新增一列</button>
+                    <button type="button" class="ghost-btn" id="addAccomRow">+ {{ $tx('Add row', '新增一列') }}</button>
                 </div>
             </div>
             <div class="card">
-                <div class="section-title">AP Preparation Interest <span>AP tutoring survey</span></div>
-                <div class="notice"><h4>Optional tutoring survey</h4><p>This does not affect AP exam registration. It helps the team follow up if the student is interested in AP preparation support.</p></div>
-                <label class="check-line" style="margin-bottom:12px"><input type="checkbox" name="preparation_interest" value="1" id="prepInterest" @checked(old('preparation_interest'))><span>I am interested in AP preparation / tutoring information.</span></label>
+                <div class="section-title">{{ $tx('AP Preparation Interest', 'AP 備考課程意願') }} <span>{{ $tx('Optional tutoring survey', '選填課程需求調查') }}</span></div>
+                <div class="notice"><h4>{{ $tx('Optional tutoring survey', '選填課程需求調查') }}</h4><p>{{ $tx('This does not affect AP exam registration. It helps the team follow up if the student is interested in AP preparation support.', '此調查不影響 AP 考試報名，僅協助團隊了解學生是否需要 AP 備考支援。') }}</p></div>
+                <label class="check-line" style="margin-bottom:12px"><input type="checkbox" name="preparation_interest" value="1" id="prepInterest" @checked(old('preparation_interest'))><span>{{ $tx('I am interested in AP preparation / tutoring information.', '我有興趣了解 AP 備考 / 家教資訊。') }}</span></label>
                 <div class="row row-2">
-                    <label class="check-line"><input type="checkbox" name="group_class_interest" value="1" @checked(old('group_class_interest'))><span>Group class interest</span></label>
-                    <label class="check-line"><input type="checkbox" name="private_tutoring_interest" value="1" @checked(old('private_tutoring_interest'))><span>Private tutoring interest</span></label>
+                    <label class="check-line"><input type="checkbox" name="group_class_interest" value="1" @checked(old('group_class_interest'))><span>{{ $tx('Group class interest', '團體課程意願') }}</span></label>
+                    <label class="check-line"><input type="checkbox" name="private_tutoring_interest" value="1" @checked(old('private_tutoring_interest'))><span>{{ $tx('Private tutoring interest', '一對一家教意願') }}</span></label>
                 </div>
                 <div class="row row-2">
-                    <div class="fg"><label class="lbl">Preferred Schedule</label><input name="preferred_tutoring_schedule" value="{{ old('preferred_tutoring_schedule') }}" placeholder="Weekday evening, weekend morning, flexible"></div>
-                    <div class="fg"><label class="lbl">Preferred Language</label><select name="preferred_tutoring_language"><option value="">Select</option><option value="English" @selected(old('preferred_tutoring_language') === 'English')>English</option><option value="Mandarin" @selected(old('preferred_tutoring_language') === 'Mandarin')>Mandarin</option><option value="Bilingual" @selected(old('preferred_tutoring_language') === 'Bilingual')>Bilingual</option></select></div>
+                    <div class="fg"><label class="lbl">{{ $tx('Preferred Schedule', '偏好上課時間') }}</label><input name="preferred_tutoring_schedule" value="{{ old('preferred_tutoring_schedule') }}" placeholder="{{ $tx('Weekday evening, weekend morning, flexible', '平日晚上、週末上午、時間彈性') }}"></div>
+                    <div class="fg"><label class="lbl">{{ $tx('Preferred Language', '偏好語言') }}</label><select name="preferred_tutoring_language"><option value="">{{ $tx('Select', '請選擇') }}</option><option value="English" @selected(old('preferred_tutoring_language') === 'English')>{{ $tx('English', '英文') }}</option><option value="Mandarin" @selected(old('preferred_tutoring_language') === 'Mandarin')>{{ $tx('Mandarin', '中文') }}</option><option value="Bilingual" @selected(old('preferred_tutoring_language') === 'Bilingual')>{{ $tx('Bilingual', '雙語') }}</option></select></div>
                 </div>
                 <div class="row row-1">
-                    <div class="fg"><label class="lbl">Preparation Notes</label><textarea name="preparation_notes" placeholder="Subjects, goals, availability, or questions">{{ old('preparation_notes') }}</textarea></div>
+                    <div class="fg"><label class="lbl">{{ $tx('Preparation Notes', '備考需求備註') }}</label><textarea name="preparation_notes" placeholder="{{ $tx('Subjects, goals, availability, or questions', '科目、目標、可上課時間或問題') }}">{{ old('preparation_notes') }}</textarea></div>
                 </div>
             </div>
         </section>
@@ -423,7 +491,7 @@
                 <hr class="div">
                 <div class="rev-section"><h3>Accommodations / 特殊需求</h3><div id="rAccom" class="hint" style="margin-top:8px">-</div></div>
                 <hr class="div">
-                <div class="rev-section"><h3>AP Preparation Interest / Tutoring</h3><div id="rPrep" class="hint" style="margin-top:8px">-</div></div>
+                <div class="rev-section"><h3>{{ $tx('AP Preparation Interest', 'AP 備考課程意願') }}</h3><div id="rPrep" class="hint" style="margin-top:8px">-</div></div>
                 <hr class="div">
                 <div class="rev-section"><h3>Fee Summary / 費用摘要</h3><table class="rev-table"><tr><td>Regular Exams / 正式考試</td><td id="rReg">-</td></tr><tr><td>Practice Exams / 模擬考</td><td id="rPra">-</td></tr><tr><td>Late Fee / 逾期費</td><td id="rLate">-</td></tr><tr style="font-weight:800;color:var(--primary)"><td>Total / 總計</td><td id="rTot">-</td></tr></table></div>
             </div>
@@ -435,9 +503,9 @@
                     <label class="pay-opt"><input type="radio" name="payment_method" value="credit_card" @checked(old('payment_method') === 'credit_card' || old('payment_method') === 'online')><div><h4>Credit Card / 信用卡 <span class="badge-soon">Gateway Setup Required / 需設定金流</span></h4><p>Available after ECPay or NewebPay credentials are configured. / 設定金流商資料後可使用。</p></div></label>
                     <label class="pay-opt"><input type="radio" name="payment_method" value="atm" @checked(old('payment_method') === 'atm')><div><h4>ATM Transfer / ATM 轉帳 <span class="badge-soon">Gateway Setup Required / 需設定金流</span></h4><p>Available after the selected Taiwan gateway enables ATM payment. / 金流商啟用 ATM 後可使用。</p></div></label>
                 </div>
-                <div class="notice" style="margin-top:16px"><h4>Acknowledgement / 聲明確認</h4><ul><li>All information provided is accurate and complete. / 所填資料正確且完整。</li><li>I understand there are no refunds once payment is made. / 繳費後恕不退費。</li><li>I have verified the exam schedule for conflicts. / 我已確認考試時程無衝突。</li></ul></div>
-                <div class="sig-area"><div class="sig-box"><p><strong>Student Signature / 學生簽名</strong></p><div class="sig-line"></div><p>Date: _____________</p></div><div class="sig-box"><p><strong>Parent / Guardian Signature / 家長簽名</strong></p><div class="sig-line"></div><p>Date: _____________</p></div></div>
-                <div style="margin-top:18px"><label class="check-line"><input type="checkbox" name="confirmed_review" value="1" required @checked(old('confirmed_review'))><span>I have read and agree to the terms above. / 我已閱讀並同意以上條款 <span class="req">*</span></span></label></div>
+                <div class="notice" style="margin-top:16px"><h4>{{ $tx('Acknowledgement', '聲明確認') }}</h4><ul><li>{{ $tx('All information provided is accurate and complete.', '所填資料正確且完整。') }}</li><li>{{ $tx('I understand there are no refunds once payment is made.', '繳費後恕不退費。') }}</li><li>{{ $tx('I have verified the exam schedule for conflicts.', '我已確認考試時程無衝突。') }}</li></ul></div>
+                <div class="sig-area"><div class="sig-box"><p><strong>{{ $tx('Student Signature', '學生簽名') }}</strong></p><div class="sig-line"></div><p>{{ $tx('Date:', '日期：') }} _____________</p></div><div class="sig-box"><p><strong>{{ $tx('Parent / Guardian Signature', '家長 / 監護人簽名') }}</strong></p><div class="sig-line"></div><p>{{ $tx('Date:', '日期：') }} _____________</p></div></div>
+                <div style="margin-top:18px"><label class="check-line"><input type="checkbox" name="confirmed_review" value="1" required @checked(old('confirmed_review'))><span>{{ $tx('I have read and agree to the terms above.', '我已閱讀並同意以上條款。') }} <span class="req">*</span></span></label></div>
                 <input type="hidden" name="accurate_information" value="1"><input type="hidden" name="ap_policies" value="1"><input type="hidden" name="privacy_policy" value="1"><input type="hidden" name="terms_conditions" value="1">
             </div>
         </section>
@@ -446,11 +514,11 @@
             <div class="card">
                 <div class="confirm-wrap">
                     <div class="confirm-icon">OK</div>
-                    <h2>Registration Submitted! / 報名已送出</h2>
-                    <p>Your AP Exam registration is ready to submit. After submission, the AP Coordinator will review it and contact you to confirm payment.<br><br>您的 AP 考試報名即將送出。送出後 AP 協調員將審核並聯繫您確認付款。</p>
-                    <div class="ref-box">Reference No. / 參考編號<br><strong>Generated after submission / 送出後產生</strong></div>
-                    <p class="hint">Confirmation email will be sent to / 確認信將寄至 <strong id="confEmail">-</strong></p>
-                    <div class="next-steps"><h4>Next Steps / 後續步驟</h4><ol><li>AP Coordinator verifies your registration / AP 協調員審核報名資料</li><li>Complete payment by the registration deadline / 在截止日前完成付款</li><li>Confirm payment with school cashier / 向學校出納確認款項</li><li>Watch your email for exam schedule details / 留意電子郵件中的考試時程</li></ol></div>
+                    <h2>{{ $tx('Registration Submitted!', '報名已送出！') }}</h2>
+                    <p>{{ $tx('Your AP Exam registration is ready to submit. After submission, the AP Coordinator will review it and contact you to confirm payment.', '您的 AP 考試報名即將送出。送出後 AP 協調員將審核並聯繫您確認付款。') }}</p>
+                    <div class="ref-box">{{ $tx('Reference No.', '參考編號') }}<br><strong>{{ $tx('Generated after submission', '送出後產生') }}</strong></div>
+                    <p class="hint">{{ $tx('Confirmation email will be sent to', '確認信將寄至') }} <strong id="confEmail">-</strong></p>
+                    <div class="next-steps"><h4>{{ $tx('Next Steps', '後續步驟') }}</h4><ol><li>{{ $tx('AP Coordinator verifies your registration', 'AP 協調員審核報名資料') }}</li><li>{{ $tx('Complete payment by the registration deadline', '在截止日前完成付款') }}</li><li>{{ $tx('Confirm payment with school cashier', '向學校出納確認款項') }}</li><li>{{ $tx('Watch your email for exam schedule details', '留意電子郵件中的考試時程') }}</li></ol></div>
                 </div>
             </div>
         </section>
@@ -469,36 +537,36 @@
                 <div class="col-md-4">
                     <div class="widget widget-company">
                         <a href="{{ route('landing') }}"><img src="{{ asset($brandLogo) }}" alt="Trinity Scholar"></a>
-                        <div class="address"><h6>Office Address</h6><p>Taipei test-center AP registration support.</p></div>
-                        <div class="address"><h6>Business Phone</h6><p>886-2-2771-6002</p></div>
-                        <div class="address"><h6>Business Email</h6><p>info@trinityscholar.com</p></div>
+                        <div class="address"><h6>{{ $footerLabels['office'] }}</h6><p>{{ $footerLabels['office_body'] }}</p></div>
+                        <div class="address"><h6>{{ $footerLabels['phone'] }}</h6><p>886-2-2771-6002</p></div>
+                        <div class="address"><h6>{{ $footerLabels['email'] }}</h6><p>info@trinityscholar.com</p></div>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="widget footer-link">
-                        <h4 class="fwidget-title mb-5 pb-3 primary-color">Registration</h4>
+                        <h4 class="fwidget-title mb-5 pb-3 primary-color">{{ $footerLabels['registration'] }}</h4>
                         <ul>
-                            <li><a href="{{ route('landing') }}#overview"><i class="fa fa-angle-right"></i>Program Information</a></li>
-                            <li><a href="{{ route('landing') }}#timeline"><i class="fa fa-angle-right"></i>Timeline</a></li>
-                            <li><a href="{{ route('landing') }}#fees"><i class="fa fa-angle-right"></i>Fees</a></li>
-                            <li><a href="{{ route('student-registrations.create') }}"><i class="fa fa-angle-right"></i>Register Now</a></li>
+                            <li><a href="{{ route('landing') }}#overview"><i class="fa fa-angle-right"></i>{{ $footerLabels['program'] }}</a></li>
+                            <li><a href="{{ route('landing') }}#timeline"><i class="fa fa-angle-right"></i>{{ $footerLabels['timeline'] }}</a></li>
+                            <li><a href="{{ route('landing') }}#fees"><i class="fa fa-angle-right"></i>{{ $footerLabels['fees'] }}</a></li>
+                            <li><a href="{{ route('student-registrations.create') }}"><i class="fa fa-angle-right"></i>{{ $footerLabels['register'] }}</a></li>
                         </ul>
                     </div>
                 </div>
                 <div class="col-md-5">
                     <div class="widget widget-opening">
-                        <h4 class="fwidget-title mb-5 pb-3 primary-color">Important Notice</h4>
-                        <p>Registration is complete only after the filled-out form and payment are received. Available seats may close before the listed deadline.</p>
+                        <h4 class="fwidget-title mb-5 pb-3 primary-color">{{ $footerLabels['notice'] }}</h4>
+                        <p>{{ $footerLabels['notice_body'] }}</p>
                         <ul>
-                            <li><span>Main Period :</span>August - October</li>
-                            <li><span>Late Period :</span>January - March</li>
-                            <li><span>Deadline :</span>February 10, 2026 for the current late-registration notice</li>
+                            <li><span>{{ $footerLabels['main_period'] }}</span>{{ $footerLabels['main_period_value'] }}</li>
+                            <li><span>{{ $footerLabels['late_period'] }}</span>{{ $footerLabels['late_period_value'] }}</li>
+                            <li><span>{{ $footerLabels['deadline'] }}</span>{{ $footerLabels['deadline_value'] }}</li>
                         </ul>
                     </div>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>Copyright &copy; 2026 Trinity Scholar. All Rights Reserved. Designed By <a href="https://devhouse.sophistec.global/" target="_blank" rel="noopener">Sophistec Dev House</a>. Powered by <a href="https://sophistec.global/" target="_blank" rel="noopener">Sophistec Global</a>.</p>
+                <p>{{ $footerLabels['copyright'] }} &copy; 2026 Trinity Scholar. {{ $footerLabels['rights'] }} {{ $footerLabels['designed'] }} <a href="https://devhouse.sophistec.global/" target="_blank" rel="noopener">Sophistec Dev House</a>. {{ $footerLabels['powered'] }} <a href="https://sophistec.global/" target="_blank" rel="noopener">Sophistec Global</a>.</p>
             </div>
         </div>
     </div>
@@ -546,6 +614,9 @@
         privateTutoring: isZhLocale ? '一對一家教' : 'Private tutoring',
         schedule: isZhLocale ? '可上課時間' : 'Schedule',
         language: isZhLocale ? '偏好語言' : 'Language',
+        examFeeLine: (count, amount) => isZhLocale ? `${count} 科 / NT$ ${amount}` : `${count} exams / NT$ ${amount}`,
+        accomExamPlaceholder: isZhLocale ? '考科名稱' : 'Exam name',
+        accomRequestPlaceholder: isZhLocale ? '申請項目' : 'Accommodation requested',
     };
 
     function localizeStaticFormCopy() {
@@ -555,7 +626,8 @@
             const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
                 acceptNode(node) {
                     const text = node.nodeValue || '';
-                    return text.includes(' / ') && cjk.test(text) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+                    const parts = text.split(' / ');
+                    return parts.length === 2 && !cjk.test(parts[0]) && cjk.test(parts[1]) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
                 }
             });
             const nodes = [];
@@ -563,8 +635,8 @@
             nodes.forEach(node => {
                 const text = node.nodeValue || '';
                 const parts = text.split(' / ');
-                if (parts.length < 2) return;
-                node.nodeValue = isZhLocale ? parts.slice(1).join(' / ').trim() : parts[0].trim();
+                if (parts.length !== 2 || cjk.test(parts[0]) || !cjk.test(parts[1])) return;
+                node.nodeValue = isZhLocale ? parts[1].trim() : parts[0].trim();
             });
         };
 
@@ -823,8 +895,8 @@
         if (field('preferred_tutoring_schedule')) prepChoices.push(`${uiText.schedule}: ${field('preferred_tutoring_schedule')}`);
         if (field('preferred_tutoring_language')) prepChoices.push(`${uiText.language}: ${field('preferred_tutoring_language')}`);
         document.getElementById('rPrep').textContent = prepChoices.length ? prepChoices.join(' / ') : uiText.notRequested;
-        document.getElementById('rReg').textContent = `${totals.regCt} exams / NT$ ${money(totals.regTot)}`;
-        document.getElementById('rPra').textContent = `${totals.praCt} exams / NT$ ${money(totals.praTot)}`;
+        document.getElementById('rReg').textContent = uiText.examFeeLine(totals.regCt, money(totals.regTot));
+        document.getElementById('rPra').textContent = uiText.examFeeLine(totals.praCt, money(totals.praTot));
         document.getElementById('rLate').textContent = `NT$ ${money(totals.lateTot)}`;
         document.getElementById('rTot').textContent = `NT$ ${money(totals.grand)}`;
         document.getElementById('confEmail').textContent = field('student_email') || '-';
@@ -874,7 +946,7 @@
         const index = document.querySelectorAll('.accom-row').length;
         const row = document.createElement('div');
         row.className = 'row row-2 accom-row';
-        row.innerHTML = `<div class="fg"><input name="accommodations[${index}][exam]" placeholder="Exam name / 考科名稱"></div><div class="fg"><input name="accommodations[${index}][request]" placeholder="Accommodation requested / 申請項目"></div>`;
+        row.innerHTML = `<div class="fg"><input name="accommodations[${index}][exam]" placeholder="${uiText.accomExamPlaceholder}"></div><div class="fg"><input name="accommodations[${index}][request]" placeholder="${uiText.accomRequestPlaceholder}"></div>`;
         document.getElementById('accomRows').appendChild(row);
     });
     function filterExams() {
