@@ -85,7 +85,7 @@
     <link rel="stylesheet" href="{{ asset($assetBase.'css/responsive.css') }}">
     <script src="{{ asset($assetBase.'js/vendor/modernizr-2.8.3.min.js') }}"></script>
     <style>
-        :root{--trinity-blue:#244e9a;--trinity-blue-dark:#142f63;--trinity-blue-soft:#eaf2ff;--trinity-blue-bright:#9db9ff}
+        :root{--trinity-blue:#244e9a;--trinity-blue-dark:#142f63;--trinity-blue-soft:#eaf2ff;--trinity-blue-bright:#9db9ff;--trinity-ink:#101827;--trinity-line:rgba(36,78,154,.14);--trinity-ease:cubic-bezier(.22,1,.36,1);--trinity-move:cubic-bezier(.25,1,.5,1)}
         html{scroll-behavior:smooth}
         body.trinity-public{font-family:"Muli","Microsoft JhengHei","PingFang TC",Arial,sans-serif;font-weight:400;letter-spacing:0}
         body.trinity-public h1,
@@ -99,7 +99,10 @@
         body.trinity-public *::-moz-selection{background:rgba(36,78,154,.88);color:#fff;text-shadow:none}
         .primary-color{color:var(--trinity-blue)!important}
         .primary-bg,.btn-primary,.media-head.primary-bg,.cs-price.primary-bg{background:var(--trinity-blue)!important;border-color:var(--trinity-blue)!important}
-        .btn-primary:hover{background:var(--trinity-blue-dark)!important;border-color:var(--trinity-blue-dark)!important}
+        .btn{transition:transform 140ms var(--trinity-ease),background-color 180ms ease,color 180ms ease,box-shadow 180ms ease,border-color 180ms ease}
+        .btn:active{transform:scale(.98)}
+        .btn-primary{box-shadow:0 14px 30px rgba(36,78,154,.24)}
+        .btn-primary:hover{background:var(--trinity-blue-dark)!important;border-color:var(--trinity-blue-dark)!important;box-shadow:0 18px 36px rgba(20,47,99,.28)}
         a:focus,a:hover{color:var(--trinity-blue)!important}
         .btn-light:focus,.btn-light:hover{background:var(--trinity-blue)!important;color:#fff!important;border-color:var(--trinity-blue)!important}
         .main-menu nav ul li a:before,.slider-content h3:before{background:var(--trinity-blue)!important}
@@ -109,14 +112,16 @@
         .section-title-style2 span:after{left:auto!important;right:-54px!important}
         .white-title span:before,
         .white-title span:after{background:var(--trinity-blue-bright)!important}
-        .header-top{background:var(--trinity-blue)!important}
-        #header .header-bottom{background:rgba(15,18,24,.62)}
+        .header-top{background:linear-gradient(90deg,var(--trinity-blue-dark),var(--trinity-blue))!important}
+        #header .header-bottom{background:rgba(10,16,28,.68);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
         #header .ht-social li{color:#fff;font-size:14px;font-weight:400;letter-spacing:0}
-        #header .header-bottom-inner{min-height:104px}
-        #header .logo a{display:inline-flex;align-items:center;background:#fff;border-radius:8px;padding:9px 14px;box-shadow:0 12px 28px rgba(0,0,0,.16)}
+        #header .header-bottom-inner{min-height:104px;border-color:rgba(255,255,255,.12)}
+        #header .logo a{display:inline-flex;align-items:center;background:rgba(255,255,255,.96);border-radius:8px;padding:9px 14px;box-shadow:0 16px 34px rgba(0,0,0,.18);transition:transform 180ms var(--trinity-ease),box-shadow 180ms ease}
+        #header .logo a:hover{transform:translateY(-1px);box-shadow:0 18px 40px rgba(0,0,0,.22)}
         #header .logo img{width:230px;max-height:64px;object-fit:contain}
         #header .main-menu{text-align:center}
         #header .main-menu nav ul li a{padding:43px 15px;font-family:"Muli",sans-serif;font-size:13px;font-weight:600;letter-spacing:.01em}
+        #header .main-menu nav ul li a:before{transition:opacity 160ms ease,transform 180ms var(--trinity-ease)}
         #header .main-menu nav ul li.active a,#header .main-menu nav ul li a:hover{color:var(--trinity-blue-bright)}
         #header .public-header-actions{display:flex;align-items:center;justify-content:flex-end;gap:12px}
         #header .public-header-actions .btn{white-space:nowrap;padding:16px 25px}
@@ -124,7 +129,8 @@
         #header .public-header-actions .btn.btn-round{border-radius:50px!important;line-height:12px}
         #header .language-switcher{margin:0}
         #header .language-switcher label{display:block;margin:0}
-        #header .language-switcher select{height:48px;min-width:126px;border:1px solid rgba(255,255,255,.55);border-radius:50px;background:rgba(255,255,255,.96);color:#252525;padding:0 18px;font-family:"Muli",sans-serif;font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:0}
+        #header .language-switcher select{height:48px;min-width:126px;border:1px solid rgba(255,255,255,.55);border-radius:50px;background:rgba(255,255,255,.96);color:#252525;padding:0 18px;font-family:"Muli",sans-serif;font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:0;box-shadow:0 12px 24px rgba(0,0,0,.12);transition:border-color 160ms ease,box-shadow 160ms ease,transform 140ms var(--trinity-ease)}
+        #header .language-switcher select:focus{border-color:var(--trinity-blue-bright);box-shadow:0 0 0 4px rgba(157,185,255,.18),0 12px 24px rgba(0,0,0,.12)}
         #header .ht-social .language-switcher select{height:34px;min-width:105px;border:0}
         footer .widget-company img{background:#fff;border-radius:8px;padding:10px 14px;width:250px;max-width:100%;height:auto}
         footer .address h6,
@@ -142,9 +148,15 @@
         .slider-area .owl-nav div:before{font-family:FontAwesome;font-size:22px;color:#fff}
         .slider-area .owl-nav .owl-prev:before{content:"\f104"}
         .slider-area .owl-nav .owl-next:before{content:"\f105"}
+        .reveal-on-scroll{opacity:0;transform:translate3d(0,18px,0);filter:blur(4px);transition:opacity 420ms var(--trinity-ease),transform 420ms var(--trinity-ease),filter 420ms var(--trinity-ease)}
+        .reveal-on-scroll.is-visible{opacity:1;transform:translate3d(0,0,0);filter:blur(0)}
+        .reveal-on-scroll:nth-child(2){transition-delay:45ms}
+        .reveal-on-scroll:nth-child(3){transition-delay:90ms}
+        .reveal-on-scroll:nth-child(4){transition-delay:135ms}
         @media(max-width:1199px){#header .main-menu nav ul li a{padding:43px 10px}#header .public-header-actions .btn{padding:15px 18px}}
         @media(max-width:991px){#header .header-bottom{background:rgba(15,18,24,.86)}#header .header-bottom-inner{min-height:auto;padding:18px 0}#header .public-header-actions{justify-content:flex-start;margin-top:10px}.slicknav_btn{margin-top:-39px}}
         @media(max-width:575px){#header .header-top{display:none}#header .logo img{width:190px}#header .public-header-actions{gap:8px;flex-wrap:wrap}#header .language-switcher select{height:42px;min-width:104px}#header .public-header-actions .btn{padding:13px 16px}}
+        @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn,#header .logo a,#header .language-switcher select,.reveal-on-scroll{transition:none!important;animation:none!important;transform:none!important;filter:none!important;opacity:1!important}}
     </style>
     {{ $styles ?? '' }}
     @stack('styles')
@@ -319,6 +331,28 @@
         history.pushState(null, '', url.hash);
         target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
+
+    (function () {
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const targets = document.querySelectorAll('.landing-premium section, .landing-premium .landing-card, .landing-premium .media, .landing-premium .late-stat');
+        if (reduceMotion || !('IntersectionObserver' in window)) {
+            targets.forEach((target) => target.classList.add('is-visible'));
+            return;
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add('is-visible');
+                observer.unobserve(entry.target);
+            });
+        }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+
+        targets.forEach((target) => {
+            target.classList.add('reveal-on-scroll');
+            observer.observe(target);
+        });
+    })();
 </script>
 {{ $scripts ?? '' }}
 @stack('scripts')

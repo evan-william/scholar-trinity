@@ -62,6 +62,11 @@ Current local template pass:
 ## Current Progress
 
 2026-07-11
+- Premium UI and motion pass:
+  - Used the local `ui-design` and `ui-animation` skill guidance for this pass: preserve the Edification/Trinity visual system, improve hierarchy and spacing, use transform/opacity motion, avoid `transition: all`, and provide reduced-motion fallbacks.
+  - Upgraded the public landing visual layer with a more cinematic Trinity-blue hero overlay, softened typography rhythm, glass quick-facts strip, stronger card depth, refined section titles, hover states, and timeline/process/FAQ/document card polish.
+  - Added CSS-only reveal motion for landing sections/cards with IntersectionObserver, plus reduced-motion handling so animation does not run for users who disable motion.
+  - Upgraded the student registration form surface with a richer header band, glass progress wrapper, blue intro accent, softer card/input focus states, premium exam/payment option hovers, and step-enter animation on Next/Back without changing validation or submission logic.
 - Public UI repair pass:
   - Repaired the broken `Registration Flow` section so the dark band wraps the full section, the title/subtitle stay inside the section, and the step cards no longer overflow or get cut off on the left/right edges.
   - Reworked the registration-flow step cards with fixed card sizing, centered Bootstrap columns, cleaner spacing, and Trinity-blue step pills.
@@ -698,6 +703,14 @@ These items come directly from `Reference/Trinity Scholar - Features.pdf` and we
 - Server credentials were shared in chat but must stay out of Git.
 
 ## Verification Log
+
+2026-07-11
+- Skill-guided UI pass: read/used local `ui-design` and `ui-animation` instructions for the premium public UI/motion polish.
+- Static check: `git diff --check` passed after the premium landing/form motion pass.
+- Motion check: grep found no `transition: all` and no layout-property transition for `width`, `height`, `top`, or `left` in the touched public UI Blade files.
+- Build check: direct Vite production build passed with `node node_modules\vite\bin\vite.js build`.
+- Deploy package: regenerated `scholar-trinity-deploy.zip` from the updated source and built public assets.
+- Blocked: PHP and Composer are still not available in PATH, so Laravel/PHPUnit tests and PHP lint were not run in this local environment.
 
 2026-07-07
 - Static check: shared public shell no longer contains custom inline CSS; it loads the original Edification CSS/JS stack and exposes optional named slots only.

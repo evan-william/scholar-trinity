@@ -69,7 +69,7 @@
     $feeTotal = $displayFees->sum('amount');
 @endphp
 
-<x-public-flow-shell :title="$metaTitle" :description="$metaDescription" content-class="none">
+<x-public-flow-shell :title="$metaTitle" :description="$metaDescription" body-class="landing-premium" content-class="none">
     <x-slot:styles>
         <style>
             #late-registration,
@@ -126,6 +126,62 @@
             .quick-facts .card h3{font-size:28px;line-height:36px;margin-bottom:4px}
             .quick-facts .card p{margin-bottom:0}
             .cta-area{background:#121820!important}
+            body.landing-premium{background:#f7faff;color:#526071}
+            body.landing-premium .slider_item{position:relative;min-height:820px;overflow:hidden}
+            body.landing-premium .slider_item:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(4,10,22,.94) 0%,rgba(8,18,36,.82) 36%,rgba(12,31,63,.34) 68%,rgba(8,18,36,.5) 100%);z-index:0}
+            body.landing-premium .slider_item:after{content:"";position:absolute;left:-16vw;top:12%;width:64vw;height:64vw;border-radius:50%;background:radial-gradient(circle,rgba(36,78,154,.38),rgba(36,78,154,.06) 44%,rgba(36,78,154,0) 66%);z-index:0;pointer-events:none}
+            body.landing-premium .slider_item .container{position:relative;z-index:1}
+            body.landing-premium .slider-content{max-width:760px;animation:hero-copy-in 720ms var(--trinity-ease) both}
+            body.landing-premium .slider-content h3{font-family:"Muli",sans-serif;font-size:20px;font-weight:500;letter-spacing:3.5px;color:rgba(255,255,255,.84);margin-bottom:18px}
+            body.landing-premium .slider-content h1{font-weight:700;letter-spacing:-.01em;text-transform:none;font-size:66px;line-height:76px;max-width:13ch;text-wrap:balance;text-shadow:0 18px 54px rgba(0,0,0,.38)}
+            body.landing-premium .slider-content h1 span{color:#8fb4ff!important}
+            body.landing-premium .slider-content p{max-width:58ch;font-size:18px;line-height:32px;font-style:normal;color:rgba(255,255,255,.76);margin-bottom:0;text-wrap:pretty}
+            body.landing-premium .slider-content .btn{margin-top:34px!important;background:#fff!important;border-color:#fff!important;color:#17366f!important;box-shadow:0 18px 46px rgba(0,0,0,.28)}
+            body.landing-premium .slider-content .btn:hover{background:#eaf2ff!important;border-color:#eaf2ff!important;color:#10295a!important}
+            @keyframes hero-copy-in{from{opacity:0;transform:translate3d(0,18px,0)}to{opacity:1;transform:translate3d(0,0,0)}}
+            body.landing-premium .quick-facts{position:relative;margin-top:-72px;z-index:2;padding-top:0!important}
+            body.landing-premium .quick-facts .container{background:rgba(255,255,255,.92);border:1px solid rgba(36,78,154,.13);border-radius:18px;padding:24px 28px;box-shadow:0 26px 70px rgba(18,43,82,.16);backdrop-filter:blur(14px)}
+            body.landing-premium .quick-facts .landing-card{border:0!important;box-shadow:none!important;background:transparent}
+            body.landing-premium .quick-facts .card-body{padding:8px 20px!important;border-left:1px solid rgba(36,78,154,.12)}
+            body.landing-premium .quick-facts .col-md-3:first-child .card-body{border-left:0}
+            body.landing-premium .quick-facts h3{font-size:34px!important;line-height:40px!important;color:#17366f!important}
+            body.landing-premium .quick-facts p{color:#65748a;font-size:14px}
+            body.landing-premium .section-title-style2{margin-bottom:42px}
+            body.landing-premium .section-title-style2 span{font-family:"Muli",sans-serif;font-size:13px;font-weight:600;letter-spacing:3px;color:#315388}
+            body.landing-premium .section-title-style2 h2{font-weight:700;letter-spacing:-.01em;color:#172033;max-width:860px;margin-left:auto;margin-right:auto;text-wrap:balance}
+            body.landing-premium .section-title-style2 p{max-width:72ch;margin:16px auto 0;color:#65748a;text-wrap:pretty}
+            body.landing-premium #overview{background:linear-gradient(180deg,#f7faff 0%,#fff 100%)}
+            body.landing-premium #overview .landing-card{height:100%;background:#fff;border:1px solid rgba(36,78,154,.12)!important;border-radius:14px;box-shadow:0 20px 46px rgba(18,43,82,.08)}
+            body.landing-premium .course-thumb{position:relative;overflow:hidden;border-radius:10px 10px 0 0}
+            body.landing-premium .course-thumb:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,30,54,0),rgba(15,30,54,.2));pointer-events:none}
+            body.landing-premium .course-thumb img{height:220px;transform:scale(1.001);transition:transform 260ms var(--trinity-ease)}
+            body.landing-premium .landing-card:hover .course-thumb img{transform:scale(1.035)}
+            body.landing-premium .landing-card{position:relative;border-radius:14px;border:1px solid rgba(36,78,154,.12)!important;background:#fff;box-shadow:0 18px 42px rgba(18,43,82,.08);transition:transform 160ms var(--trinity-ease),box-shadow 180ms ease,border-color 180ms ease}
+            body.landing-premium .landing-card:before{content:"";position:absolute;left:18px;right:18px;top:0;height:2px;background:linear-gradient(90deg,rgba(36,78,154,.02),rgba(36,78,154,.62),rgba(36,78,154,.02));opacity:0;transition:opacity 180ms ease}
+            body.landing-premium .landing-card:hover{transform:translateY(-3px) scale(1.006);box-shadow:0 28px 60px rgba(18,43,82,.13);border-color:rgba(36,78,154,.24)!important}
+            body.landing-premium .landing-card:hover:before{opacity:1}
+            body.landing-premium .landing-card h4{font-size:20px;line-height:30px;color:#172033}
+            body.landing-premium .landing-card p{color:#667386;line-height:28px}
+            body.landing-premium .late-notice-area{background:radial-gradient(circle at top right,rgba(73,112,196,.22),transparent 38%),linear-gradient(135deg,#101720 0%,#141e2e 52%,#0d1420 100%);padding:76px 0}
+            body.landing-premium .notice-card{border-radius:10px!important;background:rgba(255,255,255,.96);box-shadow:0 24px 70px rgba(0,0,0,.28)}
+            body.landing-premium .notice-list li{color:#536176}
+            body.landing-premium .late-stat{border-radius:10px;background:rgba(255,255,255,.08);box-shadow:inset 0 1px 0 rgba(255,255,255,.08);transition:transform 160ms var(--trinity-ease),background-color 180ms ease}
+            body.landing-premium .late-stat:hover{transform:translateY(-2px);background:rgba(255,255,255,.12)}
+            body.landing-premium #timeline{background:#fff}
+            body.landing-premium #timeline .media{background:#fff;border:1px solid rgba(36,78,154,.12);border-radius:14px;overflow:hidden;box-shadow:0 18px 40px rgba(18,43,82,.07);transition:transform 160ms var(--trinity-ease),box-shadow 180ms ease,border-color 180ms ease}
+            body.landing-premium #timeline .media:hover{transform:translateY(-3px);box-shadow:0 24px 54px rgba(18,43,82,.11);border-color:rgba(36,78,154,.22)}
+            body.landing-premium #timeline .media-head{min-width:156px}
+            body.landing-premium #process{background:radial-gradient(circle at 15% 10%,rgba(92,132,214,.22),transparent 34%),linear-gradient(180deg,#101720,#111924)}
+            body.landing-premium #process .process-card{background:rgba(255,255,255,.96);border-color:rgba(255,255,255,.18)!important}
+            body.landing-premium #fees,body.landing-premium #documents,body.landing-premium #faq{background:#fff}
+            body.landing-premium #documents .landing-card i,body.landing-premium #faq .landing-card i{display:inline-grid;width:38px;height:38px;place-items:center;border-radius:50%;background:#eaf2ff;box-shadow:inset 0 0 0 1px rgba(36,78,154,.1)}
+            body.landing-premium .contact-info{position:relative;background:#eef4fb}
+            body.landing-premium .contact-info:before{opacity:.92}
+            body.landing-premium .cta-area{background:linear-gradient(135deg,#101720,#172949)!important}
+            body.landing-premium .cta-area .btn-light{box-shadow:0 16px 34px rgba(0,0,0,.22)}
+            @media(prefers-reduced-motion:reduce){
+                body.landing-premium .slider-content{animation:none!important;transform:none!important;opacity:1!important}
+            }
             @media(max-width:767px){
                 .late-notice-area{padding:44px 0 34px}
                 .notice-card .card-body{padding:24px}
@@ -135,6 +191,15 @@
                 .section-title-style2 span:after{display:none!important}
                 #process .process-card{min-height:auto}
                 #overview,#timeline,#process,#fees,#documents,#faq,#contact{padding-top:42px!important;padding-bottom:42px!important}
+                body.landing-premium .slider_item{min-height:720px}
+                body.landing-premium .slider-content h1{font-size:42px;line-height:52px;max-width:12ch}
+                body.landing-premium .slider-content p{font-size:16px;line-height:28px}
+                body.landing-premium .quick-facts{margin-top:0;padding-top:24px!important}
+                body.landing-premium .quick-facts .container{border-radius:0;padding:18px 15px}
+                body.landing-premium .quick-facts .card-body{border-left:0;border-top:1px solid rgba(36,78,154,.12)}
+                body.landing-premium .quick-facts .col-md-3:first-child .card-body{border-top:0}
+                body.landing-premium #timeline .media{display:block}
+                body.landing-premium #timeline .media-head{width:100%;min-width:0}
             }
         </style>
     </x-slot:styles>

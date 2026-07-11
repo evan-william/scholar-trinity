@@ -279,9 +279,49 @@
             .form-intro{grid-template-columns:1fr}
             .form-intro h2{font-size:26px;line-height:34px}
         }
+        body.trinity-form{--trinity-ease:cubic-bezier(.22,1,.36,1);--trinity-move:cubic-bezier(.25,1,.5,1);background:radial-gradient(circle at 15% 0%,rgba(36,78,154,.16),transparent 32%),linear-gradient(180deg,#eef4fb 0%,#f8fbff 42%,#eef4fb 100%)}
+        body.trinity-form .header-top{background:linear-gradient(90deg,var(--trinity-blue-dark),var(--trinity-blue))!important}
+        body.trinity-form #header .header-bottom{background:rgba(10,16,28,.72);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+        body.trinity-form #header .header-bottom-inner{border-color:rgba(255,255,255,.12)}
+        body.trinity-form #header .logo a{background:rgba(255,255,255,.96);border-radius:8px;box-shadow:0 16px 34px rgba(0,0,0,.18);transition:transform 180ms var(--trinity-ease),box-shadow 180ms ease}
+        body.trinity-form #header .logo a:hover{transform:translateY(-1px);box-shadow:0 18px 40px rgba(0,0,0,.22)}
+        body.trinity-form .form-top-band{min-height:176px;background:linear-gradient(90deg,rgba(6,12,24,.94),rgba(8,18,36,.66)),url('{{ asset('theme/edification/images/bg/slider-bg2.jpg') }}') center/cover no-repeat}
+        body.trinity-form .progress-wrap{position:relative;background:rgba(255,255,255,.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(36,78,154,.14);box-shadow:0 18px 45px rgba(18,43,82,.08)}
+        body.trinity-form .progress-wrap:before{content:"";position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg,transparent,rgba(36,78,154,.32),transparent)}
+        body.trinity-form .progress-steps{max-width:1120px}
+        body.trinity-form .step-circle{width:38px;height:38px;border-color:#d8e5f4;background:#fff;color:#60718a;box-shadow:0 8px 18px rgba(18,43,82,.06);transition:transform 160ms var(--trinity-ease),background-color 180ms ease,color 180ms ease,box-shadow 180ms ease}
+        body.trinity-form .step-item.active .step-circle,body.trinity-form .step-item.completed .step-circle{background:var(--trinity-blue);color:#fff;box-shadow:0 12px 26px rgba(36,78,154,.26);transform:translateY(-1px)}
+        body.trinity-form .step-item:not(:last-child)::after{top:34px;background:#dfe8f4}
+        body.trinity-form .step-item.completed:not(:last-child)::after{background:linear-gradient(90deg,var(--trinity-blue),#8fb4ff)}
+        body.trinity-form .step-label{font-size:12px;color:#66768d}
+        body.trinity-form .step-item.active .step-label{color:#17366f;font-weight:700}
+        body.trinity-form .main{max-width:1120px;padding-top:42px}
+        body.trinity-form .form-intro{position:relative;overflow:hidden;background:linear-gradient(135deg,#fff 0%,#f8fbff 56%,#edf4ff 100%);border:1px solid rgba(36,78,154,.12);border-top:0;box-shadow:0 26px 70px rgba(18,43,82,.12)}
+        body.trinity-form .form-intro:before{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:linear-gradient(90deg,var(--trinity-blue),#8fb4ff)}
+        body.trinity-form .form-intro:after{content:"";position:absolute;right:-110px;top:-150px;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,rgba(36,78,154,.18),transparent 66%);pointer-events:none}
+        body.trinity-form .form-intro>*{position:relative;z-index:1}
+        body.trinity-form .card{border:1px solid rgba(36,78,154,.12);box-shadow:0 22px 60px rgba(18,43,82,.09);background:rgba(255,255,255,.96);backdrop-filter:blur(10px)}
+        body.trinity-form .section-title{font-size:22px;line-height:32px;color:#172033}
+        body.trinity-form .section-title::after{background:linear-gradient(90deg,var(--trinity-blue),#8fb4ff)}
+        body.trinity-form input:not([type]),body.trinity-form input[type=text],body.trinity-form input[type=email],body.trinity-form input[type=tel],body.trinity-form input[type=search],body.trinity-form input[type=date],body.trinity-form input[type=file],body.trinity-form select,body.trinity-form textarea{background:#f9fbff;border-color:#cddbec;transition:border-color 160ms ease,box-shadow 160ms ease,background-color 160ms ease,transform 140ms var(--trinity-ease)}
+        body.trinity-form input:focus,body.trinity-form select:focus,body.trinity-form textarea:focus{background:#fff;border-color:var(--trinity-blue);box-shadow:0 0 0 4px rgba(36,78,154,.12),0 12px 24px rgba(18,43,82,.06)}
+        body.trinity-form .exam-cb,body.trinity-form .pay-opt{background:#fff;border:1px solid rgba(36,78,154,.13);box-shadow:0 10px 26px rgba(18,43,82,.045);transition:transform 140ms var(--trinity-ease),border-color 160ms ease,box-shadow 160ms ease,background-color 160ms ease}
+        body.trinity-form .exam-cb.checked,body.trinity-form .pay-opt.selected{border-color:rgba(36,78,154,.46);background:#f1f6ff;box-shadow:0 16px 34px rgba(36,78,154,.11)}
+        @media(hover:hover) and (pointer:fine){
+            body.trinity-form .exam-cb:not(.disabled):hover,body.trinity-form .pay-opt:hover{transform:translateY(-2px);border-color:rgba(36,78,154,.34);box-shadow:0 16px 36px rgba(18,43,82,.09)}
+        }
+        body.trinity-form .step-enter{animation:form-step-in 260ms var(--trinity-ease) both}
+        @keyframes form-step-in{from{opacity:0;transform:translate3d(10px,0,0);filter:blur(3px)}to{opacity:1;transform:translate3d(0,0,0);filter:blur(0)}}
+        body.trinity-form .nav-footer{background:rgba(255,255,255,.88);backdrop-filter:blur(16px)}
+        body.trinity-form .nav-footer .btn{transition:transform 140ms var(--trinity-ease),background-color 180ms ease,box-shadow 180ms ease}
+        body.trinity-form .nav-footer .btn:active{transform:scale(.98)}
+        body.trinity-form .nav-footer .btn-primary{box-shadow:0 16px 34px rgba(36,78,154,.24)}
+        @media(prefers-reduced-motion:reduce){
+            body.trinity-form *,body.trinity-form .step-enter{transition:none!important;animation:none!important;transform:none!important;filter:none!important}
+        }
     </style>
 </head>
-<body>
+<body class="trinity-form">
 <header id="header">
     <div class="header-top">
         <div class="container">
@@ -837,8 +877,16 @@
     }
 
     function setStep(next) {
-        document.querySelectorAll('[data-step]').forEach(section => section.classList.add('hidden'));
-        document.querySelector(`[data-step="${next}"]`).classList.remove('hidden');
+        document.querySelectorAll('[data-step]').forEach(section => {
+            section.classList.add('hidden');
+            section.classList.remove('step-enter');
+        });
+        const nextSection = document.querySelector(`[data-step="${next}"]`);
+        nextSection.classList.remove('hidden');
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            void nextSection.offsetWidth;
+            nextSection.classList.add('step-enter');
+        }
         cur = next;
         document.querySelectorAll('[data-progress]').forEach(item => {
             const index = Number(item.dataset.progress);
