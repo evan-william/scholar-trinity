@@ -15,8 +15,8 @@
     $uiLocale = session('locale', str_replace('_', '-', app()->getLocale()));
     $isZh = $uiLocale === 'zh-TW';
     $navLabels = $isZh
-        ? ['home' => '首頁', 'program' => '課程資訊', 'timeline' => '時程', 'fees' => '費用公告', 'faq' => '常見問題', 'contact' => '聯絡我們', 'start' => '開始報名', 'support' => '台北 AP 報名支援']
-        : ['home' => 'Home', 'program' => 'Program', 'timeline' => 'Timeline', 'fees' => 'Fee Notice', 'faq' => 'FAQ', 'contact' => 'Contact', 'start' => 'Start Form', 'support' => 'Taipei AP Registration Support'];
+        ? ['home' => '首頁', 'program' => '課程資訊', 'timeline' => '時程', 'fees' => '費用', 'faq' => '常見問題', 'contact' => '聯絡我們', 'start' => '開始報名', 'support' => '台北 AP 報名支援']
+        : ['home' => 'Home', 'program' => 'Program', 'timeline' => 'Timeline', 'fees' => 'Fees', 'faq' => 'FAQ', 'contact' => 'Contact', 'start' => 'Start Form', 'support' => 'Taipei AP Registration Support'];
     $footerLabels = $isZh
         ? [
             'office' => '服務說明',
@@ -26,7 +26,7 @@
             'registration' => '報名資訊',
             'program' => '課程資訊',
             'timeline' => '報名時程',
-            'fees' => '費用公告',
+            'fees' => '費用說明',
             'register' => '立即報名',
             'notice' => '重要提醒',
             'notice_body' => '報名需在表單與付款皆收到後才算完成。名額有限，可能在公告截止日前額滿關閉。',
@@ -49,7 +49,7 @@
             'registration' => 'Registration',
             'program' => 'Program Information',
             'timeline' => 'Timeline',
-            'fees' => 'Fee Notice',
+            'fees' => 'Fees',
             'register' => 'Register Now',
             'notice' => 'Important Notice',
             'notice_body' => 'Registration is complete only after the filled-out form and payment are received. Available seats may close before the listed deadline.',
@@ -160,7 +160,6 @@
     </style>
     {{ $styles ?? '' }}
     @stack('styles')
-    <link rel="stylesheet" href="{{ asset('theme/trinity/css/premium.css') }}">
 </head>
 <body class="trinity-public {{ $bodyClass }}">
 <header id="header">
@@ -191,7 +190,7 @@
                 <div class="row align-items-center">
                     <div class="col-lg-3 col-sm-8">
                         <div class="logo">
-                            <a href="{{ route('landing') }}" aria-label="Trinity Scholar homepage"><img src="{{ asset($brandLogo) }}" alt="Trinity Scholar"></a>
+                            <a href="{{ route('landing') }}"><img src="{{ asset($brandLogo) }}" alt="Trinity Scholar"></a>
                         </div>
                     </div>
                     <div class="col-xl-6 col-lg-6 d-none d-lg-block">
@@ -265,7 +264,7 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="widget widget-company">
-                        <a href="{{ route('landing') }}" aria-label="Trinity Scholar homepage"><img src="{{ asset($brandLogo) }}" alt="Trinity Scholar"></a>
+                        <a href="{{ route('landing') }}"><img src="{{ asset($brandLogo) }}" alt="Trinity Scholar"></a>
                         <div class="address">
                             <h6>{{ $footerLabels['office'] }}</h6>
                             <p>{{ $footerLabels['office_body'] }}</p>
@@ -335,34 +334,24 @@
 
     (function () {
         const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        const targets = document.querySelectorAll([
-            '.landing-premium .section-title-style2',
-            '.landing-premium .landing-card',
-            '.landing-premium .media',
-            '.landing-premium .late-stat',
-            '.landing-premium .fee-availability',
-            '.landing-premium .faq-item'
-        ].join(','));
-
-        if (reduceMotion || !targets.length || !('IntersectionObserver' in window)) return;
-
-        try {
-            targets.forEach((target) => target.classList.add('reveal-on-scroll'));
-            document.body.classList.add('motion-ready');
-
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach((entry) => {
-                    if (!entry.isIntersecting) return;
-                    entry.target.classList.add('is-visible');
-                    observer.unobserve(entry.target);
-                });
-            }, { threshold: 0.08, rootMargin: '0px 0px -6% 0px' });
-
-            targets.forEach((target) => observer.observe(target));
-        } catch (error) {
-            document.body.classList.remove('motion-ready');
-            targets.forEach((target) => target.classList.remove('reveal-on-scroll'));
+        const targets = document.querySelectorAll('.landing-premium section, .landing-premium .landing-card, .landing-premium .media, .landing-premium .late-stat');
+        if (reduceMotion || !('IntersectionObserver' in window)) {
+            targets.forEach((target) => target.classList.add('is-visible'));
+            return;
         }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add('is-visible');
+                observer.unobserve(entry.target);
+            });
+        }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+
+        targets.forEach((target) => {
+            target.classList.add('reveal-on-scroll');
+            observer.observe(target);
+        });
     })();
 </script>
 {{ $scripts ?? '' }}

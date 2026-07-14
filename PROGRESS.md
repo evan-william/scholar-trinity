@@ -62,26 +62,20 @@ Current local template pass:
 ## Current Progress
 
 2026-07-14
-- Created a complete pre-change backup at `Backup/scholar-trinity-20260714-131756` with all `14,056` project files copied and verified.
-- Unified premium public UI pass:
-  - Added `public/theme/trinity/css/premium.css` as the final Trinity visual layer shared by the landing page and registration form.
-  - Kept the approved Edification structure/assets while replacing the inconsistent styling with one Trinity-blue color system, one spacing/radius system, calmer typography, stronger section hierarchy, responsive breakpoints, and consistent header/footer controls.
-  - Repaired the dark late-registration heading contrast so the eyebrow and title remain fully readable against the dark section.
-  - Reworked landing hero, quick facts, overview cards, notice cards, timeline, registration flow, document checklist, FAQ accordion, contact band, CTA, and footer states.
-  - Replaced the FAQ card wall with semantic `<details>` accordions and added restrained open-state motion.
-- Registration form UI pass:
-  - Fixed the global `.row` form selector that was overriding Bootstrap rows in the header/footer; form grids are now scoped to `.main`.
-  - Unified header/footer styling with the landing page, improved progress-step clarity, form card hierarchy, input focus/error states, upload area, exam/payment selection states, review panels, fixed action bar, and mobile layouts.
-  - Kept registration validation, autosave, upload, review, fee calculation, and submission logic intact; changes are presentation and interaction wiring only.
-- Public fee visibility update from client feedback:
-  - Removed all visible landing-page fee cards, totals, and estimated amounts.
-  - Replaced the landing fee section with a bilingual `Fee Information Is Coming Soon` status notice.
-  - Removed visible subject, practice-exam, preview, and review amounts from the student form while preserving internal/server-side calculation fields.
-  - Renamed public navigation/footer fee links to `Fee Notice` / `費用公告`.
-- Motion/accessibility pass:
-  - Applied transform/opacity-only reveal and interaction motion with deliberate timing and hover gating for fine pointers.
-  - Made content visible by default; JavaScript only enables reveal states after IntersectionObserver setup succeeds, preventing invisible content when scripts fail.
-  - Added a complete `prefers-reduced-motion` path and retained visible focus states.
+- Backup UI restoration:
+  - Restored the shared public shell, landing page, and student registration form from `Backup/scholar-trinity-20260714-131756` after reverting the latest premium visual redesign.
+  - Removed the additional `public/theme/trinity/css/premium.css` override so spacing, typography, animation, and component styling return to the backed-up Edification/Trinity implementation.
+  - Preserved the existing form validation, calculation, review, and submission logic.
+- Public fee visibility:
+  - Kept the complete landing and registration fee sections, labels, explanations, subject counts, and internal calculations.
+  - Replaced only public-facing fee amounts with localized `Coming Soon` / `即將公布` text until pricing is approved.
+- FAQ interaction:
+  - Kept the landing FAQ as an accessible native expandable/collapsible accordion, with the first item open by default and reduced-motion handling.
+- Verification:
+  - Confirmed the shared public shell matches the backup byte-for-byte and the removed premium override is no longer present.
+  - `git diff --check`, merge-marker scan, form JavaScript ID scan, and public fee-amount scan passed.
+  - Direct Vite production build passed with `node node_modules\vite\bin\vite.js build`.
+  - Browser QA was intentionally not run for this pass, following the user instruction not to open a browser.
 
 2026-07-11
 - Premium UI and motion pass:
@@ -725,18 +719,6 @@ These items come directly from `Reference/Trinity Scholar - Features.pdf` and we
 - Server credentials were shared in chat but must stay out of Git.
 
 ## Verification Log
-
-2026-07-14
-- Backup check: source and backup both contain `14,056` files; Robocopy reported `0` failed files.
-- Skill-guided UI pass: re-read and applied the local `ui-design` Build guidance and `ui-animation` decision/component/transition guidance.
-- CSS parse check: `public/theme/trinity/css/premium.css` parsed successfully through PostCSS; braces are balanced (`264` open / `264` close).
-- Static JS/markup check: all `51` IDs referenced through `getElementById()` in the registration form exist in the Blade markup.
-- Motion check: no `transition: all` and no transition targeting `width`, `height`, `top`, or `left` in the touched public UI sources.
-- Static check: `git diff --check` passed.
-- Build check: direct Vite production build passed with `node node_modules\\vite\\bin\\vite.js build` (`61` modules transformed).
-- Deploy package: regenerated `scholar-trinity-deploy.zip` with `381` entries and verified the premium stylesheet, shared shell, landing view, registration view, and Vite manifest are present.
-- Environment note: `npm run build` still fails only because the Windows npm wrapper misreads the `&` in the parent path; the direct local Vite build succeeds.
-- Blocked: PHP and Composer remain unavailable in local PATH, so Laravel/PHPUnit tests and PHP lint were not run locally.
 
 2026-07-11
 - Skill-guided UI pass: read/used local `ui-design` and `ui-animation` instructions for the premium public UI/motion polish.
