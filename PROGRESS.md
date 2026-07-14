@@ -62,6 +62,14 @@ Current local template pass:
 ## Current Progress
 
 2026-07-14
+- Trinity blue branding and deployment-cache repair:
+  - Added a versioned `public-ui.css` URL plus a small critical inline brand fallback so cached Edification CSS can no longer restore orange top bars, buttons, active lines, or section accents after ZIP deployment.
+  - Forced the desktop language selector and `Start Form` action to remain side-by-side, with a compact horizontal mobile layout.
+  - Cropped the newly supplied transparent Trinity Scholar logo to its visible pixel bounds and added it as `public/images/trinity-scholar-logo-clean.png`.
+  - Applied the clean logo to the landing/public header and every public/form footer while intentionally preserving the already-approved registration-form header logo.
+- Registration-flow visual repair:
+  - Replaced the low-resolution process photo with the higher-resolution Edification `take-toure-bg.jpg` asset.
+  - Reworked the weak 2x2 process panel into a clearer vertical step sequence with consistent blue numbering, spacing, and responsive stacking.
 - Template-led public UI overhaul:
   - Re-read the local Edification Home 1, Home 2, and Home 3 templates and reused their image-led about, course, event, and editorial composition patterns instead of introducing a separate generic design language.
   - Added one shared `public/theme/trinity/css/public-ui.css` layer for public typography, header, logo, navigation, buttons, footer, responsive behavior, selection color, and reduced-motion handling.
@@ -519,7 +527,7 @@ These items come directly from `Reference/Trinity Scholar - Features.pdf` and we
   - DONE: pre-submit review now includes the newly required fields and accommodations summary.
   - DONE: textbox/input style now has the softer filled look requested in the client screenshot.
   - DONE: Ricky's validation-step return, autosave, passport draft upload, and toast improvements were reviewed and preserved.
-  - TODO: replace temporary TS/AP Registration text branding with official Trinity Scholar/logo assets.
+  - DONE: replaced temporary branding with the supplied Trinity Scholar logo assets; the form header keeps its approved treatment and all footers use the cleaned transparent mark.
   - TODO: browser QA on desktop/mobile after PHP server can run locally or on staging.
 
 - Decide template:
@@ -737,6 +745,12 @@ These items come directly from `Reference/Trinity Scholar - Features.pdf` and we
 - Server credentials were shared in chat but must stay out of Git.
 
 ## Verification Log
+
+2026-07-14
+- Blue-brand/cache-busting, clean-logo, and registration-flow repair passed `git diff --check`, merge-marker scan, required-asset scan, and the registration JavaScript ID-reference scan (`51` referenced IDs, `0` missing).
+- Direct Vite production build passed with `node node_modules\vite\bin\vite.js build`.
+- Regenerated `scholar-trinity-deploy.zip` and verified it contains the clean logo, versioned public UI stylesheet source, updated shared shell, landing/form views, and Vite build manifest.
+- Browser QA intentionally remains skipped because the user explicitly requested no browser use.
 
 2026-07-11
 - Skill-guided UI pass: read/used local `ui-design` and `ui-animation` instructions for the premium public UI/motion polish.

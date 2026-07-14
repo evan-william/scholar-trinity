@@ -145,19 +145,19 @@
             #timeline .media-body{padding-right:24px}
             #timeline .media-body h4{font-size:19px;line-height:26px}
             #process{padding:86px 0;background:#fff}
-            .process-layout{display:grid;grid-template-columns:minmax(0,1.02fr) minmax(0,.98fr);align-items:stretch;border:1px solid var(--trinity-line);background:#fff}
-            .process-photo{position:relative;min-height:480px;overflow:hidden}
-            .process-photo img{width:100%;height:100%;object-fit:cover}
-            .process-photo-caption{position:absolute;right:24px;bottom:24px;left:24px;padding:18px 20px;color:#fff;background:rgba(7,13,24,.86)}
-            .process-photo-caption strong{display:block;color:#fff;font-family:var(--trinity-display);font-size:21px}
-            .process-photo-caption span{display:block;margin-top:4px;color:rgba(255,255,255,.72);font-size:13px}
-            .process-list{display:grid;grid-template-columns:1fr 1fr;margin:0;padding:18px;list-style:none;background:#f7f9fc}
-            .process-item{display:flex;gap:14px;padding:24px 20px;border-right:1px solid var(--trinity-line);border-bottom:1px solid var(--trinity-line)}
-            .process-item:nth-child(2n){border-right:0}
-            .process-item:nth-last-child(-n+2){border-bottom:0}
-            .process-number{display:grid;flex:0 0 34px;width:34px;height:34px;place-items:center;border-radius:50%;color:#fff;background:var(--trinity-blue);font-family:var(--trinity-display);font-size:15px}
-            .process-item h4{margin:2px 0 7px;font-size:18px;line-height:24px}
-            .process-item p{margin:0;color:#6b7686;font-size:13px;line-height:21px}
+            .process-layout{display:grid;grid-template-columns:minmax(340px,.9fr) minmax(0,1.1fr);align-items:stretch;overflow:hidden;border:1px solid var(--trinity-line);background:#fff;box-shadow:0 18px 46px rgba(24,45,76,.08)}
+            .process-photo{position:relative;min-height:530px;overflow:hidden;background:#111a29}
+            .process-photo:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,13,24,.04) 30%,rgba(7,13,24,.82) 100%)}
+            .process-photo img{width:100%;height:100%;object-fit:cover;object-position:center;transform:scale(1.01)}
+            .process-photo-caption{position:absolute;right:32px;bottom:32px;left:32px;z-index:1;padding-left:18px;color:#fff;border-left:3px solid #8fb4ff}
+            .process-photo-caption strong{display:block;color:#fff;font-family:var(--trinity-display);font-size:24px;line-height:31px}
+            .process-photo-caption span{display:block;max-width:34ch;margin-top:7px;color:rgba(255,255,255,.78);font-size:14px;line-height:22px}
+            .process-list{display:flex;flex-direction:column;justify-content:center;margin:0;padding:24px 34px;list-style:none;background:#f7f9fc}
+            .process-item{display:flex;align-items:flex-start;gap:18px;padding:24px 0;border-bottom:1px solid var(--trinity-line)}
+            .process-item:last-child{border-bottom:0}
+            .process-number{display:grid;flex:0 0 42px;width:42px;height:42px;place-items:center;border-radius:3px;color:#fff;background:var(--trinity-blue);font-family:var(--trinity-body);font-size:14px;font-weight:700;box-shadow:0 8px 18px rgba(36,78,154,.18)}
+            .process-item h4{margin:0 0 6px;font-size:19px;line-height:26px}
+            .process-item p{max-width:42ch;margin:0;color:#667386;font-size:14px;line-height:22px}
             #fees{padding:82px 0;background:#f6f8fb}
             .fee-layout{display:grid;grid-template-columns:minmax(300px,.78fr) minmax(0,1.22fr);overflow:hidden;background:#fff;border:1px solid var(--trinity-line)}
             .fee-visual{position:relative;min-height:510px;background:linear-gradient(rgba(9,18,33,.12),rgba(9,18,33,.52)),url('{{ asset($assetBase.'images/blog/blog-thumbnail2.jpg') }}') center/cover no-repeat}
@@ -210,7 +210,7 @@
                 #overview,.late-notice-area,#timeline,#process,#fees,#documents,#faq,#contact{padding-top:58px;padding-bottom:58px}
                 .late-facts{grid-template-columns:1fr}.late-stat{border-right:0;border-bottom:1px solid rgba(255,255,255,.18)}.late-stat:last-child{border-bottom:0}
                 #timeline .media{display:block}#timeline .media-head{width:100%;min-width:0}#timeline .media-body{padding:20px}
-                .process-list,.fee-grid,.document-grid{grid-template-columns:1fr}.process-item,.fee-item,.document-item{border-right:0}.process-item:nth-last-child(2),.fee-item:nth-last-child(2){border-bottom:1px solid var(--trinity-line)}
+                .fee-grid,.document-grid{grid-template-columns:1fr}.fee-item,.document-item{border-right:0}.fee-item:nth-last-child(2){border-bottom:1px solid var(--trinity-line)}
             }
             @media(max-width:575px){
                 .fact-row{grid-template-columns:1fr}.fact-item{min-height:90px;border-right:0;border-bottom:1px solid var(--trinity-line)!important}.fact-item:last-child{border-bottom:0!important}
@@ -418,7 +418,7 @@
             </div>
             <div class="process-layout">
                 <div class="process-photo">
-                    <img src="{{ asset($assetBase.'images/course/cs-img4.jpg') }}" alt="{{ $tx('Students preparing registration information', '學生準備報名資料') }}">
+                    <img src="{{ asset($assetBase.'images/bg/take-toure-bg.jpg') }}" alt="{{ $tx('Students preparing registration information', '學生準備報名資料') }}">
                     <div class="process-photo-caption"><strong>{{ $tx('One guided submission', '一次完成引導式提交') }}</strong><span>{{ $tx('No student account is required before starting the form.', '開始填寫表單前不需要建立學生帳號。') }}</span></div>
                 </div>
                 <ol class="process-list">

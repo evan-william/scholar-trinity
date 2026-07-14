@@ -188,6 +188,7 @@ a:hover { color: var(--trinity-blue) !important; }
 
 #header .public-header-actions {
     display: flex;
+    flex-flow: row nowrap;
     align-items: center;
     justify-content: flex-end;
     gap: 10px;
@@ -204,6 +205,8 @@ a:hover { color: var(--trinity-blue) !important; }
 }
 
 #header .language-switcher { margin: 0; }
+#header .language-switcher,
+#header .language-switcher label { flex: 0 0 auto; }
 #header .language-switcher label { display: block; margin: 0; }
 #header .language-switcher select {
     min-width: 116px;
@@ -241,6 +244,21 @@ footer .widget-company img {
     background: transparent;
     border-radius: 0;
     filter: brightness(0) invert(1);
+}
+
+body.trinity-public #header .logo img {
+    width: 180px;
+    height: 82px;
+    max-height: 82px;
+    object-fit: contain;
+    filter: none;
+}
+
+body.trinity-public footer .widget-company img {
+    width: 176px;
+    height: 100px;
+    object-fit: contain;
+    filter: none;
 }
 
 footer .widget p,
@@ -299,7 +317,7 @@ footer .footer-bottom a:hover { color: var(--trinity-blue-bright) !important; }
 @media (max-width: 575px) {
     #header .header-top { display: none; }
     #header .logo img { width: 118px; max-height: 68px; }
-    #header .public-header-actions { gap: 7px; }
+    #header .public-header-actions { flex-flow: row nowrap; gap: 7px; }
     #header .language-switcher select { min-width: 98px; height: 40px; padding: 0 12px; }
     #header .public-header-actions .btn { padding: 12px 14px; font-size: 12px; }
 }

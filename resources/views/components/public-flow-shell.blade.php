@@ -10,8 +10,10 @@
 ])
 @php
     $assetBase = 'theme/edification/';
-    $brandLogo = 'images/trinity-scholar-logo.png';
+    $brandLogo = 'images/trinity-scholar-logo-clean.png';
+    $footerLogo = 'images/trinity-scholar-logo-clean.png';
     $brandFavicon = 'images/trinity-scholar-favicon.png';
+    $publicUiVersion = '20260714-2';
     $uiLocale = session('locale', str_replace('_', '-', app()->getLocale()));
     $isZh = $uiLocale === 'zh-TW';
     $navLabels = $isZh
@@ -83,7 +85,56 @@
     <link rel="stylesheet" href="{{ asset($assetBase.'css/default-css.css') }}">
     <link rel="stylesheet" href="{{ asset($assetBase.'css/styles.css') }}">
     <link rel="stylesheet" href="{{ asset($assetBase.'css/responsive.css') }}">
-    <link rel="stylesheet" href="{{ asset('theme/trinity/css/public-ui.css') }}">
+    <link rel="stylesheet" href="{{ asset('theme/trinity/css/public-ui.css') }}?v={{ $publicUiVersion }}">
+    <style>
+        /* Critical brand rules keep the public shell correct while deployed caches refresh. */
+        body.trinity-public #header .header-top,
+        body.trinity-public .primary-bg,
+        body.trinity-public .btn-primary,
+        body.trinity-public .media-head.primary-bg,
+        body.trinity-public .cs-price.primary-bg {
+            color: #fff !important;
+            background: #244e9a !important;
+            border-color: #244e9a !important;
+        }
+        body.trinity-public .primary-color { color: #244e9a !important; }
+        body.trinity-public #header .main-menu nav ul li a:before,
+        body.trinity-public .slider-content h3:before,
+        body.trinity-public .section-title-style2 span:before,
+        body.trinity-public .section-title-style2 span:after { background: #244e9a !important; }
+        body.trinity-public #header .ht-address li,
+        body.trinity-public #header .ht-social li { color: rgba(255,255,255,.94) !important; }
+        body.trinity-public #header .logo img {
+            width: 180px;
+            height: 82px;
+            max-height: 82px;
+            object-fit: contain;
+            filter: none !important;
+        }
+        body.trinity-public #header .public-header-actions {
+            display: flex !important;
+            flex-flow: row nowrap !important;
+            align-items: center !important;
+            justify-content: flex-end !important;
+            gap: 10px !important;
+        }
+        body.trinity-public #header .language-switcher,
+        body.trinity-public #header .language-switcher label { display: block; flex: 0 0 auto; margin: 0 !important; }
+        body.trinity-public #header .language-switcher select { min-width: 104px; height: 44px; border-radius: 50px; }
+        body.trinity-public #header .public-header-actions .btn { flex: 0 0 auto; padding: 14px 18px; white-space: nowrap; }
+        body.trinity-public footer .widget-company img {
+            width: 176px;
+            height: 100px;
+            object-fit: contain;
+            filter: none !important;
+        }
+        @media (max-width: 575px) {
+            body.trinity-public #header .logo img { width: 138px; height: 68px; }
+            body.trinity-public #header .public-header-actions { justify-content: flex-start !important; }
+            body.trinity-public #header .language-switcher select { min-width: 96px; height: 40px; }
+            body.trinity-public #header .public-header-actions .btn { padding: 12px 14px; font-size: 12px; }
+        }
+    </style>
     <script src="{{ asset($assetBase.'js/vendor/modernizr-2.8.3.min.js') }}"></script>
     {{ $styles ?? '' }}
     @stack('styles')
@@ -191,7 +242,7 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="widget widget-company">
-                        <a href="{{ route('landing') }}"><img src="{{ asset($brandLogo) }}" alt="Trinity Scholar"></a>
+                        <a href="{{ route('landing') }}"><img src="{{ asset($footerLogo) }}" alt="Trinity Scholar"></a>
                         <div class="address">
                             <h6>{{ $footerLabels['office'] }}</h6>
                             <p>{{ $footerLabels['office_body'] }}</p>

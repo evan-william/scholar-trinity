@@ -1,5 +1,6 @@
 @php
     $brandLogo = 'images/trinity-scholar-logo.png';
+    $footerLogo = 'images/trinity-scholar-logo-clean.png';
     $brandFavicon = 'images/trinity-scholar-favicon.png';
     $uiLocale = session('locale', str_replace('_', '-', app()->getLocale()));
     $isZh = $uiLocale === 'zh-TW';
@@ -93,7 +94,7 @@
     <link rel="stylesheet" href="{{ asset('theme/edification/css/default-css.css') }}">
     <link rel="stylesheet" href="{{ asset('theme/edification/css/styles.css') }}">
     <link rel="stylesheet" href="{{ asset('theme/edification/css/responsive.css') }}">
-    <link rel="stylesheet" href="{{ asset('theme/trinity/css/public-ui.css') }}">
+    <link rel="stylesheet" href="{{ asset('theme/trinity/css/public-ui.css') }}?v=20260714-2">
     <script src="{{ asset('theme/edification/js/vendor/modernizr-2.8.3.min.js') }}"></script>
     <style>
         :root{--trinity-blue:#244e9a;--trinity-blue-dark:#142f63;--trinity-blue-soft:#eaf2ff;--trinity-blue-bright:#9db9ff;--primary:#244e9a;--primary-light:#142f63;--accent:#244e9a;--success:#237a4f;--danger:#b42318;--gray-50:#f8f9fa;--gray-100:#f1f3f5;--gray-200:#e9ecef;--gray-400:#ced4da;--gray-600:#6c757d;--gray-800:#343a40;--white:#fff;--radius:8px;--shadow:0 2px 16px rgba(0,0,0,.09)}
@@ -209,7 +210,7 @@
         footer .footer-top{padding-top:120px}
         footer .widget p,footer .widget li{color:rgba(255,255,255,.75)}
         footer .widget a{color:rgba(255,255,255,.8)}
-        footer .widget-company img{background:#fff;border-radius:8px;padding:10px 14px;width:250px;max-width:100%;height:auto}
+        footer .widget-company img{background:#fff;border-radius:8px;padding:10px 14px;width:210px;max-width:100%;height:auto;filter:none}
         footer .address h6,
         footer .footer-link li i,
         footer span.post-date i{color:var(--trinity-blue-bright)!important}
@@ -704,7 +705,7 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="widget widget-company">
-                        <a href="{{ route('landing') }}"><img src="{{ asset($brandLogo) }}" alt="Trinity Scholar"></a>
+                        <a href="{{ route('landing') }}"><img src="{{ asset($footerLogo) }}" alt="Trinity Scholar"></a>
                         <div class="address"><h6>{{ $footerLabels['office'] }}</h6><p>{{ $footerLabels['office_body'] }}</p></div>
                         <div class="address"><h6>{{ $footerLabels['phone'] }}</h6><p>886-2-2771-6002</p></div>
                         <div class="address"><h6>{{ $footerLabels['email'] }}</h6><p>info@trinityscholar.com</p></div>
