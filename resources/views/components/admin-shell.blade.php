@@ -8,10 +8,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $title }} | Trinity Scholar Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
     <style>
         :root{--navy:#153764;--blue:#25558f;--gold:#c9a84c;--ink:#1f2a37;--muted:#667085;--line:#d9dee8;--soft:#f5f7fb;--white:#fff;--green:#237a4f;--red:#b42318;--amber:#9a6a00;--shadow:0 14px 42px rgba(22,47,83,.11)}
         *{box-sizing:border-box}
-        body{margin:0;background:var(--soft);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+        body{margin:0;background:var(--soft);color:var(--ink);font-family:"Open Sans",Arial,sans-serif}
+        h1,h2,h3,h4,h5,h6{font-family:"Playfair Display",Georgia,serif}
         a{text-decoration:none}
         .shell{min-height:100vh;display:grid;grid-template-columns:260px minmax(0,1fr)}
         .side{background:#102d52;color:#dbe8f8;padding:18px;position:sticky;top:0;height:100vh;overflow:auto}
@@ -31,7 +35,7 @@
         .section-title{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin:0 0 14px}
         .section-title h2{margin:0;color:var(--navy);font-size:20px}
         .section-title p{margin:4px 0 0;color:var(--muted);font-size:13px}
-        .btn{border:0;border-radius:6px;padding:10px 14px;background:var(--navy);color:#fff;text-decoration:none;font-weight:900;cursor:pointer;font:inherit;display:inline-flex;align-items:center;justify-content:center;min-height:40px}
+        .btn{border:0;border-radius:6px;padding:10px 14px;background:var(--navy);color:#fff;text-decoration:none;font-family:"Open Sans",Arial,sans-serif;font-size:inherit;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;min-height:40px}
         .btn.light{background:#fff;color:var(--navy);border:1.5px solid var(--line)}
         .btn.gold{background:var(--gold);color:#382800}
         .filters{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}

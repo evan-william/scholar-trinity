@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AP Exam Registration | TPCA x Trinity Scholar</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #1a3a6b;
@@ -26,8 +29,9 @@
             min-height: 100vh;
             color: var(--ink);
             background: var(--soft);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft JhengHei", Arial, sans-serif;
+            font-family: "Open Sans", "Microsoft JhengHei", Arial, sans-serif;
         }
+        h1, h2, h3, h4, h5, h6 { font-family: "Playfair Display", Georgia, "Microsoft JhengHei", serif; }
 
         .header {
             display: flex;

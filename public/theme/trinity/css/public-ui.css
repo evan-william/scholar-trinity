@@ -7,8 +7,8 @@
     --trinity-copy: #596677;
     --trinity-line: #dde3eb;
     --trinity-surface: #f5f7fa;
-    --trinity-display: Georgia, "Times New Roman", "Microsoft JhengHei", serif;
-    --trinity-body: "Segoe UI", "Helvetica Neue", Arial, "Microsoft JhengHei", "PingFang TC", sans-serif;
+    --trinity-display: "Playfair Display", Georgia, "Times New Roman", "Microsoft JhengHei", serif;
+    --trinity-body: "Open Sans", "Microsoft JhengHei", "PingFang TC", Arial, sans-serif;
     --trinity-ease: cubic-bezier(.22, 1, .36, 1);
 }
 

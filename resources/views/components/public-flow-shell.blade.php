@@ -13,7 +13,7 @@
     $brandLogo = 'images/trinity-scholar-logo-clean.png';
     $footerLogo = 'images/trinity-scholar-logo-clean.png';
     $brandFavicon = 'images/trinity-scholar-favicon.png';
-    $publicUiVersion = '20260714-3';
+    $publicUiVersion = '20260714-4';
     $uiLocale = session('locale', str_replace('_', '-', app()->getLocale()));
     $isZh = $uiLocale === 'zh-TW';
     $navLabels = $isZh
@@ -76,6 +76,9 @@
     <meta name="description" content="{{ $description }}">
     <title>{{ $title }}</title>
     <link rel="icon" type="image/png" href="{{ asset($brandFavicon) }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset($assetBase.'css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset($assetBase.'css/font-awesome.min.css') }}">
     <link rel="stylesheet" href="{{ asset($assetBase.'css/owl.carousel.min.css') }}">

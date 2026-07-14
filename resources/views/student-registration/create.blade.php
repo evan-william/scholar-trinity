@@ -94,12 +94,15 @@
     <link rel="stylesheet" href="{{ asset('theme/edification/css/default-css.css') }}">
     <link rel="stylesheet" href="{{ asset('theme/edification/css/styles.css') }}">
     <link rel="stylesheet" href="{{ asset('theme/edification/css/responsive.css') }}">
-    <link rel="stylesheet" href="{{ asset('theme/trinity/css/public-ui.css') }}?v=20260714-3">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('theme/trinity/css/public-ui.css') }}?v=20260714-4">
     <script src="{{ asset('theme/edification/js/vendor/modernizr-2.8.3.min.js') }}"></script>
     <style>
         :root{--trinity-blue:#244e9a;--trinity-blue-dark:#142f63;--trinity-blue-soft:#eaf2ff;--trinity-blue-bright:#9db9ff;--primary:#244e9a;--primary-light:#142f63;--accent:#244e9a;--success:#237a4f;--danger:#b42318;--gray-50:#f8f9fa;--gray-100:#f1f3f5;--gray-200:#e9ecef;--gray-400:#ced4da;--gray-600:#6c757d;--gray-800:#343a40;--white:#fff;--radius:8px;--shadow:0 2px 16px rgba(0,0,0,.09)}
         html{scroll-behavior:smooth}
-        *{box-sizing:border-box}body{margin:0;background:var(--gray-50);color:var(--gray-800);font-family:"Muli","Microsoft JhengHei","PingFang TC",Arial,sans-serif;min-height:100vh}
+        *{box-sizing:border-box}body{margin:0;background:var(--gray-50);color:var(--gray-800);font-family:"Open Sans","Microsoft JhengHei","PingFang TC",Arial,sans-serif;min-height:100vh}
         .header{background:var(--primary);color:#fff;padding:14px 24px}.head-inner{max-width:920px;margin:0 auto;display:flex;align-items:center;gap:16px;flex-wrap:wrap}.header-logos{display:flex;align-items:center;gap:12px}.logo-pill{background:#fff;color:var(--primary);font-size:10px;font-weight:800;padding:6px 10px;border-radius:6px;line-height:1.3;text-align:center;letter-spacing:.3px}.logo-divider{width:1px;height:36px;background:rgba(255,255,255,.25)}.header-title{flex:1;min-width:220px}.header-title h1{font-size:16px;font-weight:700;line-height:1.35;margin:0}.header-title p{font-size:11px;opacity:.76;margin:2px 0 0}.header-badge{background:var(--trinity-blue);color:#fff;padding:5px 14px;border-radius:20px;font-size:12px;font-weight:800;white-space:nowrap}.header-actions{display:flex;gap:10px;align-items:center}
         .progress-wrap{background:#fff;border-bottom:1px solid var(--gray-200);padding:0 16px;overflow-x:auto}.progress-steps{display:flex;min-width:max-content;max-width:840px;margin:0 auto}.step-item{flex:1;display:flex;flex-direction:column;align-items:center;padding:14px 6px;position:relative;min-width:118px}.step-item:not(:last-child)::after{content:"";position:absolute;top:28px;left:calc(50% + 17px);right:calc(-50% + 17px);height:2px;background:var(--gray-200)}.step-item.completed:not(:last-child)::after{background:var(--primary)}.step-circle{width:30px;height:30px;border-radius:50%;border:2px solid var(--gray-400);background:#fff;color:var(--gray-600);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;z-index:1}.step-item.active .step-circle,.step-item.completed .step-circle{border-color:var(--primary);background:var(--primary);color:#fff}.step-label{margin-top:5px;font-size:10px;text-align:center;color:var(--gray-600);line-height:1.3}.step-item.active .step-label{color:var(--primary);font-weight:700}
         .main{max-width:760px;margin:0 auto;padding:24px 16px 108px}.card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:26px 24px;margin-bottom:16px}.section-title{font-size:17px;font-weight:800;color:var(--primary);border-bottom:2px solid var(--accent);padding-bottom:9px;margin-bottom:20px}.section-title span{display:block;font-size:12px;font-weight:400;color:var(--gray-600);margin-top:2px}.row{display:grid;gap:14px;margin-bottom:14px}.row-2{grid-template-columns:1fr 1fr}.row-3{grid-template-columns:1fr 1fr .55fr}.row-1{grid-template-columns:1fr}.fg{display:flex;flex-direction:column;gap:5px}.fg.span2{grid-column:1/-1}.lbl{font-size:13px;font-weight:700;color:var(--gray-800)}.lbl .zh{display:block;font-size:11px;font-weight:400;color:var(--gray-600)}.req{color:var(--danger);margin-left:2px}
@@ -204,7 +207,7 @@
         #header .public-header-actions .btn-primary{background:var(--trinity-blue)!important;border-color:var(--trinity-blue)!important;color:#fff!important}
         #header .language-switcher{margin:0}
         #header .language-switcher label{display:block;margin:0}
-        #header .language-switcher select{height:46px;min-width:112px;border:1px solid rgba(255,255,255,.55);border-radius:50px;background:rgba(255,255,255,.96);color:#252525;padding:0 16px;font-family:"Muli",sans-serif;font-size:14px;font-weight:700;text-transform:uppercase}
+        #header .language-switcher select{height:46px;min-width:112px;border:1px solid rgba(255,255,255,.55);border-radius:50px;background:rgba(255,255,255,.96);color:#252525;padding:0 16px;font-family:"Open Sans",sans-serif;font-size:14px;font-weight:700;text-transform:uppercase}
         .form-top-band{min-height:150px;background:linear-gradient(rgba(11,16,24,.58),rgba(11,16,24,.58)),url('{{ asset('theme/edification/images/bg/slider-bg1.jpg') }}') center/cover no-repeat}
         .progress-wrap{margin-top:0;border-top:0;box-shadow:0 6px 20px rgba(0,0,0,.05)}
         footer .footer-top{padding-top:120px}
@@ -231,15 +234,15 @@
         @media(max-width:991px){#header .header-bottom{background:rgba(15,18,24,.86)}#header .header-bottom-inner{min-height:auto;padding:18px 0}#header .public-header-actions{justify-content:flex-start;margin-top:10px}.slicknav_btn{margin-top:-39px}.form-top-band{min-height:176px}}
         @media(max-width:575px){#header .header-top{display:none}#header .logo img{width:190px}#header .public-header-actions{gap:7px;flex-wrap:nowrap;width:auto;margin-left:0}#header .language-switcher select{height:42px;min-width:100px}#header .public-header-actions .btn{min-width:118px;padding:12px 14px}.form-top-band{min-height:126px}}
 
-        body{font-family:"Muli","Microsoft JhengHei","PingFang TC",Arial,sans-serif;font-size:16px;font-weight:400;line-height:1.65;letter-spacing:0;color:#526071;background:#f5f8fc}
+        body{font-family:"Open Sans","Microsoft JhengHei","PingFang TC",Arial,sans-serif;font-size:16px;font-weight:400;line-height:1.65;letter-spacing:0;color:#526071;background:#f5f8fc}
         body *::selection{background:rgba(36,78,154,.88);color:#fff;text-shadow:none}
         body *::-moz-selection{background:rgba(36,78,154,.88);color:#fff;text-shadow:none}
         h1,h2,h3,h4,h5,h6,
         .section-title,
         .form-intro h2,
-        .intro-summary strong{font-family:"Roboto Slab","Microsoft JhengHei","PingFang TC",serif;letter-spacing:0}
-        p,li,label,input,select,textarea,button,.btn,.step-label,.hint,.notice{font-family:"Muli","Microsoft JhengHei","PingFang TC",Arial,sans-serif;letter-spacing:0}
-        #header .main-menu nav ul li a{font-family:"Muli",sans-serif;font-size:13px;font-weight:600;letter-spacing:.01em}
+        .intro-summary strong{font-family:"Playfair Display","Microsoft JhengHei","PingFang TC",serif;letter-spacing:0}
+        p,li,label,input,select,textarea,button,.btn,.step-label,.hint,.notice{font-family:"Open Sans","Microsoft JhengHei","PingFang TC",Arial,sans-serif;letter-spacing:0}
+        #header .main-menu nav ul li a{font-family:"Open Sans",sans-serif;font-size:13px;font-weight:600;letter-spacing:.01em}
         #header .language-switcher select{font-weight:600;letter-spacing:0}
         #header .public-header-actions .btn{font-weight:700;letter-spacing:0}
         .form-top-band{min-height:132px}
@@ -255,14 +258,14 @@
         .header-badge{background:#e6edf8;color:#1b3f7b;border-radius:50px;font-weight:700;box-shadow:none}
         .section-title{font-size:20px;line-height:30px;font-weight:700;color:#1e2c39;border-bottom:1px solid #dfe8f2;padding-bottom:13px;margin-bottom:24px}
         .section-title::after{width:48px;height:2px;background:var(--trinity-blue);margin-top:11px}
-        .section-title span{font-family:"Muli","Microsoft JhengHei","PingFang TC",Arial,sans-serif;font-size:13px;font-weight:400;color:#6b7a90}
+        .section-title span{font-family:"Open Sans","Microsoft JhengHei","PingFang TC",Arial,sans-serif;font-size:13px;font-weight:400;color:#6b7a90}
         .lbl{font-size:13px;font-weight:600;color:#2f4157;text-transform:none;letter-spacing:0}
         .lbl .zh{font-size:12px;font-weight:400;color:#708197}
         input:not([type]),input[type=text],input[type=email],input[type=tel],input[type=search],input[type=date],input[type=file],select,textarea{min-height:45px;border:1px solid #cfdcea;border-radius:6px;background:#fff;color:#253247;font-size:15px;font-weight:400;padding:11px 13px;box-shadow:none}
         input:not([type]):hover,input[type=text]:hover,input[type=email]:hover,input[type=tel]:hover,input[type=search]:hover,input[type=date]:hover,select:hover,textarea:hover{background:#fff;border-color:#9fb6d7}
         input:focus,select:focus,textarea:focus{border-color:var(--trinity-blue);box-shadow:0 0 0 3px rgba(36,78,154,.12)}
         .notice{background:#f8fbff;border-color:#cddcee;border-left-color:var(--trinity-blue);border-radius:8px}
-        .notice h4,.pay-opt h4,.next-steps h4,.rev-section h3{font-family:"Roboto Slab","Microsoft JhengHei","PingFang TC",serif;font-weight:700;color:#1e2c39}
+        .notice h4,.pay-opt h4,.next-steps h4,.rev-section h3{font-family:"Playfair Display","Microsoft JhengHei","PingFang TC",serif;font-weight:700;color:#1e2c39}
         .sel-badge,
         .price-preview,
         .cat-title,
@@ -272,7 +275,7 @@
         .toast,
         .exam-name{font-weight:700}
         .exam-cb,.pay-opt,.sig-box,.price-box,.next-steps,.rev-section{border-radius:8px}
-        .btn{border-radius:50px;font-family:"Muli",sans-serif;font-weight:700;letter-spacing:0}
+        .btn{border-radius:50px;font-family:"Open Sans",sans-serif;font-weight:700;letter-spacing:0}
         .nav-footer .btn-primary{min-width:168px;border-radius:50px}
         .nav-footer{box-shadow:0 -10px 28px rgba(26,58,107,.1)}
         @media(max-width:767px){

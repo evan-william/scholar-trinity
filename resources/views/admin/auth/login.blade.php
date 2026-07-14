@@ -4,10 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ __('admin_auth.login_title') }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
     <style>
         :root{--navy:#153764;--gold:#c9a84c;--ink:#1f2a37;--muted:#667085;--line:#d9dee8;--soft:#f5f7fb;--green:#237a4f;--red:#b42318;--shadow:0 24px 70px rgba(12,36,68,.22)}
         *{box-sizing:border-box}
-        body{margin:0;min-height:100vh;background:#102d52;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;display:grid;place-items:center;padding:24px}
+        body{margin:0;min-height:100vh;background:#102d52;color:var(--ink);font-family:"Open Sans",Arial,sans-serif;display:grid;place-items:center;padding:24px}
+        h1,h2,h3,h4,h5,h6{font-family:"Playfair Display",Georgia,serif}
         body::before{content:"";position:fixed;inset:0;background:linear-gradient(90deg,rgba(11,31,58,.94),rgba(21,55,100,.82)),url('{{ asset('theme/edification/images/bg/hero-bg.jpg') }}') center/cover no-repeat}
         .login-shell{position:relative;width:min(960px,100%);display:grid;grid-template-columns:1fr 430px;background:#fff;border-radius:8px;overflow:hidden;box-shadow:var(--shadow)}
         .panel{background:#102d52;color:#fff;padding:42px 36px;display:flex;flex-direction:column;justify-content:space-between;gap:42px}

@@ -4,10 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registration Submitted | {{ $registration->reference_number }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
     <style>
         :root { --primary:#1a3a6b; --accent:#c9a84c; --muted:#667085; --line:#d5dae3; --soft:#f5f7fa; --success:#238654; }
         * { box-sizing: border-box; }
-        body { margin:0; min-height:100vh; background:var(--soft); color:#253142; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft JhengHei",Arial,sans-serif; }
+        body { margin:0; min-height:100vh; background:var(--soft); color:#253142; font-family:"Open Sans","Microsoft JhengHei",Arial,sans-serif; }
+        h1, h2, h3, h4, h5, h6 { font-family:"Playfair Display",Georgia,"Microsoft JhengHei",serif; }
         .header { display:flex; align-items:center; gap:16px; padding:14px 24px; color:white; background:var(--primary); flex-wrap:wrap; }
         .logo-pill { min-width:74px; padding:7px 10px; border-radius:6px; color:var(--primary); background:white; font-size:10px; line-height:1.25; letter-spacing:.4px; text-align:center; font-weight:800; }
         .header-title h1 { margin:0; font-size:17px; }

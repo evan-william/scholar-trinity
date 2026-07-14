@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Print {{ $registration->registration_number }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
     <style>
-        body{font-family:Arial,sans-serif;color:#111}.wrap{max-width:820px;margin:0 auto}h1,h2{color:#153764}h2{font-size:16px;margin-top:24px}table{width:100%;border-collapse:collapse}td{padding:8px;border-bottom:1px solid #ddd;vertical-align:top}td:first-child{font-weight:bold;width:34%}.muted{color:#555;font-size:12px}@media print{button{display:none}}
+        body{font-family:"Open Sans",Arial,sans-serif;color:#111}.wrap{max-width:820px;margin:0 auto}h1,h2{color:#153764;font-family:"Playfair Display",Georgia,serif}h2{font-size:16px;margin-top:24px}table{width:100%;border-collapse:collapse}td{padding:8px;border-bottom:1px solid #ddd;vertical-align:top}td:first-child{font-weight:bold;width:34%}.muted{color:#555;font-size:12px}@media print{button{display:none}}
     </style>
 </head>
 <body>

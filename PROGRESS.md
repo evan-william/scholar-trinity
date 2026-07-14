@@ -62,6 +62,12 @@ Current local template pass:
 ## Current Progress
 
 2026-07-14
+- Website-wide typography standardization:
+  - Selected `Playfair Display` for editorial/institutional headings and `Open Sans` for body copy, navigation, buttons, forms, tables, and dashboard controls.
+  - Applied the pairing to the public shell, landing page, no-login student form, admin dashboard shell, admin authentication, legacy registration pages, and printable registration detail.
+  - Removed active-route `Muli`, `Roboto Slab`, Segoe UI, and generic system-font overrides that could make different pages render inconsistently.
+  - Added Google Fonts preconnects and bumped the shared public UI cache version to `20260714-4`.
+  - Left the unused Laravel `welcome.blade.php` and email-client layout on their compatibility fonts by design; neither controls the active website UI.
 - Final public UI repair pass from screenshot feedback:
   - Replaced oversized section-title blocks with compact Trinity-blue line markers and forced navigation active/hover states to remain blue.
   - Made landing registration step numbers solid blue with high-contrast white numerals.
