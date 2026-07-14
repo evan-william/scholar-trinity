@@ -118,17 +118,19 @@ a:hover { color: var(--trinity-blue) !important; }
 
 .section-title-style2 span:before,
 .section-title-style2 span:after {
-    width: 32px !important;
+    content: "" !important;
+    width: 36px !important;
     height: 2px !important;
     top: 50% !important;
-    left: -46px !important;
-    border-radius: 0;
+    left: -52px !important;
+    border-radius: 999px !important;
     background: var(--trinity-blue) !important;
+    background-image: none !important;
     transform: translateY(-50%);
 }
 
 .section-title-style2 span:after {
-    right: -46px !important;
+    right: -52px !important;
     left: auto !important;
 }
 
@@ -184,7 +186,9 @@ a:hover { color: var(--trinity-blue) !important; }
 }
 
 #header .main-menu nav ul li.active a,
-#header .main-menu nav ul li a:hover { color: var(--trinity-blue-bright) !important; }
+#header .main-menu nav ul li a:hover,
+#header .main-menu nav ul li.active > a,
+#header .main-menu nav ul li > a:hover { color: var(--trinity-blue-bright) !important; }
 
 #header .public-header-actions {
     display: flex;
@@ -192,11 +196,14 @@ a:hover { color: var(--trinity-blue) !important; }
     align-items: center;
     justify-content: flex-end;
     gap: 10px;
+    width: max-content;
+    margin-left: auto;
 }
 
 #header .public-header-actions .btn {
     padding: 15px 22px;
     white-space: nowrap;
+    min-width: 142px;
 }
 
 #header .public-header-actions .btn.btn-round {
@@ -209,7 +216,7 @@ a:hover { color: var(--trinity-blue) !important; }
 #header .language-switcher label { flex: 0 0 auto; }
 #header .language-switcher label { display: block; margin: 0; }
 #header .language-switcher select {
-    min-width: 116px;
+    min-width: 112px;
     height: 46px;
     padding: 0 16px;
     color: #1c2736;
@@ -244,6 +251,16 @@ footer .widget-company img {
     background: transparent;
     border-radius: 0;
     filter: brightness(0) invert(1);
+}
+
+body.trinity-form footer .widget-company img {
+    width: 178px;
+    max-width: 100%;
+    height: auto;
+    padding: 0;
+    background: transparent;
+    border-radius: 0;
+    filter: brightness(0) invert(1) !important;
 }
 
 body.trinity-public #header .logo img {
@@ -317,9 +334,9 @@ footer .footer-bottom a:hover { color: var(--trinity-blue-bright) !important; }
 @media (max-width: 575px) {
     #header .header-top { display: none; }
     #header .logo img { width: 118px; max-height: 68px; }
-    #header .public-header-actions { flex-flow: row nowrap; gap: 7px; }
+    #header .public-header-actions { flex-flow: row nowrap; gap: 7px; width: auto; margin-left: 0; }
     #header .language-switcher select { min-width: 98px; height: 40px; padding: 0 12px; }
-    #header .public-header-actions .btn { padding: 12px 14px; font-size: 12px; }
+    #header .public-header-actions .btn { min-width: 118px; padding: 12px 14px; font-size: 12px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

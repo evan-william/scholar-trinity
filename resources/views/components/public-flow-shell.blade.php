@@ -13,7 +13,7 @@
     $brandLogo = 'images/trinity-scholar-logo-clean.png';
     $footerLogo = 'images/trinity-scholar-logo-clean.png';
     $brandFavicon = 'images/trinity-scholar-favicon.png';
-    $publicUiVersion = '20260714-2';
+    $publicUiVersion = '20260714-3';
     $uiLocale = session('locale', str_replace('_', '-', app()->getLocale()));
     $isZh = $uiLocale === 'zh-TW';
     $navLabels = $isZh
@@ -99,9 +99,25 @@
         }
         body.trinity-public .primary-color { color: #244e9a !important; }
         body.trinity-public #header .main-menu nav ul li a:before,
-        body.trinity-public .slider-content h3:before,
+        body.trinity-public .slider-content h3:before { background: #244e9a !important; }
+        body.trinity-public #header .main-menu nav ul li.active > a,
+        body.trinity-public #header .main-menu nav ul li > a:hover,
+        body.trinity-public #header .main-menu nav ul li.active > a:hover { color: #a9c2f4 !important; }
         body.trinity-public .section-title-style2 span:before,
-        body.trinity-public .section-title-style2 span:after { background: #244e9a !important; }
+        body.trinity-public .section-title-style2 span:after {
+            content: "" !important;
+            width: 36px !important;
+            height: 2px !important;
+            top: 50% !important;
+            border-radius: 999px !important;
+            background: #244e9a !important;
+            background-image: none !important;
+            transform: translateY(-50%) !important;
+        }
+        body.trinity-public .section-title-style2 span:before { left: -52px !important; }
+        body.trinity-public .section-title-style2 span:after { right: -52px !important; left: auto !important; }
+        body.trinity-public .white-title span:before,
+        body.trinity-public .white-title span:after { background: #a9c2f4 !important; }
         body.trinity-public #header .ht-address li,
         body.trinity-public #header .ht-social li { color: rgba(255,255,255,.94) !important; }
         body.trinity-public #header .logo img {
@@ -117,11 +133,13 @@
             align-items: center !important;
             justify-content: flex-end !important;
             gap: 10px !important;
+            width: max-content !important;
+            margin-left: auto !important;
         }
         body.trinity-public #header .language-switcher,
         body.trinity-public #header .language-switcher label { display: block; flex: 0 0 auto; margin: 0 !important; }
-        body.trinity-public #header .language-switcher select { min-width: 104px; height: 44px; border-radius: 50px; }
-        body.trinity-public #header .public-header-actions .btn { flex: 0 0 auto; padding: 14px 18px; white-space: nowrap; }
+        body.trinity-public #header .language-switcher select { min-width: 112px; height: 44px; border-radius: 50px; }
+        body.trinity-public #header .public-header-actions .btn { flex: 0 0 auto; min-width: 142px; padding: 14px 18px; white-space: nowrap; }
         body.trinity-public footer .widget-company img {
             width: 176px;
             height: 100px;
@@ -130,9 +148,9 @@
         }
         @media (max-width: 575px) {
             body.trinity-public #header .logo img { width: 138px; height: 68px; }
-            body.trinity-public #header .public-header-actions { justify-content: flex-start !important; }
+            body.trinity-public #header .public-header-actions { justify-content: flex-start !important; width: auto !important; margin-left: 0 !important; }
             body.trinity-public #header .language-switcher select { min-width: 96px; height: 40px; }
-            body.trinity-public #header .public-header-actions .btn { padding: 12px 14px; font-size: 12px; }
+            body.trinity-public #header .public-header-actions .btn { min-width: 118px; padding: 12px 14px; font-size: 12px; }
         }
     </style>
     <script src="{{ asset($assetBase.'js/vendor/modernizr-2.8.3.min.js') }}"></script>
