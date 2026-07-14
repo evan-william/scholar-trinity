@@ -1,6 +1,6 @@
 @php
     $brandLogo = 'images/trinity-scholar-logo.png';
-    $footerLogo = 'images/trinity-scholar-logo-clean.png';
+    $footerLogo = 'images/trinity-scholar-logo.png';
     $brandFavicon = 'images/trinity-scholar-favicon.png';
     $uiLocale = session('locale', str_replace('_', '-', app()->getLocale()));
     $isZh = $uiLocale === 'zh-TW';
@@ -94,7 +94,7 @@
     <link rel="stylesheet" href="{{ asset('theme/edification/css/default-css.css') }}">
     <link rel="stylesheet" href="{{ asset('theme/edification/css/styles.css') }}">
     <link rel="stylesheet" href="{{ asset('theme/edification/css/responsive.css') }}">
-    <link rel="stylesheet" href="{{ asset('theme/trinity/css/public-ui.css') }}?v=20260714-2">
+    <link rel="stylesheet" href="{{ asset('theme/trinity/css/public-ui.css') }}?v=20260714-3">
     <script src="{{ asset('theme/edification/js/vendor/modernizr-2.8.3.min.js') }}"></script>
     <style>
         :root{--trinity-blue:#244e9a;--trinity-blue-dark:#142f63;--trinity-blue-soft:#eaf2ff;--trinity-blue-bright:#9db9ff;--primary:#244e9a;--primary-light:#142f63;--accent:#244e9a;--success:#237a4f;--danger:#b42318;--gray-50:#f8f9fa;--gray-100:#f1f3f5;--gray-200:#e9ecef;--gray-400:#ced4da;--gray-600:#6c757d;--gray-800:#343a40;--white:#fff;--radius:8px;--shadow:0 2px 16px rgba(0,0,0,.09)}
@@ -184,8 +184,8 @@
         .main-menu nav ul li a:before,.slider-content h3:before{background:var(--trinity-blue)!important}
         .body_overlay{background-color:var(--trinity-blue)!important}
         .section-title-style2 span:before,
-        .section-title-style2 span:after{background:var(--trinity-blue)!important;width:38px!important;height:2px!important;top:50%!important;transform:translateY(-50%);left:-54px!important;border-radius:99px}
-        .section-title-style2 span:after{left:auto!important;right:-54px!important}
+        .section-title-style2 span:after{content:""!important;background:var(--trinity-blue)!important;background-image:none!important;width:36px!important;height:2px!important;top:50%!important;transform:translateY(-50%);left:-52px!important;border-radius:99px}
+        .section-title-style2 span:after{left:auto!important;right:-52px!important}
         .white-title span:before,
         .white-title span:after{background:var(--trinity-blue-bright)!important}
         .header-top{background:var(--trinity-blue)!important}
@@ -197,20 +197,20 @@
         #header .logo img{width:230px;max-height:64px;object-fit:contain}
         #header .main-menu{text-align:center}
         #header .main-menu nav ul li a{padding:43px 15px}
-        #header .main-menu nav ul li.active a,#header .main-menu nav ul li a:hover{color:var(--trinity-blue-bright)}
-        #header .public-header-actions{display:flex;align-items:center;justify-content:flex-end;gap:12px}
-        #header .public-header-actions .btn{white-space:nowrap;padding:16px 25px}
+        #header .main-menu nav ul li.active>a,#header .main-menu nav ul li>a:hover{color:var(--trinity-blue-bright)!important}
+        #header .public-header-actions{display:flex;flex-flow:row nowrap;align-items:center;justify-content:flex-end;gap:10px;width:max-content;margin-left:auto}
+        #header .public-header-actions .btn{min-width:142px;white-space:nowrap;padding:15px 18px}
         #header .public-header-actions .btn.btn-round{border-radius:50px!important;line-height:12px}
         #header .public-header-actions .btn-primary{background:var(--trinity-blue)!important;border-color:var(--trinity-blue)!important;color:#fff!important}
         #header .language-switcher{margin:0}
         #header .language-switcher label{display:block;margin:0}
-        #header .language-switcher select{height:48px;min-width:126px;border:1px solid rgba(255,255,255,.55);border-radius:50px;background:rgba(255,255,255,.96);color:#252525;padding:0 18px;font-family:"Muli",sans-serif;font-size:14px;font-weight:700;text-transform:uppercase}
+        #header .language-switcher select{height:46px;min-width:112px;border:1px solid rgba(255,255,255,.55);border-radius:50px;background:rgba(255,255,255,.96);color:#252525;padding:0 16px;font-family:"Muli",sans-serif;font-size:14px;font-weight:700;text-transform:uppercase}
         .form-top-band{min-height:150px;background:linear-gradient(rgba(11,16,24,.58),rgba(11,16,24,.58)),url('{{ asset('theme/edification/images/bg/slider-bg1.jpg') }}') center/cover no-repeat}
         .progress-wrap{margin-top:0;border-top:0;box-shadow:0 6px 20px rgba(0,0,0,.05)}
         footer .footer-top{padding-top:120px}
         footer .widget p,footer .widget li{color:rgba(255,255,255,.75)}
         footer .widget a{color:rgba(255,255,255,.8)}
-        footer .widget-company img{background:#fff;border-radius:8px;padding:10px 14px;width:210px;max-width:100%;height:auto;filter:none}
+        footer .widget-company img{width:178px;max-width:100%;height:auto;padding:0;background:transparent;border-radius:0;filter:brightness(0) invert(1)!important}
         footer .address h6,
         footer .footer-link li i,
         footer span.post-date i{color:var(--trinity-blue-bright)!important}
@@ -229,7 +229,7 @@
         html[lang="en"] .zh{display:none!important}
         @media(max-width:1199px){#header .main-menu nav ul li a{padding:43px 10px}#header .public-header-actions .btn{padding:15px 18px}}
         @media(max-width:991px){#header .header-bottom{background:rgba(15,18,24,.86)}#header .header-bottom-inner{min-height:auto;padding:18px 0}#header .public-header-actions{justify-content:flex-start;margin-top:10px}.slicknav_btn{margin-top:-39px}.form-top-band{min-height:176px}}
-        @media(max-width:575px){#header .header-top{display:none}#header .logo img{width:190px}#header .public-header-actions{gap:8px;flex-wrap:wrap}#header .language-switcher select{height:42px;min-width:104px}#header .public-header-actions .btn{padding:13px 16px}.form-top-band{min-height:126px}}
+        @media(max-width:575px){#header .header-top{display:none}#header .logo img{width:190px}#header .public-header-actions{gap:7px;flex-wrap:nowrap;width:auto;margin-left:0}#header .language-switcher select{height:42px;min-width:100px}#header .public-header-actions .btn{min-width:118px;padding:12px 14px}.form-top-band{min-height:126px}}
 
         body{font-family:"Muli","Microsoft JhengHei","PingFang TC",Arial,sans-serif;font-size:16px;font-weight:400;line-height:1.65;letter-spacing:0;color:#526071;background:#f5f8fc}
         body *::selection{background:rgba(36,78,154,.88);color:#fff;text-shadow:none}
@@ -370,6 +370,12 @@
         body.trinity-form .notice{padding:15px 18px;margin-bottom:18px;background:#f7f8fa;border:0;border-left:3px solid var(--trinity-blue);border-radius:0}
         body.trinity-form .notice h4{margin-bottom:6px;color:#26364d;font-family:var(--trinity-display);font-size:15px;font-weight:700}
         body.trinity-form .notice p,body.trinity-form .notice li{color:#566274;font-size:12px;line-height:20px}
+        body.trinity-form .step-aside-layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:18px;align-items:start}
+        body.trinity-form .step-aside-layout>.card{margin-bottom:0}
+        body.trinity-form .step-aside-layout>.notice{position:sticky;top:16px;margin:0;padding:22px 24px;background:#fff;border:1px solid #dfe3e8;border-left:4px solid var(--trinity-blue);border-radius:4px;box-shadow:0 7px 18px rgba(24,34,49,.05)}
+        body.trinity-form .step-aside-layout>.notice h4{margin-bottom:10px;color:#1d2939;font-size:18px;line-height:25px}
+        body.trinity-form .step-aside-layout>.notice ul{margin:0;padding-left:18px}
+        body.trinity-form .step-aside-layout>.notice li+li{margin-top:8px}
         body.trinity-form .exam-sticky{top:0;padding:11px 0;margin-bottom:17px;background:#fff;border:0;border-bottom:1px solid #dfe3e8;border-radius:0;box-shadow:none}
         body.trinity-form .sel-badge{padding:5px 11px;color:#fff;background:var(--trinity-blue);border-radius:50px;font-size:11px;font-weight:600}
         body.trinity-form .price-preview{color:#1d3f79;font-family:var(--trinity-display);font-size:15px;font-weight:700}
@@ -394,7 +400,7 @@
         body.trinity-form .step-ind{color:#6d7888;font-size:11px}
         body.trinity-form .step-enter{animation:form-step-in 220ms var(--trinity-ease) both}
         @media(hover:hover) and (pointer:fine){body.trinity-form .exam-cb:not(.disabled):hover,body.trinity-form .pay-opt:hover{border-color:#9aa9bb;box-shadow:none;transform:translateY(-1px)}}
-        @media(max-width:991px){body.trinity-form .form-intro{grid-template-columns:1fr}body.trinity-form .intro-summary{min-height:230px}body.trinity-form .form-top-band{min-height:100px}}
+        @media(max-width:991px){body.trinity-form .form-intro{grid-template-columns:1fr}body.trinity-form .intro-summary{min-height:230px}body.trinity-form .form-top-band{min-height:100px}body.trinity-form .step-aside-layout{grid-template-columns:1fr}body.trinity-form .step-aside-layout>.notice{position:static}}
         @media(max-width:767px){body.trinity-form .main{padding:24px 12px 100px}body.trinity-form .form-intro>div{padding:25px 22px}body.trinity-form .form-intro h2{font-size:27px;line-height:34px}body.trinity-form .card{padding:24px 18px}body.trinity-form .section-title{font-size:20px}body.trinity-form .form-top-band{min-height:86px}}
         @media(max-width:575px){body.trinity-form #header .logo img{width:118px;max-height:68px}body.trinity-form .progress-wrap{padding:0 8px}body.trinity-form .step-item{min-width:94px}body.trinity-form .nav-footer .btn{min-width:0}}
     </style>
@@ -505,6 +511,7 @@
         <input type="hidden" name="passport_file_token" id="passportFileToken" value="{{ $passportDraftToken }}">
         <input type="hidden" name="passport_file_name" id="passportFileName" value="{{ $passportDraft['name'] ?? '' }}">
         <section data-step="1">
+            <div class="step-aside-layout">
             <div class="card">
                 <div class="section-title">Student Information <span>學生基本資料</span></div>
                 <div class="row row-3">
@@ -555,6 +562,7 @@
                 </div>
             </div>
             <div class="notice"><h4>{{ $tx('Important Notice', '重要提醒') }}</h4><ul><li>{{ $tx('Except AP Chinese, late or exception exam sessions are not offered.', '除 AP 中文外，不提供補考或例外考試場次。') }}</li><li>{{ $tx('Once payment is submitted, cancelled exams are non-refundable.', '繳費後取消考試恕不退費。') }}</li></ul></div>
+            </div>
         </section>
 
         <section class="hidden" data-step="2">

@@ -423,7 +423,7 @@
             </div>
             <div class="process-layout">
                 <div class="process-photo">
-                    <img src="{{ asset($assetBase.'images/bg/take-toure-bg.jpg') }}" alt="{{ $tx('Students preparing registration information', '學生準備報名資料') }}">
+                    <img src="{{ asset('images/artie112-ai-generated-9030608.jpg') }}" alt="{{ $tx('Students preparing registration information', '學生準備報名資料') }}">
                     <div class="process-photo-caption"><strong>{{ $tx('One guided submission', '一次完成引導式提交') }}</strong><span>{{ $tx('No student account is required before starting the form.', '開始填寫表單前不需要建立學生帳號。') }}</span></div>
                 </div>
                 <ol class="process-list">

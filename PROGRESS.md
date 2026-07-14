@@ -62,13 +62,21 @@ Current local template pass:
 ## Current Progress
 
 2026-07-14
+- Final public UI repair pass from screenshot feedback:
+  - Replaced oversized section-title blocks with compact Trinity-blue line markers and forced navigation active/hover states to remain blue.
+  - Made landing registration step numbers solid blue with high-contrast white numerals.
+  - Replaced the low-quality preparation image with the supplied HD `artie112-ai-generated-9030608.jpg` asset.
+  - Kept language and `Start Form` actions aligned horizontally on desktop and compact mobile widths.
+  - Changed the registration-form footer to use the same full white Trinity Scholar mark as its approved header.
+  - Moved the first-step Important Notice beside the student-information card on desktop, with responsive stacking on tablet/mobile.
+  - Bumped public UI asset cache version to `20260714-3` for ZIP/server deployments.
 - Trinity blue branding and deployment-cache repair:
   - Added a versioned `public-ui.css` URL plus a small critical inline brand fallback so cached Edification CSS can no longer restore orange top bars, buttons, active lines, or section accents after ZIP deployment.
   - Forced the desktop language selector and `Start Form` action to remain side-by-side, with a compact horizontal mobile layout.
   - Cropped the newly supplied transparent Trinity Scholar logo to its visible pixel bounds and added it as `public/images/trinity-scholar-logo-clean.png`.
   - Applied the clean logo to the landing/public header and every public/form footer while intentionally preserving the already-approved registration-form header logo.
 - Registration-flow visual repair:
-  - Replaced the low-resolution process photo with the higher-resolution Edification `take-toure-bg.jpg` asset.
+  - Replaced the low-resolution process photo with the supplied HD `artie112-ai-generated-9030608.jpg` asset.
   - Reworked the weak 2x2 process panel into a clearer vertical step sequence with consistent blue numbering, spacing, and responsive stacking.
 - Template-led public UI overhaul:
   - Re-read the local Edification Home 1, Home 2, and Home 3 templates and reused their image-led about, course, event, and editorial composition patterns instead of introducing a separate generic design language.
