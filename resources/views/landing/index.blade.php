@@ -67,148 +67,154 @@
         ],
     ]);
     $feeTotal = $displayFees->sum('amount');
+    $processItems = $process?->items ?: [$tx('Fill student form', '填寫學生資料'), $tx('Select AP exams', '選擇 AP 考試'), $tx('Upload passport', '上傳護照'), $tx('Submit payment proof', '提交付款資料')];
+    $processDetails = [
+        $tx('Enter the student and guardian information required for registration.', '填寫報名所需的學生與家長資料。'),
+        $tx('Choose available subjects and note any preparation interests.', '選擇可報名科目並填寫備考需求。'),
+        $tx('Provide a clear passport file and accommodation documents when needed.', '上傳清楚的護照檔案，並視需要提供特殊需求文件。'),
+        $tx('Confirm the selected payment method before admin verification.', '確認付款方式後交由管理團隊審核。'),
+    ];
 @endphp
 
-<x-public-flow-shell :title="$metaTitle" :description="$metaDescription" body-class="landing-premium" content-class="none">
+<x-public-flow-shell :title="$metaTitle" :description="$metaDescription" body-class="landing-refined" content-class="none">
     <x-slot:styles>
         <style>
-            #late-registration,
-            #timeline,
-            #process,
-            #fees,
-            #documents,
-            #faq,
-            #contact{scroll-margin-top:130px}
-            .late-notice-area{background:#14171d;padding:56px 0 48px;position:relative;overflow:hidden}
-            .late-notice-area:before{content:"";position:absolute;right:-120px;top:-120px;width:340px;height:340px;border:55px solid rgba(36,78,154,.14);border-radius:50%}
-            .late-notice-area:after{content:"";position:absolute;left:-90px;bottom:-110px;width:260px;height:260px;background:rgba(255,255,255,.035);border-radius:50%}
+            #overview,#late-registration,#timeline,#process,#fees,#documents,#faq,#contact{scroll-margin-top:112px}
+            .landing-refined{background:#fff}
+            .landing-refined .slider_item{position:relative;min-height:710px}
+            .landing-refined .slider_item:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(5,11,20,.94) 0%,rgba(8,16,29,.82) 48%,rgba(8,16,29,.24) 100%);z-index:0}
+            .landing-refined .slider_item .container{position:relative;z-index:1}
+            .landing-refined .slider-content{max-width:690px}
+            .landing-refined .slider-content h3{margin-bottom:18px;color:rgba(255,255,255,.82);font-family:var(--trinity-body);font-size:16px;font-weight:500;letter-spacing:0}
+            .landing-refined .slider-content h1{max-width:13ch;color:#fff;font-size:58px;line-height:68px;font-weight:700;letter-spacing:0;text-transform:none;text-shadow:0 8px 26px rgba(0,0,0,.32)}
+            .landing-refined .slider-content h1 span{color:#a9c2f4!important}
+            .landing-refined .slider-content p{max-width:56ch;margin-bottom:0;color:rgba(255,255,255,.78);font-size:18px;font-style:normal;line-height:30px}
+            .landing-refined .slider-content .btn{margin-top:30px!important}
+            .section-title-style2{margin-bottom:38px;padding-top:0}
+            .section-title-style2 span{color:#315388;font-family:var(--trinity-body);font-size:13px;font-weight:600;letter-spacing:0;text-transform:uppercase}
+            .section-title-style2 h2{margin-top:8px;color:var(--trinity-ink);font-size:40px;line-height:50px;font-weight:700;letter-spacing:0}
+            .section-title-style2 p{max-width:70ch;margin:14px auto 0;color:#667386;line-height:28px}
+            .section-title-style2.white-title span{color:#bfd2f7}
+            .section-title-style2.white-title h2{color:#fff!important;text-shadow:0 3px 18px rgba(0,0,0,.42)}
+            .section-title-style2.white-title p{color:rgba(255,255,255,.76)}
+            .quick-facts{padding:0!important;background:#fff;border-bottom:1px solid var(--trinity-line)}
+            .fact-row{display:grid;grid-template-columns:repeat(4,1fr)}
+            .fact-item{display:flex;align-items:center;gap:14px;min-height:112px;padding:22px 24px;border-right:1px solid var(--trinity-line)}
+            .fact-item:last-child{border-right:0}
+            .fact-icon{display:grid;flex:0 0 42px;width:42px;height:42px;place-items:center;border-radius:50%;background:var(--trinity-blue-soft);color:var(--trinity-blue);font-size:17px}
+            .fact-item strong{display:block;color:#1d3f79;font-family:var(--trinity-display);font-size:23px;line-height:28px;font-weight:700}
+            .fact-item span{display:block;margin-top:3px;color:#748093;font-size:13px;line-height:19px}
+            #overview{padding:90px 0 78px;background:#fff}
+            .overview-lead{align-items:center;margin-bottom:62px}
+            .overview-copy .section-title{margin-bottom:22px}
+            .overview-copy .section-title span{color:#315388;font-family:var(--trinity-body);font-size:13px;font-weight:600;letter-spacing:0;text-transform:uppercase}
+            .overview-copy .section-title h2{margin-top:8px;font-size:42px;line-height:51px}
+            .overview-copy p{margin-bottom:25px;color:#667386;line-height:29px}
+            .overview-visual{position:relative;min-height:395px;overflow:hidden;border-radius:6px;background:url('{{ asset($assetBase.'images/about/abt-right-thumb.jpg') }}') center/cover no-repeat;box-shadow:18px 18px 0 #edf2f8}
+            .overview-visual-note{position:absolute;right:0;bottom:0;max-width:250px;padding:19px 22px;color:#fff;background:rgba(20,47,99,.94)}
+            .overview-visual-note strong{display:block;color:#fff;font-family:var(--trinity-display);font-size:20px;line-height:26px}
+            .overview-visual-note span{display:block;margin-top:5px;color:rgba(255,255,255,.76);font-size:12px;line-height:18px}
+            .visual-card{height:100%;overflow:hidden;background:#fff;border:1px solid var(--trinity-line);border-radius:4px;box-shadow:0 12px 28px rgba(24,34,49,.07);transition:transform 160ms var(--trinity-ease),box-shadow 180ms ease}
+            .visual-card:hover{transform:translateY(-3px);box-shadow:0 18px 36px rgba(24,34,49,.11)}
+            .visual-card .course-thumb{position:relative;overflow:hidden}
+            .visual-card .course-thumb img{display:block;width:100%;height:205px;object-fit:cover;transition:transform 260ms var(--trinity-ease)}
+            .visual-card:hover .course-thumb img{transform:scale(1.025)}
+            .visual-card .card-body{padding:24px!important}
+            .visual-card h4{margin-bottom:10px;font-size:20px;line-height:28px}
+            .visual-card p{margin:0;color:#697586;line-height:26px}
+            .visual-card .cs-price{top:auto;right:0;bottom:0;padding:8px 14px}
+            .late-notice-area{position:relative;overflow:hidden;padding:82px 0;background:linear-gradient(rgba(6,13,25,.88),rgba(6,13,25,.9)),url('{{ asset($assetBase.'images/bg/slider-bg3.jpg') }}') center/cover no-repeat}
             .late-notice-area .container{position:relative;z-index:1}
-            .notice-card{height:100%;background:#fff;border:0!important;border-radius:4px;box-shadow:0 18px 45px rgba(0,0,0,.18)}
+            .notice-card{height:100%;overflow:hidden;background:#fff;border:0!important;border-radius:4px;box-shadow:0 16px 36px rgba(0,0,0,.24)}
             .notice-card .card-body{padding:30px}
-            .notice-kicker{display:inline-block;color:var(--trinity-blue);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
-            .notice-list{margin:18px 0 0;padding:0}
-            .notice-list li{display:flex;gap:10px;font-size:14px;font-weight:700;line-height:1.55;padding:5px 0;color:#5e6573}
-            .notice-list li i{color:var(--trinity-blue);margin-top:4px}
-            .late-stat{display:flex;align-items:center;gap:18px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);padding:18px 20px;margin-top:24px}
-            .late-stat strong{display:block;color:#fff;font-size:28px;line-height:1;font-family:"Roboto Slab",serif}
-            .late-stat span{display:block;color:rgba(255,255,255,.75);font-size:13px;text-transform:uppercase;letter-spacing:.06em}
-            .late-stat i{display:grid;place-items:center;width:48px;height:48px;border-radius:50%;background:var(--trinity-blue);color:#fff;font-size:20px}
-            .compact-section-title{margin-bottom:34px}
-            .faq-card .card-body p{margin-bottom:0}
-            .faq-list{max-width:920px;margin:0 auto;border-top:1px solid rgba(36,78,154,.14)}
-            .faq-item{border-bottom:1px solid rgba(36,78,154,.14);background:#fff}
-            .faq-item summary{position:relative;display:flex;align-items:center;min-height:74px;padding:20px 54px 20px 18px;color:#172033;font-family:"Roboto Slab","Microsoft JhengHei","PingFang TC",serif;font-size:18px;font-weight:700;cursor:pointer;list-style:none}
+            .notice-kicker{display:inline-block;margin-bottom:10px;color:var(--trinity-blue);font-size:12px;font-weight:650;letter-spacing:0;text-transform:uppercase}
+            .notice-card h4{font-size:23px;line-height:31px}
+            .notice-card p{color:#687486;line-height:26px}
+            .notice-list{margin:17px 0 0;padding:0}
+            .notice-list li{display:flex;gap:10px;padding:5px 0;color:#566274;font-size:14px;font-weight:500;line-height:22px}
+            .notice-list li i{margin-top:4px;color:var(--trinity-blue)}
+            .late-facts{display:grid;grid-template-columns:repeat(3,1fr);margin-top:22px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08)}
+            .late-stat{display:flex;align-items:center;gap:14px;min-height:94px;padding:18px 20px;border-right:1px solid rgba(255,255,255,.18)}
+            .late-stat:last-child{border-right:0}
+            .late-stat i{color:#a9c2f4;font-size:20px}
+            .late-stat strong{display:block;color:#fff;font-family:var(--trinity-display);font-size:22px;line-height:27px}
+            .late-stat span{display:block;color:rgba(255,255,255,.68);font-size:11px;letter-spacing:0;text-transform:uppercase}
+            #timeline{padding:78px 0 58px;background:#f6f8fb}
+            #timeline .media{height:100%;overflow:hidden;background:#fff;border:1px solid var(--trinity-line);border-radius:4px;box-shadow:0 10px 24px rgba(24,34,49,.06)}
+            #timeline .media-head{min-width:140px}
+            #timeline .media-body{padding-right:24px}
+            #timeline .media-body h4{font-size:19px;line-height:26px}
+            #process{padding:86px 0;background:#fff}
+            .process-layout{display:grid;grid-template-columns:minmax(0,1.02fr) minmax(0,.98fr);align-items:stretch;border:1px solid var(--trinity-line);background:#fff}
+            .process-photo{position:relative;min-height:480px;overflow:hidden}
+            .process-photo img{width:100%;height:100%;object-fit:cover}
+            .process-photo-caption{position:absolute;right:24px;bottom:24px;left:24px;padding:18px 20px;color:#fff;background:rgba(7,13,24,.86)}
+            .process-photo-caption strong{display:block;color:#fff;font-family:var(--trinity-display);font-size:21px}
+            .process-photo-caption span{display:block;margin-top:4px;color:rgba(255,255,255,.72);font-size:13px}
+            .process-list{display:grid;grid-template-columns:1fr 1fr;margin:0;padding:18px;list-style:none;background:#f7f9fc}
+            .process-item{display:flex;gap:14px;padding:24px 20px;border-right:1px solid var(--trinity-line);border-bottom:1px solid var(--trinity-line)}
+            .process-item:nth-child(2n){border-right:0}
+            .process-item:nth-last-child(-n+2){border-bottom:0}
+            .process-number{display:grid;flex:0 0 34px;width:34px;height:34px;place-items:center;border-radius:50%;color:#fff;background:var(--trinity-blue);font-family:var(--trinity-display);font-size:15px}
+            .process-item h4{margin:2px 0 7px;font-size:18px;line-height:24px}
+            .process-item p{margin:0;color:#6b7686;font-size:13px;line-height:21px}
+            #fees{padding:82px 0;background:#f6f8fb}
+            .fee-layout{display:grid;grid-template-columns:minmax(300px,.78fr) minmax(0,1.22fr);overflow:hidden;background:#fff;border:1px solid var(--trinity-line)}
+            .fee-visual{position:relative;min-height:510px;background:linear-gradient(rgba(9,18,33,.12),rgba(9,18,33,.52)),url('{{ asset($assetBase.'images/blog/blog-thumbnail2.jpg') }}') center/cover no-repeat}
+            .fee-visual-copy{position:absolute;right:30px;bottom:30px;left:30px;color:#fff}
+            .fee-visual-copy span{display:block;margin-bottom:8px;font-size:12px;text-transform:uppercase}
+            .fee-visual-copy strong{display:block;color:#fff;font-family:var(--trinity-display);font-size:30px;line-height:38px}
+            .fee-grid{display:grid;grid-template-columns:1fr 1fr;padding:24px}
+            .fee-item{display:flex;min-height:210px;flex-direction:column;padding:26px 24px;border-right:1px solid var(--trinity-line);border-bottom:1px solid var(--trinity-line)}
+            .fee-item:nth-child(2n){border-right:0}
+            .fee-item:nth-last-child(-n+2){border-bottom:0}
+            .fee-item small{color:var(--trinity-blue);font-size:11px;font-weight:650;text-transform:uppercase}
+            .fee-item h4{margin:8px 0;font-size:19px;line-height:26px}
+            .fee-item p{flex:1;margin:0;color:#6b7686;font-size:13px;line-height:22px}
+            .fee-item strong{display:block;margin-top:15px;color:#1d3f79;font-family:var(--trinity-display);font-size:21px}
+            #documents{padding:84px 0;background:#fff}
+            .documents-layout{display:grid;grid-template-columns:minmax(280px,.75fr) minmax(0,1.25fr);gap:42px;align-items:stretch}
+            .documents-photo{position:relative;min-height:520px;overflow:hidden;border-radius:4px;background:url('{{ asset($assetBase.'images/course/cs-img5.jpg') }}') center/cover no-repeat}
+            .documents-photo:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(7,13,24,.74))}
+            .documents-photo-copy{position:absolute;right:26px;bottom:26px;left:26px;z-index:1;color:#fff}
+            .documents-photo-copy strong{display:block;color:#fff;font-family:var(--trinity-display);font-size:25px;line-height:32px}
+            .documents-photo-copy span{display:block;margin-top:6px;color:rgba(255,255,255,.74);font-size:13px}
+            .document-grid{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--trinity-line)}
+            .document-item{display:grid;grid-template-columns:34px 1fr;gap:13px;padding:22px 18px;border-right:1px solid var(--trinity-line);border-bottom:1px solid var(--trinity-line)}
+            .document-item:nth-child(2n){border-right:0}
+            .document-item i{margin-top:2px;color:var(--trinity-blue);font-size:20px}
+            .document-item h4{margin:0 0 6px;font-size:17px;line-height:23px}
+            .document-item p{margin:0;color:#6b7686;font-size:13px;line-height:21px}
+            #faq{padding:78px 0;background:#f6f8fb}
+            .faq-list{max-width:920px;margin:0 auto;border-top:1px solid #cfd7e2}
+            .faq-item{background:transparent;border-bottom:1px solid #cfd7e2}
+            .faq-item summary{position:relative;display:flex;min-height:70px;align-items:center;padding:18px 52px 18px 4px;color:var(--trinity-ink);font-family:var(--trinity-display);font-size:18px;font-weight:700;line-height:26px;cursor:pointer;list-style:none}
             .faq-item summary::-webkit-details-marker{display:none}
-            .faq-item summary:after{content:"+";position:absolute;right:16px;display:grid;width:34px;height:34px;place-items:center;border:1px solid rgba(36,78,154,.18);border-radius:50%;background:#eaf2ff;color:var(--trinity-blue);font-family:"Muli",sans-serif;font-size:21px;font-weight:400;transition:transform 180ms var(--trinity-ease),background-color 180ms ease,color 180ms ease}
-            .faq-item[open] summary:after{transform:rotate(45deg);background:var(--trinity-blue);color:#fff}
-            .faq-item p{margin:0;padding:0 54px 24px 18px;color:#667386;font-size:14px;line-height:1.8;animation:faq-copy-in 180ms var(--trinity-ease) both}
-            @keyframes faq-copy-in{from{opacity:0;transform:translate3d(0,-4px,0)}to{opacity:1;transform:translate3d(0,0,0)}}
-            .section-title-style2{margin-bottom:36px;padding-top:18px}
-            .section-title-style2 span{font-size:15px;letter-spacing:2px;color:#1e2c39}
-            .section-title-style2 h2{font-size:42px;line-height:52px}
-            .white-title span{color:rgba(255,255,255,.82)}
-            .landing-card{border:1px solid #e5eaf2;box-shadow:0 14px 34px rgba(18,43,82,.07);transition:transform .2s ease,box-shadow .2s ease}
-            .landing-card:hover{transform:translateY(-4px);box-shadow:0 22px 44px rgba(18,43,82,.11)}
-            .course-thumb img{height:190px;width:100%;object-fit:cover}
-            #overview{padding-top:58px!important;padding-bottom:74px!important}
-            #timeline{padding-top:58px!important;padding-bottom:56px!important}
-            #process{background:#12171f;padding-top:68px!important;padding-bottom:76px!important;overflow:hidden}
-            #process:before{display:none!important}
-            #process .container{position:relative;z-index:1}
-            #process .section-title-style2{margin-bottom:34px;padding-top:0}
-            #process .section-title-style2 span{color:rgba(255,255,255,.78)}
-            #process .section-title-style2 h2{color:#fff!important}
-            #process .section-title-style2 p{max-width:720px;margin:12px auto 0;color:rgba(255,255,255,.72)}
-            #process .process-grid{justify-content:center}
-            #process .process-col{display:flex}
-            #process .process-card{width:100%;min-height:220px;border:1px solid rgba(255,255,255,.12);border-radius:4px;box-shadow:0 18px 45px rgba(0,0,0,.18);overflow:hidden}
-            #process .process-card .teacher-content{padding:30px 24px!important}
-            #process .process-step{display:inline-flex;align-items:center;justify-content:center;min-width:72px;height:30px;margin-bottom:18px;border-radius:50px;background:var(--trinity-blue-soft);color:var(--trinity-blue);font-family:"Muli",sans-serif;font-size:13px;font-weight:700;letter-spacing:0}
-            #process .process-card h4{font-size:20px;line-height:30px;margin-bottom:10px!important;color:#1e2c39}
-            #process .process-card p{margin:0;color:#737f8d;line-height:28px}
-            #fees{padding-top:56px!important;padding-bottom:34px!important}
-            #documents{padding-top:22px!important;padding-bottom:40px!important}
-            #faq{padding-top:40px!important;padding-bottom:70px!important}
-            #contact{padding-top:82px!important;padding-bottom:74px!important}
-            .quick-facts{padding-top:56px!important;padding-bottom:18px!important}
-            .quick-facts .card h3{font-size:28px;line-height:36px;margin-bottom:4px}
-            .quick-facts .card p{margin-bottom:0}
-            .cta-area{background:#121820!important}
-            body.landing-premium{background:#f7faff;color:#526071}
-            body.landing-premium .slider_item{position:relative;min-height:820px;overflow:hidden}
-            body.landing-premium .slider_item:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(4,10,22,.94) 0%,rgba(8,18,36,.82) 36%,rgba(12,31,63,.34) 68%,rgba(8,18,36,.5) 100%);z-index:0}
-            body.landing-premium .slider_item:after{content:"";position:absolute;left:-16vw;top:12%;width:64vw;height:64vw;border-radius:50%;background:radial-gradient(circle,rgba(36,78,154,.38),rgba(36,78,154,.06) 44%,rgba(36,78,154,0) 66%);z-index:0;pointer-events:none}
-            body.landing-premium .slider_item .container{position:relative;z-index:1}
-            body.landing-premium .slider-content{max-width:760px;animation:hero-copy-in 720ms var(--trinity-ease) both}
-            body.landing-premium .slider-content h3{font-family:"Muli",sans-serif;font-size:20px;font-weight:500;letter-spacing:3.5px;color:rgba(255,255,255,.84);margin-bottom:18px}
-            body.landing-premium .slider-content h1{font-weight:700;letter-spacing:-.01em;text-transform:none;font-size:66px;line-height:76px;max-width:13ch;text-wrap:balance;text-shadow:0 18px 54px rgba(0,0,0,.38)}
-            body.landing-premium .slider-content h1 span{color:#8fb4ff!important}
-            body.landing-premium .slider-content p{max-width:58ch;font-size:18px;line-height:32px;font-style:normal;color:rgba(255,255,255,.76);margin-bottom:0;text-wrap:pretty}
-            body.landing-premium .slider-content .btn{margin-top:34px!important;background:#fff!important;border-color:#fff!important;color:#17366f!important;box-shadow:0 18px 46px rgba(0,0,0,.28)}
-            body.landing-premium .slider-content .btn:hover{background:#eaf2ff!important;border-color:#eaf2ff!important;color:#10295a!important}
-            @keyframes hero-copy-in{from{opacity:0;transform:translate3d(0,18px,0)}to{opacity:1;transform:translate3d(0,0,0)}}
-            body.landing-premium .quick-facts{position:relative;margin-top:-72px;z-index:2;padding-top:0!important}
-            body.landing-premium .quick-facts .container{background:rgba(255,255,255,.92);border:1px solid rgba(36,78,154,.13);border-radius:18px;padding:24px 28px;box-shadow:0 26px 70px rgba(18,43,82,.16);backdrop-filter:blur(14px)}
-            body.landing-premium .quick-facts .landing-card{border:0!important;box-shadow:none!important;background:transparent}
-            body.landing-premium .quick-facts .card-body{padding:8px 20px!important;border-left:1px solid rgba(36,78,154,.12)}
-            body.landing-premium .quick-facts .col-md-3:first-child .card-body{border-left:0}
-            body.landing-premium .quick-facts h3{font-size:34px!important;line-height:40px!important;color:#17366f!important}
-            body.landing-premium .quick-facts p{color:#65748a;font-size:14px}
-            body.landing-premium .section-title-style2{margin-bottom:42px}
-            body.landing-premium .section-title-style2 span{font-family:"Muli",sans-serif;font-size:13px;font-weight:600;letter-spacing:3px;color:#315388}
-            body.landing-premium .section-title-style2 h2{font-weight:700;letter-spacing:-.01em;color:#172033;max-width:860px;margin-left:auto;margin-right:auto;text-wrap:balance}
-            body.landing-premium .section-title-style2 p{max-width:72ch;margin:16px auto 0;color:#65748a;text-wrap:pretty}
-            body.landing-premium #overview{background:linear-gradient(180deg,#f7faff 0%,#fff 100%)}
-            body.landing-premium #overview .landing-card{height:100%;background:#fff;border:1px solid rgba(36,78,154,.12)!important;border-radius:14px;box-shadow:0 20px 46px rgba(18,43,82,.08)}
-            body.landing-premium .course-thumb{position:relative;overflow:hidden;border-radius:10px 10px 0 0}
-            body.landing-premium .course-thumb:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,30,54,0),rgba(15,30,54,.2));pointer-events:none}
-            body.landing-premium .course-thumb img{height:220px;transform:scale(1.001);transition:transform 260ms var(--trinity-ease)}
-            body.landing-premium .landing-card:hover .course-thumb img{transform:scale(1.035)}
-            body.landing-premium .landing-card{position:relative;border-radius:14px;border:1px solid rgba(36,78,154,.12)!important;background:#fff;box-shadow:0 18px 42px rgba(18,43,82,.08);transition:transform 160ms var(--trinity-ease),box-shadow 180ms ease,border-color 180ms ease}
-            body.landing-premium .landing-card:before{content:"";position:absolute;left:18px;right:18px;top:0;height:2px;background:linear-gradient(90deg,rgba(36,78,154,.02),rgba(36,78,154,.62),rgba(36,78,154,.02));opacity:0;transition:opacity 180ms ease}
-            body.landing-premium .landing-card:hover{transform:translateY(-3px) scale(1.006);box-shadow:0 28px 60px rgba(18,43,82,.13);border-color:rgba(36,78,154,.24)!important}
-            body.landing-premium .landing-card:hover:before{opacity:1}
-            body.landing-premium .landing-card h4{font-size:20px;line-height:30px;color:#172033}
-            body.landing-premium .landing-card p{color:#667386;line-height:28px}
-            body.landing-premium .late-notice-area{background:radial-gradient(circle at top right,rgba(73,112,196,.22),transparent 38%),linear-gradient(135deg,#101720 0%,#141e2e 52%,#0d1420 100%);padding:76px 0}
-            body.landing-premium .notice-card{border-radius:10px!important;background:rgba(255,255,255,.96);box-shadow:0 24px 70px rgba(0,0,0,.28)}
-            body.landing-premium .notice-list li{color:#536176}
-            body.landing-premium .late-stat{border-radius:10px;background:rgba(255,255,255,.08);box-shadow:inset 0 1px 0 rgba(255,255,255,.08);transition:transform 160ms var(--trinity-ease),background-color 180ms ease}
-            body.landing-premium .late-stat:hover{transform:translateY(-2px);background:rgba(255,255,255,.12)}
-            body.landing-premium #timeline{background:#fff}
-            body.landing-premium #timeline .media{background:#fff;border:1px solid rgba(36,78,154,.12);border-radius:14px;overflow:hidden;box-shadow:0 18px 40px rgba(18,43,82,.07);transition:transform 160ms var(--trinity-ease),box-shadow 180ms ease,border-color 180ms ease}
-            body.landing-premium #timeline .media:hover{transform:translateY(-3px);box-shadow:0 24px 54px rgba(18,43,82,.11);border-color:rgba(36,78,154,.22)}
-            body.landing-premium #timeline .media-head{min-width:156px}
-            body.landing-premium #process{background:radial-gradient(circle at 15% 10%,rgba(92,132,214,.22),transparent 34%),linear-gradient(180deg,#101720,#111924)}
-            body.landing-premium #process .process-card{background:rgba(255,255,255,.96);border-color:rgba(255,255,255,.18)!important}
-            body.landing-premium #fees,body.landing-premium #documents,body.landing-premium #faq{background:#fff}
-            body.landing-premium #documents .landing-card i,body.landing-premium #faq .landing-card i{display:inline-grid;width:38px;height:38px;place-items:center;border-radius:50%;background:#eaf2ff;box-shadow:inset 0 0 0 1px rgba(36,78,154,.1)}
-            body.landing-premium .contact-info{position:relative;background:#eef4fb}
-            body.landing-premium .contact-info:before{opacity:.92}
-            body.landing-premium .cta-area{background:linear-gradient(135deg,#101720,#172949)!important}
-            body.landing-premium .cta-area .btn-light{box-shadow:0 16px 34px rgba(0,0,0,.22)}
-            @media(prefers-reduced-motion:reduce){
-                body.landing-premium .slider-content{animation:none!important;transform:none!important;opacity:1!important}
-                .faq-item p{animation:none!important}
+            .faq-item summary:after{content:"+";position:absolute;right:6px;display:grid;width:32px;height:32px;place-items:center;border:1px solid #c4cfdd;border-radius:50%;color:var(--trinity-blue);background:#fff;font-family:var(--trinity-body);font-size:20px;font-weight:400;transition:transform 180ms var(--trinity-ease),background-color 180ms ease,color 180ms ease}
+            .faq-item[open] summary:after{color:#fff;background:var(--trinity-blue);transform:rotate(45deg)}
+            .faq-item p{max-width:760px;margin:0;padding:0 52px 22px 4px;color:#667386;font-size:14px;line-height:25px}
+            #contact{padding:82px 0;background:#fff}
+            .contact-panel{height:100%;padding:30px;border:1px solid var(--trinity-line);border-radius:4px;background:#fff}
+            .contact-panel h3{margin-bottom:18px;font-size:27px;line-height:34px}
+            .contact-panel p{margin-bottom:10px}
+            .contact-panel ul{margin-top:18px}
+            .contact-panel li{margin-bottom:8px;color:#667386}
+            .cta-area{background:#101720!important}
+            @media(max-width:991px){
+                .fact-row{grid-template-columns:1fr 1fr}.fact-item:nth-child(2){border-right:0}.fact-item:nth-child(-n+2){border-bottom:1px solid var(--trinity-line)}
+                .overview-visual{margin-top:34px}.process-layout,.fee-layout,.documents-layout{grid-template-columns:1fr}.process-photo,.fee-visual,.documents-photo{min-height:390px}
             }
             @media(max-width:767px){
-                .late-notice-area{padding:44px 0 34px}
-                .notice-card .card-body{padding:24px}
-                .late-stat{margin-top:14px}
-                .section-title-style2 h2{font-size:32px;line-height:40px}
-                .section-title-style2 span:before,
-                .section-title-style2 span:after{display:none!important}
-                #process .process-card{min-height:auto}
-                #overview,#timeline,#process,#fees,#documents,#faq,#contact{padding-top:42px!important;padding-bottom:42px!important}
-                body.landing-premium .slider_item{min-height:720px}
-                body.landing-premium .slider-content h1{font-size:42px;line-height:52px;max-width:12ch}
-                body.landing-premium .slider-content p{font-size:16px;line-height:28px}
-                body.landing-premium .quick-facts{margin-top:0;padding-top:24px!important}
-                body.landing-premium .quick-facts .container{border-radius:0;padding:18px 15px}
-                body.landing-premium .quick-facts .card-body{border-left:0;border-top:1px solid rgba(36,78,154,.12)}
-                body.landing-premium .quick-facts .col-md-3:first-child .card-body{border-top:0}
-                body.landing-premium #timeline .media{display:block}
-                body.landing-premium #timeline .media-head{width:100%;min-width:0}
+                .landing-refined .slider_item{min-height:640px}.landing-refined .slider-content h1{font-size:42px;line-height:50px}.landing-refined .slider-content p{font-size:16px;line-height:27px}
+                .section-title-style2 h2,.overview-copy .section-title h2{font-size:31px;line-height:39px}.section-title-style2 span:before,.section-title-style2 span:after{display:none!important}
+                #overview,.late-notice-area,#timeline,#process,#fees,#documents,#faq,#contact{padding-top:58px;padding-bottom:58px}
+                .late-facts{grid-template-columns:1fr}.late-stat{border-right:0;border-bottom:1px solid rgba(255,255,255,.18)}.late-stat:last-child{border-bottom:0}
+                #timeline .media{display:block}#timeline .media-head{width:100%;min-width:0}#timeline .media-body{padding:20px}
+                .process-list,.fee-grid,.document-grid{grid-template-columns:1fr}.process-item,.fee-item,.document-item{border-right:0}.process-item:nth-last-child(2),.fee-item:nth-last-child(2){border-bottom:1px solid var(--trinity-line)}
+            }
+            @media(max-width:575px){
+                .fact-row{grid-template-columns:1fr}.fact-item{min-height:90px;border-right:0;border-bottom:1px solid var(--trinity-line)!important}.fact-item:last-child{border-bottom:0!important}
+                .overview-visual,.process-photo,.fee-visual,.documents-photo{min-height:320px}.overview-visual{box-shadow:10px 10px 0 #edf2f8}.notice-card .card-body{padding:24px}.fee-grid{padding:12px}.contact-panel{padding:24px}
             }
         </style>
     </x-slot:styles>
@@ -260,46 +266,54 @@
         </div>
     </x-slot:hero>
 
-    <section class="course-area quick-facts pt--80 pb--40">
+    <section class="quick-facts" aria-label="{{ $tx('Registration highlights', '報名重點') }}">
         <div class="container">
-            <div class="row">
-                <div class="col-md-3 col-sm-6 mb-5"><div class="card landing-card text-center"><div class="card-body p-25"><h3 class="primary-color">{{ $tx('Feb. 10', '2 月 10 日') }}</h3><p>{{ $tx('Late registration deadline', '逾期報名截止') }}</p></div></div></div>
-                <div class="col-md-3 col-sm-6 mb-5"><div class="card landing-card text-center"><div class="card-body p-25"><h3 class="primary-color">{{ $tx('Taipei', '台北') }}</h3><p>{{ $tx('Test-center support', '考場報名支援') }}</p></div></div></div>
-                <div class="col-md-3 col-sm-6 mb-5"><div class="card landing-card text-center"><div class="card-body p-25"><h3 class="primary-color">{{ $tx('Form + Pay', '表單 + 付款') }}</h3><p>{{ $tx('Both required to complete', '兩者皆完成才算報名') }}</p></div></div></div>
-                <div class="col-md-3 col-sm-6 mb-5"><div class="card landing-card text-center"><div class="card-body p-25"><h3 class="primary-color">{{ $tx('No Login', '不需登入') }}</h3><p>{{ $tx('Students register directly', '學生可直接填寫') }}</p></div></div></div>
+            <div class="fact-row">
+                <div class="fact-item"><i class="fa fa-calendar fact-icon"></i><div><strong>{{ $tx('Feb. 10', '2 月 10 日') }}</strong><span>{{ $tx('Late registration deadline', '逾期報名截止') }}</span></div></div>
+                <div class="fact-item"><i class="fa fa-map-marker fact-icon"></i><div><strong>{{ $tx('Taipei', '台北') }}</strong><span>{{ $tx('Test-center support', '考場報名支援') }}</span></div></div>
+                <div class="fact-item"><i class="fa fa-check-square-o fact-icon"></i><div><strong>{{ $tx('Form + Pay', '表單 + 付款') }}</strong><span>{{ $tx('Both required to complete', '兩者皆完成才算報名') }}</span></div></div>
+                <div class="fact-item"><i class="fa fa-unlock-alt fact-icon"></i><div><strong>{{ $tx('No Login', '不需登入') }}</strong><span>{{ $tx('Students register directly', '學生可直接填寫') }}</span></div></div>
             </div>
         </div>
     </section>
 
-    <section id="overview" class="course-area pt--40 pb--100">
+    <section id="overview" class="about-area">
         <div class="container">
-            <div class="row">
-                <div class="col-md-10 offset-md-1">
-                    <div class="section-title-style2 black-title title-tb text-center">
-                        <span>{{ $tx('Program Overview', '服務總覽') }}</span>
-                        <h2 class="primary-color">{{ $tx('Trinity Scholar AP Registration Service', 'Trinity Scholar AP 考試報名服務') }}</h2>
+            <div class="row overview-lead">
+                <div class="col-lg-6">
+                    <div class="overview-copy">
+                        <div class="section-title">
+                            <span>{{ $tx('Program Overview', '服務總覽') }}</span>
+                            <h2>{{ $tx('A clearer route to AP exam registration', '更清楚的 AP 考試報名流程') }}</h2>
+                        </div>
                         <p>{{ $overview?->body ?: $tx('Trinity Scholar helps students submit AP registration details, passport documents, exam selections, payment information, and admin verification in one guided platform.', 'Trinity Scholar 協助學生在同一平台提交 AP 報名資料、護照文件、考試選擇、付款資訊，並由管理團隊完成審核。') }}</p>
+                        <a class="btn btn-primary btn-round" href="{{ route('student-registrations.create') }}">{{ $tx('Start Registration', '開始報名') }}</a>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="overview-visual" role="img" aria-label="{{ $tx('Taipei test-center support', '台北考場報名支援') }}">
+                        <div class="overview-visual-note"><strong>{{ $tx('Taipei test-center support', '台北考場報名支援') }}</strong><span>{{ $tx('Registration coordination from form submission through admin review.', '從表單提交到管理端審核的完整報名協調。') }}</span></div>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-lg-4 col-md-6 mb-5">
-                    <div class="card landing-card">
+                    <article class="visual-card">
                         <div class="course-thumb"><img src="{{ asset($assetBase.'images/course/cs-img1.jpg') }}" alt="{{ $tx('Guided AP registration', 'AP 報名流程') }}"><span class="cs-price primary-bg">AP</span></div>
                         <div class="card-body p-25"><h4><a href="{{ route('student-registrations.create') }}">{{ $tx('Guided Registration', '引導式報名') }}</a></h4><p>{{ $tx('Student information, guardian contact, passport upload, AP subject choice, accommodations, and payment method are collected in one flow.', '學生資料、家長聯絡資訊、護照上傳、AP 科目選擇、特殊需求與付款方式，皆可在同一流程中完成。') }}</p></div>
-                    </div>
+                    </article>
                 </div>
                 <div class="col-lg-4 col-md-6 mb-5">
-                    <div class="card landing-card">
+                    <article class="visual-card">
                         <div class="course-thumb"><img src="{{ asset($assetBase.'images/about/abt-right-thumb.jpg') }}" alt="{{ $tx('Coordinator review', '協調員審核') }}"><span class="cs-price primary-bg">{{ $tx('Admin', '審核') }}</span></div>
                         <div class="card-body p-25"><h4><a href="{{ route('student-registrations.create') }}">{{ $tx('Coordinator Review', '協調員審核') }}</a></h4><p>{{ $tx('The admin team reviews document validity, payment status, subject availability, quota, notes, and final registration status.', '管理團隊會審核文件有效性、付款狀態、科目名額、配額、備註與最終報名狀態。') }}</p></div>
-                    </div>
+                    </article>
                 </div>
                 <div class="col-lg-4 col-md-6 mb-5">
-                    <div class="card landing-card">
+                    <article class="visual-card">
                         <div class="course-thumb"><img src="{{ asset($assetBase.'images/course/cs-img3.jpg') }}" alt="{{ $tx('Exam preparation', '考試準備') }}"><span class="cs-price primary-bg">{{ $tx('Prep', '備考') }}</span></div>
                         <div class="card-body p-25"><h4><a href="{{ route('student-registrations.create') }}">{{ $tx('Preparation Interest', '備考課程意願') }}</a></h4><p>{{ $tx('Students can indicate AP preparation, group class, private tutoring, preferred schedule, and preferred language for follow-up.', '學生可填寫 AP 備考、團體課、一對一家教、偏好時段與語言等需求，方便後續聯繫。') }}</p></div>
-                    </div>
+                    </article>
                 </div>
             </div>
         </div>
@@ -345,16 +359,10 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="late-stat"><i class="fa fa-calendar"></i><div><span>{{ $tx('Deadline', '截止日') }}</span><strong>{{ $tx('Feb. 10', '2/10') }}</strong></div></div>
-                </div>
-                <div class="col-md-4">
-                    <div class="late-stat"><i class="fa fa-file-text-o"></i><div><span>{{ $tx('Required', '必要條件') }}</span><strong>{{ $tx('Form + Pay', '表單 + 付款') }}</strong></div></div>
-                </div>
-                <div class="col-md-4">
-                    <div class="late-stat"><i class="fa fa-user"></i><div><span>{{ $tx('Review', '審核') }}</span><strong>{{ $tx('Admin Check', '管理員確認') }}</strong></div></div>
-                </div>
+            <div class="late-facts">
+                <div class="late-stat"><i class="fa fa-calendar"></i><div><span>{{ $tx('Deadline', '截止日') }}</span><strong>{{ $tx('Feb. 10', '2/10') }}</strong></div></div>
+                <div class="late-stat"><i class="fa fa-file-text-o"></i><div><span>{{ $tx('Required', '必要條件') }}</span><strong>{{ $tx('Form + Payment', '表單 + 付款') }}</strong></div></div>
+                <div class="late-stat"><i class="fa fa-user"></i><div><span>{{ $tx('Final Review', '最終審核') }}</span><strong>{{ $tx('Admin Confirmation', '管理員確認') }}</strong></div></div>
             </div>
         </div>
     </section>
@@ -397,7 +405,7 @@
         </div>
     </section>
 
-    <section id="process" class="teacher-area pt--40 pb--100">
+    <section id="process" class="registration-process">
         <div class="container">
             <div class="row">
                 <div class="col-md-10 offset-md-1">
@@ -408,23 +416,24 @@
                     </div>
                 </div>
             </div>
-            <div class="row process-grid">
-                @foreach (($process?->items ?: [$tx('Fill student form', '填寫學生資料'), $tx('Select AP exams', '選擇 AP 考試'), $tx('Upload passport', '上傳護照'), $tx('Submit payment proof', '提交付款資料')]) as $index => $item)
-                    <div class="col-xl-3 col-lg-3 col-md-6 mb-5 process-col">
-                        <div class="card landing-card text-center process-card">
-                            <div class="card-body teacher-content p-25">
-                                <span class="process-step">{{ $tx('Step', '步驟') }} {{ $index + 1 }}</span>
-                                <h4 class="card-title mb-4">{{ $item }}</h4>
-                                <p>{{ $tx('Each step is reviewed by the AP registration admin team before completion.', '每個步驟都會由 AP 報名管理團隊審核後確認。') }}</p>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
+            <div class="process-layout">
+                <div class="process-photo">
+                    <img src="{{ asset($assetBase.'images/course/cs-img4.jpg') }}" alt="{{ $tx('Students preparing registration information', '學生準備報名資料') }}">
+                    <div class="process-photo-caption"><strong>{{ $tx('One guided submission', '一次完成引導式提交') }}</strong><span>{{ $tx('No student account is required before starting the form.', '開始填寫表單前不需要建立學生帳號。') }}</span></div>
+                </div>
+                <ol class="process-list">
+                    @foreach ($processItems as $index => $item)
+                        <li class="process-item">
+                            <span class="process-number">{{ $index + 1 }}</span>
+                            <div><h4>{{ $item }}</h4><p>{{ $processDetails[$index] ?? $tx('Reviewed by the AP registration admin team before completion.', '完成前由 AP 報名管理團隊審核。') }}</p></div>
+                        </li>
+                    @endforeach
+                </ol>
             </div>
         </div>
     </section>
 
-    <section id="fees" class="course-area pt--90 pb--40">
+    <section id="fees" class="fee-explanation">
         <div class="container">
             <div class="row">
                 <div class="col-md-10 offset-md-1">
@@ -435,34 +444,31 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                @foreach ($displayFees as $fee)
-                    <div class="col-lg-3 col-md-6 mb-5">
-                    <div class="card landing-card h-100">
-                        <div class="card-body p-25">
-                            <span class="primary-color text-uppercase d-block mb-3">{{ $fee->currency }}</span>
+            <div class="fee-layout">
+                <div class="fee-visual" role="img" aria-label="{{ $tx('Student planning AP registration', '學生規劃 AP 報名') }}">
+                    <div class="fee-visual-copy"><span>{{ $tx('Pricing Notice', '費用公告') }}</span><strong>{{ $tx('Clear details before payment', '付款前提供清楚費用資訊') }}</strong></div>
+                </div>
+                <div class="fee-grid">
+                    @foreach ($displayFees as $fee)
+                        <article class="fee-item">
+                            <small>{{ $fee->currency }}</small>
                             <h4>{{ $fee->name }}</h4>
                             <p>{{ $fee->description }}</p>
-                            <h3>{{ $tx('Coming Soon', '即將公布') }}</h3>
-                        </div>
-                    </div>
-                </div>
-                @endforeach
-                <div class="col-lg-3 col-md-6 mb-5">
-                    <div class="card landing-card h-100">
-                        <div class="card-body p-25">
-                            <span class="primary-color text-uppercase d-block mb-3">{{ $tx('Estimated', '預估') }}</span>
-                            <h4>{{ $tx('Base Total', '基本總額') }}</h4>
-                            <p>{{ $tx('Before subject-specific adjustment, late fees, or practice exam options.', '尚未包含科目差異、逾期費或模擬考選項的調整。') }}</p>
-                            <h3>{{ $tx('Coming Soon', '即將公布') }}</h3>
-                        </div>
-                    </div>
+                            <strong>{{ $tx('Coming Soon', '即將公布') }}</strong>
+                        </article>
+                    @endforeach
+                    <article class="fee-item">
+                        <small>{{ $tx('Estimated', '預估') }}</small>
+                        <h4>{{ $tx('Base Total', '基本總額') }}</h4>
+                        <p>{{ $tx('Before subject-specific adjustment, late fees, or practice exam options.', '尚未包含科目差異、逾期費或模擬考選項的調整。') }}</p>
+                        <strong>{{ $tx('Coming Soon', '即將公布') }}</strong>
+                    </article>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="documents" class="feature-blog pt--40 pb--60">
+    <section id="documents" class="required-documents">
         <div class="container">
             <div class="row">
                 <div class="col-md-10 offset-md-1">
@@ -473,18 +479,18 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                @foreach ($displayDocuments as $document)
-                    <div class="col-lg-4 col-md-6 mb-4">
-                        <div class="card landing-card h-100">
-                            <div class="card-body p-25">
-                                <i class="fa fa-check-circle primary-color mb-3"></i>
-                                <h4>{{ $document->name }}</h4>
-                                <p>{{ $document->description }}</p>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
+            <div class="documents-layout">
+                <div class="documents-photo" role="img" aria-label="{{ $tx('Preparing registration documents', '準備報名文件') }}">
+                    <div class="documents-photo-copy"><strong>{{ $tx('Prepare once, submit with confidence', '一次備妥，安心提交') }}</strong><span>{{ $tx('Use clear and accurate files so the admin review can move faster.', '提供清楚且正確的文件，協助管理團隊加快審核。') }}</span></div>
+                </div>
+                <div class="document-grid">
+                    @foreach ($displayDocuments as $document)
+                        <article class="document-item">
+                            <i class="fa fa-check-circle"></i>
+                            <div><h4>{{ $document->name }}</h4><p>{{ $document->description }}</p></div>
+                        </article>
+                    @endforeach
+                </div>
             </div>
         </div>
     </section>
@@ -510,32 +516,28 @@
         </div>
     </section>
 
-    <section id="contact" class="contact-info ptb--120">
+    <section id="contact" class="contact-section">
         <div class="container">
             <div class="row">
                 <div class="col-lg-6 mb-4">
-                    <div class="card landing-card h-100">
-                        <div class="card-body p-25">
-                            <span class="primary-color text-uppercase d-block mb-3">{{ $tx('Contact Information', '聯絡資訊') }}</span>
-                            <h3>{{ $contact?->organization ?: 'Trinity Scholar' }}</h3>
-                            <p><i class="fa fa-envelope primary-color"></i> {{ $contact?->email ?: 'info@trinityscholar.com' }}</p>
-                            <p><i class="fa fa-phone primary-color"></i> {{ $contact?->phone ?: '886-2-2771-6002' }}</p>
-                            <p><i class="fa fa-clock-o primary-color"></i> {{ $contact?->office_hours ?: 'Mon-Fri 9:00-18:00' }}</p>
-                        </div>
+                    <div class="contact-panel">
+                        <span class="primary-color text-uppercase d-block mb-3">{{ $tx('Contact Information', '聯絡資訊') }}</span>
+                        <h3>{{ $contact?->organization ?: 'Trinity Scholar' }}</h3>
+                        <p><i class="fa fa-envelope primary-color"></i> {{ $contact?->email ?: 'info@trinityscholar.com' }}</p>
+                        <p><i class="fa fa-phone primary-color"></i> {{ $contact?->phone ?: '886-2-2771-6002' }}</p>
+                        <p><i class="fa fa-clock-o primary-color"></i> {{ $contact?->office_hours ?: 'Mon-Fri 9:00-18:00' }}</p>
                     </div>
                 </div>
                 <div class="col-lg-6 mb-4">
-                    <div class="card landing-card h-100">
-                        <div class="card-body p-25">
-                            <span class="primary-color text-uppercase d-block mb-3">{{ $privacy?->eyebrow ?: $tx('Privacy', '隱私保護') }}</span>
-                            <h3>{{ $privacy?->title ?: $tx('Private documents stay protected', '文件資料皆受保護') }}</h3>
-                            <p>{{ $privacy?->body ?: $tx('Passport and payment documents are stored privately and only available to authorized administrators.', '護照與付款文件會以私密方式保存，僅授權管理員可查看。') }}</p>
-                            <ul>
-                                @foreach (($privacy?->items ?? [$tx('Private passport upload', '護照私密上傳'), $tx('Admin-only document review', '僅管理員可審核文件'), $tx('Audit logging', '操作紀錄留存')]) as $item)
-                                    <li>{{ $item }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
+                    <div class="contact-panel">
+                        <span class="primary-color text-uppercase d-block mb-3">{{ $privacy?->eyebrow ?: $tx('Privacy', '隱私保護') }}</span>
+                        <h3>{{ $privacy?->title ?: $tx('Private documents stay protected', '文件資料皆受保護') }}</h3>
+                        <p>{{ $privacy?->body ?: $tx('Passport and payment documents are stored privately and only available to authorized administrators.', '護照與付款文件會以私密方式保存，僅授權管理員可查看。') }}</p>
+                        <ul>
+                            @foreach (($privacy?->items ?? [$tx('Private passport upload', '護照私密上傳'), $tx('Admin-only document review', '僅管理員可審核文件'), $tx('Audit logging', '操作紀錄留存')]) as $item)
+                                <li><i class="fa fa-lock primary-color"></i> {{ $item }}</li>
+                            @endforeach
+                        </ul>
                     </div>
                 </div>
             </div>

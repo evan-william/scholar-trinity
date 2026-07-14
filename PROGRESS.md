@@ -62,6 +62,24 @@ Current local template pass:
 ## Current Progress
 
 2026-07-14
+- Template-led public UI overhaul:
+  - Re-read the local Edification Home 1, Home 2, and Home 3 templates and reused their image-led about, course, event, and editorial composition patterns instead of introducing a separate generic design language.
+  - Added one shared `public/theme/trinity/css/public-ui.css` layer for public typography, header, logo, navigation, buttons, footer, responsive behavior, selection color, and reduced-motion handling.
+  - Removed the large white logo container; the supplied Trinity Scholar mark now renders as a clean white mark directly on the dark template header and footer.
+  - Rebuilt the landing body with a compact icon facts row, split overview image, three template image cards, photo-backed late-registration notice, event-style timeline, image-led registration flow, image-led fee explanation, and visual document checklist.
+  - Fixed the unreadable late-registration heading by explicitly maintaining white heading contrast over the template background image.
+- Registration form UI overhaul:
+  - Kept all existing fields, routes, validation, draft upload, calculations, review behavior, and submission JavaScript unchanged.
+  - Reworked the form presentation with a restrained system/serif institutional font stack, neutral dividers, flatter section panels, quieter inputs, simplified progress steps, and an image-led late-registration summary.
+  - Removed the visible blue gradient edge, large glow effects, glass cards, and repeated blue-outline treatment that made the form feel disconnected from the Edification landing page.
+  - Replaced the text-only passport upload marker with the template Font Awesome upload icon.
+- Visual-content and pricing safeguards:
+  - Continued to show fee categories and explanations while keeping every public amount as localized `Coming Soon` / `即將公布`.
+  - Preserved the native expandable FAQ accordion and all required registration/document content.
+- Verification:
+  - `git diff --check`, merge-marker scan, section-balance scan, form JavaScript ID scan, asset-existence scan, and public fee-amount scan passed.
+  - Direct Vite production build passed with `node node_modules\vite\bin\vite.js build`.
+  - Browser QA was intentionally not run because the user explicitly requested no browser use.
 - Backup UI restoration:
   - Restored the shared public shell, landing page, and student registration form from `Backup/scholar-trinity-20260714-131756` after reverting the latest premium visual redesign.
   - Removed the additional `public/theme/trinity/css/premium.css` override so spacing, typography, animation, and component styling return to the backed-up Edification/Trinity implementation.

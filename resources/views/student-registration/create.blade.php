@@ -93,6 +93,7 @@
     <link rel="stylesheet" href="{{ asset('theme/edification/css/default-css.css') }}">
     <link rel="stylesheet" href="{{ asset('theme/edification/css/styles.css') }}">
     <link rel="stylesheet" href="{{ asset('theme/edification/css/responsive.css') }}">
+    <link rel="stylesheet" href="{{ asset('theme/trinity/css/public-ui.css') }}">
     <script src="{{ asset('theme/edification/js/vendor/modernizr-2.8.3.min.js') }}"></script>
     <style>
         :root{--trinity-blue:#244e9a;--trinity-blue-dark:#142f63;--trinity-blue-soft:#eaf2ff;--trinity-blue-bright:#9db9ff;--primary:#244e9a;--primary-light:#142f63;--accent:#244e9a;--success:#237a4f;--danger:#b42318;--gray-50:#f8f9fa;--gray-100:#f1f3f5;--gray-200:#e9ecef;--gray-400:#ced4da;--gray-600:#6c757d;--gray-800:#343a40;--white:#fff;--radius:8px;--shadow:0 2px 16px rgba(0,0,0,.09)}
@@ -319,6 +320,82 @@
         @media(prefers-reduced-motion:reduce){
             body.trinity-form *,body.trinity-form .step-enter{transition:none!important;animation:none!important;transform:none!important;filter:none!important}
         }
+
+        /* Final form surface: restrained Edification styling without layered blue cards. */
+        body.trinity-form{color:#525e6d;background:#f3f5f7;font-family:var(--trinity-body);font-size:15px;line-height:1.6}
+        body.trinity-form h1,body.trinity-form h2,body.trinity-form h3,body.trinity-form h4,body.trinity-form h5,body.trinity-form h6{font-family:var(--trinity-display);letter-spacing:0}
+        body.trinity-form #header .logo a{padding:0;background:transparent;border-radius:0;box-shadow:none}
+        body.trinity-form #header .logo a:hover{transform:none;box-shadow:none}
+        body.trinity-form #header .logo img{width:154px;height:auto;max-height:88px;filter:brightness(0) invert(1)}
+        body.trinity-form .form-top-band{min-height:116px;background:linear-gradient(rgba(7,13,24,.66),rgba(7,13,24,.66)),url('{{ asset('theme/edification/images/bg/slider-bg2.jpg') }}') center 42%/cover no-repeat}
+        body.trinity-form .progress-wrap{position:relative;padding:0 18px;background:#fff;border-top:0;border-bottom:1px solid #dfe3e8;box-shadow:none;backdrop-filter:none}
+        body.trinity-form .progress-wrap:before{display:none}
+        body.trinity-form .progress-steps{max-width:1040px}
+        body.trinity-form .step-item{padding:17px 8px 15px}
+        body.trinity-form .step-item:not(:last-child)::after{top:34px;height:1px;background:#d9dee5}
+        body.trinity-form .step-item.completed:not(:last-child)::after{background:var(--trinity-blue)}
+        body.trinity-form .step-circle{width:34px;height:34px;color:#667386;background:#fff;border:1px solid #bfc7d2;box-shadow:none;font-family:var(--trinity-body);font-size:12px;font-weight:600;transition:background-color 160ms ease,color 160ms ease,border-color 160ms ease}
+        body.trinity-form .step-item.active .step-circle,body.trinity-form .step-item.completed .step-circle{color:#fff;background:var(--trinity-blue);border-color:var(--trinity-blue);box-shadow:none;transform:none}
+        body.trinity-form .step-label{margin-top:7px;color:#6b7685;font-family:var(--trinity-body);font-size:11px;line-height:16px}
+        body.trinity-form .step-item.active .step-label{color:#183a73;font-weight:600}
+        body.trinity-form .main{max-width:1080px;padding:34px 18px 104px}
+        body.trinity-form .form-intro{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(270px,.7fr);gap:0;margin:0 0 24px;padding:0;overflow:hidden;background:#fff;border:1px solid #dfe3e8;border-top:1px solid #dfe3e8;border-radius:4px;box-shadow:0 8px 22px rgba(24,34,49,.06)}
+        body.trinity-form .form-intro:before,body.trinity-form .form-intro:after{display:none}
+        body.trinity-form .form-intro>div{padding:34px 36px}
+        body.trinity-form .form-intro h2{margin:11px 0 12px;color:#1c2b3f;font-family:var(--trinity-display);font-size:32px;line-height:40px;font-weight:700}
+        body.trinity-form .form-intro p{margin:0 0 13px;color:#657181;font-size:15px;line-height:25px}
+        body.trinity-form .intro-list{margin:0;padding-left:18px;color:#39485c;font-size:13px;line-height:21px}
+        body.trinity-form .header-badge{display:inline-flex;padding:5px 10px;color:#244e9a;background:#edf3fc;border:0;border-radius:50px;box-shadow:none;font-family:var(--trinity-body);font-size:11px;font-weight:600}
+        body.trinity-form .intro-summary{display:flex;min-height:260px;flex-direction:column;justify-content:flex-end;padding:28px;color:#fff;background:linear-gradient(rgba(7,13,24,.2),rgba(7,13,24,.78)),url('{{ asset('theme/edification/images/course/cs-img2.jpg') }}') center/cover no-repeat;border:0;border-radius:0;box-shadow:none}
+        body.trinity-form .intro-summary span{color:rgba(255,255,255,.76);font-family:var(--trinity-body);font-size:11px;font-weight:600;letter-spacing:0;text-transform:uppercase}
+        body.trinity-form .intro-summary strong{margin:6px 0;color:#fff;font-family:var(--trinity-display);font-size:31px;line-height:36px}
+        body.trinity-form .intro-summary p{margin:0;color:rgba(255,255,255,.82);font-size:13px;line-height:21px}
+        body.trinity-form .card{padding:30px 32px;margin-bottom:18px;background:#fff;border:1px solid #dfe3e8;border-radius:4px;box-shadow:0 7px 18px rgba(24,34,49,.05);backdrop-filter:none}
+        body.trinity-form .section-title{margin-bottom:25px;padding:0 0 15px;color:#1d2939;border-bottom:1px solid #dfe3e8;font-family:var(--trinity-display);font-size:23px;line-height:30px;font-weight:700}
+        body.trinity-form .section-title::after{display:none}
+        body.trinity-form .section-title span{display:block;margin-top:3px;color:#738093;font-family:var(--trinity-body);font-size:12px;font-weight:400;line-height:18px}
+        body.trinity-form .row{gap:17px;margin-bottom:17px}
+        body.trinity-form .fg{gap:6px}
+        body.trinity-form .lbl{color:#344155;font-family:var(--trinity-body);font-size:12px;font-weight:600;letter-spacing:0;text-transform:none}
+        body.trinity-form .lbl .zh{margin-top:1px;color:#7c8796;font-size:11px;font-weight:400}
+        body.trinity-form input:not([type]),body.trinity-form input[type=text],body.trinity-form input[type=email],body.trinity-form input[type=tel],body.trinity-form input[type=search],body.trinity-form input[type=date],body.trinity-form input[type=file],body.trinity-form select,body.trinity-form textarea{min-height:45px;padding:10px 12px;color:#263244;background:#fff;border:1px solid #c8cfd8;border-radius:3px;box-shadow:none;font-family:var(--trinity-body);font-size:14px;font-weight:400;transition:border-color 150ms ease,box-shadow 150ms ease,background-color 150ms ease}
+        body.trinity-form input:not([type]):hover,body.trinity-form input[type=text]:hover,body.trinity-form input[type=email]:hover,body.trinity-form input[type=tel]:hover,body.trinity-form input[type=search]:hover,body.trinity-form input[type=date]:hover,body.trinity-form select:hover,body.trinity-form textarea:hover{background:#fff;border-color:#9ba8b7}
+        body.trinity-form input:focus,body.trinity-form select:focus,body.trinity-form textarea:focus{background:#fff;border-color:#5478b7;box-shadow:0 0 0 3px rgba(36,78,154,.1);outline:0}
+        body.trinity-form input[aria-invalid=true],body.trinity-form select[aria-invalid=true],body.trinity-form textarea[aria-invalid=true]{background:#fffafa;border-color:var(--danger);box-shadow:0 0 0 3px rgba(180,35,24,.07)}
+        body.trinity-form .hint{color:#7a8492;font-size:11px}
+        body.trinity-form .upload-area{padding:25px 18px;background:#fafbfc;border:1px dashed #aeb8c5;border-radius:3px}
+        body.trinity-form .upload-area:hover{background:#f7f9fc;border-color:#5478b7}
+        body.trinity-form .upload-icon{color:var(--trinity-blue);font-size:25px}
+        body.trinity-form .notice{padding:15px 18px;margin-bottom:18px;background:#f7f8fa;border:0;border-left:3px solid var(--trinity-blue);border-radius:0}
+        body.trinity-form .notice h4{margin-bottom:6px;color:#26364d;font-family:var(--trinity-display);font-size:15px;font-weight:700}
+        body.trinity-form .notice p,body.trinity-form .notice li{color:#566274;font-size:12px;line-height:20px}
+        body.trinity-form .exam-sticky{top:0;padding:11px 0;margin-bottom:17px;background:#fff;border:0;border-bottom:1px solid #dfe3e8;border-radius:0;box-shadow:none}
+        body.trinity-form .sel-badge{padding:5px 11px;color:#fff;background:var(--trinity-blue);border-radius:50px;font-size:11px;font-weight:600}
+        body.trinity-form .price-preview{color:#1d3f79;font-family:var(--trinity-display);font-size:15px;font-weight:700}
+        body.trinity-form .cat-title{margin:20px 0 9px;padding-bottom:7px;color:#233f6e;border-bottom:1px solid #dfe3e8;font-family:var(--trinity-body);font-size:12px;font-weight:650}
+        body.trinity-form .exam-cb,body.trinity-form .pay-opt{padding:13px;background:#fff;border:1px solid #d9dee5;border-radius:3px;box-shadow:none;transition:border-color 150ms ease,background-color 150ms ease,transform 140ms var(--trinity-ease)}
+        body.trinity-form .exam-cb.checked,body.trinity-form .pay-opt.selected{background:#f5f8fd;border-color:#6584ba;box-shadow:none}
+        body.trinity-form .exam-name{color:#263244;font-size:13px;font-weight:650}
+        body.trinity-form .exam-sub{color:#778292;font-size:11px}
+        body.trinity-form .exam-price-tag{color:#244e9a;font-size:11px;font-weight:650}
+        body.trinity-form .price-box,body.trinity-form .sig-box,body.trinity-form .next-steps,body.trinity-form .rev-section{background:#f8f9fb;border:1px solid #dfe3e8;border-radius:3px;box-shadow:none}
+        body.trinity-form .price-row.total{color:#183a73;border-top:1px solid #aebdce;font-family:var(--trinity-display);font-size:16px;font-weight:700}
+        body.trinity-form .pay-opt h4,body.trinity-form .next-steps h4,body.trinity-form .rev-section h3{color:#26364d;font-family:var(--trinity-display);font-weight:700}
+        body.trinity-form .rev-table{background:#fff;border:1px solid #dfe3e8;border-radius:0}
+        body.trinity-form .rev-table tr:nth-child(odd),body.trinity-form .rev-table tr:nth-child(even){background:#fff}
+        body.trinity-form .rev-table td{padding:10px 12px;border-bottom:1px solid #e5e8ed;font-size:12px}
+        body.trinity-form .rev-table td:first-child{color:#596677;background:#f6f7f9;font-weight:600}
+        body.trinity-form .rev-table td:last-child{color:#263244;font-weight:500}
+        body.trinity-form .ghost-btn{color:#3d4b5f;background:#fff;border:1px dashed #aeb8c5;border-radius:3px}
+        body.trinity-form .nav-footer{padding:11px 18px;background:#fff;border-top:1px solid #dfe3e8;box-shadow:0 -6px 18px rgba(24,34,49,.07);backdrop-filter:none}
+        body.trinity-form .nav-footer .btn{min-width:130px;border-radius:50px;font-family:var(--trinity-body);font-weight:650;box-shadow:none}
+        body.trinity-form .nav-footer .btn-primary{min-width:160px;box-shadow:0 8px 18px rgba(36,78,154,.18)}
+        body.trinity-form .step-ind{color:#6d7888;font-size:11px}
+        body.trinity-form .step-enter{animation:form-step-in 220ms var(--trinity-ease) both}
+        @media(hover:hover) and (pointer:fine){body.trinity-form .exam-cb:not(.disabled):hover,body.trinity-form .pay-opt:hover{border-color:#9aa9bb;box-shadow:none;transform:translateY(-1px)}}
+        @media(max-width:991px){body.trinity-form .form-intro{grid-template-columns:1fr}body.trinity-form .intro-summary{min-height:230px}body.trinity-form .form-top-band{min-height:100px}}
+        @media(max-width:767px){body.trinity-form .main{padding:24px 12px 100px}body.trinity-form .form-intro>div{padding:25px 22px}body.trinity-form .form-intro h2{font-size:27px;line-height:34px}body.trinity-form .card{padding:24px 18px}body.trinity-form .section-title{font-size:20px}body.trinity-form .form-top-band{min-height:86px}}
+        @media(max-width:575px){body.trinity-form #header .logo img{width:118px;max-height:68px}body.trinity-form .progress-wrap{padding:0 8px}body.trinity-form .step-item{min-width:94px}body.trinity-form .nav-footer .btn{min-width:0}}
     </style>
 </head>
 <body class="trinity-form">
@@ -460,7 +537,7 @@
                         <label class="lbl">Passport Upload <span class="req">*</span><span class="zh">護照上傳（照片頁需清楚）</span></label>
                         <div class="upload-area">
                             <input type="file" name="passport_file" id="passportFile" accept=".pdf,.jpg,.jpeg,.png">
-                            <div class="upload-icon">Upload</div>
+                            <div class="upload-icon"><i class="fa fa-cloud-upload" aria-hidden="true"></i></div>
                             <div class="upload-text"><strong>{{ $tx('Click to upload', '點選上傳') }}</strong> {{ $tx('or drag & drop', '或拖曳檔案') }}</div>
                             <div class="upload-sub">{{ $tx('PDF, JPG, PNG / Max 10MB / clear passport photo page required', 'PDF、JPG、PNG / 最大 10MB / 請上傳清楚的護照照片頁') }}</div>
                             <div class="upload-selected {{ $passportDraft ? '' : 'hidden' }}" id="fileLabel">
