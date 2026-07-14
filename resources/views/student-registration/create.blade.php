@@ -4,8 +4,8 @@
     $uiLocale = session('locale', str_replace('_', '-', app()->getLocale()));
     $isZh = $uiLocale === 'zh-TW';
     $navLabels = $isZh
-        ? ['home' => '首頁', 'program' => '課程資訊', 'timeline' => '時程', 'fees' => '費用', 'faq' => '常見問題', 'contact' => '聯絡我們', 'start' => '開始報名', 'support' => '台北 AP 報名支援']
-        : ['home' => 'Home', 'program' => 'Program', 'timeline' => 'Timeline', 'fees' => 'Fees', 'faq' => 'FAQ', 'contact' => 'Contact', 'start' => 'Start Form', 'support' => 'Taipei AP Registration Support'];
+        ? ['home' => '首頁', 'program' => '課程資訊', 'timeline' => '時程', 'fees' => '費用公告', 'faq' => '常見問題', 'contact' => '聯絡我們', 'start' => '開始報名', 'support' => '台北 AP 報名支援']
+        : ['home' => 'Home', 'program' => 'Program', 'timeline' => 'Timeline', 'fees' => 'Fee Notice', 'faq' => 'FAQ', 'contact' => 'Contact', 'start' => 'Start Form', 'support' => 'Taipei AP Registration Support'];
     $stepLabels = $isZh
         ? ['學生資料', '家長 / 監護人', '考試選擇', '特殊考試需求', '確認與付款', '完成報名']
         : ['Student Information', 'Parent / Guardian', 'Exam Selection', 'Accommodations', 'Review & Payment', 'Confirmation'];
@@ -17,7 +17,7 @@
             'items' => ['逾期報名截止日期：2026 年 2 月 10 日。', '報名需在表單與付款皆收到後才算完成。', 'AP Chinese、AP Calculus、AP Macro/Micro 已在台北考場公告中標示額滿。', '最終科目名額將由管理團隊審核後確認。'],
             'summary_label' => '逾期報名',
             'summary_title' => '2 月 10 日',
-            'summary_body' => '逾期報名可能會有額外費用。座位有限，額滿時可能提前關閉報名。',
+            'summary_body' => '費用資訊仍在確認中，將另行公告。座位有限，額滿時可能提前關閉報名。',
         ]
         : [
             'badge' => 'No login required',
@@ -26,7 +26,7 @@
             'items' => ['Late registration deadline: February 10, 2026.', 'Registration is complete only after the form and payment are received.', 'AP Chinese, AP Calculus, and AP Macro/Micro are marked full in the shared Taipei test-center notice.', 'Final subject availability is confirmed by the admin team after submission.'],
             'summary_label' => 'Late Registration',
             'summary_title' => 'Feb. 10',
-            'summary_body' => 'Extra late registration fees may apply. Submit early because registration can close before the deadline when seats are full.',
+            'summary_body' => 'Fee details are being finalized and will be announced separately. Submit early because seats may fill before the deadline.',
         ];
     $footerLabels = $isZh
         ? [
@@ -37,7 +37,7 @@
             'registration' => '報名資訊',
             'program' => '課程資訊',
             'timeline' => '報名時程',
-            'fees' => '費用說明',
+            'fees' => '費用公告',
             'register' => '立即報名',
             'notice' => '重要提醒',
             'notice_body' => '報名需在表單與付款皆收到後才算完成。名額有限，可能在公告截止日前額滿關閉。',
@@ -60,7 +60,7 @@
             'registration' => 'Registration',
             'program' => 'Program Information',
             'timeline' => 'Timeline',
-            'fees' => 'Fees',
+            'fees' => 'Fee Notice',
             'register' => 'Register Now',
             'notice' => 'Important Notice',
             'notice_body' => 'Registration is complete only after the filled-out form and payment are received. Available seats may close before the listed deadline.',
@@ -100,14 +100,14 @@
         *{box-sizing:border-box}body{margin:0;background:var(--gray-50);color:var(--gray-800);font-family:"Muli","Microsoft JhengHei","PingFang TC",Arial,sans-serif;min-height:100vh}
         .header{background:var(--primary);color:#fff;padding:14px 24px}.head-inner{max-width:920px;margin:0 auto;display:flex;align-items:center;gap:16px;flex-wrap:wrap}.header-logos{display:flex;align-items:center;gap:12px}.logo-pill{background:#fff;color:var(--primary);font-size:10px;font-weight:800;padding:6px 10px;border-radius:6px;line-height:1.3;text-align:center;letter-spacing:.3px}.logo-divider{width:1px;height:36px;background:rgba(255,255,255,.25)}.header-title{flex:1;min-width:220px}.header-title h1{font-size:16px;font-weight:700;line-height:1.35;margin:0}.header-title p{font-size:11px;opacity:.76;margin:2px 0 0}.header-badge{background:var(--trinity-blue);color:#fff;padding:5px 14px;border-radius:20px;font-size:12px;font-weight:800;white-space:nowrap}.header-actions{display:flex;gap:10px;align-items:center}
         .progress-wrap{background:#fff;border-bottom:1px solid var(--gray-200);padding:0 16px;overflow-x:auto}.progress-steps{display:flex;min-width:max-content;max-width:840px;margin:0 auto}.step-item{flex:1;display:flex;flex-direction:column;align-items:center;padding:14px 6px;position:relative;min-width:118px}.step-item:not(:last-child)::after{content:"";position:absolute;top:28px;left:calc(50% + 17px);right:calc(-50% + 17px);height:2px;background:var(--gray-200)}.step-item.completed:not(:last-child)::after{background:var(--primary)}.step-circle{width:30px;height:30px;border-radius:50%;border:2px solid var(--gray-400);background:#fff;color:var(--gray-600);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;z-index:1}.step-item.active .step-circle,.step-item.completed .step-circle{border-color:var(--primary);background:var(--primary);color:#fff}.step-label{margin-top:5px;font-size:10px;text-align:center;color:var(--gray-600);line-height:1.3}.step-item.active .step-label{color:var(--primary);font-weight:700}
-        .main{max-width:760px;margin:0 auto;padding:24px 16px 108px}.card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:26px 24px;margin-bottom:16px}.section-title{font-size:17px;font-weight:800;color:var(--primary);border-bottom:2px solid var(--accent);padding-bottom:9px;margin-bottom:20px}.section-title span{display:block;font-size:12px;font-weight:400;color:var(--gray-600);margin-top:2px}.row{display:grid;gap:14px;margin-bottom:14px}.row-2{grid-template-columns:1fr 1fr}.row-3{grid-template-columns:1fr 1fr .55fr}.row-1{grid-template-columns:1fr}.fg{display:flex;flex-direction:column;gap:5px}.fg.span2{grid-column:1/-1}.lbl{font-size:13px;font-weight:700;color:var(--gray-800)}.lbl .zh{display:block;font-size:11px;font-weight:400;color:var(--gray-600)}.req{color:var(--danger);margin-left:2px}
+        .main{max-width:760px;margin:0 auto;padding:24px 16px 108px}.card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:26px 24px;margin-bottom:16px}.section-title{font-size:17px;font-weight:800;color:var(--primary);border-bottom:2px solid var(--accent);padding-bottom:9px;margin-bottom:20px}.section-title span{display:block;font-size:12px;font-weight:400;color:var(--gray-600);margin-top:2px}.main .row{display:grid;gap:14px;margin-bottom:14px}.main .row-2{grid-template-columns:1fr 1fr}.main .row-3{grid-template-columns:1fr 1fr .55fr}.main .row-1{grid-template-columns:1fr}.fg{display:flex;flex-direction:column;gap:5px}.fg.span2{grid-column:1/-1}.lbl{font-size:13px;font-weight:700;color:var(--gray-800)}.lbl .zh{display:block;font-size:11px;font-weight:400;color:var(--gray-600)}.req{color:var(--danger);margin-left:2px}
         input:not([type]),input[type=text],input[type=email],input[type=tel],input[type=search],input[type=file],select,textarea{border:1.5px solid var(--gray-400);border-radius:6px;padding:9px 12px;font:inherit;font-size:14px;color:var(--gray-800);background:#fff;width:100%}input:focus,select:focus,textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(26,58,107,.1)}input[aria-invalid=true],select[aria-invalid=true],textarea[aria-invalid=true]{border-color:var(--danger);background:#fffafa}.hint{font-size:11px;color:var(--gray-600);margin-top:3px}.error{color:var(--danger);font-size:12px}.error-box{background:#fff0ee;border:1px solid #ffc9c4;color:var(--danger);padding:12px 14px;border-radius:8px;margin-bottom:14px}.hidden{display:none!important}
         .upload-area{border:2px dashed var(--gray-400);border-radius:var(--radius);padding:22px 16px;text-align:center;cursor:pointer;background:var(--gray-50);position:relative}.upload-area:hover{border-color:var(--primary);background:rgba(26,58,107,.03)}.upload-area input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;height:100%}.upload-icon{font-size:30px;margin-bottom:6px}.upload-text{font-size:13px;color:var(--gray-600)}.upload-text strong{color:var(--primary)}.upload-sub{font-size:11px;color:var(--gray-600);margin-top:3px}.upload-selected{margin-top:8px;font-size:13px;color:var(--success);font-weight:700}
         .notice{background:#f4f7ff;border:1px solid #c9d8f3;border-left:4px solid var(--accent);border-radius:var(--radius);padding:14px 16px;margin-bottom:18px}.notice h4{font-size:13px;font-weight:800;color:var(--trinity-blue-dark);margin:0 0 7px}.notice p,.notice li{font-size:12px;color:#334155;line-height:1.65}.notice ul{padding-left:16px;margin:0}
         .exam-sticky{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid var(--gray-200);padding:10px 0;margin:0 0 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}.sel-badge{display:inline-flex;align-items:center;gap:6px;background:var(--primary);color:#fff;padding:4px 13px;border-radius:20px;font-size:12px;font-weight:800}.price-preview{font-size:14px;font-weight:900;color:var(--primary)}.filters{display:grid;grid-template-columns:1fr 220px;gap:10px;margin-bottom:14px}.cat-title{font-size:13px;font-weight:900;color:var(--primary);margin:18px 0 8px;padding-bottom:5px;border-bottom:1px solid var(--gray-200)}.exam-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.exam-cb{display:flex;align-items:flex-start;gap:10px;border:1.5px solid var(--gray-200);border-radius:8px;padding:10px 11px;cursor:pointer;background:#fff;min-height:58px}.exam-cb.checked{border-color:var(--primary);background:rgba(26,58,107,.05)}.exam-cb.disabled{opacity:.58;cursor:not-allowed;background:#f8fafc}.exam-cb input{width:16px;height:16px;min-height:auto;margin-top:2px;accent-color:var(--primary)}.exam-name{font-size:13px;font-weight:800;color:var(--gray-800);line-height:1.35}.exam-sub{font-size:11px;color:var(--gray-600);line-height:1.4}.exam-price-tag{margin-left:auto;font-size:12px;font-weight:900;color:var(--primary);white-space:nowrap}.price-box{background:var(--gray-50);border:1px solid var(--gray-200);border-radius:8px;padding:14px;margin-top:16px}.price-row{display:flex;justify-content:space-between;gap:12px;padding:5px 0;font-size:13px}.price-row.total{border-top:2px solid var(--primary);margin-top:8px;padding-top:10px;color:var(--primary);font-weight:900;font-size:16px}
         .check-line{display:flex;align-items:flex-start;gap:10px;font-size:13px;font-weight:700;line-height:1.5}.check-line input{width:18px;height:18px;min-height:auto;margin-top:1px;accent-color:var(--primary)}.ghost-btn{background:#fff;border:1.5px dashed var(--gray-400);padding:8px 14px;border-radius:6px;cursor:pointer;font-size:12px;color:var(--gray-600);font-family:inherit}.rev-section h3{font-size:14px;color:var(--primary);margin:0 0 8px}.rev-table{width:100%;border-collapse:collapse}.rev-table td{padding:7px 0;border-bottom:1px solid #edf0f5;font-size:13px;vertical-align:top}.rev-table td:first-child{width:38%;color:var(--gray-600);padding-right:12px}.div{border:0;border-top:1px solid var(--gray-200);margin:16px 0}.pay-options{display:grid;gap:10px}.pay-opt{border:1.5px solid var(--gray-200);border-radius:8px;padding:12px;display:flex;gap:10px;cursor:pointer}.pay-opt.selected{border-color:var(--primary);background:rgba(26,58,107,.05)}.pay-opt input{width:18px;height:18px;margin-top:3px;accent-color:var(--primary)}.pay-opt h4{margin:0 0 4px;color:var(--primary);font-size:14px}.pay-opt p{margin:0;color:var(--gray-600);font-size:12px;line-height:1.55}.badge-soon{display:inline-flex;background:#eef3f9;color:var(--primary);border-radius:999px;padding:2px 7px;font-size:10px}.sig-area{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}.sig-box{border:1px solid var(--gray-200);border-radius:8px;padding:14px;background:var(--gray-50)}.sig-box p{font-size:12px;margin:0 0 8px}.sig-line{height:48px;border-bottom:1.5px solid var(--gray-400);margin-bottom:8px}.confirm-wrap{text-align:center;padding:10px 0}.confirm-icon{width:66px;height:66px;border-radius:50%;display:grid;place-items:center;background:#e8f6ef;color:var(--success);font-size:24px;font-weight:900;margin:0 auto 14px}.ref-box{display:inline-block;background:var(--gray-50);border:1px solid var(--gray-200);border-radius:8px;padding:13px 18px;margin:14px 0}.next-steps{text-align:left;background:var(--gray-50);border-radius:8px;padding:14px 18px;margin-top:16px}.next-steps h4{margin:0 0 8px;color:var(--primary)}.next-steps li{font-size:13px;margin-bottom:6px;line-height:1.5}
         .nav-footer{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--gray-200);box-shadow:0 -2px 14px rgba(0,0,0,.06);padding:12px 18px;display:flex;align-items:center;justify-content:center;gap:18px;z-index:50}.btn{border:0;border-radius:6px;padding:11px 20px;font:inherit;font-size:14px;font-weight:900;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-light)}.btn-outline{background:#fff;color:var(--primary);border:1.5px solid var(--gray-400)}.btn-success{background:var(--success);color:#fff}.step-ind{font-size:12px;color:var(--gray-600);min-width:92px;text-align:center}.loading{opacity:.65;pointer-events:none}.toast{position:fixed;left:50%;bottom:82px;transform:translateX(-50%);z-index:80;max-width:min(520px,calc(100vw - 28px));background:#fff;border:1px solid #ffc9c4;border-left:5px solid var(--danger);box-shadow:0 12px 34px rgba(0,0,0,.16);border-radius:8px;padding:12px 16px;color:var(--danger);font-size:13px;font-weight:800;line-height:1.45}.toast.success{border-color:#b9e2ce;border-left-color:var(--success);color:var(--success)}
-        @media(max-width:640px){.main{padding-inline:12px}.card{padding:20px 16px}.row-2,.row-3,.filters,.exam-grid,.sig-area{grid-template-columns:1fr}.header{padding-inline:16px}.header-actions{width:100%;justify-content:space-between}.nav-footer{justify-content:space-between;gap:10px}.btn{padding:10px 14px}.step-item{min-width:92px}}
+        @media(max-width:640px){.main{padding-inline:12px}.card{padding:20px 16px}.main .row-2,.main .row-3,.filters,.exam-grid,.sig-area{grid-template-columns:1fr}.header{padding-inline:16px}.header-actions{width:100%;justify-content:space-between}.nav-footer{justify-content:space-between;gap:10px}.btn{padding:10px 14px}.step-item{min-width:92px}}
         .main{max-width:900px}
         .form-intro{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:22px;align-items:center;border-top:4px solid var(--accent);overflow:hidden}
         .form-intro h2{font-size:24px;line-height:1.2;color:var(--primary);margin:10px 0 8px}
@@ -320,6 +320,7 @@
             body.trinity-form *,body.trinity-form .step-enter{transition:none!important;animation:none!important;transform:none!important;filter:none!important}
         }
     </style>
+    <link rel="stylesheet" href="{{ asset('theme/trinity/css/premium.css') }}">
 </head>
 <body class="trinity-form">
 <header id="header">
@@ -350,7 +351,7 @@
                 <div class="row align-items-center">
                     <div class="col-lg-3 col-sm-8">
                         <div class="logo">
-                            <a href="{{ route('landing') }}"><img src="{{ asset($brandLogo) }}" alt="Trinity Scholar"></a>
+                            <a href="{{ route('landing') }}" aria-label="Trinity Scholar homepage"><img src="{{ asset($brandLogo) }}" alt="Trinity Scholar"></a>
                         </div>
                     </div>
                     <div class="col-xl-6 col-lg-6 d-none d-lg-block">
@@ -497,8 +498,8 @@
 
         <section class="hidden" data-step="3">
             <div class="card">
-                <div class="section-title">AP Exam Selection <span>AP 考試選擇與費用</span></div>
-                <div class="exam-sticky"><span id="selBadge" class="sel-badge">0 selected / 已選 0 科</span><span id="pricePreview" class="price-preview">NT$ 0</span></div>
+                <div class="section-title">AP Exam Selection <span>AP 考試選擇</span></div>
+                <div class="exam-sticky"><span id="selBadge" class="sel-badge">0 selected / 已選 0 科</span><span id="pricePreview" class="fee-status-inline">{{ $tx('Fee details coming soon', '費用資訊即將公布') }}</span></div>
                 <div class="filters"><label class="lbl">Search exam <span class="zh">搜尋考科</span><input id="examSearch" type="search" placeholder="Calculus, Biology, CSA"></label><label class="lbl">AP exam categories <span class="zh">考科分類</span><select id="categoryFilter"><option value="">All Categories / 全部分類</option>@foreach($subjects->pluck('category')->filter()->unique()->sort() as $category)<option value="{{ $category }}">{{ $category }}</option>@endforeach</select></label></div>
                 @foreach($subjects->groupBy(fn($subject) => $subject->category ?: 'Other') as $category => $categorySubjects)
                     <div class="cat-title">{{ $category }} / {{ $category === 'Mathematics' ? '數學' : ($category === 'Science' || $category === 'Sciences' ? '科學' : '分類') }}</div>
@@ -512,27 +513,27 @@
                                 <div>
                                     <div class="exam-name">{{ $subject->name }}</div>
                                     <div class="exam-sub">{{ $subject->code }} / {{ optional($subject->exam_date)->format('M d, Y') ?? $tx('Date TBA', '日期待公告') }} / {{ __('student_registration.statuses.'.$statusKey) }}</div>
-                                    <div class="exam-sub">{{ $tx('Exam', '考試') }} NT$ {{ number_format($subject->exam_fee) }} / {{ $tx('Service', '服務') }} NT$ {{ number_format($subject->service_fee) }} / {{ $tx('Late', '逾期') }} NT$ {{ number_format($lateFee) }}</div>
+                                    <div class="exam-sub">{{ $tx('Fee details will be announced after final confirmation.', '費用資訊將在最終確認後公布。') }}</div>
                                 </div>
                             </label>
                         @endforeach
                     </div>
                 @endforeach
-                <div class="section-title" style="margin-top:24px">{{ $tx('Practice Exams (Optional)', '模擬考（選填）') }} <span>{{ $tx('NT$1,800 per exam', '每科 NT$1,800') }}</span></div>
-                <div class="notice"><h4>{{ $tx('Practice Exam Info', '模擬考說明') }}</h4><p>{{ $tx('NT$1,800 per practice exam. Dates subject to change.', '每科模擬考 NT$1,800，日期可能調整。') }}</p></div>
+                <div class="section-title" style="margin-top:24px">{{ $tx('Practice Exams (Optional)', '模擬考（選填）') }} <span>{{ $tx('Schedule and fee details coming soon', '時程與費用資訊即將公布') }}</span></div>
+                <div class="notice"><h4>{{ $tx('Practice Exam Info', '模擬考說明') }}</h4><p>{{ $tx('Practice-exam dates and verified fee information will be announced separately.', '模擬考日期與確認後的費用資訊將另行公告。') }}</p></div>
                 <div class="exam-grid">
                     @php($fallbackPracticeExams = collect(['Biology 生物','English Language and Composition 英文語言與寫作','Physics 1 物理 1','Computer Science A 電腦科學 A','Calculus AB/BC 微積分','Macroeconomics 總體經濟','Precalculus 預備微積分'])->map(fn ($name) => (object) ['uuid' => $name, 'name' => $name, 'fee' => config('registration.practice_exam_fee', 1800), 'currency' => 'NTD', 'practice_date' => null, 'location' => null]))
                     @foreach(($practiceExamOptions ?? collect())->isNotEmpty() ? $practiceExamOptions : $fallbackPracticeExams as $practice)
-                        <label class="exam-cb"><input type="checkbox" name="practice_exams[]" value="{{ $practice->uuid }}" data-type="practice" data-p="{{ $practice->fee }}" data-name="{{ $tx('Practice:', '模擬考：') }} {{ $practice->name }}" @checked(in_array($practice->uuid, old('practice_exams', [])))><div><div class="exam-name">{{ $practice->name }}</div><div class="exam-sub">{{ $tx('Practice Exam', '模擬考') }} @if($practice->practice_date) / {{ $practice->practice_date->format('M d, Y') }} @endif @if($practice->location) / {{ $practice->location }} @endif</div></div><div class="exam-price-tag">{{ $practice->currency }} {{ number_format($practice->fee) }}</div></label>
+                        <label class="exam-cb"><input type="checkbox" name="practice_exams[]" value="{{ $practice->uuid }}" data-type="practice" data-p="{{ $practice->fee }}" data-name="{{ $tx('Practice:', '模擬考：') }} {{ $practice->name }}" @checked(in_array($practice->uuid, old('practice_exams', [])))><div><div class="exam-name">{{ $practice->name }}</div><div class="exam-sub">{{ $tx('Practice Exam', '模擬考') }} @if($practice->practice_date) / {{ $practice->practice_date->format('M d, Y') }} @endif @if($practice->location) / {{ $practice->location }} @endif</div></div><div class="fee-pending-tag">{{ $tx('Pending', '待公布') }}</div></label>
                     @endforeach
                 </div>
                 <input type="hidden" name="practice_exam_total" id="practiceExamTotal" value="0">
-                <div class="price-box">
-                    <div class="price-row"><span>{{ $tx('Regular AP Exams', '正式考試') }} (<span id="regCt">0</span>)</span><span>NT$ <span id="regTot">0</span></span></div>
-                    <div class="price-row"><span>{{ $tx('Practice Exams', '模擬考') }} (<span id="praCt">0</span>)</span><span>NT$ <span id="praTot">0</span></span></div>
-                    <div class="price-row"><span>{{ $tx('Late Registration Fee', '逾期報名費') }}</span><span>NT$ <span id="lateTot">0</span></span></div>
-                    <div class="price-row total"><span>{{ $tx('Total Due', '應付總額') }}</span><span>NT$ <span id="grandTot">0</span></span></div>
-                    <p class="hint">{{ $tx('Final pricing confirmed by AP Coordinator.', '最終費用由 AP 協調員確認。') }}</p>
+                <div class="fee-disclosure" role="status">
+                    <i class="fa fa-lock" aria-hidden="true"></i>
+                    <div><h4>{{ $tx('Fee information is temporarily unavailable.', '目前暫不提供費用資訊。') }}</h4><p>{{ $tx('Your selections will be reviewed first. Verified pricing will be communicated separately when available.', '系統會先審核所選項目；確認後的費用資訊將於可提供時另行通知。') }}</p></div>
+                </div>
+                <div hidden aria-hidden="true">
+                    <span id="regCt">0</span><span id="praCt">0</span><span id="regTot">0</span><span id="praTot">0</span><span id="lateTot">0</span><span id="grandTot">0</span>
                 </div>
             </div>
         </section>
@@ -584,7 +585,7 @@
                 <hr class="div">
                 <div class="rev-section"><h3>{{ $tx('AP Preparation Interest', 'AP 備考課程意願') }}</h3><div id="rPrep" class="hint" style="margin-top:8px">-</div></div>
                 <hr class="div">
-                <div class="rev-section"><h3>Fee Summary / 費用摘要</h3><table class="rev-table"><tr><td>Regular Exams / 正式考試</td><td id="rReg">-</td></tr><tr><td>Practice Exams / 模擬考</td><td id="rPra">-</td></tr><tr><td>Late Fee / 逾期費</td><td id="rLate">-</td></tr><tr style="font-weight:800;color:var(--primary)"><td>Total / 總計</td><td id="rTot">-</td></tr></table></div>
+                <div class="rev-section"><h3>{{ $tx('Fee Notice', '費用公告') }}</h3><div class="fee-disclosure"><i class="fa fa-clock-o" aria-hidden="true"></i><div><h4>{{ $tx('Fee details are coming soon.', '費用資訊即將公布。') }}</h4><p>{{ $tx('No fee amount is shown while current pricing is being finalized.', '目前費用仍在確認中，暫不顯示任何金額。') }}</p></div></div><div hidden aria-hidden="true"><span id="rReg">-</span><span id="rPra">-</span><span id="rLate">-</span><span id="rTot">-</span></div></div>
             </div>
             <div class="card">
                 <div class="section-title">Payment Method <span>付款方式</span></div>
@@ -627,7 +628,7 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="widget widget-company">
-                        <a href="{{ route('landing') }}"><img src="{{ asset($brandLogo) }}" alt="Trinity Scholar"></a>
+                        <a href="{{ route('landing') }}" aria-label="Trinity Scholar homepage"><img src="{{ asset($brandLogo) }}" alt="Trinity Scholar"></a>
                         <div class="address"><h6>{{ $footerLabels['office'] }}</h6><p>{{ $footerLabels['office_body'] }}</p></div>
                         <div class="address"><h6>{{ $footerLabels['phone'] }}</h6><p>886-2-2771-6002</p></div>
                         <div class="address"><h6>{{ $footerLabels['email'] }}</h6><p>info@trinityscholar.com</p></div>
@@ -706,6 +707,7 @@
         schedule: isZhLocale ? '可上課時間' : 'Schedule',
         language: isZhLocale ? '偏好語言' : 'Language',
         examFeeLine: (count, amount) => isZhLocale ? `${count} 科 / NT$ ${amount}` : `${count} exams / NT$ ${amount}`,
+        feeComingSoon: isZhLocale ? '費用資訊即將公布' : 'Fee details coming soon',
         accomExamPlaceholder: isZhLocale ? '考科名稱' : 'Exam name',
         accomRequestPlaceholder: isZhLocale ? '申請項目' : 'Accommodation requested',
     };
@@ -958,7 +960,7 @@
         document.getElementById('lateTot').textContent = money(lateTot);
         document.getElementById('grandTot').textContent = money(grand);
         document.getElementById('selBadge').textContent = uiText.selectedCount(regCt + praCt);
-        document.getElementById('pricePreview').textContent = `NT$ ${money(grand)}`;
+        document.getElementById('pricePreview').textContent = uiText.feeComingSoon;
         document.getElementById('practiceExamTotal').value = praTot;
         return {regCt, praCt, regTot, praTot, lateTot, grand};
     }

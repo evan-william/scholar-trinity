@@ -12,26 +12,6 @@
     $process = $sections->get('process');
     $privacy = $sections->get('privacy');
     $assetBase = 'theme/edification/';
-    $displayFees = $fees->isNotEmpty() ? $fees : collect([
-        (object) [
-            'currency' => 'NTD',
-            'name' => $tx('AP Exam Fee', 'AP 考試費'),
-            'description' => $tx('Collected for official AP exam registration. Final subject pricing is confirmed by the admin team after review.', '用於正式 AP 考試報名，最終科目費用由管理團隊審核後確認。'),
-            'amount' => 7800,
-        ],
-        (object) [
-            'currency' => 'NTD',
-            'name' => $tx('Trinity Service Fee', 'Trinity 服務費'),
-            'description' => $tx('Service handling fee for registration coordination, document review, payment checking, and student follow-up.', '包含報名協調、文件審核、付款確認與學生後續聯繫的服務費。'),
-            'amount' => 1200,
-        ],
-        (object) [
-            'currency' => 'NTD',
-            'name' => $tx('Late Registration Fee', '逾期報名費'),
-            'description' => $tx('Applied during the late-registration period. Seats are limited and may close before the listed deadline.', '逾期報名期間適用。名額有限，可能在公告截止日前額滿關閉。'),
-            'amount' => 1500,
-        ],
-    ]);
     $displayDocuments = $documents->isNotEmpty() ? $documents : collect([
         (object) ['name' => $tx('Passport', '護照'), 'description' => $tx('Clear passport photo page or PDF upload is required for exam registration verification.', '需上傳清楚的護照照片頁或 PDF，以便進行考試報名資料核對。')],
         (object) ['name' => $tx('Student Information', '學生資料'), 'description' => $tx('Legal English name, school, grade, student email, phone, nationality, and date of birth.', '英文法定姓名、學校、年級、學生 Email、電話、國籍與出生日期。')],
@@ -66,7 +46,6 @@
             'answer' => $tx('Yes. Students can mark accommodation needs and provide SSD or supporting documentation during registration when applicable.', '可以。若適用，學生可在報名時標記特殊需求並提供 SSD 或相關證明文件。'),
         ],
     ]);
-    $feeTotal = $displayFees->sum('amount');
 @endphp
 
 <x-public-flow-shell :title="$metaTitle" :description="$metaDescription" body-class="landing-premium" content-class="none">
@@ -315,7 +294,7 @@
                             <p>{{ $tx('Trinity Scholar is accepting AP Late Registration requests for students who need Taipei test-center registration support.', 'Trinity Scholar 目前接受需要台北考場報名支援的學生提交 AP 逾期報名需求。') }}</p>
                             <ul class="notice-list">
                                 <li><i class="fa fa-check-circle"></i><span>{{ $tx('Late registration is available until', '逾期報名開放至') }} <strong>{{ $tx('February 10, 2026', '2026 年 2 月 10 日') }}</strong>{{ $tx('.', '。') }}</span></li>
-                                <li><i class="fa fa-check-circle"></i><span>{{ $tx('Extra late registration fees may apply.', '逾期報名可能會產生額外費用。') }}</span></li>
+                                <li><i class="fa fa-check-circle"></i><span>{{ $tx('Fee details are being finalized and will be announced separately.', '費用資訊仍在確認中，將另行公告。') }}</span></li>
                                 <li><i class="fa fa-check-circle"></i><span>{{ $tx('Registration is complete only after both the form and payment are received.', '表單與付款皆收到後才算完成報名。') }}</span></li>
                             </ul>
                         </div>
@@ -381,7 +360,7 @@
                         <div class="media align-items-center"><div class="media-head primary-bg"><span>{{ $tx('AUG', '八月') }}</span><p>{{ $tx('OCT', '十月') }}</p></div><div class="media-body"><h4>{{ $tx('Main Registration Period', '一般報名時段') }}</h4><p><i class="fa fa-clock-o"></i>{{ $tx('Standard AP registration window.', '標準 AP 報名期間。') }}</p></div></div>
                     </div>
                     <div class="col-md-6 mb-5">
-                        <div class="media align-items-center"><div class="media-head primary-bg"><span>{{ $tx('JAN', '一月') }}</span><p>{{ $tx('MAR', '三月') }}</p></div><div class="media-body"><h4>{{ $tx('Late Registration Period', '逾期報名時段') }}</h4><p><i class="fa fa-clock-o"></i>{{ $tx('Late registration may include additional fees and limited seats.', '逾期報名可能有額外費用且名額有限。') }}</p></div></div>
+                        <div class="media align-items-center"><div class="media-head primary-bg"><span>{{ $tx('JAN', '一月') }}</span><p>{{ $tx('MAR', '三月') }}</p></div><div class="media-body"><h4>{{ $tx('Late Registration Period', '逾期報名時段') }}</h4><p><i class="fa fa-clock-o"></i>{{ $tx('Late registration has limited seats. Fee details will be announced separately.', '逾期報名名額有限，費用資訊將另行公告。') }}</p></div></div>
                     </div>
                 @endforelse
             </div>
@@ -420,35 +399,21 @@
             <div class="row">
                 <div class="col-md-10 offset-md-1">
                     <div class="section-title-style2 black-title title-tb text-center">
-                        <span>{{ $tx('Fee Explanation', '費用說明') }}</span>
-                        <h2 class="primary-color">{{ $tx('Exam Fee and Service Fee', '考試費與服務費') }}</h2>
-                        <p>{{ $tx('Late registration may include extra fees. Final total is calculated from selected subjects and admin-managed fee settings.', '逾期報名可能包含額外費用；最終金額會依選擇科目與管理端設定計算。') }}</p>
+                        <span>{{ $tx('Fee Notice', '費用公告') }}</span>
+                        <h2 class="primary-color">{{ $tx('Fee Information Is Coming Soon', '費用資訊即將公布') }}</h2>
+                        <p>{{ $tx('Current pricing is still being finalized. No fee amounts are published on this page at this time.', '目前費用仍在確認中，本頁暫不公布任何金額。') }}</p>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                @foreach ($displayFees as $fee)
-                    <div class="col-lg-3 col-md-6 mb-5">
-                    <div class="card landing-card h-100">
-                        <div class="card-body p-25">
-                            <span class="primary-color text-uppercase d-block mb-3">{{ $fee->currency }}</span>
-                            <h4>{{ $fee->name }}</h4>
-                            <p>{{ $fee->description }}</p>
-                            <h3>{{ number_format($fee->amount) }}</h3>
-                        </div>
+            <div class="fee-availability" role="status" aria-live="polite">
+                <div class="fee-availability__copy">
+                    <span class="fee-availability__icon" aria-hidden="true"><i class="fa fa-lock"></i></span>
+                    <div>
+                        <h3>{{ $tx('Pricing is temporarily unavailable.', '目前暫不提供費用資訊。') }}</h3>
+                        <p>{{ $tx('The registration team is confirming the latest exam, service, late-registration, and practice-exam pricing. Verified fee information will appear here once it is ready.', '報名團隊正在確認最新的考試費、服務費、逾期報名費與模擬考費用；資訊確認後將公布於此。') }}</p>
                     </div>
                 </div>
-                @endforeach
-                <div class="col-lg-3 col-md-6 mb-5">
-                    <div class="card landing-card h-100">
-                        <div class="card-body p-25">
-                            <span class="primary-color text-uppercase d-block mb-3">{{ $tx('Estimated', '預估') }}</span>
-                            <h4>{{ $tx('Base Total', '基本總額') }}</h4>
-                            <p>{{ $tx('Before subject-specific adjustment, late fees, or practice exam options.', '尚未包含科目差異、逾期費或模擬考選項的調整。') }}</p>
-                            <h3>NTD {{ number_format($feeTotal) }}</h3>
-                        </div>
-                    </div>
-                </div>
+                <span class="fee-availability__status"><i class="fa fa-clock-o" aria-hidden="true"></i>{{ $tx('Coming Soon', '即將公布') }}</span>
             </div>
         </div>
     </section>
@@ -490,17 +455,12 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="faq-list">
                 @foreach ($displayFaqs as $faq)
-                    <div class="col-lg-6 mb-4">
-                        <div class="card landing-card h-100">
-                            <div class="card-body p-25">
-                                <i class="fa fa-question-circle primary-color mb-3"></i>
-                                <h4>{{ $faq->question }}</h4>
-                                <p>{{ $faq->answer }}</p>
-                            </div>
-                        </div>
-                    </div>
+                    <details class="faq-item" @if($loop->first) open @endif>
+                        <summary>{{ $faq->question }}</summary>
+                        <p>{{ $faq->answer }}</p>
+                    </details>
                 @endforeach
             </div>
         </div>
