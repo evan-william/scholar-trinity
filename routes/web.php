@@ -43,6 +43,7 @@ Route::get('/receipts/{registrationPayment}/create', [ReceiptController::class, 
 Route::post('/receipts/{registrationPayment}', [ReceiptController::class, 'store'])->middleware('throttle:8,1')->name('receipts.store');
 Route::get('/receipt-requests/{receiptRequest}', [ReceiptController::class, 'show'])->name('receipts.show');
 Route::get('/login', fn () => redirect()->route('admin.login'))->name('login');
+Route::get('/admin', fn () => redirect()->route(auth()->user()?->isAdmin() ? 'admin.dashboard' : 'admin.login'))->name('admin.index');
 
 Route::middleware('guest')->group(function (): void {
     Route::get('/admin/login', [AdminAuthController::class, 'showLogin'])->name('admin.login');

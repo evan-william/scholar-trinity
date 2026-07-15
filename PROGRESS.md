@@ -1,6 +1,6 @@
 # Trinity Scholar Progress Tracker
 
-Last updated: 2026-07-14, Asia/Bangkok
+Last updated: 2026-07-15, Asia/Bangkok
 
 This file is the working source of truth for project status. Every implementation pass must update:
 - `Current Progress` for what changed.
@@ -61,7 +61,28 @@ Current local template pass:
 
 ## Current Progress
 
+2026-07-15
+- Registration layout repair:
+  - Forced the shared public/form footer into a stable three-column desktop grid so Important Notice stays to the right of contact and registration links.
+  - Added two-column tablet and single-column mobile footer fallbacks.
+  - Moved the step-one sticky Important Notice below the full public header offset and replaced the generic blue side stripe with a restrained information marker.
+  - Bumped the shared public UI cache version to `20260715-1`.
+- Admin entry and bootstrap login:
+  - Added `/admin` as the canonical entry URL; guests are redirected to `/admin/login` and authenticated admins to `/admin/dashboard`.
+  - Admin login now accepts either a username alias or an email while preserving Laravel authentication, rate limiting, session regeneration, admin authorization, and security audit logging.
+  - Added a one-time bootstrap admin account through `DatabaseSeeder`; subsequent seeding does not overwrite an existing admin password.
+  - Added targeted feature coverage for `/admin` routing and username-alias login.
+  - The bootstrap credential is temporary and must be rotated immediately after first server login.
+
 2026-07-14
+- Landing image differentiation:
+  - Kept the supplied HD registration-support image for the Student Registration process section.
+  - Replaced the duplicated Document Checklist image with the template's distinct 1920x820 student study/document scene (`bg1.jpg`).
+  - Bumped the public UI cache version to `20260714-6` for deployment consistency.
+- Registration-step contrast hotfix:
+  - Fixed white-on-white process numbers caused by a cached/missing external CSS custom property during deployment.
+  - Added a hardcoded Trinity-blue critical fallback, explicit white text fill, and higher-specificity landing selector so steps 1-4 remain visible even while server CSS caches refresh.
+  - Bumped the public UI cache version to `20260714-5`.
 - Website-wide typography standardization:
   - Selected `Playfair Display` for editorial/institutional headings and `Open Sans` for body copy, navigation, buttons, forms, tables, and dashboard controls.
   - Applied the pairing to the public shell, landing page, no-login student form, admin dashboard shell, admin authentication, legacy registration pages, and printable registration detail.
@@ -708,7 +729,8 @@ These items come directly from `Reference/Trinity Scholar - Features.pdf` and we
   - TODO: define DB name/user/password on server.
   - DONE: backup checklist documented in `SERVER_CHECKLIST.md`.
   - DONE: `security:backup-storage` creates a private storage manifest or optional zip and logs it.
-  - DONE: local/testing demo admin seeder is restricted away from production environment.
+  - DONE: production-capable bootstrap admin seeding is available and does not overwrite an existing account password on later seed runs.
+  - TODO: rotate the temporary bootstrap admin credential immediately after first successful server login.
   - TODO: implement or document the actual production MySQL/MariaDB backup command/job; built-in `security:backup-database` only supports local SQLite.
   - TODO: configure actual backup job and restricted DB access on server.
 
@@ -745,6 +767,7 @@ These items come directly from `Reference/Trinity Scholar - Features.pdf` and we
 ## Bugs / Re-Audit Findings
 
 - PHP and Composer are not available in the current Codex environment, so tests have not been run here.
+- Admin dashboard/login requires an initialized database and migrations; the public no-database fallback does not make authenticated admin features database-free.
 - `resources/views/student-registration/create.blade.php` still contains a lot of inline CSS/JS and should be replaced or refactored after template choice.
 - Backend template zip is Filament source/package code, not a safe raw drop-in template. It should be installed through Composer when the environment supports it.
 - Word re-audit 2026-07-04: core MVP registration/admin/manual-payment features are mostly represented, but the app is not production-complete until real payment gateway, real e-invoice/fapiao, and server QA are done.
@@ -759,6 +782,14 @@ These items come directly from `Reference/Trinity Scholar - Features.pdf` and we
 - Server credentials were shared in chat but must stay out of Git.
 
 ## Verification Log
+
+2026-07-15
+- `git diff --check` passed and no merge-conflict markers were found after the footer, sticky notice, and admin-entry changes.
+- Direct Vite production build passed with `node node_modules\vite\bin\vite.js build`.
+- Static checks confirmed the `/admin` route, username alias configuration, bootstrap credential configuration, login translation key, sticky offset, and three-column footer override are present.
+- Regenerated `scholar-trinity-deploy.zip` from current tracked source plus the latest Vite build; verified required app/admin/UI files are present and local `.env`, dependencies, logs, and private uploads are excluded.
+- PHP and Composer remain unavailable in the local PATH, so the added Laravel feature test could not be executed locally.
+- Browser QA was intentionally skipped because the user explicitly requested no browser use.
 
 2026-07-14
 - Blue-brand/cache-busting, clean-logo, and registration-flow repair passed `git diff --check`, merge-marker scan, required-asset scan, and the registration JavaScript ID-reference scan (`51` referenced IDs, `0` missing).

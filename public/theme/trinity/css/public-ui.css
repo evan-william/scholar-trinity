@@ -292,6 +292,54 @@ footer .footer-bottom a {
 }
 footer .footer-bottom a:hover { color: var(--trinity-blue-bright) !important; }
 
+/* Keep the three footer groups aligned even when legacy template grid rules load later. */
+body.trinity-public footer .footer-top .row,
+body.trinity-form footer .footer-top .row {
+    display: grid !important;
+    grid-template-columns: minmax(0, 4fr) minmax(180px, 3fr) minmax(0, 5fr) !important;
+    gap: 48px !important;
+    margin: 0 !important;
+}
+
+body.trinity-public footer .footer-top .row > [class*="col-"],
+body.trinity-form footer .footer-top .row > [class*="col-"] {
+    width: auto !important;
+    max-width: none !important;
+    padding: 0 !important;
+    flex: none !important;
+}
+
+body.trinity-public footer .footer-top .widget,
+body.trinity-form footer .footer-top .widget {
+    margin: 0 !important;
+}
+
+@media (max-width: 991px) {
+    body.trinity-public footer .footer-top .row,
+    body.trinity-form footer .footer-top .row {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 38px 32px !important;
+    }
+
+    body.trinity-public footer .footer-top .row > :last-child,
+    body.trinity-form footer .footer-top .row > :last-child {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 575px) {
+    body.trinity-public footer .footer-top .row,
+    body.trinity-form footer .footer-top .row {
+        grid-template-columns: 1fr !important;
+        gap: 32px !important;
+    }
+
+    body.trinity-public footer .footer-top .row > :last-child,
+    body.trinity-form footer .footer-top .row > :last-child {
+        grid-column: auto;
+    }
+}
+
 .contact-info:before { background: var(--trinity-blue) !important; }
 .cnt-addres-single .icon { color: var(--trinity-blue) !important; }
 .contact-form form input:focus,

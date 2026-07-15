@@ -160,7 +160,7 @@
             .process-list{display:flex;flex-direction:column;justify-content:center;margin:0;padding:24px 34px;list-style:none;background:#f7f9fc}
             .process-item{display:flex;align-items:flex-start;gap:18px;padding:24px 0;border-bottom:1px solid var(--trinity-line)}
             .process-item:last-child{border-bottom:0}
-            .process-number{display:grid!important;flex:0 0 44px;width:44px;height:44px;place-items:center;border:1px solid rgba(36,78,154,.2);border-radius:4px;color:#fff!important;background:var(--trinity-blue)!important;font-family:var(--trinity-body);font-size:15px;font-weight:700;box-shadow:0 8px 18px rgba(36,78,154,.2)}
+            .landing-refined .process-list .process-number{display:grid!important;flex:0 0 44px!important;width:44px!important;height:44px!important;place-items:center!important;border:1px solid #244e9a!important;border-radius:4px!important;color:#fff!important;-webkit-text-fill-color:#fff!important;background:#244e9a!important;background-color:#244e9a!important;background-image:none!important;opacity:1!important;font-family:"Open Sans",Arial,sans-serif!important;font-size:15px!important;line-height:44px!important;font-weight:700!important;text-align:center!important;text-shadow:none!important;box-shadow:0 8px 18px rgba(36,78,154,.2)!important}
             .process-item h4{margin:0 0 6px;font-size:19px;line-height:26px}
             .process-item p{max-width:42ch;margin:0;color:#667386;font-size:14px;line-height:22px}
             #fees{padding:82px 0;background:#f6f8fb}
@@ -179,7 +179,7 @@
             .fee-item strong{display:block;margin-top:15px;color:#1d3f79;font-family:var(--trinity-display);font-size:21px}
             #documents{padding:84px 0;background:#fff}
             .documents-layout{display:grid;grid-template-columns:minmax(280px,.75fr) minmax(0,1.25fr);gap:42px;align-items:stretch}
-            .documents-photo{position:relative;min-height:520px;overflow:hidden;border-radius:4px;background:url('{{ asset('images/artie112-ai-generated-9030608.jpg') }}') center/cover no-repeat}
+            .documents-photo{position:relative;min-height:520px;overflow:hidden;border-radius:4px;background:url('{{ asset($assetBase.'images/bg/bg1.jpg') }}') center/cover no-repeat}
             .documents-photo:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(7,13,24,.74))}
             .documents-photo-copy{position:absolute;right:26px;bottom:26px;left:26px;z-index:1;color:#fff}
             .documents-photo-copy strong{display:block;color:#fff;font-family:var(--trinity-display);font-size:25px;line-height:32px}

@@ -58,8 +58,8 @@
         @if($errors->any())<div class="error">{{ $errors->first() }}</div>@endif
         <form method="POST" action="{{ route('admin.login.store') }}">
             @csrf
-            <label>{{ __('admin_auth.email') }}
-                <input name="email" type="email" value="{{ old('email') }}" required autofocus autocomplete="email">
+            <label>{{ __('admin_auth.login_identifier') }}
+                <input name="login" type="text" value="{{ old('login') }}" required autofocus autocomplete="username">
             </label>
             <label>{{ __('admin_auth.password') }}
                 <input name="password" type="password" required autocomplete="current-password">

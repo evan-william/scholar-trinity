@@ -28,22 +28,28 @@ class AdminAuthController extends Controller
 
     public function login(Request $request): RedirectResponse
     {
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
+        $validated = $request->validate([
+            'login' => ['nullable', 'string', 'max:255', 'required_without:email'],
+            'email' => ['nullable', 'email', 'required_without:login'],
             'password' => ['required', 'string'],
             'remember' => ['nullable', 'boolean'],
         ]);
 
         $remember = $request->boolean('remember');
-        unset($credentials['remember']);
+        $identifier = trim((string) ($validated['login'] ?? $validated['email']));
+        $errorKey = array_key_exists('login', $validated) ? 'login' : 'email';
+        $email = Str::lower($identifier) === Str::lower((string) config('admin.login_username', 'admin'))
+            ? (string) config('admin.login_email', 'admin@trinityscholar.local')
+            : Str::lower($identifier);
+        $credentials = ['email' => $email, 'password' => $validated['password']];
 
         if (! Auth::attempt($credentials, $remember) || ! Auth::user()->isAdmin()) {
             $userId = Auth::id();
             Auth::logout();
-            Log::warning('Failed admin login.', ['email' => $request->input('email'), 'user_id' => $userId, 'ip' => $request->ip()]);
-            app(SecurityAuditService::class)->log('auth', 'admin_login_failed', 'Failed admin login.', null, [], [], ['email' => $request->input('email')], 'failed', $request, $userId);
+            Log::warning('Failed admin login.', ['identifier' => $identifier, 'user_id' => $userId, 'ip' => $request->ip()]);
+            app(SecurityAuditService::class)->log('auth', 'admin_login_failed', 'Failed admin login.', null, [], [], ['identifier' => $identifier], 'failed', $request, $userId);
 
-            return back()->withErrors(['email' => __('admin_auth.failed')])->onlyInput('email');
+            return back()->withErrors([$errorKey => __('admin_auth.failed')])->onlyInput($errorKey);
         }
 
         $request->session()->regenerate();

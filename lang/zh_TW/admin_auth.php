@@ -3,6 +3,7 @@
 return [
     'login_title' => '管理員登入',
     'email' => '電子郵件',
+    'login_identifier' => '使用者名稱或電子郵件',
     'password' => '密碼',
     'remember' => '記住我',
     'login' => '登入',

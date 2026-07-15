@@ -3,6 +3,7 @@
 return [
     'login_title' => 'Admin Login',
     'email' => 'Email',
+    'login_identifier' => 'Username or Email',
     'password' => 'Password',
     'remember' => 'Remember me',
     'login' => 'Login',

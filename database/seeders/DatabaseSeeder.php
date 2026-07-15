@@ -21,6 +21,21 @@ class DatabaseSeeder extends Seeder
         $this->call(ApExamSubjectSeeder::class);
         $this->call(PaymentSettingSeeder::class);
 
+        $bootstrapAdmin = User::query()->firstOrCreate(
+            ['email' => (string) config('admin.login_email', 'admin@trinityscholar.local')],
+            [
+                'name' => (string) config('admin.login_username', 'admin'),
+                'password' => Hash::make((string) config('admin.bootstrap_password', 'admin123')),
+                'is_admin' => true,
+                'email_verified_at' => now(),
+                'password_changed_at' => now(),
+            ]
+        );
+
+        if (! $bootstrapAdmin->is_admin) {
+            $bootstrapAdmin->forceFill(['is_admin' => true])->save();
+        }
+
         if (app()->environment(['local', 'testing'])) {
             User::query()->updateOrCreate(
                 ['email' => 'test@example.com'],

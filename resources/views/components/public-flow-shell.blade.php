@@ -13,7 +13,7 @@
     $brandLogo = 'images/trinity-scholar-logo-clean.png';
     $footerLogo = 'images/trinity-scholar-logo-clean.png';
     $brandFavicon = 'images/trinity-scholar-favicon.png';
-    $publicUiVersion = '20260714-4';
+    $publicUiVersion = '20260715-1';
     $uiLocale = session('locale', str_replace('_', '-', app()->getLocale()));
     $isZh = $uiLocale === 'zh-TW';
     $navLabels = $isZh
@@ -121,6 +121,23 @@
         body.trinity-public .section-title-style2 span:after { right: -52px !important; left: auto !important; }
         body.trinity-public .white-title span:before,
         body.trinity-public .white-title span:after { background: #a9c2f4 !important; }
+        body.trinity-public.landing-refined .process-list .process-number {
+            display: grid !important;
+            width: 44px !important;
+            height: 44px !important;
+            flex: 0 0 44px !important;
+            place-items: center !important;
+            color: #fff !important;
+            -webkit-text-fill-color: #fff !important;
+            background: #244e9a !important;
+            background-color: #244e9a !important;
+            background-image: none !important;
+            border: 1px solid #244e9a !important;
+            opacity: 1 !important;
+            line-height: 44px !important;
+            text-align: center !important;
+            text-shadow: none !important;
+        }
         body.trinity-public #header .ht-address li,
         body.trinity-public #header .ht-social li { color: rgba(255,255,255,.94) !important; }
         body.trinity-public #header .logo img {

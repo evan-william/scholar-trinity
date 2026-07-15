@@ -97,7 +97,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('theme/trinity/css/public-ui.css') }}?v=20260714-4">
+    <link rel="stylesheet" href="{{ asset('theme/trinity/css/public-ui.css') }}?v=20260715-1">
     <script src="{{ asset('theme/edification/js/vendor/modernizr-2.8.3.min.js') }}"></script>
     <style>
         :root{--trinity-blue:#244e9a;--trinity-blue-dark:#142f63;--trinity-blue-soft:#eaf2ff;--trinity-blue-bright:#9db9ff;--primary:#244e9a;--primary-light:#142f63;--accent:#244e9a;--success:#237a4f;--danger:#b42318;--gray-50:#f8f9fa;--gray-100:#f1f3f5;--gray-200:#e9ecef;--gray-400:#ced4da;--gray-600:#6c757d;--gray-800:#343a40;--white:#fff;--radius:8px;--shadow:0 2px 16px rgba(0,0,0,.09)}
@@ -375,8 +375,9 @@
         body.trinity-form .notice p,body.trinity-form .notice li{color:#566274;font-size:12px;line-height:20px}
         body.trinity-form .step-aside-layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:18px;align-items:start}
         body.trinity-form .step-aside-layout>.card{margin-bottom:0}
-        body.trinity-form .step-aside-layout>.notice{position:sticky;top:16px;margin:0;padding:22px 24px;background:#fff;border:1px solid #dfe3e8;border-left:4px solid var(--trinity-blue);border-radius:4px;box-shadow:0 7px 18px rgba(24,34,49,.05)}
-        body.trinity-form .step-aside-layout>.notice h4{margin-bottom:10px;color:#1d2939;font-size:18px;line-height:25px}
+        body.trinity-form .step-aside-layout>.notice{position:sticky;top:176px;margin:0;padding:22px 24px;background:#fff;border:1px solid #dfe3e8;border-radius:4px;box-shadow:0 7px 18px rgba(24,34,49,.05)}
+        body.trinity-form .step-aside-layout>.notice h4{display:flex;align-items:center;gap:10px;margin-bottom:10px;color:#1d2939;font-size:18px;line-height:25px}
+        body.trinity-form .step-aside-layout>.notice h4::before{content:"i";display:inline-grid;width:24px;height:24px;flex:0 0 24px;place-items:center;color:#244e9a;border:1px solid #9fb0c8;border-radius:50%;font-family:Georgia,serif;font-size:14px;font-style:italic;font-weight:700}
         body.trinity-form .step-aside-layout>.notice ul{margin:0;padding-left:18px}
         body.trinity-form .step-aside-layout>.notice li+li{margin-top:8px}
         body.trinity-form .exam-sticky{top:0;padding:11px 0;margin-bottom:17px;background:#fff;border:0;border-bottom:1px solid #dfe3e8;border-radius:0;box-shadow:none}
@@ -403,9 +404,12 @@
         body.trinity-form .step-ind{color:#6d7888;font-size:11px}
         body.trinity-form .step-enter{animation:form-step-in 220ms var(--trinity-ease) both}
         @media(hover:hover) and (pointer:fine){body.trinity-form .exam-cb:not(.disabled):hover,body.trinity-form .pay-opt:hover{border-color:#9aa9bb;box-shadow:none;transform:translateY(-1px)}}
-        @media(max-width:991px){body.trinity-form .form-intro{grid-template-columns:1fr}body.trinity-form .intro-summary{min-height:230px}body.trinity-form .form-top-band{min-height:100px}body.trinity-form .step-aside-layout{grid-template-columns:1fr}body.trinity-form .step-aside-layout>.notice{position:static}}
+        body.trinity-form footer .footer-top .row{display:grid!important;grid-template-columns:minmax(0,4fr) minmax(180px,3fr) minmax(0,5fr)!important;gap:48px!important;margin:0!important}
+        body.trinity-form footer .footer-top .row>[class*="col-"]{width:auto!important;max-width:none!important;padding:0!important;flex:none!important}
+        body.trinity-form footer .footer-top .widget{margin:0!important}
+        @media(max-width:991px){body.trinity-form .form-intro{grid-template-columns:1fr}body.trinity-form .intro-summary{min-height:230px}body.trinity-form .form-top-band{min-height:100px}body.trinity-form .step-aside-layout{grid-template-columns:1fr}body.trinity-form .step-aside-layout>.notice{position:static}body.trinity-form footer .footer-top .row{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:38px 32px!important}body.trinity-form footer .footer-top .row>:last-child{grid-column:1/-1}}
         @media(max-width:767px){body.trinity-form .main{padding:24px 12px 100px}body.trinity-form .form-intro>div{padding:25px 22px}body.trinity-form .form-intro h2{font-size:27px;line-height:34px}body.trinity-form .card{padding:24px 18px}body.trinity-form .section-title{font-size:20px}body.trinity-form .form-top-band{min-height:86px}}
-        @media(max-width:575px){body.trinity-form #header .logo img{width:118px;max-height:68px}body.trinity-form .progress-wrap{padding:0 8px}body.trinity-form .step-item{min-width:94px}body.trinity-form .nav-footer .btn{min-width:0}}
+        @media(max-width:575px){body.trinity-form #header .logo img{width:118px;max-height:68px}body.trinity-form .progress-wrap{padding:0 8px}body.trinity-form .step-item{min-width:94px}body.trinity-form .nav-footer .btn{min-width:0}body.trinity-form footer .footer-top .row{grid-template-columns:1fr!important;gap:32px!important}body.trinity-form footer .footer-top .row>:last-child{grid-column:auto}}
     </style>
 </head>
 <body class="trinity-form">

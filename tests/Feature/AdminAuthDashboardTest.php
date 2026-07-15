@@ -31,6 +31,25 @@ class AdminAuthDashboardTest extends TestCase
         $this->assertAuthenticatedAs($admin);
     }
 
+    public function test_admin_entry_route_and_username_alias_open_the_dashboard(): void
+    {
+        config([
+            'admin.login_username' => 'admin',
+            'admin.login_email' => 'admin@example.com',
+        ]);
+        $admin = $this->adminUser();
+
+        $this->get('/admin')->assertRedirect(route('admin.login'));
+
+        $this->post('/admin/login', [
+            'login' => 'admin',
+            'password' => 'StrongPass!123',
+        ])->assertRedirect(route('admin.dashboard'));
+
+        $this->assertAuthenticatedAs($admin);
+        $this->get('/admin')->assertRedirect(route('admin.dashboard'));
+    }
+
     public function test_invalid_login_is_rejected_and_rate_limited(): void
     {
         $this->adminUser();
