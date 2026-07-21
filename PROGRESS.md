@@ -1,6 +1,6 @@
 # Trinity Scholar Progress Tracker
 
-Last updated: 2026-07-15, Asia/Bangkok
+Last updated: 2026-07-21, Asia/Bangkok
 
 This file is the working source of truth for project status. Every implementation pass must update:
 - `Current Progress` for what changed.
@@ -60,6 +60,13 @@ Current local template pass:
 - Raw downloaded templates are ignored through `template-source/` in `.gitignore`.
 
 ## Current Progress
+
+2026-07-21
+- Admin login recovery:
+  - Confirmed the deployed `admin` / bootstrap-password failure can occur when the server seeder was never run or an older admin row already exists, because the normal seeder intentionally does not overwrite existing passwords.
+  - Added `php artisan admin:bootstrap` to explicitly create or reset the configured admin account while retaining hashed password storage and the normal Laravel login/audit flow.
+  - Added feature coverage for initial admin creation and deliberate password reset through the command.
+  - Added the recovery command to `SERVER_UPLOAD_GUIDE.md`.
 
 2026-07-15
 - Registration layout repair:
@@ -782,6 +789,13 @@ These items come directly from `Reference/Trinity Scholar - Features.pdf` and we
 - Server credentials were shared in chat but must stay out of Git.
 
 ## Verification Log
+
+2026-07-21
+- Confirmed Laravel 12 automatically discovers command classes under `app/Console/Commands` through `ApplicationBuilder::withCommands()`.
+- `git diff --check` passed and no merge-conflict markers were found after adding admin recovery.
+- Direct Vite production build passed with `node node_modules\vite\bin\vite.js build`.
+- Added PHPUnit coverage for command-based admin creation and password reset, but it could not be executed locally because PHP/Composer remain unavailable in PATH.
+- Browser QA was not used.
 
 2026-07-15
 - `git diff --check` passed and no merge-conflict markers were found after the footer, sticky notice, and admin-entry changes.

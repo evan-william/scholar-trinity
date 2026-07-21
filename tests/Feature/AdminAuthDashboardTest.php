@@ -50,6 +50,27 @@ class AdminAuthDashboardTest extends TestCase
         $this->get('/admin')->assertRedirect(route('admin.dashboard'));
     }
 
+    public function test_admin_bootstrap_command_creates_and_resets_the_configured_account(): void
+    {
+        config([
+            'admin.login_username' => 'admin',
+            'admin.login_email' => 'admin@trinityscholar.local',
+        ]);
+
+        $this->artisan('admin:bootstrap', ['--password' => 'admin123'])
+            ->assertSuccessful();
+
+        $admin = User::query()->where('email', 'admin@trinityscholar.local')->firstOrFail();
+        $this->assertSame('admin', $admin->name);
+        $this->assertTrue($admin->isAdmin());
+        $this->assertTrue(Hash::check('admin123', $admin->password));
+
+        $this->artisan('admin:bootstrap', ['--password' => 'ChangedAdmin123!'])
+            ->assertSuccessful();
+
+        $this->assertTrue(Hash::check('ChangedAdmin123!', $admin->fresh()->password));
+    }
+
     public function test_invalid_login_is_rejected_and_rate_limited(): void
     {
         $this->adminUser();

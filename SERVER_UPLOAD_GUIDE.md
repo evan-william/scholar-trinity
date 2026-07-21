@@ -108,6 +108,15 @@ Laravel/Vite production mode:
 
 ## Quick Smoke Test After Deploy
 
+Create or reset the temporary admin account after migrations:
+
+```bash
+php artisan optimize:clear
+php artisan admin:bootstrap --username=admin --password=admin123
+```
+
+Then open `/admin`. This command intentionally resets the configured admin account password, so run it only when bootstrapping or recovering access and rotate the temporary password afterward.
+
 Open:
 - `https://trinity.sophistec.global`
 - `https://trinity.sophistec.global/student-registration`
