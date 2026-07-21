@@ -119,13 +119,10 @@
             .landing-refined .slider-content .btn{margin-top:30px!important}
             .section-title-style2{margin-bottom:38px;padding-top:0}
             .section-title-style2 span{color:#315388;font-family:var(--trinity-body);font-size:13px;font-weight:600;letter-spacing:0;text-transform:uppercase}
-            .section-title-style2 span:before,.section-title-style2 span:after{content:""!important;width:36px!important;height:2px!important;top:50%!important;border-radius:999px!important;background:var(--trinity-blue)!important;background-image:none!important;transform:translateY(-50%)!important}
-            .section-title-style2 span:before{left:-52px!important}
-            .section-title-style2 span:after{right:-52px!important;left:auto!important}
+            .landing-refined .section-title-style2 span:before,.landing-refined .section-title-style2 span:after{display:none!important}
             .section-title-style2 h2{margin-top:8px;color:var(--trinity-ink);font-size:40px;line-height:50px;font-weight:700;letter-spacing:0}
             .section-title-style2 p{max-width:70ch;margin:14px auto 0;color:#667386;line-height:28px}
             .section-title-style2.white-title span{color:#bfd2f7}
-            .section-title-style2.white-title span:before,.section-title-style2.white-title span:after{background:#a9c2f4!important}
             .section-title-style2.white-title h2{color:#fff!important;text-shadow:0 3px 18px rgba(0,0,0,.42)}
             .section-title-style2.white-title p{color:rgba(255,255,255,.76)}
             .landing-refined #header .main-menu nav ul li.active>a,.landing-refined #header .main-menu nav ul li>a:hover{color:#a9c2f4!important}
@@ -181,7 +178,7 @@
             .process-photo{position:relative;min-height:530px;overflow:hidden;background:#111a29}
             .process-photo:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,13,24,.04) 30%,rgba(7,13,24,.82) 100%)}
             .process-photo img{width:100%;height:100%;object-fit:cover;object-position:center;transform:scale(1.01)}
-            .process-photo-caption{position:absolute;right:32px;bottom:32px;left:32px;z-index:1;padding-left:18px;color:#fff;border-left:3px solid #8fb4ff}
+            .process-photo-caption{position:absolute;right:32px;bottom:32px;left:32px;z-index:1;color:#fff}
             .process-photo-caption strong{display:block;color:#fff;font-family:var(--trinity-display);font-size:24px;line-height:31px}
             .process-photo-caption span{display:block;max-width:34ch;margin-top:7px;color:rgba(255,255,255,.78);font-size:14px;line-height:22px}
             .process-list{display:flex;flex-direction:column;justify-content:center;margin:0;padding:24px 34px;list-style:none;background:#f7f9fc}
@@ -215,6 +212,9 @@
             .faq-item summary:after{content:"+";position:absolute;right:6px;display:grid;width:32px;height:32px;place-items:center;border:1px solid #c4cfdd;border-radius:50%;color:var(--trinity-blue);background:#fff;font-family:var(--trinity-body);font-size:20px;font-weight:400;transition:transform 180ms var(--trinity-ease),background-color 180ms ease,color 180ms ease}
             .faq-item[open] summary:after{color:#fff;background:var(--trinity-blue);transform:rotate(45deg)}
             .faq-item p{max-width:760px;margin:0;padding:0 52px 22px 4px;color:#667386;font-size:14px;line-height:25px}
+            .faq-item[open] p{animation:faq-answer-in 260ms var(--trinity-ease) both}
+            @keyframes faq-answer-in{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+            @media(prefers-reduced-motion:reduce){.faq-item[open] p{animation:none}}
             #contact{padding:68px 0 76px;background:#fff}
             .contact-panel{height:100%;padding:30px;border:1px solid var(--trinity-line);border-radius:4px;background:#fff}
             .contact-panel h3{margin-bottom:18px;font-size:27px;line-height:34px}
@@ -259,13 +259,13 @@
 
     <x-slot:hero>
         <div class="slider-area owl-carousel has-color">
-            <div class="slider_item" style="background: url({{ asset('images/taipei-registration-support.jpg') }}) center/cover no-repeat;">
+            <div class="slider_item" style="background: url({{ asset($assetBase.'images/bg/slider-bg1.jpg') }}) center/cover no-repeat;">
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-7 col-md-9">
                             <div class="slider-content">
-                                <h3>{{ $tx('AP Registration Support', 'AP 報名支援') }}</h3>
-                                <h1><span class="primary-color">{{ $heroTitle }}</span></h1>
+                                <h3>{{ $heroTitle }}</h3>
+                                <h1><span class="primary-color">{{ $tx('Taipei Test Center', '台北考場') }}</span> {{ $tx('Registration Support', '報名支援') }}</h1>
                                 <p>{{ $heroIntro }}</p>
                                 <a class="btn btn-primary btn-round btn-lg mt-5" href="{{ route('student-registrations.create') }}">{{ $tx('Start Student Registration', '開始學生報名') }}</a>
                             </div>
@@ -278,8 +278,8 @@
                     <div class="row">
                         <div class="col-lg-7 col-md-9">
                             <div class="slider-content">
-                                <h3>{{ $tx('Registration Windows', '報名時段') }}</h3>
-                                <h1><span class="primary-color">{{ $tx('Plan Early', '提早準備') }}</span> {{ $tx('For AP Registration', 'AP 考試報名') }}</h1>
+                                <h3>{{ $tx('Late Registration', '逾期報名') }}</h3>
+                                <h1><span class="primary-color">{{ $tx('Spring Availability', '春季名額') }}</span> {{ $tx('When Slots Remain', '視剩餘名額開放') }}</h1>
                                 <p>{{ $tx('Main registration runs from August through October. Late registration may open during the spring semester if seats remain available.', '一般報名期間為八月至十月；若仍有名額，逾期報名可能於春季學期開放。') }}</p>
                                 <a class="btn btn-primary btn-round btn-lg mt-5" href="#registration-information">{{ $tx('View Registration Information', '查看報名資訊') }}</a>
                             </div>
@@ -441,7 +441,7 @@
             </div>
             <div class="process-layout">
                 <div class="process-photo">
-                    <img src="{{ asset('images/taipei-registration-support.jpg') }}" alt="{{ $tx('Student preparing registration information in Taipei', '學生在台北準備報名資料') }}">
+                    <img src="{{ asset('images/artie112-ai-generated-9030608.jpg') }}" alt="{{ $tx('Students preparing registration information', '學生準備報名資料') }}">
                     <div class="process-photo-caption"><strong>{{ $tx('One guided submission', '一次完成引導式提交') }}</strong><span>{{ $tx('No student account is required before starting the form.', '開始填寫表單前不需要建立學生帳號。') }}</span></div>
                 </div>
                 <ol class="process-list">

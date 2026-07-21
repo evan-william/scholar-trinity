@@ -285,6 +285,13 @@ footer .address h6,
 footer .footer-link li i,
 footer span.post-date i,
 footer .primary-color { color: var(--trinity-blue-bright) !important; }
+footer .fwidget-title,
+footer .widget-opening li span { color: var(--trinity-blue-bright) !important; }
+footer .fwidget-title::before,
+footer .fwidget-title::after {
+    background: var(--trinity-blue) !important;
+    border-color: var(--trinity-blue) !important;
+}
 footer .footer-bottom a {
     color: inherit;
     text-decoration: underline;

@@ -815,6 +815,12 @@ These items come directly from `Reference/Trinity Scholar - Features.pdf` and we
 ## Verification Log
 
 2026-07-21
+- Follow-up visual correction from stakeholder screenshots:
+  - Restored the Edification `slider-bg1`, `slider-bg2`, and `slider-bg3` hero imagery and the shorter template-style hero composition without restoring the superseded fixed February deadline.
+  - Returned the registration-process visual to the separate high-resolution `artie112` asset so it no longer repeats the Taipei hero/support image.
+  - Removed decorative title and process-caption lines that made the page feel badge-heavy.
+  - Added a reduced-motion-aware FAQ answer reveal animation.
+  - Added higher-specificity Trinity-blue footer rules for labels, headings, arrows, accent rules, and provider links, then bumped the public UI cache version.
 - Re-audited all text and screenshots in `Webpage Edits Request.docx`; every non-pending homepage and registration-form request is represented in the implementation, while client-pending copy, prices, course options, and card-payment details remain explicitly deferred.
 - Removed the obsolete February 10 fallback FAQ and unused homepage fee-section CSS so the source no longer carries superseded public content.
 - Static content scan confirmed the active public views no longer contain the old dated deadline, homepage fee anchor, Cash/School Cashier option, or old contact email.

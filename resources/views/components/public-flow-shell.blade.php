@@ -13,7 +13,7 @@
     $brandLogo = 'images/trinity-scholar-logo-clean.png';
     $footerLogo = 'images/trinity-scholar-logo-clean.png';
     $brandFavicon = 'images/trinity-scholar-favicon.png';
-    $publicUiVersion = '20260721-1';
+    $publicUiVersion = '20260721-2';
     $uiLocale = session('locale', str_replace('_', '-', app()->getLocale()));
     $isZh = $uiLocale === 'zh-TW';
     $navLabels = $isZh
@@ -159,6 +159,25 @@
             height: 100px;
             object-fit: contain;
             filter: none !important;
+        }
+        body.trinity-public footer .address h6,
+        body.trinity-public footer .fwidget-title,
+        body.trinity-public footer .footer-link li i,
+        body.trinity-public footer .widget-opening li span,
+        body.trinity-public footer .footer-bottom a,
+        body.trinity-form footer .address h6,
+        body.trinity-form footer .fwidget-title,
+        body.trinity-form footer .footer-link li i,
+        body.trinity-form footer .widget-opening li span,
+        body.trinity-form footer .footer-bottom a {
+            color: #8fb4ff !important;
+        }
+        body.trinity-public footer .fwidget-title:before,
+        body.trinity-public footer .fwidget-title:after,
+        body.trinity-form footer .fwidget-title:before,
+        body.trinity-form footer .fwidget-title:after {
+            background: #315ca8 !important;
+            border-color: #315ca8 !important;
         }
         @media (max-width: 575px) {
             body.trinity-public #header .logo img { width: 138px; height: 68px; }
