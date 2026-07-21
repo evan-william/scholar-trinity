@@ -6,7 +6,7 @@ Registration Reference: {{ $registration->registration_number }}
 Student: {{ $registration->student_full_name }}
 Submission Date: {{ optional($registration->submitted_at)->format('Y-m-d H:i') }}
 Selected Exams: {{ $registration->exams->pluck('name')->join(', ') }}
-Total: {{ $registration->currency ?: 'NTD' }} {{ number_format($registration->grand_total ?: $registration->total_fee) }}
+Payment: Open the registration page for bank-transfer instructions and payment-proof upload.
 
 {{ __('ap_registration.email.next_steps') }}
 {{ __('ap_registration.email.footer') }}

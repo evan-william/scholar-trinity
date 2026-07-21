@@ -20,6 +20,8 @@ class DatabaseSeeder extends Seeder
         $this->call(ExamSeasonSeeder::class);
         $this->call(ApExamSubjectSeeder::class);
         $this->call(PaymentSettingSeeder::class);
+        $this->call(SystemSettingSeeder::class);
+        $this->call(EmailTemplateSettingSeeder::class);
 
         $bootstrapAdmin = User::query()->firstOrCreate(
             ['email' => (string) config('admin.login_email', 'admin@trinityscholar.local')],

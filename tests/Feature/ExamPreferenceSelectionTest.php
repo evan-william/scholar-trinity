@@ -186,6 +186,10 @@ class ExamPreferenceSelectionTest extends TestCase
             'privacy_policy' => '1',
             'terms_conditions' => '1',
             'confirmed_review' => '1',
+            'student_signature_name' => 'Alex Student',
+            'student_signature_date' => now()->toDateString(),
+            'guardian_signature_name' => 'Pat Parent',
+            'guardian_signature_date' => now()->toDateString(),
         ], $overrides);
     }
 }

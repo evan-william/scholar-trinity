@@ -13,12 +13,12 @@
     $brandLogo = 'images/trinity-scholar-logo-clean.png';
     $footerLogo = 'images/trinity-scholar-logo-clean.png';
     $brandFavicon = 'images/trinity-scholar-favicon.png';
-    $publicUiVersion = '20260715-1';
+    $publicUiVersion = '20260721-1';
     $uiLocale = session('locale', str_replace('_', '-', app()->getLocale()));
     $isZh = $uiLocale === 'zh-TW';
     $navLabels = $isZh
-        ? ['home' => '首頁', 'program' => '課程資訊', 'timeline' => '時程', 'fees' => '費用', 'faq' => '常見問題', 'contact' => '聯絡我們', 'start' => '開始報名', 'support' => '台北 AP 報名支援']
-        : ['home' => 'Home', 'program' => 'Program', 'timeline' => 'Timeline', 'fees' => 'Fees', 'faq' => 'FAQ', 'contact' => 'Contact', 'start' => 'Start Form', 'support' => 'Taipei AP Registration Support'];
+        ? ['home' => '首頁', 'program' => '課程資訊', 'timeline' => '時程', 'faq' => '常見問題', 'contact' => '聯絡我們', 'start' => '開始報名', 'support' => '台北 AP 報名支援']
+        : ['home' => 'Home', 'program' => 'Program', 'timeline' => 'Timeline', 'faq' => 'FAQ', 'contact' => 'Contact', 'start' => 'Start Form', 'support' => 'Taipei AP Registration Support'];
     $footerLabels = $isZh
         ? [
             'office' => '服務說明',
@@ -28,16 +28,13 @@
             'registration' => '報名資訊',
             'program' => '課程資訊',
             'timeline' => '報名時程',
-            'fees' => '費用說明',
             'register' => '立即報名',
             'notice' => '重要提醒',
-            'notice_body' => '報名需在表單與付款皆收到後才算完成。名額有限，可能在公告截止日前額滿關閉。',
+            'notice_body' => '表單與付款皆收到，且官方確認信寄出後，報名才算完成。名額有限，可能在公告截止日前額滿關閉。',
             'main_period' => '一般時段：',
             'late_period' => '逾期時段：',
-            'deadline' => '截止日期：',
             'main_period_value' => '八月至十月',
             'late_period_value' => '一月至三月',
-            'deadline_value' => '本次逾期報名公告為 2026 年 2 月 10 日',
             'copyright' => '版權所有',
             'rights' => '保留所有權利。',
             'designed' => 'Designed By',
@@ -51,16 +48,13 @@
             'registration' => 'Registration',
             'program' => 'Program Information',
             'timeline' => 'Timeline',
-            'fees' => 'Fees',
             'register' => 'Register Now',
             'notice' => 'Important Notice',
-            'notice_body' => 'Registration is complete only after the filled-out form and payment are received. Available seats may close before the listed deadline.',
+            'notice_body' => 'Registration is finalized once your form and payment are received and you receive an official confirmation email. Seats are limited and may close prior to the listed deadline.',
             'main_period' => 'Main Period :',
             'late_period' => 'Late Period :',
-            'deadline' => 'Deadline :',
             'main_period_value' => 'August - October',
             'late_period_value' => 'January - March',
-            'deadline_value' => 'February 10, 2026 for the current late-registration notice',
             'copyright' => 'Copyright',
             'rights' => 'All Rights Reserved.',
             'designed' => 'Designed By',
@@ -186,7 +180,7 @@
                     <div class="ht-address">
                         <ul>
                             <li><i class="fa fa-phone"></i>886-2-2771-6002</li>
-                            <li><i class="fa fa-envelope"></i>info@trinityscholar.com</li>
+                            <li><i class="fa fa-envelope"></i>ap-registration@trinityscholar.com</li>
                         </ul>
                     </div>
                 </div>
@@ -216,7 +210,6 @@
                                     <li class="{{ request()->routeIs('landing') ? 'active' : '' }}"><a href="{{ route('landing') }}">{{ $navLabels['home'] }}</a></li>
                                     <li><a href="{{ route('landing') }}#overview">{{ $navLabels['program'] }}</a></li>
                                     <li><a href="{{ route('landing') }}#timeline">{{ $navLabels['timeline'] }}</a></li>
-                                    <li><a href="{{ route('landing') }}#fees">{{ $navLabels['fees'] }}</a></li>
                                     <li><a href="{{ route('landing') }}#faq">{{ $navLabels['faq'] }}</a></li>
                                     <li><a href="{{ route('landing') }}#contact">{{ $navLabels['contact'] }}</a></li>
                                 </ul>
@@ -291,7 +284,8 @@
                         </div>
                         <div class="address">
                             <h6>{{ $footerLabels['email'] }}</h6>
-                            <p>info@trinityscholar.com</p>
+                            <p>ap-registration@trinityscholar.com</p>
+                            <p>Line: @TrinityScholar</p>
                         </div>
                     </div>
                 </div>
@@ -301,7 +295,6 @@
                         <ul>
                             <li><a href="{{ route('landing') }}#overview"><i class="fa fa-angle-right"></i>{{ $footerLabels['program'] }}</a></li>
                             <li><a href="{{ route('landing') }}#timeline"><i class="fa fa-angle-right"></i>{{ $footerLabels['timeline'] }}</a></li>
-                            <li><a href="{{ route('landing') }}#fees"><i class="fa fa-angle-right"></i>{{ $footerLabels['fees'] }}</a></li>
                             <li><a href="{{ route('student-registrations.create') }}"><i class="fa fa-angle-right"></i>{{ $footerLabels['register'] }}</a></li>
                         </ul>
                     </div>
@@ -313,7 +306,6 @@
                         <ul>
                             <li><span>{{ $footerLabels['main_period'] }}</span>{{ $footerLabels['main_period_value'] }}</li>
                             <li><span>{{ $footerLabels['late_period'] }}</span>{{ $footerLabels['late_period_value'] }}</li>
-                            <li><span>{{ $footerLabels['deadline'] }}</span>{{ $footerLabels['deadline_value'] }}</li>
                         </ul>
                     </div>
                 </div>

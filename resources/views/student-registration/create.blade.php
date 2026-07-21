@@ -5,8 +5,8 @@
     $uiLocale = session('locale', str_replace('_', '-', app()->getLocale()));
     $isZh = $uiLocale === 'zh-TW';
     $navLabels = $isZh
-        ? ['home' => '首頁', 'program' => '課程資訊', 'timeline' => '時程', 'fees' => '費用', 'faq' => '常見問題', 'contact' => '聯絡我們', 'start' => '開始報名', 'support' => '台北 AP 報名支援']
-        : ['home' => 'Home', 'program' => 'Program', 'timeline' => 'Timeline', 'fees' => 'Fees', 'faq' => 'FAQ', 'contact' => 'Contact', 'start' => 'Start Form', 'support' => 'Taipei AP Registration Support'];
+        ? ['home' => '首頁', 'program' => '課程資訊', 'timeline' => '時程', 'faq' => '常見問題', 'contact' => '聯絡我們', 'start' => '開始報名', 'support' => '台北 AP 報名支援']
+        : ['home' => 'Home', 'program' => 'Program', 'timeline' => 'Timeline', 'faq' => 'FAQ', 'contact' => 'Contact', 'start' => 'Start Form', 'support' => 'Taipei AP Registration Support'];
     $stepLabels = $isZh
         ? ['學生資料', '家長 / 監護人', '考試選擇', '特殊考試需求', '確認與付款', '完成報名']
         : ['Student Information', 'Parent / Guardian', 'Exam Selection', 'Accommodations', 'Review & Payment', 'Confirmation'];
@@ -15,19 +15,19 @@
             'badge' => '不需登入',
             'title' => '2026 AP 考試報名',
             'body' => '學生可在同一個流程中提交報名資料、護照、考試選擇、特殊需求與付款方式。',
-            'items' => ['逾期報名截止日期：2026 年 2 月 10 日。', '報名需在表單與付款皆收到後才算完成。', 'AP Chinese、AP Calculus、AP Macro/Micro 已在台北考場公告中標示額滿。', '最終科目名額將由管理團隊審核後確認。'],
-            'summary_label' => '逾期報名',
-            'summary_title' => '2 月 10 日',
-            'summary_body' => '逾期報名可能會有額外費用。座位有限，額滿時可能提前關閉報名。',
+            'items' => ['一般報名期間通常為八月至十月。', '若仍有名額，逾期報名可能於一月至三月開放。', '表單與付款皆收到，且官方確認信寄出後，報名才算完成。'],
+            'summary_label' => '考試地點',
+            'summary_title' => $registrationSettings['test_site_name_zh'] ?? '基督教美國高中課程',
+            'summary_body' => $registrationSettings['test_site_address_zh'] ?? '台北市士林區美德街99號',
         ]
         : [
             'badge' => 'No login required',
             'title' => '2026 AP Exam Registration',
             'body' => 'Students can submit registration details, passport upload, exam selections, accommodations, and payment method in one guided flow.',
-            'items' => ['Late registration deadline: February 10, 2026.', 'Registration is complete only after the form and payment are received.', 'AP Chinese, AP Calculus, and AP Macro/Micro are marked full in the shared Taipei test-center notice.', 'Final subject availability is confirmed by the admin team after submission.'],
-            'summary_label' => 'Late Registration',
-            'summary_title' => 'Feb. 10',
-            'summary_body' => 'Extra late registration fees may apply. Submit early because registration can close before the deadline when seats are full.',
+            'items' => ['Main registration is normally available from August through October.', 'Late registration may open from January through March if seats remain.', 'Registration is finalized after the form, payment, and official confirmation email are received.'],
+            'summary_label' => 'Test Site',
+            'summary_title' => $registrationSettings['test_site_name_en'] ?? 'The Primacy Collegiate Academy',
+            'summary_body' => $registrationSettings['test_site_address_en'] ?? 'No. 99, Meide St, Shilin District, Taipei City, 11159',
         ];
     $footerLabels = $isZh
         ? [
@@ -38,16 +38,13 @@
             'registration' => '報名資訊',
             'program' => '課程資訊',
             'timeline' => '報名時程',
-            'fees' => '費用說明',
             'register' => '立即報名',
             'notice' => '重要提醒',
-            'notice_body' => '報名需在表單與付款皆收到後才算完成。名額有限，可能在公告截止日前額滿關閉。',
+            'notice_body' => '表單與付款皆收到，且官方確認信寄出後，報名才算完成。名額有限，可能在公告截止日前額滿關閉。',
             'main_period' => '一般時段：',
             'late_period' => '逾期時段：',
-            'deadline' => '截止日期：',
             'main_period_value' => '八月至十月',
             'late_period_value' => '一月至三月',
-            'deadline_value' => '本次逾期報名公告為 2026 年 2 月 10 日',
             'copyright' => '版權所有',
             'rights' => '保留所有權利。',
             'designed' => 'Designed By',
@@ -61,16 +58,13 @@
             'registration' => 'Registration',
             'program' => 'Program Information',
             'timeline' => 'Timeline',
-            'fees' => 'Fees',
             'register' => 'Register Now',
             'notice' => 'Important Notice',
-            'notice_body' => 'Registration is complete only after the filled-out form and payment are received. Available seats may close before the listed deadline.',
+            'notice_body' => 'Registration is finalized once your form and payment are received and you receive an official confirmation email. Seats are limited and may close prior to the listed deadline.',
             'main_period' => 'Main Period :',
             'late_period' => 'Late Period :',
-            'deadline' => 'Deadline :',
             'main_period_value' => 'August - October',
             'late_period_value' => 'January - March',
-            'deadline_value' => 'February 10, 2026 for the current late-registration notice',
             'copyright' => 'Copyright',
             'rights' => 'All Rights Reserved.',
             'designed' => 'Designed By',
@@ -97,7 +91,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('theme/trinity/css/public-ui.css') }}?v=20260715-1">
+    <link rel="stylesheet" href="{{ asset('theme/trinity/css/public-ui.css') }}?v=20260721-1">
     <script src="{{ asset('theme/edification/js/vendor/modernizr-2.8.3.min.js') }}"></script>
     <style>
         :root{--trinity-blue:#244e9a;--trinity-blue-dark:#142f63;--trinity-blue-soft:#eaf2ff;--trinity-blue-bright:#9db9ff;--primary:#244e9a;--primary-light:#142f63;--accent:#244e9a;--success:#237a4f;--danger:#b42318;--gray-50:#f8f9fa;--gray-100:#f1f3f5;--gray-200:#e9ecef;--gray-400:#ced4da;--gray-600:#6c757d;--gray-800:#343a40;--white:#fff;--radius:8px;--shadow:0 2px 16px rgba(0,0,0,.09)}
@@ -122,7 +116,14 @@
         .intro-summary strong{display:block;color:var(--primary);font-size:28px;line-height:1;margin-bottom:6px}
         .intro-summary span{display:block;color:var(--trinity-blue-dark);font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
         .intro-summary p{font-size:13px;margin:0;color:var(--gray-800)}
-        @media(max-width:640px){.form-intro{grid-template-columns:1fr}}
+        .intro-summary small{display:block;margin-top:12px;color:#667386;font-size:11px;line-height:1.5}
+        .test-site-map{display:inline-flex;align-items:center;gap:7px;margin-top:12px;color:var(--primary);font-size:12px;font-weight:700}
+        .preparation-choice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:16px}
+        .preparation-choice-grid .check-line{min-height:54px;padding:14px;border:1px solid #dce5f0;border-radius:8px;background:#f8fafc}
+        .pay-opt.unavailable{cursor:not-allowed;opacity:.68;background:#f5f7fa}
+        .pay-opt.unavailable>i{width:18px;margin-top:3px;color:var(--primary);text-align:center}
+        .sig-box{display:grid;gap:8px}.sig-box .lbl:not(:first-child){margin-top:5px}
+        @media(max-width:640px){.form-intro{grid-template-columns:1fr}.preparation-choice-grid{grid-template-columns:1fr}}
         /* Current visual pass: softer registration form styling per client feedback. */
         body{background:#eef4fb}
         .header{background:linear-gradient(90deg,#102d52,#1d477d);box-shadow:0 12px 34px rgba(16,45,82,.16)}
@@ -421,7 +422,7 @@
                     <div class="ht-address">
                         <ul>
                             <li><i class="fa fa-phone"></i>886-2-2771-6002</li>
-                            <li><i class="fa fa-envelope"></i>info@trinityscholar.com</li>
+                            <li><i class="fa fa-envelope"></i>ap-registration@trinityscholar.com</li>
                         </ul>
                     </div>
                 </div>
@@ -451,7 +452,6 @@
                                     <li><a href="{{ route('landing') }}">{{ $navLabels['home'] }}</a></li>
                                     <li><a href="{{ route('landing') }}#overview">{{ $navLabels['program'] }}</a></li>
                                     <li><a href="{{ route('landing') }}#timeline">{{ $navLabels['timeline'] }}</a></li>
-                                    <li><a href="{{ route('landing') }}#fees">{{ $navLabels['fees'] }}</a></li>
                                     <li><a href="{{ route('landing') }}#faq">{{ $navLabels['faq'] }}</a></li>
                                     <li><a href="{{ route('landing') }}#contact">{{ $navLabels['contact'] }}</a></li>
                                 </ul>
@@ -506,10 +506,12 @@
                 @endforeach
             </ul>
         </div>
-        <aside class="intro-summary" aria-label="Late registration summary">
+        <aside class="intro-summary" aria-label="{{ $tx('Test site information', '考試地點資訊') }}">
             <span>{{ $introCopy['summary_label'] }}</span>
             <strong>{{ $introCopy['summary_title'] }}</strong>
             <p>{{ $introCopy['summary_body'] }}</p>
+            <a class="test-site-map" href="{{ $registrationSettings['test_site_map_url'] ?? '#' }}" target="_blank" rel="noopener"><i class="fa fa-map-marker"></i> {{ $tx('Open Map', '開啟地圖') }}</a>
+            <small>{{ $tx('AP fee details are pending and will be shown before payment.', 'AP 費用資訊尚待確認，將於付款前顯示。') }}</small>
         </aside>
     </section>
 
@@ -544,7 +546,7 @@
                 </div>
                 <input type="hidden" name="school_country" value="{{ old('school_country', 'Taiwan') }}">
                 <div class="row row-2">
-                    <div class="fg"><label class="lbl">Student Email <span class="req">*</span><span class="zh">學生電子郵件</span></label><input type="email" name="student_email" value="{{ old('student_email') }}" placeholder="student@example.com" required @error('student_email') aria-invalid="true" @enderror>@error('student_email')<span class="error">{{ $message }}</span>@enderror</div>
+                    <div class="fg"><label class="lbl">Student Email <span class="req">*</span><span class="zh">學生電子郵件</span></label><input type="email" name="student_email" value="{{ old('student_email') }}" placeholder="student@example.com" required @error('student_email') aria-invalid="true" @enderror><span class="hint">{{ $tx("Please enter the student's personal email address (do not use a school email).", '請輸入學生的個人電子郵件（請勿使用學校電子郵件）。') }}</span>@error('student_email')<span class="error">{{ $message }}</span>@enderror</div>
                     <div class="fg"><label class="lbl">Student Phone <span class="req">*</span><span class="zh">學生電話</span></label><input type="tel" name="student_phone" value="{{ old('student_phone') }}" placeholder="0912345678" inputmode="numeric" pattern="[0-9]{6,20}" maxlength="20" data-numeric="digits" data-numeric-label="Student Phone" required></div>
                 </div>
                 <div class="row row-1">
@@ -650,7 +652,7 @@
                 <div class="section-title">{{ $tx('AP Preparation Interest', 'AP 備考課程意願') }} <span>{{ $tx('Optional tutoring survey', '選填課程需求調查') }}</span></div>
                 <div class="notice"><h4>{{ $tx('Optional tutoring survey', '選填課程需求調查') }}</h4><p>{{ $tx('This does not affect AP exam registration. It helps the team follow up if the student is interested in AP preparation support.', '此調查不影響 AP 考試報名，僅協助團隊了解學生是否需要 AP 備考支援。') }}</p></div>
                 <label class="check-line" style="margin-bottom:12px"><input type="checkbox" name="preparation_interest" value="1" id="prepInterest" @checked(old('preparation_interest'))><span>{{ $tx('I am interested in AP preparation / tutoring information.', '我有興趣了解 AP 備考 / 家教資訊。') }}</span></label>
-                <div class="row row-2">
+                <div class="preparation-choice-grid">
                     <label class="check-line"><input type="checkbox" name="group_class_interest" value="1" @checked(old('group_class_interest'))><span>{{ $tx('Group class interest', '團體課程意願') }}</span></label>
                     <label class="check-line"><input type="checkbox" name="private_tutoring_interest" value="1" @checked(old('private_tutoring_interest'))><span>{{ $tx('Private tutoring interest', '一對一家教意願') }}</span></label>
                 </div>
@@ -682,13 +684,14 @@
             <div class="card">
                 <div class="section-title">Payment Method <span>付款方式</span></div>
                 <div class="pay-options">
-                    <label class="pay-opt"><input type="radio" name="payment_method" value="bank_transfer" required @checked(old('payment_method') === 'bank_transfer')><div><h4>Bank Transfer / 銀行轉帳</h4><p>Transfer to school bank account, then confirm with School Cashier WaWa Wang. / 匯款至學校帳戶後，請向出納確認。</p></div></label>
-                    <label class="pay-opt"><input type="radio" name="payment_method" value="cash" @checked(old('payment_method') === 'cash')><div><h4>Cash / 現金</h4><p>Direct cash payment to school cashier. / 直接至學校出納繳現金。</p></div></label>
-                    <label class="pay-opt"><input type="radio" name="payment_method" value="credit_card" @checked(old('payment_method') === 'credit_card' || old('payment_method') === 'online')><div><h4>Credit Card / 信用卡 <span class="badge-soon">Gateway Setup Required / 需設定金流</span></h4><p>Available after ECPay or NewebPay credentials are configured. / 設定金流商資料後可使用。</p></div></label>
-                    <label class="pay-opt"><input type="radio" name="payment_method" value="atm" @checked(old('payment_method') === 'atm')><div><h4>ATM Transfer / ATM 轉帳 <span class="badge-soon">Gateway Setup Required / 需設定金流</span></h4><p>Available after the selected Taiwan gateway enables ATM payment. / 金流商啟用 ATM 後可使用。</p></div></label>
+                    <label class="pay-opt"><input type="radio" name="payment_method" value="bank_transfer" required @checked(in_array(old('payment_method', 'bank_transfer'), ['bank_transfer', 'manual_bank_transfer'], true))><div><h4>{{ $tx('Bank Transfer', '銀行轉帳') }}</h4><p>{{ $tx('Transfer to a Taiwanese bank account, then confirm with Trinity Scholar admin. Bank details and payment-proof instructions are provided after submission.', '匯款至台灣銀行帳戶後，請向 Trinity Scholar 管理員確認。提交表單後將提供銀行資料及付款證明上傳說明。') }}</p></div></label>
+                    <div class="pay-opt unavailable" aria-disabled="true"><i class="fa fa-credit-card"></i><div><h4>{{ $tx('Credit / Debit Card', '信用卡 / 簽帳金融卡') }} <span class="badge-soon">{{ $tx('Pending', '尚待確認') }}</span></h4><p>{{ $tx('This payment option is not available yet.', '此付款方式目前尚未開放。') }}</p></div></div>
                 </div>
                 <div class="notice" style="margin-top:16px"><h4>{{ $tx('Acknowledgement', '聲明確認') }}</h4><ul><li>{{ $tx('All information provided is accurate and complete.', '所填資料正確且完整。') }}</li><li>{{ $tx('I understand there are no refunds once payment is made.', '繳費後恕不退費。') }}</li><li>{{ $tx('I have verified the exam schedule for conflicts.', '我已確認考試時程無衝突。') }}</li></ul></div>
-                <div class="sig-area"><div class="sig-box"><p><strong>{{ $tx('Student Signature', '學生簽名') }}</strong></p><div class="sig-line"></div><p>{{ $tx('Date:', '日期：') }} _____________</p></div><div class="sig-box"><p><strong>{{ $tx('Parent / Guardian Signature', '家長 / 監護人簽名') }}</strong></p><div class="sig-line"></div><p>{{ $tx('Date:', '日期：') }} _____________</p></div></div>
+                <div class="sig-area">
+                    <div class="sig-box"><label class="lbl">{{ $tx('Student Signature (type full legal name)', '學生簽名（輸入完整法定姓名）') }} <span class="req">*</span></label><input name="student_signature_name" value="{{ old('student_signature_name') }}" required autocomplete="name"><label class="lbl">{{ $tx('Signature Date', '簽名日期') }} <span class="req">*</span></label><input type="date" name="student_signature_date" value="{{ old('student_signature_date', now()->toDateString()) }}" max="{{ now()->toDateString() }}" required></div>
+                    <div class="sig-box"><label class="lbl">{{ $tx('Parent / Guardian Signature (type full legal name)', '家長 / 監護人簽名（輸入完整法定姓名）') }} <span class="req">*</span></label><input name="guardian_signature_name" value="{{ old('guardian_signature_name') }}" required autocomplete="name"><label class="lbl">{{ $tx('Signature Date', '簽名日期') }} <span class="req">*</span></label><input type="date" name="guardian_signature_date" value="{{ old('guardian_signature_date', now()->toDateString()) }}" max="{{ now()->toDateString() }}" required></div>
+                </div>
                 <div style="margin-top:18px"><label class="check-line"><input type="checkbox" name="confirmed_review" value="1" required @checked(old('confirmed_review'))><span>{{ $tx('I have read and agree to the terms above.', '我已閱讀並同意以上條款。') }} <span class="req">*</span></span></label></div>
                 <input type="hidden" name="accurate_information" value="1"><input type="hidden" name="ap_policies" value="1"><input type="hidden" name="privacy_policy" value="1"><input type="hidden" name="terms_conditions" value="1">
             </div>
@@ -698,11 +701,11 @@
             <div class="card">
                 <div class="confirm-wrap">
                     <div class="confirm-icon">OK</div>
-                    <h2>{{ $tx('Registration Submitted!', '報名已送出！') }}</h2>
+                    <h2>{{ $tx('Ready to Submit', '準備提交') }}</h2>
                     <p>{{ $tx('Your AP Exam registration is ready to submit. After submission, the AP Coordinator will review it and contact you to confirm payment.', '您的 AP 考試報名即將送出。送出後 AP 協調員將審核並聯繫您確認付款。') }}</p>
                     <div class="ref-box">{{ $tx('Reference No.', '參考編號') }}<br><strong>{{ $tx('Generated after submission', '送出後產生') }}</strong></div>
                     <p class="hint">{{ $tx('Confirmation email will be sent to', '確認信將寄至') }} <strong id="confEmail">-</strong></p>
-                    <div class="next-steps"><h4>{{ $tx('Next Steps', '後續步驟') }}</h4><ol><li>{{ $tx('AP Coordinator verifies your registration', 'AP 協調員審核報名資料') }}</li><li>{{ $tx('Complete payment by the registration deadline', '在截止日前完成付款') }}</li><li>{{ $tx('Confirm payment with school cashier', '向學校出納確認款項') }}</li><li>{{ $tx('Watch your email for exam schedule details', '留意電子郵件中的考試時程') }}</li></ol></div>
+                    <div class="next-steps"><h4>{{ $tx('After You Submit', '提交後流程') }}</h4><ol><li>{{ $tx('A confirmation email is sent to the student and parent.', '確認信將寄至學生與家長電子郵件。') }}</li><li>{{ $tx('Open the payment page to receive bank-transfer instructions.', '開啟付款頁面以取得銀行轉帳說明。') }}</li><li>{{ $tx('Upload payment proof for admin verification.', '上傳付款證明供管理員審核。') }}</li><li>{{ $tx('The admin team confirms enrollment by email.', '管理團隊將以電子郵件確認報名。') }}</li></ol></div>
                 </div>
             </div>
         </section>
@@ -723,7 +726,7 @@
                         <a href="{{ route('landing') }}"><img src="{{ asset($footerLogo) }}" alt="Trinity Scholar"></a>
                         <div class="address"><h6>{{ $footerLabels['office'] }}</h6><p>{{ $footerLabels['office_body'] }}</p></div>
                         <div class="address"><h6>{{ $footerLabels['phone'] }}</h6><p>886-2-2771-6002</p></div>
-                        <div class="address"><h6>{{ $footerLabels['email'] }}</h6><p>info@trinityscholar.com</p></div>
+                        <div class="address"><h6>{{ $footerLabels['email'] }}</h6><p>ap-registration@trinityscholar.com</p><p>Line: @TrinityScholar</p></div>
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -732,7 +735,6 @@
                         <ul>
                             <li><a href="{{ route('landing') }}#overview"><i class="fa fa-angle-right"></i>{{ $footerLabels['program'] }}</a></li>
                             <li><a href="{{ route('landing') }}#timeline"><i class="fa fa-angle-right"></i>{{ $footerLabels['timeline'] }}</a></li>
-                            <li><a href="{{ route('landing') }}#fees"><i class="fa fa-angle-right"></i>{{ $footerLabels['fees'] }}</a></li>
                             <li><a href="{{ route('student-registrations.create') }}"><i class="fa fa-angle-right"></i>{{ $footerLabels['register'] }}</a></li>
                         </ul>
                     </div>
@@ -744,7 +746,6 @@
                         <ul>
                             <li><span>{{ $footerLabels['main_period'] }}</span>{{ $footerLabels['main_period_value'] }}</li>
                             <li><span>{{ $footerLabels['late_period'] }}</span>{{ $footerLabels['late_period_value'] }}</li>
-                            <li><span>{{ $footerLabels['deadline'] }}</span>{{ $footerLabels['deadline_value'] }}</li>
                         </ul>
                     </div>
                 </div>

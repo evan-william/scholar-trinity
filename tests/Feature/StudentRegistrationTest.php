@@ -44,6 +44,10 @@ class StudentRegistrationTest extends TestCase
         $this->assertSame(7800, $registration->exam_fee_total);
         $this->assertSame(1200, $registration->service_fee_total);
         $this->assertSame(10800, $registration->total_fee);
+        $this->assertSame('Alex Student', $registration->student_signature_name);
+        $this->assertSame(now()->toDateString(), $registration->student_signature_date->toDateString());
+        $this->assertSame('Pat Parent', $registration->guardian_signature_name);
+        $this->assertSame(now()->toDateString(), $registration->guardian_signature_date->toDateString());
         $this->assertCount(1, $registration->exams);
         $this->assertCount(1, $registration->practiceExamSelections);
         $this->assertCount(4, $registration->agreements);
@@ -306,6 +310,10 @@ class StudentRegistrationTest extends TestCase
             'privacy_policy' => '1',
             'terms_conditions' => '1',
             'confirmed_review' => '1',
+            'student_signature_name' => 'Alex Student',
+            'student_signature_date' => now()->toDateString(),
+            'guardian_signature_name' => 'Pat Parent',
+            'guardian_signature_date' => now()->toDateString(),
         ], $overrides);
     }
 }

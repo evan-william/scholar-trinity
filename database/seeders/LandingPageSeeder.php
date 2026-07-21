@@ -47,7 +47,7 @@ class LandingPageSeeder extends Seeder
                 'eyebrow' => 'Registration Process',
                 'title' => 'A clear step-by-step workflow',
                 'body' => 'Students and parents should read the requirements first, prepare documents, complete the registration form, review all information, then finish payment after confirmation instructions are provided.',
-                'items' => ['Read information', 'Prepare documents', 'Fill registration form', 'Select AP exams', 'Upload passport', 'Review information', 'Payment', 'Confirmation'],
+                'items' => ['Fill registration form', 'Upload documents', 'Review and submit', 'Payment', 'Confirmation'],
                 'sort_order' => 20,
             ],
             'privacy' => [
@@ -89,11 +89,9 @@ class LandingPageSeeder extends Seeder
         }
 
         $documents = [
-            ['name' => 'Passport', 'description' => 'Clear passport photo page or PDF upload.', 'is_required' => true],
-            ['name' => 'Student Information', 'description' => 'Legal name, grade, school, email, and phone.', 'is_required' => true],
+            ['name' => 'Student Information', 'description' => 'Legal name, school, grade, date of birth, and a personal student email address. School email addresses should not be used.', 'is_required' => true],
+            ['name' => 'Valid Student Passport', 'description' => 'Clear passport photo page or PDF upload.', 'is_required' => true],
             ['name' => 'Parent Information', 'description' => 'Parent or guardian contact and mailing address.', 'is_required' => true],
-            ['name' => 'Email Address', 'description' => 'Used for confirmation and follow-up.', 'is_required' => true],
-            ['name' => 'Phone Number', 'description' => 'Used if payment or registration details need clarification.', 'is_required' => true],
             ['name' => 'Accommodation Documents', 'description' => 'Required only when requesting College Board approved accommodations.', 'is_required' => false],
         ];
 
@@ -104,7 +102,8 @@ class LandingPageSeeder extends Seeder
 
         $faqs = [
             ['question' => 'What is AP?', 'answer' => 'AP stands for Advanced Placement, a program that allows students to take college-level courses and exams.'],
-            ['question' => 'Who can register?', 'answer' => 'Outside students may register when TPCA offers available AP exam seats for community students.'],
+            ['question' => 'Who can register?', 'answer' => 'Any high school student, homeschooled student, or independent learner.'],
+            ['question' => 'What is the age requirement?', 'answer' => 'There is no minimum age, but AP is designed for high school students in grades 9 through 12. College Board generally does not permit students over age 21 to take the exams.'],
             ['question' => 'Can I change my exam?', 'answer' => 'Changes depend on availability, deadlines, and coordinator approval. Contact the team as early as possible.'],
             ['question' => 'Can I upload passport later?', 'answer' => 'Passport upload is required during registration so identity details can be verified before payment confirmation.'],
             ['question' => 'When is payment due?', 'answer' => 'Payment instructions are confirmed after registration review. Families should complete payment before the deadline for their registration round.'],
@@ -120,13 +119,13 @@ class LandingPageSeeder extends Seeder
             ['id' => LandingContact::query()->value('id')],
             [
                 'organization' => 'Trinity Scholar',
-                'email' => 'ap-registration@example.com',
-                'phone' => '+886 2 0000 0000',
-                'whatsapp' => '+886 900 000 000',
-                'office_hours' => 'Monday to Friday, 09:00-17:00',
-                'address' => 'Taipei, Taiwan',
-                'map_url' => null,
-                'social_links' => ['Website: https://example.com'],
+                'email' => 'ap-registration@trinityscholar.com',
+                'phone' => '886-2-2771-6002',
+                'whatsapp' => '@TrinityScholar',
+                'office_hours' => 'Monday to Friday, 09:00-18:00',
+                'address' => 'No. 99, Meide St, Shilin District, Taipei City, 11159',
+                'map_url' => 'https://www.google.com/maps/search/?api=1&query=No.+99%2C+Meide+St%2C+Shilin+District%2C+Taipei+City+11159',
+                'social_links' => ['Line: @TrinityScholar'],
             ]
         );
     }

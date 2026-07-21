@@ -103,6 +103,14 @@
         </div>
 
         <div class="card">
+            <div class="section-title"><h2>Submitted Signatures</h2></div>
+            <table>
+                <tr><td>Student</td><td>{{ $registration->student_signature_name ?: '-' }}<br><span class="mini">{{ optional($registration->student_signature_date)->format('Y-m-d') ?: '-' }}</span></td></tr>
+                <tr><td>Parent / Guardian</td><td>{{ $registration->guardian_signature_name ?: '-' }}<br><span class="mini">{{ optional($registration->guardian_signature_date)->format('Y-m-d') ?: '-' }}</span></td></tr>
+            </table>
+        </div>
+
+        <div class="card">
             <div class="section-title"><h2>{{ __('admin.submission_verification') }}</h2></div>
             <table>
                 <tr><td>{{ __('admin.submitted_at') }}</td><td>{{ optional($registration->submitted_at)->format('Y-m-d H:i') ?: '-' }}</td></tr>

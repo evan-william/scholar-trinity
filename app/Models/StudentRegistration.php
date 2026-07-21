@@ -86,6 +86,10 @@ class StudentRegistration extends Model
         'preferred_tutoring_schedule',
         'preferred_tutoring_language',
         'preparation_notes',
+        'student_signature_name',
+        'student_signature_date',
+        'guardian_signature_name',
+        'guardian_signature_date',
         'review_confirmed_at',
         'confirmation_sent_at',
         'verification_status',
@@ -126,6 +130,8 @@ class StudentRegistration extends Model
         'private_tutoring_interest' => 'boolean',
         'review_confirmed_at' => 'datetime',
         'confirmation_sent_at' => 'datetime',
+        'student_signature_date' => 'date',
+        'guardian_signature_date' => 'date',
     ];
 
     public function exams(): BelongsToMany

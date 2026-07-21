@@ -127,6 +127,10 @@ class StudentRegistrationService
                 'preferred_tutoring_schedule' => $data['preferred_tutoring_schedule'] ?? null,
                 'preferred_tutoring_language' => $data['preferred_tutoring_language'] ?? null,
                 'preparation_notes' => $data['preparation_notes'] ?? null,
+                'student_signature_name' => $data['student_signature_name'],
+                'student_signature_date' => $data['student_signature_date'],
+                'guardian_signature_name' => $data['guardian_signature_name'],
+                'guardian_signature_date' => $data['guardian_signature_date'],
                 'review_confirmed_at' => now(),
                 'submitted_at' => now(),
             ]);

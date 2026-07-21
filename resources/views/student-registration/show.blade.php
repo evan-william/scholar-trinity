@@ -77,4 +77,12 @@
             <li>Final registration confirmation is sent by email after payment and verification are complete.</li>
         </ol>
     </section>
+
+    <section class="card">
+        <h2>Submitted Signatures</h2>
+        <table class="summary-table">
+            <tr><td>Student</td><td>{{ $registration->student_signature_name ?: '-' }} / {{ optional($registration->student_signature_date)->format('Y-m-d') ?: '-' }}</td></tr>
+            <tr><td>Parent / Guardian</td><td>{{ $registration->guardian_signature_name ?: '-' }} / {{ optional($registration->guardian_signature_date)->format('Y-m-d') ?: '-' }}</td></tr>
+        </table>
+    </section>
 </x-public-flow-shell>

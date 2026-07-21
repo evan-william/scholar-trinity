@@ -8,6 +8,7 @@ use App\Models\StudentRegistration;
 use App\Repositories\StudentRegistrationRepository;
 use App\Services\FileSecurityService;
 use App\Services\StudentRegistrationService;
+use App\Services\PublicRegistrationSettings;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -38,6 +39,7 @@ class StudentRegistrationController extends Controller
             'subjects' => $subjects,
             'gradeLevels' => config('registration.grade_levels'),
             'practiceExamOptions' => $practiceExamOptions,
+            'registrationSettings' => app(PublicRegistrationSettings::class)->all(),
         ]);
     }
 

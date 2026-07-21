@@ -62,6 +62,23 @@ Current local template pass:
 ## Current Progress
 
 2026-07-21
+- Client webpage edit request implementation:
+  - Replaced the homepage's dated late-registration campaign with general main/late registration information while leaving the client's detailed main-registration copy marked pending.
+  - Added admin-editable public registration periods, usual main/late test periods, test-site names, address, and map URL through System Settings.
+  - Replaced the non-Taipei education imagery with a new high-resolution Taipei student/city visual for the hero, overview, registration information, and process presentation.
+  - Rebuilt the public timeline around August-October main registration, January-March late registration, beginning-of-May main tests, and mid/late-May late tests.
+  - Replaced the registration flow with the requested five stages: form, documents, review/submit, payment, and confirmation.
+  - Removed the public homepage fee section; detailed form pricing remains `Coming Soon` until client approval.
+  - Updated the document checklist, eligibility answer, age-requirement FAQ, email, phone, Line contact, and footer notice exactly from client feedback.
+  - Added test-site information and map link to the no-login form, with all values editable by admins.
+  - Added the personal-email warning, aligned AP preparation choices, removed Cash, and kept credit/debit unavailable while payment details are pending.
+  - Replaced decorative signature lines with validated student/guardian typed signatures and dates, persisted them, and exposed them in admin detail and exports.
+  - Corrected the pre-submit confirmation wording and clarified the bank-instruction, payment-proof, and official-confirmation-email workflow.
+  - Wired active admin-managed registration-confirmation email templates into the real mailable with safe placeholder replacement and production migration defaults.
+  - Added regression coverage payloads for the newly required signature fields.
+  - Bumped public UI cache version to `20260721-1` and optimized the generated Taipei visual from a 2.1 MB PNG to a 250 KB progressive JPEG.
+  - Verification passed: Vite production build, `git diff --check`, merge-marker scan, Blade section/div balance, form JavaScript ID references, and required public asset checks.
+  - PHP/Composer are still unavailable in the local PATH, so PHPUnit and Artisan migration execution must be run on the server after upload.
 - Admin login recovery:
   - Confirmed the deployed `admin` / bootstrap-password failure can occur when the server seeder was never run or an older admin row already exists, because the normal seeder intentionally does not overwrite existing passwords.
   - Added `php artisan admin:bootstrap` to explicitly create or reset the configured admin account while retaining hashed password storage and the normal Laravel login/audit flow.
@@ -531,7 +548,14 @@ These items come directly from `Reference/Trinity Scholar - Features.pdf` and we
   - DONE: add admin notification mechanism for important events such as new registration, payment proof upload, invalid passport, and receipt request.
   - DONE: build admin email template management UI using existing `EmailTemplateSetting` model/table.
   - DONE: add general system configuration module for app-level preferences that are not payment/e-invoice/landing settings.
-  - TODO: wire saved email template overrides into actual mailable rendering after copy QA.
+  - DONE: active student registration confirmation templates now render in the real mailable with safe placeholders and Blade fallback.
+
+### Client-Pending Items - 2026-07-21
+
+- PENDING: final detailed main-registration information copy from the client.
+- PENDING: final AP course/exam options and approved public fee values.
+- PENDING: credit/debit-card payment method and production payment-provider credentials.
+- PENDING: final production bank-account details; current admin payment settings remain the source for bank instructions.
 
 - Online Practice Exam Platform:
   - FUTURE TODO: question bank.
@@ -791,6 +815,12 @@ These items come directly from `Reference/Trinity Scholar - Features.pdf` and we
 ## Verification Log
 
 2026-07-21
+- Re-audited all text and screenshots in `Webpage Edits Request.docx`; every non-pending homepage and registration-form request is represented in the implementation, while client-pending copy, prices, course options, and card-payment details remain explicitly deferred.
+- Removed the obsolete February 10 fallback FAQ and unused homepage fee-section CSS so the source no longer carries superseded public content.
+- Static content scan confirmed the active public views no longer contain the old dated deadline, homepage fee anchor, Cash/School Cashier option, or old contact email.
+- Direct Vite production build passed again with `node .\node_modules\vite\bin\vite.js build` after the final client-feedback cleanup.
+- Regenerated and inspected `scholar-trinity-deploy.zip`; all new migrations, settings/email services, Taipei image, public views, and built assets are included, while secrets and local dependencies are excluded.
+- Browser QA was intentionally not used per user instruction; PHP/Composer remain unavailable locally, so Artisan migrations and PHPUnit could not be executed in this environment.
 - Confirmed Laravel 12 automatically discovers command classes under `app/Console/Commands` through `ApplicationBuilder::withCommands()`.
 - `git diff --check` passed and no merge-conflict markers were found after adding admin recovery.
 - Direct Vite production build passed with `node node_modules\vite\bin\vite.js build`.

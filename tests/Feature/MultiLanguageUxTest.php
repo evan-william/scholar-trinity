@@ -86,7 +86,7 @@ class MultiLanguageUxTest extends TestCase
         $registration = StudentRegistration::query()->with(['contact', 'exams'])->firstOrFail();
         $payment = RegistrationPayment::query()->with('registration.contact')->firstOrFail();
         $setting = PaymentSetting::query()->firstOrFail();
-        $this->assertTrue((new StudentRegistrationConfirmation($registration))->build()->hasSubject('AP 考試報名確認 '.$registration->registration_number));
+        $this->assertTrue((new StudentRegistrationConfirmation($registration))->build()->hasSubject('已收到 AP 考試報名 - '.$registration->registration_number));
         $this->assertTrue((new PaymentInstructionMail($payment, $setting))->build()->hasSubject('AP 付款說明 '.$registration->registration_number));
     }
 
@@ -207,6 +207,10 @@ class MultiLanguageUxTest extends TestCase
             'privacy_policy' => '1',
             'terms_conditions' => '1',
             'confirmed_review' => '1',
+            'student_signature_name' => 'Alex Student',
+            'student_signature_date' => now()->toDateString(),
+            'guardian_signature_name' => 'Pat Parent',
+            'guardian_signature_date' => now()->toDateString(),
         ], $overrides);
     }
 }

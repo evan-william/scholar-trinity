@@ -20,7 +20,9 @@ class LandingContentService
 
     public function publicPayload(): array
     {
-        return $this->repository->payload();
+        return $this->repository->payload() + [
+            'registrationSettings' => app(PublicRegistrationSettings::class)->all(),
+        ];
     }
 
     public function adminPayload(): array

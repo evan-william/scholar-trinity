@@ -29,9 +29,9 @@
         </div>
         <div class="card">
             <div class="section-title"><h2>Template Notes</h2></div>
-            <p class="muted">Templates are stored for admin management and future dynamic rendering. Current mailables still use Blade views until rendering integration is enabled and QA-tested.</p>
+            <p class="muted">Active registration-confirmation templates are rendered immediately. Supported placeholders are replaced safely before the email is sent.</p>
             <ul class="list">
-                <li>Use keys such as <code>{{ '{{ registration_number }}' }}</code> consistently when dynamic rendering is added.</li>
+                <li>Available confirmation placeholders: <code>{{ '{{ registration_number }}' }}</code>, <code>{{ '{{ student_name }}' }}</code>, <code>{{ '{{ submitted_at }}' }}</code>, and <code>{{ '{{ selected_exams }}' }}</code>.</li>
                 <li>Keep payment, receipt, and passport emails bilingual until final copy is approved.</li>
             </ul>
         </div>

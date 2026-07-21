@@ -1,7 +1,30 @@
 <x-admin-shell
     title="System Settings"
-    subtitle="General app-level preferences that are not payment, e-invoice, or landing content."
+    subtitle="Manage public registration dates, test-site details, and general application preferences."
 >
+    @php($registrationSettings = $settings->where('group', 'registration'))
+    @if($registrationSettings->isNotEmpty())
+        <section class="card">
+            <div class="section-title"><h2>Public Registration Information</h2><p>These values appear on the homepage and student registration form.</p></div>
+            <div class="grid-2">
+                @foreach($registrationSettings as $setting)
+                    <form method="POST" action="{{ route('admin.system-settings.store') }}" style="padding:18px;border:1px solid #dce3ec;border-radius:6px;background:#f8fafc">
+                        @csrf
+                        <input type="hidden" name="group" value="registration">
+                        <input type="hidden" name="key" value="{{ $setting->key }}">
+                        <input type="hidden" name="type" value="string">
+                        <input type="hidden" name="description" value="{{ $setting->description }}">
+                        <input type="hidden" name="is_public" value="1">
+                        <label>{{ str($setting->key)->after('registration.')->replace('_', ' ')->title() }}
+                            <textarea name="value" required>{{ $setting->value }}</textarea>
+                        </label>
+                        <button class="btn" type="submit">Save</button>
+                    </form>
+                @endforeach
+            </div>
+        </section>
+    @endif
+
     <section class="grid-2">
         <div class="card">
             <div class="section-title"><h2>Save Setting</h2></div>
@@ -29,6 +52,9 @@
             <ul class="list">
                 <li><code>registration.default_locale</code></li>
                 <li><code>registration.close_message</code></li>
+                <li><code>registration.test_site_name_en</code></li>
+                <li><code>registration.test_site_address_en</code></li>
+                <li><code>registration.test_site_map_url</code></li>
                 <li><code>notifications.admin_email</code></li>
                 <li><code>crm.default_counselor_email</code></li>
             </ul>

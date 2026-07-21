@@ -85,7 +85,11 @@ class StoreStudentRegistrationRequest extends FormRequest
             'accommodations' => ['nullable', 'array'],
             'accommodations.*.exam' => ['nullable', 'string', 'max:120'],
             'accommodations.*.request' => ['nullable', 'string', 'max:180'],
-            'payment_method' => ['nullable', 'in:bank_transfer,cash,online,manual_bank_transfer,credit_card,atm'],
+            'payment_method' => ['required', 'in:bank_transfer,manual_bank_transfer'],
+            'student_signature_name' => ['required', 'string', 'max:140'],
+            'student_signature_date' => ['required', 'date', 'before_or_equal:today'],
+            'guardian_signature_name' => ['required', 'string', 'max:140'],
+            'guardian_signature_date' => ['required', 'date', 'before_or_equal:today'],
             'accurate_information' => ['accepted'],
             'ap_policies' => ['accepted'],
             'privacy_policy' => ['accepted'],
@@ -224,7 +228,9 @@ class StoreStudentRegistrationRequest extends FormRequest
                 'preferred_tutoring_schedule', 'preferred_tutoring_language', 'preparation_notes',
             ],
             5 => [
-                'payment_method', 'accurate_information', 'ap_policies', 'privacy_policy',
+                'payment_method', 'student_signature_name', 'student_signature_date',
+                'guardian_signature_name', 'guardian_signature_date',
+                'accurate_information', 'ap_policies', 'privacy_policy',
                 'terms_conditions', 'confirmed_review',
             ],
         ];
