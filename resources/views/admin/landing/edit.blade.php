@@ -1,6 +1,7 @@
 @php
     $seo = $settings->get('seo', collect());
     $hero = $settings->get('hero', collect());
+    $registrationIntro = $sections->get('registration_intro');
     $overview = $sections->get('overview');
     $process = $sections->get('process');
     $privacy = $sections->get('privacy');
@@ -21,6 +22,23 @@
                 <label>Keywords<input name="settings[seo][keywords]" value="{{ old('settings.seo.keywords', data_get($seo, 'keywords.text')) }}" maxlength="255"></label>
                 <label>Canonical URL<input name="settings[seo][canonical_url]" value="{{ old('settings.seo.canonical_url', data_get($seo, 'canonical_url.text')) }}" type="url"></label>
                 <label>Meta Description<textarea name="settings[seo][meta_description]" maxlength="170" required>{{ old('settings.seo.meta_description', data_get($seo, 'meta_description.text')) }}</textarea></label>
+            </div>
+        </section>
+
+        <section class="card">
+            <div class="section-title">
+                <div>
+                    <h2>Registration Form Intro</h2>
+                    <p>Controls the introductory panel at the top of the public student registration form. English content is active; Traditional Chinese remains unchanged while client translation is pending.</p>
+                </div>
+                <a class="btn light" href="{{ route('student-registrations.create') }}" target="_blank" rel="noopener">View Form</a>
+            </div>
+            <input type="hidden" name="sections[registration_intro][sort_order]" value="{{ $registrationIntro?->sort_order ?? 5 }}">
+            <div class="grid">
+                <label>Eyebrow / Badge<input name="sections[registration_intro][eyebrow]" value="{{ old('sections.registration_intro.eyebrow', $registrationIntro?->eyebrow) }}" placeholder="No login required"></label>
+                <label>Title<input name="sections[registration_intro][title]" value="{{ old('sections.registration_intro.title', $registrationIntro?->title) }}" required></label>
+                <label>Introduction<textarea name="sections[registration_intro][body]" required>{{ old('sections.registration_intro.body', $registrationIntro?->body) }}</textarea></label>
+                <label>Important Points <span class="hint">One item per line.</span><textarea name="sections[registration_intro][items]">{{ old('sections.registration_intro.items', implode("\n", $registrationIntro?->items ?? [])) }}</textarea></label>
             </div>
         </section>
 

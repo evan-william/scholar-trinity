@@ -26,7 +26,14 @@
                 </label>
                 <label>{{ __('admin.exam_code') }}<input name="code" value="{{ old('code',$subject->code) }}" required></label>
                 <label>{{ __('admin.exam_name') }}<input name="name" value="{{ old('name',$subject->name) }}" required></label>
-                <label>{{ __('admin.category') }}<input name="category" value="{{ old('category',$subject->category) }}" required></label>
+                <label>{{ __('admin.category') }}
+                    <select name="category" required>
+                        <option value="">Select category</option>
+                        @foreach($categories as $category)
+                            <option value="{{ $category }}" @selected(old('category', $subject->category) === $category)>{{ $category }}</option>
+                        @endforeach
+                    </select>
+                </label>
                 <label>{{ __('admin.status') }}
                     <select name="status">
                         @foreach(['draft','not_open','open','limited','full','closed','cancelled','disabled'] as $status)

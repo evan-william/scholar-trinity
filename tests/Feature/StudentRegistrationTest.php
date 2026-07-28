@@ -68,6 +68,35 @@ class StudentRegistrationTest extends TestCase
             ->assertSessionHasErrors(['student_email', 'passport_number']);
     }
 
+    public function test_registration_remains_visible_when_email_delivery_fails(): void
+    {
+        $this->seed(ApExamSubjectSeeder::class);
+        $subject = ApExamSubject::query()->firstOrFail();
+        Mail::shouldReceive('to')->andThrow(new \RuntimeException('SMTP unavailable'));
+
+        $this->post('/student-registration', $this->validPayload([
+            'exam_subject_ids' => [$subject->id],
+        ]))->assertRedirect();
+
+        $registration = StudentRegistration::query()->firstOrFail();
+
+        $this->assertSame('submitted', $registration->status);
+        $this->assertNull($registration->confirmation_sent_at);
+        $this->assertDatabaseHas('registration_payments', [
+            'student_registration_id' => $registration->id,
+            'payment_status' => 'pending',
+        ]);
+        $this->assertDatabaseHas('receipt_requests', [
+            'student_registration_id' => $registration->id,
+            'status' => 'not_requested',
+        ]);
+
+        $this->actingAs($this->adminUser())
+            ->get(route('admin.student-registrations.index'))
+            ->assertOk()
+            ->assertSee($registration->registration_number);
+    }
+
     public function test_registration_uses_active_practice_exam_options_and_saves_preparation_interest(): void
     {
         Mail::fake();
@@ -169,6 +198,7 @@ class StudentRegistrationTest extends TestCase
             'student_email' => 'second@example.com',
             'passport_number' => 'B12345678',
             'exam_subject_ids' => [$subject->id],
+            'passport_file' => null,
             'passport_file_token' => $token,
         ]))->assertRedirect();
 

@@ -15,6 +15,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Throwable;
 
 class PaymentFlowService
 {
@@ -42,7 +43,7 @@ class PaymentFlowService
 
         $setting = $this->activeSetting();
 
-        return DB::transaction(function () use ($registration, $method, $setting): RegistrationPayment {
+        $payment = DB::transaction(function () use ($registration, $method, $setting): RegistrationPayment {
             $payment = RegistrationPayment::query()->create([
                 'student_registration_id' => $registration->id,
                 'payment_reference' => $registration->registration_number.'-PAY',
@@ -61,12 +62,21 @@ class PaymentFlowService
                 'method' => $method,
             ]);
 
+            return $payment;
+        });
+
+        try {
             Mail::to($registration->student_email)
                 ->cc($registration->contact?->parent_email)
                 ->send(new PaymentInstructionMail($payment->load('registration.contact'), $setting));
+        } catch (Throwable $exception) {
+            Log::error('Payment instruction email failed after payment persistence.', [
+                'payment_reference' => $payment->payment_reference,
+                'error' => $exception->getMessage(),
+            ]);
+        }
 
-            return $payment;
-        });
+        return $payment;
     }
 
     public function uploadProof(RegistrationPayment $payment, UploadedFile $file, ?string $ipAddress): RegistrationPayment

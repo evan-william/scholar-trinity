@@ -8,6 +8,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $title }} | Trinity Scholar Admin</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/trinity-scholar-favicon.png') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
@@ -17,10 +18,11 @@
         body{margin:0;background:var(--soft);color:var(--ink);font-family:"Open Sans",Arial,sans-serif}
         h1,h2,h3,h4,h5,h6{font-family:"Playfair Display",Georgia,serif}
         a{text-decoration:none}
-        .shell{min-height:100vh;display:grid;grid-template-columns:260px minmax(0,1fr)}
-        .side{background:#102d52;color:#dbe8f8;padding:18px;position:sticky;top:0;height:100vh;overflow:auto}
-        .brand{display:flex;align-items:center;gap:12px;color:#fff;font-weight:950;margin-bottom:22px}
-        .mark{width:42px;height:42px;border-radius:8px;background:#fff;color:var(--navy);display:grid;place-items:center;font-size:11px;line-height:1.05;text-align:center}
+        .shell{min-height:100vh;display:grid;grid-template-columns:240px minmax(0,1fr)}
+        .side{background:#102d52;color:#dbe8f8;padding:16px;position:sticky;top:0;height:100vh;overflow:auto}
+        .brand{display:block;color:#fff;margin-bottom:20px}
+        .brand-logo{display:block;width:100%;height:72px;object-fit:contain;background:#fff;border-radius:6px;padding:10px 14px}
+        .brand-label{display:block;margin-top:8px;color:#b9cce4;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
         .nav-group{display:grid;gap:6px}
         .nav-link{display:flex;align-items:center;justify-content:space-between;gap:10px;color:#dbe8f8;border-radius:7px;padding:10px 11px;font-size:14px;font-weight:800}
         .nav-link:hover,.nav-link.active{background:rgba(255,255,255,.12);color:#fff}
@@ -29,7 +31,7 @@
         .top h1{margin:0;color:var(--navy);font-size:26px;line-height:1.1}
         .top p{margin:4px 0 0;color:var(--muted);font-size:13px}
         .top-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
-        .wrap{max-width:1280px;margin:0 auto;padding:22px 18px 48px}
+        .wrap{width:100%;max-width:none;margin:0;padding:22px clamp(16px,2vw,32px) 48px}
         .card{background:#fff;border:1px solid var(--line);border-radius:8px;padding:18px;box-shadow:0 4px 16px rgba(22,47,83,.05)}
         .card+ .card{margin-top:14px}
         .section-title{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin:0 0 14px}
@@ -74,7 +76,7 @@
         .notice.error{background:#fff0ee;color:var(--red);border-color:#ffc9c4}
         form{margin:0}
         pre{white-space:pre-wrap;background:#f8fafc;border:1px solid #edf0f5;border-radius:8px;padding:14px;overflow:auto}
-        @media(max-width:1050px){.shell{grid-template-columns:1fr}.side{position:static;height:auto}.nav-group{grid-template-columns:repeat(2,minmax(0,1fr))}.filters,.metrics,.grid-2,.grid,.grid-3{grid-template-columns:1fr 1fr}.top{position:static}}
+        @media(max-width:1050px){.shell{grid-template-columns:1fr}.side{position:static;height:auto}.brand{max-width:230px}.nav-group{grid-template-columns:repeat(2,minmax(0,1fr))}.filters,.metrics,.grid-2,.grid,.grid-3{grid-template-columns:1fr 1fr}.top{position:static}}
         @media(max-width:680px){.top{align-items:flex-start;flex-direction:column}.top-actions{justify-content:flex-start}.filters,.metrics,.grid-2,.grid,.grid-3,.nav-group{grid-template-columns:1fr}table{display:block;overflow-x:auto}.wrap{padding-inline:12px}}
     </style>
 </head>
@@ -82,8 +84,8 @@
 <div class="shell">
     <aside class="side">
         <a class="brand" href="{{ route('admin.dashboard') }}">
-            <span class="mark">TS<br>AP</span>
-            <span>{{ __('admin.app_name') }}</span>
+            <img class="brand-logo" src="{{ asset('images/trinity-scholar-logo-clean.png') }}" alt="Trinity Scholar">
+            <span class="brand-label">{{ __('admin.app_name') }}</span>
         </a>
         <nav class="nav-group" aria-label="Admin navigation">
             @foreach([

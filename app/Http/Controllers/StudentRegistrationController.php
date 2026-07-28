@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreStudentRegistrationRequest;
 use App\Models\PracticeExamOption;
 use App\Models\StudentRegistration;
+use App\Repositories\LandingContentRepository;
 use App\Repositories\StudentRegistrationRepository;
 use App\Services\FileSecurityService;
 use App\Services\StudentRegistrationService;
@@ -21,7 +22,10 @@ class StudentRegistrationController extends Controller
 {
     private const PASSPORT_DRAFT_SESSION_KEY = 'student_registration_passport_drafts';
 
-    public function create(StudentRegistrationRepository $repository): View
+    public function create(
+        StudentRegistrationRepository $repository,
+        LandingContentRepository $landingContent
+    ): View
     {
         try {
             $subjects = $repository->availableSubjects();
@@ -40,6 +44,7 @@ class StudentRegistrationController extends Controller
             'gradeLevels' => config('registration.grade_levels'),
             'practiceExamOptions' => $practiceExamOptions,
             'registrationSettings' => app(PublicRegistrationSettings::class)->all(),
+            'registrationIntro' => data_get($landingContent->payload(), 'sections')->get('registration_intro'),
         ]);
     }
 

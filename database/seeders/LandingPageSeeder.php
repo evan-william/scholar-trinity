@@ -36,6 +36,13 @@ class LandingPageSeeder extends Seeder
         }
 
         $sections = [
+            'registration_intro' => [
+                'eyebrow' => 'No login required',
+                'title' => '2026 AP Exam Registration',
+                'body' => 'Students can submit registration details, passport upload, exam selections, accommodations, and payment method in one guided flow.',
+                'items' => ['Main registration is normally available from August through October.', 'Late registration may open from January through March if seats remain.', 'Registration is finalized after the form, payment, and official confirmation email are received.'],
+                'sort_order' => 5,
+            ],
             'overview' => [
                 'eyebrow' => 'Program Overview',
                 'title' => 'Everything families need before registering',

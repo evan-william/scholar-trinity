@@ -15,6 +15,7 @@ class IssueReceiptRequest extends FormRequest
     {
         return [
             'receipt_number' => ['required', 'string', 'max:80'],
+            'invoice_number' => ['nullable', 'string', 'max:80'],
             'notes' => ['nullable', 'string', 'max:2000'],
         ];
     }

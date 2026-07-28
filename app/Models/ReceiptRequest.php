@@ -30,6 +30,9 @@ class ReceiptRequest extends Model
         'currency',
         'status',
         'receipt_number',
+        'invoice_number',
+        'invoice_received',
+        'receipt_received',
         'issued_at',
         'sent_at',
         'issued_by',
@@ -42,6 +45,8 @@ class ReceiptRequest extends Model
         'late_fee_amount' => 'integer',
         'taxable_receipt_amount' => 'integer',
         'non_receipt_amount' => 'integer',
+        'invoice_received' => 'boolean',
+        'receipt_received' => 'boolean',
         'issued_at' => 'datetime',
         'sent_at' => 'datetime',
     ];

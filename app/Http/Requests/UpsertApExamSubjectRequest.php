@@ -20,7 +20,7 @@ class UpsertApExamSubjectRequest extends FormRequest
             'exam_season_id' => ['nullable', 'exists:exam_seasons,id'],
             'code' => ['required', 'string', 'max:40', Rule::unique('ap_exam_subjects', 'code')->ignore($subjectId)],
             'name' => ['required', 'string', 'max:160'],
-            'category' => ['required', 'string', 'max:100'],
+            'category' => ['required', 'string', Rule::in(config('registration.subject_categories', []))],
             'description' => ['nullable', 'string', 'max:1000'],
             'exam_date' => ['nullable', 'date'],
             'start_time' => ['nullable', 'date_format:H:i'],

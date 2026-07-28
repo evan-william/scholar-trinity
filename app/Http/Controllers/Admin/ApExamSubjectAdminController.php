@@ -24,6 +24,7 @@ class ApExamSubjectAdminController extends Controller
         return view('admin.ap-exam-subjects.form', [
             'subject' => new ApExamSubject(['timezone' => 'Asia/Taipei', 'currency' => 'NTD', 'status' => 'draft', 'is_active' => true]),
             'seasons' => ExamSeason::query()->orderByDesc('exam_year')->get(),
+            'categories' => config('registration.subject_categories', []),
         ]);
     }
 
@@ -40,6 +41,7 @@ class ApExamSubjectAdminController extends Controller
         return view('admin.ap-exam-subjects.form', [
             'subject' => $apExamSubject,
             'seasons' => ExamSeason::query()->orderByDesc('exam_year')->get(),
+            'categories' => config('registration.subject_categories', []),
         ]);
     }
 

@@ -56,7 +56,8 @@ class ReceiptAdminController extends Controller
             $request->validated('receipt_number'),
             $request->user()->id,
             $request->ip(),
-            $request->validated('notes')
+            $request->validated('notes'),
+            $request->validated('invoice_number')
         );
 
         return redirect()->route('admin.receipts.show', $receiptRequest)->with('status', 'Receipt marked as issued.');
@@ -100,7 +101,10 @@ class ReceiptAdminController extends Controller
             'Service Fee Amount' => $receipt->service_fee_amount,
             'Receipt Amount' => $receipt->taxable_receipt_amount,
             'Status' => $receipt->status,
-            'Receipt Number' => $receipt->receipt_number,
+            'Invoice Number' => $receipt->invoice_number,
+            'Receipt / Fapiao Number' => $receipt->receipt_number,
+            'Invoice Received' => $receipt->invoice_received ? 'Yes' : 'No',
+            'Receipt / Fapiao Received' => $receipt->receipt_received ? 'Yes' : 'No',
             'Issued At' => optional($receipt->issued_at)->format('Y-m-d H:i'),
         ]);
 
@@ -153,6 +157,7 @@ class ReceiptAdminController extends Controller
             ->when($request->query('search'), function ($query, string $search): void {
                 $query->where('buyer_name', 'like', "%{$search}%")
                     ->orWhere('buyer_email', 'like', "%{$search}%")
+                    ->orWhere('invoice_number', 'like', "%{$search}%")
                     ->orWhere('receipt_number', 'like', "%{$search}%")
                     ->orWhereHas('registration', fn ($registration) => $registration->where('registration_number', 'like', "%{$search}%")->orWhere('student_full_name', 'like', "%{$search}%"));
             })

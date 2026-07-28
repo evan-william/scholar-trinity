@@ -29,6 +29,12 @@
             'summary_title' => $registrationSettings['test_site_name_en'] ?? 'The Primacy Collegiate Academy',
             'summary_body' => $registrationSettings['test_site_address_en'] ?? 'No. 99, Meide St, Shilin District, Taipei City, 11159',
         ];
+    if (! $isZh && isset($registrationIntro) && $registrationIntro) {
+        $introCopy['badge'] = $registrationIntro->eyebrow ?: $introCopy['badge'];
+        $introCopy['title'] = $registrationIntro->title ?: $introCopy['title'];
+        $introCopy['body'] = $registrationIntro->body ?: $introCopy['body'];
+        $introCopy['items'] = filled($registrationIntro->items) ? $registrationIntro->items : $introCopy['items'];
+    }
     $footerLabels = $isZh
         ? [
             'office' => '服務說明',

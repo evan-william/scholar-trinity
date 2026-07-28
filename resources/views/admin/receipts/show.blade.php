@@ -14,7 +14,10 @@
                     <tr><td>Phone</td><td>{{ $receipt->buyer_phone ?: '-' }}</td></tr>
                     <tr><td>Company</td><td>{{ $receipt->company_name ?: '-' }}</td></tr>
                     <tr><td>GUI / Tax ID</td><td>{{ $receipt->gui_tax_id ?: '-' }}</td></tr>
-                    <tr><td>Receipt Number</td><td>{{ $receipt->receipt_number ?: '-' }}</td></tr>
+                    <tr><td>Invoice Number</td><td>{{ $receipt->invoice_number ?: '-' }}</td></tr>
+                    <tr><td>Receipt / Fapiao Number</td><td>{{ $receipt->receipt_number ?: '-' }}</td></tr>
+                    <tr><td>Invoice Received</td><td>{{ $receipt->invoice_received ? 'Yes' : 'No' }}</td></tr>
+                    <tr><td>Receipt / Fapiao Received</td><td>{{ $receipt->receipt_received ? 'Yes' : 'No' }}</td></tr>
                     <tr><td>Issued</td><td>{{ optional($receipt->issued_at)->format('Y-m-d H:i') ?: '-' }}</td></tr>
                 </tbody>
             </table>
@@ -54,8 +57,16 @@
                 <label>Phone<input name="buyer_phone" value="{{ old('buyer_phone', $receipt->buyer_phone) }}"></label>
                 <label>Company<input name="company_name" value="{{ old('company_name', $receipt->company_name) }}"></label>
                 <label>GUI / Tax ID<input name="gui_tax_id" value="{{ old('gui_tax_id', $receipt->gui_tax_id) }}"></label>
+                <div class="grid">
+                    <label>Invoice Number<input name="invoice_number" value="{{ old('invoice_number', $receipt->invoice_number) }}"></label>
+                    <label>Receipt / Fapiao Number<input name="receipt_number" value="{{ old('receipt_number', $receipt->receipt_number) }}"></label>
+                </div>
+                <div class="actions" style="margin-bottom:12px">
+                    <label style="flex-direction:row;align-items:center;margin:0"><input style="width:auto;min-height:auto" type="checkbox" name="invoice_received" value="1" @checked(old('invoice_received', $receipt->invoice_received))> Invoice received</label>
+                    <label style="flex-direction:row;align-items:center;margin:0"><input style="width:auto;min-height:auto" type="checkbox" name="receipt_received" value="1" @checked(old('receipt_received', $receipt->receipt_received))> Receipt / fapiao received</label>
+                </div>
                 <label>Notes<textarea name="notes">{{ old('notes', $receipt->notes) }}</textarea></label>
-                <button class="btn" type="submit">Save Receipt Info</button>
+                <button class="btn" type="submit">Save Tracking Information</button>
             </form>
         </div>
 
@@ -63,7 +74,8 @@
             <h2>Actions</h2>
             <form method="POST" action="{{ route('admin.receipts.issue', $receipt) }}">
                 @csrf
-                <label>Receipt Number<input name="receipt_number" value="{{ old('receipt_number', $receipt->receipt_number) }}"></label>
+                <label>Invoice Number <span class="hint">Optional</span><input name="invoice_number" value="{{ old('invoice_number', $receipt->invoice_number) }}"></label>
+                <label>Receipt / Fapiao Number<input name="receipt_number" value="{{ old('receipt_number', $receipt->receipt_number) }}" required></label>
                 <label>Notes<textarea name="notes"></textarea></label>
                 <button class="btn" type="submit">Mark Issued</button>
             </form>

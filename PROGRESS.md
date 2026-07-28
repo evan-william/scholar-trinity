@@ -1,6 +1,6 @@
 # Trinity Scholar Progress Tracker
 
-Last updated: 2026-07-21, Asia/Bangkok
+Last updated: 2026-07-28, Asia/Bangkok
 
 This file is the working source of truth for project status. Every implementation pass must update:
 - `Current Progress` for what changed.
@@ -60,6 +60,29 @@ Current local template pass:
 - Raw downloaded templates are ignored through `template-source/` in `.gitignore`.
 
 ## Current Progress
+
+2026-07-28
+- Client admin/CMS revision:
+  - Removed the fixed 1280px admin content cap so management screens use the available desktop workspace while retaining responsive padding and mobile fallbacks.
+  - Replaced the temporary `TS AP` admin badge with the real Trinity Scholar logo and added the Trinity favicon to every admin page.
+  - Converted AP subject and practice-exam categories from free text to a shared, validated dropdown list.
+  - Added a clearly labeled `Registration Form Intro` editor to Landing Content CMS. Its English eyebrow, title, body, and important points now control the top intro panel on the no-login registration form.
+  - Preserved the current Traditional Chinese intro while the client translation remains pending.
+- Registration durability:
+  - Moved registration confirmation email, payment setup, receipt tracking, and admin notification work outside the core registration database transaction.
+  - A failed SMTP call can no longer roll back a successfully submitted registration, which addresses the reported case where a completed entry did not appear in admin.
+  - Payment instruction email is also sent only after payment persistence and no longer rolls back the payment record on delivery failure.
+  - Added regression coverage proving a registration, pending payment, receipt tracking row, and admin-list entry remain available when mail delivery fails.
+- Invoice and receipt/fapiao tracking:
+  - Added manual invoice number, receipt/fapiao number, invoice-received status, receipt/fapiao-received status, and admin notes.
+  - Every new registration payment now gets a receipt tracking record even when the student did not explicitly request a receipt, so admin staff always have a place to record follow-up.
+  - Expanded receipt list search, detail view, issue action, and CSV export with the new tracking fields.
+  - Moved receipt-request email/notification delivery outside its persistence transaction.
+- Verification:
+  - `git diff --check` passed.
+  - Vite production build passed with 61 modules transformed.
+  - Targeted regression suites passed: 23 tests and 158 assertions.
+  - Full PHPUnit suite passed: 77 tests and 463 assertions using local XAMPP PHP with GD and ZIP enabled.
 
 2026-07-21
 - Client webpage edit request implementation:
@@ -305,7 +328,7 @@ Legend:
 | Student Registration | Parent / Guardian Information | DONE | `RegistrationContact`, form fields, persistence, admin display/export. |
 | Student Registration | Address Information | DONE | Mailing address/city/district/postal code stored in contact record. |
 | Student Registration | Emergency Contact | DONE | Emergency contact fields stored and shown/exported. |
-| Student Registration | Registration Validation | DONE | `StoreStudentRegistrationRequest` validates required registration fields and passport requirement. Runtime tests still blocked here by missing PHP. |
+| Student Registration | Registration Validation | DONE | `StoreStudentRegistrationRequest` validates required registration fields and passport requirement; the full PHPUnit suite passes locally. |
 | Document Management | Passport Upload | DONE | Student form + draft upload + final storage. |
 | Document Management | File Validation | DONE | MIME/size validation and `FileSecurityService`. |
 | Document Management | File Preview | PARTIAL | Admin preview exists. Student-side pre-submit visual preview is not fully implemented beyond selected/draft file handling. |
@@ -375,9 +398,9 @@ Legend:
 | Payment Gateway | ECPay / NewebPay Integration | PARTIAL | Adapter skeleton exists. ECPay has basic payload/signature path; NewebPay throws `LogicException`. Not production-ready. |
 | Payment Gateway | Payment Callback | PARTIAL | Callback route/service exists, but provider-specific validation/security is not complete. |
 | Payment Gateway | Payment Notification | PARTIAL | Payment confirmation email exists, but real-time provider notification handling is not production-verified. |
-| Receipt / Fapiao | Receipt Information | DONE | Public receipt/fapiao form and request persistence. |
-| Receipt / Fapiao | Receipt Management | DONE | Admin list/detail/settings/issue/status/send. |
-| Receipt / Fapiao | Receipt Export | DONE | Receipt CSV export exists. |
+| Receipt / Fapiao | Receipt Information | DONE | Public request form plus an automatic tracking row for every new registration payment. |
+| Receipt / Fapiao | Receipt Management | DONE | Admin list/detail/settings/issue/status/send plus invoice number, receipt/fapiao number, received flags, and notes. |
+| Receipt / Fapiao | Receipt Export | DONE | Receipt CSV export includes invoice/fapiao tracking fields. |
 | Receipt / Fapiao | E-Invoice Integration | PARTIAL | Provider interfaces/placeholders exist; real Taiwan e-invoice API not implemented. |
 | System Enhancement | Admin Notification | DONE | Admin notification table/service/page exists, with hooks for important registration/payment/passport/receipt events. |
 | System Enhancement | Email Template Management | PARTIAL | Admin CRUD UI exists for template overrides; current mailables still render Blade views until dynamic rendering is QA-tested. |
@@ -615,6 +638,7 @@ These items come directly from `Reference/Trinity Scholar - Features.pdf` and we
   - DONE: important hidden/missing data persistence fixed.
   - DONE: review step now includes DOB, nationality, passport number, relationship, emergency contact, and accommodations.
   - DONE: top-of-form intro now uses extracted announcement content and no-login registration guidance.
+  - DONE: English top-of-form intro is editable directly from Landing Content CMS; pending Traditional Chinese client copy remains unchanged.
   - TODO: deeper visual refactor after final frontend/admin template decision.
   - DONE: new submitted fields appear in admin detail/edit/print and exports.
 
@@ -648,6 +672,7 @@ These items come directly from `Reference/Trinity Scholar - Features.pdf` and we
   - DONE: operations queue metrics added for document, verification, payment, receipt, and quota follow-up.
   - DONE: dashboard counts uploaded/pending-review passports instead of a hardcoded placeholder.
   - DONE: dashboard now uses a reusable admin shell with sidebar, filters, metrics, operations queue, quick actions, chart, and subject summary.
+  - DONE: admin shell uses the full available desktop width and real Trinity Scholar logo/favicon.
   - TODO: apply final selected admin template styling to every admin management page.
 
 - Registration Management:
@@ -667,7 +692,8 @@ These items come directly from `Reference/Trinity Scholar - Features.pdf` and we
   - DONE: new registration fields and practice/accommodation data are included in exports.
   - DONE: export filters now include document status, verification status, receipt status, and accommodations.
   - DONE: export history page now uses the backend/admin shell.
-  - TODO: verify XLSX works on server with PHP Zip extension.
+  - DONE: local PHPUnit export coverage passes with the PHP ZIP extension enabled.
+  - TODO: confirm the PHP ZIP extension is also enabled on the production server.
 
 ### Phase 3 - Payment Flow
 
@@ -713,8 +739,9 @@ These items come directly from `Reference/Trinity Scholar - Features.pdf` and we
   - DONE: public receipt/fapiao form now explains service-fee-only receipt rules and amount breakdown.
 
 - Admin Receipt Management:
-  - `PARTIAL`: list/filter/export/issue/manual receipt number exist.
+  - `PARTIAL`: list/filter/export/issue, manual invoice number, manual receipt/fapiao number, received-status tracking, and notes exist.
   - DONE: receipt list/detail/settings now use the backend/admin shell.
+  - DONE: every new registration payment creates an admin-visible receipt tracking record.
   - TODO: final provider-specific e-invoice UX after provider is chosen.
 
 - Auto Fapiao Integration:
@@ -797,7 +824,7 @@ These items come directly from `Reference/Trinity Scholar - Features.pdf` and we
 
 ## Bugs / Re-Audit Findings
 
-- PHP and Composer are not available in the current Codex environment, so tests have not been run here.
+- PHP is not registered in the Windows PATH, but the local XAMPP PHP runtime is available at `C:\xampp\php\php.exe`; the full PHPUnit suite passes when GD and ZIP are enabled explicitly.
 - Admin dashboard/login requires an initialized database and migrations; the public no-database fallback does not make authenticated admin features database-free.
 - `resources/views/student-registration/create.blade.php` still contains a lot of inline CSS/JS and should be replaced or refactored after template choice.
 - Backend template zip is Filament source/package code, not a safe raw drop-in template. It should be installed through Composer when the environment supports it.
@@ -813,6 +840,15 @@ These items come directly from `Reference/Trinity Scholar - Features.pdf` and we
 - Server credentials were shared in chat but must stay out of Git.
 
 ## Verification Log
+
+2026-07-28
+- Ran targeted regression coverage for registration durability, receipt/invoice tracking, and CMS registration intro: 23 tests and 158 assertions passed.
+- Updated stale registration fixtures to include the production-required passport, contact, and payment fields, and aligned public-fee expectations with the approved `Coming Soon` state.
+- Ran the complete PHPUnit suite with XAMPP PHP 8.2, GD, and ZIP: 77 tests and 463 assertions passed.
+- Vite production build passed with 61 modules transformed.
+- PHP syntax lint passed for every changed PHP and Blade file, including both new migrations.
+- Regenerated `scholar-trinity-deploy.zip`; verified the new migrations, CMS/admin views, and Vite manifest are present while `.env`, dependencies, logs, private uploads, and local teammate notes are excluded.
+- Browser QA was intentionally not used per user instruction.
 
 2026-07-21
 - Follow-up visual correction from stakeholder screenshots:
@@ -938,7 +974,7 @@ These items come directly from `Reference/Trinity Scholar - Features.pdf` and we
 
 ## Suggested Next Work Order
 
-1. For Monday/demo scope: keep compro + no-login registration + admin can view data stable; run PHP/browser QA on a real PHP environment.
+1. Deploy the verified client revision, run migrations, and smoke-test no-login submission plus admin visibility on the production server.
 2. Get client/team approval on current Edification compro pass or replace with the approved premium frontend template.
 3. Choose final admin template path: keep current Blade admin shell, install Filament by Composer, or use a Laravel admin template.
 4. Server deploy execution: fill `.env`, DB credentials, `npm run build`, Laravel migrate.

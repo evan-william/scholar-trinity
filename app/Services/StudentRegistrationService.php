@@ -55,7 +55,7 @@ class StudentRegistrationService
             ]);
         }
 
-        return DB::transaction(function () use ($data, $subjects, $ipAddress, $userAgent): StudentRegistration {
+        $registration = DB::transaction(function () use ($data, $subjects, $ipAddress, $userAgent): StudentRegistration {
             $passportDraft = null;
             if (! isset($data['passport_file'])) {
                 $passportDraft = ! empty($data['passport_file_token'])
@@ -238,14 +238,38 @@ class StudentRegistrationService
                 'student_email' => $registration->student_email,
             ]);
 
+            return $registration->load(['contact', 'exams', 'histories']);
+        });
+
+        try {
+            $payment = app(PaymentFlowService::class)->ensurePayment(
+                $registration->fresh(['contact', 'exams']),
+                $registration->payment_method
+            );
+            app(ReceiptService::class)->ensureTrackingRecord($payment);
+        } catch (\Throwable $exception) {
+            Log::error('Registration persisted but payment setup failed.', [
+                'registration_number' => $registration->registration_number,
+                'error' => $exception->getMessage(),
+            ]);
+        }
+
+        try {
             Mail::to($registration->student_email)
                 ->cc($registration->contact->parent_email)
                 ->send(new StudentRegistrationConfirmation($registration->load(['contact', 'exams'])));
-
             $registration->update(['confirmation_sent_at' => now()]);
+            Log::info('Student registration confirmation email sent.', [
+                'registration_number' => $registration->registration_number,
+            ]);
+        } catch (\Throwable $exception) {
+            Log::error('Registration confirmation email failed after persistence.', [
+                'registration_number' => $registration->registration_number,
+                'error' => $exception->getMessage(),
+            ]);
+        }
 
-            app(PaymentFlowService::class)->ensurePayment($registration->fresh(['contact', 'exams']), $paymentMethod);
-
+        try {
             app(AdminNotificationService::class)->create(
                 'registration_submitted',
                 'New AP registration submitted',
@@ -254,13 +278,14 @@ class StudentRegistrationService
                 route('admin.student-registrations.show', $registration),
                 $registration,
             );
-
-            Log::info('Student registration confirmation email sent.', [
+        } catch (\Throwable $exception) {
+            Log::error('Registration persisted but admin notification failed.', [
                 'registration_number' => $registration->registration_number,
+                'error' => $exception->getMessage(),
             ]);
+        }
 
-            return $registration->load(['contact', 'exams', 'histories']);
-        });
+        return $registration->fresh(['contact', 'exams', 'histories']);
     }
 
     public function updateStatus(StudentRegistration $registration, string $status, ?string $note = null): StudentRegistration

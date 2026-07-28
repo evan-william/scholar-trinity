@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
+use Throwable;
 
 class ReceiptService
 {
@@ -41,6 +42,30 @@ class ReceiptService
         return max($payment->grand_total - $this->taxableAmount($payment), 0);
     }
 
+    public function ensureTrackingRecord(RegistrationPayment $payment): ReceiptRequest
+    {
+        $payment->loadMissing('registration.contact');
+        $registration = $payment->registration;
+
+        return ReceiptRequest::query()->firstOrCreate(
+            ['registration_payment_id' => $payment->id],
+            [
+                'student_registration_id' => $payment->student_registration_id,
+                'buyer_name' => $registration?->contact?->parent_full_name ?: $registration?->student_full_name,
+                'buyer_email' => $registration?->contact?->parent_email ?: $registration?->student_email,
+                'buyer_phone' => $registration?->contact?->parent_phone ?: $registration?->student_phone,
+                'receipt_type' => 'none',
+                'exam_fee_amount' => $payment->exam_fee_amount,
+                'service_fee_amount' => $payment->service_fee_amount,
+                'late_fee_amount' => $payment->late_fee_amount,
+                'taxable_receipt_amount' => 0,
+                'non_receipt_amount' => $payment->grand_total,
+                'currency' => $payment->currency,
+                'status' => 'not_requested',
+            ]
+        );
+    }
+
     /**
      * @param array<string, mixed> $data
      */
@@ -50,7 +75,7 @@ class ReceiptService
         $type = $data['receipt_type'];
         $status = $type === 'none' ? 'not_requested' : 'pending_issue';
 
-        return DB::transaction(function () use ($payment, $data, $type, $status, $ipAddress): ReceiptRequest {
+        $receipt = DB::transaction(function () use ($payment, $data, $type, $status, $ipAddress): ReceiptRequest {
             $receipt = ReceiptRequest::query()->updateOrCreate(
                 ['registration_payment_id' => $payment->id],
                 [
@@ -76,7 +101,11 @@ class ReceiptService
                 'taxable_receipt_amount' => $receipt->taxable_receipt_amount,
             ]);
             app(SecurityAuditService::class)->log('receipt', 'receipt_requested', 'Receipt request saved.', $receipt, [], ['status' => $status], ['receipt_type' => $type]);
-            if ($type !== 'none') {
+            return $receipt->fresh(['registration', 'payment']);
+        });
+
+        if ($type !== 'none') {
+            try {
                 app(AdminNotificationService::class)->create(
                     'receipt_requested',
                     'Receipt/fapiao request received',
@@ -86,14 +115,16 @@ class ReceiptService
                     receipt: $receipt,
                     payload: ['receipt_type' => $type],
                 );
-            }
-
-            if ($type !== 'none') {
                 Mail::to($receipt->buyer_email)->send(new ReceiptRequestReceivedMail($receipt->load('registration')));
+            } catch (Throwable $exception) {
+                Log::error('Receipt request notification failed after persistence.', [
+                    'receipt_uuid' => $receipt->uuid,
+                    'error' => $exception->getMessage(),
+                ]);
             }
+        }
 
-            return $receipt->fresh(['registration', 'payment']);
-        });
+        return $receipt;
     }
 
     /**
@@ -109,6 +140,10 @@ class ReceiptService
             'company_name' => $data['company_name'] ?? null,
             'gui_tax_id' => $data['gui_tax_id'] ?? null,
             'receipt_type' => $data['receipt_type'],
+            'invoice_number' => $data['invoice_number'] ?? null,
+            'receipt_number' => $data['receipt_number'] ?? null,
+            'invoice_received' => (bool) ($data['invoice_received'] ?? false),
+            'receipt_received' => (bool) ($data['receipt_received'] ?? false),
             'notes' => $data['notes'] ?? $receipt->notes,
         ]);
         $this->log($receipt, 'receipt_information_updated', $old, $receipt->status, $adminId, $ipAddress);
@@ -117,7 +152,14 @@ class ReceiptService
         return $receipt->fresh();
     }
 
-    public function markIssued(ReceiptRequest $receipt, string $receiptNumber, int $adminId, ?string $ipAddress, ?string $notes = null): ReceiptRequest
+    public function markIssued(
+        ReceiptRequest $receipt,
+        string $receiptNumber,
+        int $adminId,
+        ?string $ipAddress,
+        ?string $notes = null,
+        ?string $invoiceNumber = null
+    ): ReceiptRequest
     {
         if (in_array($receipt->status, ['issued', 'sent'], true)) {
             throw ValidationException::withMessages(['receipt_number' => __('receipt.validation.already_issued')]);
@@ -131,6 +173,9 @@ class ReceiptService
         $receipt->update([
             'status' => 'issued',
             'receipt_number' => $receiptNumber,
+            'invoice_number' => $invoiceNumber ?: $receipt->invoice_number,
+            'receipt_received' => true,
+            'invoice_received' => $invoiceNumber ? true : $receipt->invoice_received,
             'issued_at' => now(),
             'issued_by' => $adminId,
             'notes' => $notes ?: $receipt->notes,
@@ -138,9 +183,12 @@ class ReceiptService
 
         $this->log($receipt, 'receipt_issued', $old, 'issued', $adminId, $ipAddress, [
             'receipt_number' => $receiptNumber,
+            'invoice_number' => $invoiceNumber,
         ]);
         app(SecurityAuditService::class)->log('receipt', 'receipt_issued', 'Receipt marked issued.', $receipt, ['status' => $old], ['status' => 'issued', 'receipt_number' => $receiptNumber], [], 'success', request(), $adminId);
-        Mail::to($receipt->buyer_email)->send(new ReceiptIssuedMail($receipt->fresh(['registration', 'payment'])));
+        if ($receipt->buyer_email) {
+            Mail::to($receipt->buyer_email)->send(new ReceiptIssuedMail($receipt->fresh(['registration', 'payment'])));
+        }
 
         return $receipt->fresh();
     }

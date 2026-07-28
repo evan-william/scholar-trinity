@@ -12,6 +12,7 @@ use App\Models\RegistrationPayment;
 use App\Models\StudentRegistration;
 use Database\Seeders\PaymentSettingSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
@@ -182,12 +183,15 @@ class MultiLanguageUxTest extends TestCase
     {
         return array_replace([
             'student_full_name' => 'Alex Chen',
+            'family_name_en' => 'CHEN',
+            'first_name_en' => 'Ming',
             'preferred_name' => 'Alex',
             'gender' => 'Male',
             'date_of_birth' => '2009-01-15',
             'nationality' => 'Taiwan',
             'passport_number' => 'A12345678',
             'passport_expiry_date' => '2030-01-15',
+            'passport_file' => UploadedFile::fake()->image('passport.jpg'),
             'student_email' => 'alex@example.com',
             'student_phone' => '+886 912 345 678',
             'school_name' => 'Taipei International School',
@@ -202,6 +206,7 @@ class MultiLanguageUxTest extends TestCase
             'emergency_contact_name' => 'Mark Jou',
             'emergency_contact_phone' => '+886 988 111 222',
             'emergency_contact_relationship' => 'Father',
+            'payment_method' => 'bank_transfer',
             'accurate_information' => '1',
             'ap_policies' => '1',
             'privacy_policy' => '1',

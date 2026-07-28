@@ -137,14 +137,40 @@ class ReceiptManagementTest extends TestCase
             ->assertHeader('Content-Type', 'text/csv; charset=utf-8');
 
         $this->actingAs($admin)
+            ->patch(route('admin.receipts.update', $receipt), [
+                'receipt_type' => 'personal',
+                'buyer_name' => 'Ivon Jou',
+                'buyer_email' => 'ivon@example.com',
+                'buyer_phone' => '+886 987 654 321',
+                'invoice_number' => 'INV-2026-0001',
+                'receipt_number' => 'FA-2026-DRAFT',
+                'invoice_received' => '1',
+                'notes' => 'Invoice received; fapiao pending.',
+            ])->assertRedirect(route('admin.receipts.show', $receipt));
+
+        $receipt->refresh();
+        $this->assertSame('INV-2026-0001', $receipt->invoice_number);
+        $this->assertSame('FA-2026-DRAFT', $receipt->receipt_number);
+        $this->assertTrue($receipt->invoice_received);
+        $this->assertFalse($receipt->receipt_received);
+
+        $this->actingAs($admin)
+            ->get(route('admin.receipts.index', ['search' => 'INV-2026-0001']))
+            ->assertOk()
+            ->assertSee('INV-2026-0001');
+
+        $this->actingAs($admin)
             ->post(route('admin.receipts.issue', $receipt), [
                 'receipt_number' => 'FA-2026-0001',
+                'invoice_number' => 'INV-2026-0001',
                 'notes' => 'Issued manually.',
             ])->assertRedirect(route('admin.receipts.show', $receipt));
 
         $receipt->refresh();
         $this->assertSame('issued', $receipt->status);
         $this->assertSame('FA-2026-0001', $receipt->receipt_number);
+        $this->assertSame('INV-2026-0001', $receipt->invoice_number);
+        $this->assertTrue($receipt->receipt_received);
         Mail::assertSent(ReceiptIssuedMail::class);
         $this->assertDatabaseHas('receipt_logs', [
             'receipt_request_id' => $receipt->id,

@@ -7,6 +7,7 @@ use App\Models\ExamSeason;
 use App\Models\PracticeExamOption;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class PracticeExamOptionAdminController extends Controller
@@ -16,6 +17,7 @@ class PracticeExamOptionAdminController extends Controller
         return view('admin.practice-exams.index', [
             'practiceExams' => PracticeExamOption::query()->with('examSeason')->orderBy('sort_order')->paginate(30),
             'seasons' => ExamSeason::query()->orderByDesc('exam_year')->get(),
+            'categories' => config('registration.subject_categories', []),
         ]);
     }
 
@@ -24,7 +26,7 @@ class PracticeExamOptionAdminController extends Controller
         $data = $request->validate([
             'exam_season_id' => ['nullable', 'exists:exam_seasons,id'],
             'name' => ['required', 'string', 'max:160'],
-            'category' => ['nullable', 'string', 'max:100'],
+            'category' => ['nullable', 'string', Rule::in(config('registration.subject_categories', []))],
             'practice_date' => ['nullable', 'date'],
             'start_time' => ['nullable', 'date_format:H:i'],
             'end_time' => ['nullable', 'date_format:H:i', 'after:start_time'],
@@ -45,7 +47,7 @@ class PracticeExamOptionAdminController extends Controller
         $data = $request->validate([
             'exam_season_id' => ['nullable', 'exists:exam_seasons,id'],
             'name' => ['required', 'string', 'max:160'],
-            'category' => ['nullable', 'string', 'max:100'],
+            'category' => ['nullable', 'string', Rule::in(config('registration.subject_categories', []))],
             'practice_date' => ['nullable', 'date'],
             'start_time' => ['nullable', 'date_format:H:i'],
             'end_time' => ['nullable', 'date_format:H:i', 'after:start_time'],

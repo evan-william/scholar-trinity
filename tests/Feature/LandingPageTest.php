@@ -47,6 +47,7 @@ class LandingPageTest extends TestCase
 
         $payload = $this->validAdminPayload();
         $payload['settings']['hero']['title'] = 'Updated AP Registration';
+        $payload['sections']['registration_intro']['title'] = 'Updated Registration Intro';
         $payload['faqs'][0]['answer'] = 'Updated answer for families.';
 
         $this->put('/admin/landing', $payload)
@@ -55,6 +56,10 @@ class LandingPageTest extends TestCase
         $this->get('/')
             ->assertSee('Updated AP Registration')
             ->assertSee('Updated answer for families.');
+
+        $this->get('/student-registration')
+            ->assertOk()
+            ->assertSee('Updated Registration Intro');
     }
 
     private function adminUser(): User
@@ -94,6 +99,7 @@ class LandingPageTest extends TestCase
                 ],
             ],
             'sections' => [
+                'registration_intro' => ['eyebrow' => 'No login required', 'title' => 'Registration Intro', 'body' => 'Registration intro body', 'items' => "One\nTwo", 'sort_order' => 5],
                 'overview' => ['eyebrow' => 'Overview', 'title' => 'Overview Title', 'body' => 'Overview body', 'items' => "One\nTwo", 'sort_order' => 10],
                 'process' => ['eyebrow' => 'Process', 'title' => 'Process Title', 'body' => 'Process body', 'items' => "Read\nPay", 'sort_order' => 20],
                 'privacy' => ['eyebrow' => 'Privacy', 'title' => 'Privacy Title', 'body' => 'Privacy body', 'items' => "Consent\nRetention", 'sort_order' => 30],

@@ -321,8 +321,8 @@
                 <div class="col-lg-6">
                     <div class="overview-copy">
                         <div class="section-title">
-                            <span>{{ $tx('Program Overview', '服務總覽') }}</span>
-                            <h2>{{ $tx('A clearer route to AP exam registration', '更清楚的 AP 考試報名流程') }}</h2>
+                            <span>{{ $overview?->eyebrow ?: $tx('Program Overview', '服務總覽') }}</span>
+                            <h2>{{ $overview?->title ?: $tx('A clearer route to AP exam registration', '更清楚的 AP 考試報名流程') }}</h2>
                         </div>
                         <p>{{ $overview?->body ?: $tx('Trinity Scholar helps students submit AP registration details, passport documents, exam selections, payment information, and admin verification in one guided platform.', 'Trinity Scholar 協助學生在同一平台提交 AP 報名資料、護照文件、考試選擇、付款資訊，並由管理團隊完成審核。') }}</p>
                         <a class="btn btn-primary btn-round" href="{{ route('student-registrations.create') }}">{{ $tx('Start Registration', '開始報名') }}</a>

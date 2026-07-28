@@ -16,7 +16,14 @@
                     </select>
                 </label>
                 <label>Name<input name="name" required></label>
-                <label>Category<input name="category" placeholder="Science, Math, English"></label>
+                <label>Category
+                    <select name="category">
+                        <option value="">Select category</option>
+                        @foreach($categories as $category)
+                            <option value="{{ $category }}">{{ $category }}</option>
+                        @endforeach
+                    </select>
+                </label>
                 <label>Practice Date<input type="date" name="practice_date"></label>
                 <label>Start Time<input type="time" name="start_time"></label>
                 <label>End Time<input type="time" name="end_time"></label>
@@ -39,7 +46,14 @@
                     @method('PUT')
                     <div class="grid">
                         <label>Name<input name="name" value="{{ $option->name }}" required></label>
-                        <label>Category<input name="category" value="{{ $option->category }}" placeholder="Science, Math, English"></label>
+                        <label>Category
+                            <select name="category">
+                                <option value="">Select category</option>
+                                @foreach($categories as $category)
+                                    <option value="{{ $category }}" @selected($option->category === $category)>{{ $category }}</option>
+                                @endforeach
+                            </select>
+                        </label>
                         <label>Season
                             <select name="exam_season_id">
                                 <option value="">No season</option>
