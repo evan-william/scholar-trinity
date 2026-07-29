@@ -20,6 +20,7 @@
                     <th>{{ __('admin.quota') }}</th>
                     <th>{{ __('admin.fees') }}</th>
                     <th>{{ __('admin.status') }}</th>
+                    <th>{{ __('admin.registration_availability') }}</th>
                     <th>{{ __('admin.actions') }}</th>
                 </tr>
             </thead>
@@ -35,6 +36,12 @@
                         <td>{{ $subject->registered_count }}/{{ $subject->quota ?? 'No cap' }}</td>
                         <td>{{ $subject->currency }} {{ number_format($subject->exam_fee + $subject->service_fee + $subject->late_registration_fee) }}</td>
                         <td><span class="status">{{ $subject->status }}</span></td>
+                        <td>
+                            @php($blockReason = $subject->selectionBlockReason())
+                            <span class="status">{{ $blockReason ? __('student_registration.availability.'.$blockReason, [
+                                'date' => $blockReason === 'not_yet_open' ? optional($subject->registration_open_at)->format('Y-m-d H:i') : optional($subject->registration_close_at)->format('Y-m-d H:i'),
+                            ]) : __('admin.selectable_now') }}</span>
+                        </td>
                         <td>
                             <div class="actions">
                                 <a class="btn light" href="{{ route('admin.ap-exam-subjects.edit',$subject) }}">{{ __('admin.edit') }}</a>

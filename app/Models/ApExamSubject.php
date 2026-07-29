@@ -62,30 +62,39 @@ class ApExamSubject extends Model
 
     public function isSelectable(?\DateTimeInterface $at = null): bool
     {
+        return $this->selectionBlockReason($at) === null;
+    }
+
+    public function selectionBlockReason(?\DateTimeInterface $at = null): ?string
+    {
         $now = $at ? \Illuminate\Support\Carbon::parse($at) : now();
         $status = strtolower($this->status);
 
         if ($this->examSeason && ! $this->examSeason->acceptsRegistration($now)) {
-            return false;
+            return 'season_closed';
         }
 
-        if (! $this->is_active || ! in_array($status, ['open', 'limited'], true)) {
-            return false;
+        if (! $this->is_active) {
+            return 'inactive';
+        }
+
+        if (! in_array($status, ['open', 'limited'], true)) {
+            return 'status_closed';
         }
 
         if ($this->quota !== null && $this->registered_count >= $this->quota) {
-            return false;
+            return 'quota_full';
         }
 
         if ($this->registration_open_at && $now->lt($this->registration_open_at)) {
-            return false;
+            return 'not_yet_open';
         }
 
         if ($this->registration_close_at && $now->gt($this->registration_close_at)) {
-            return false;
+            return 'registration_closed';
         }
 
-        return true;
+        return null;
     }
 
     public function lateFeeApplies(?\DateTimeInterface $at = null): bool

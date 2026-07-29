@@ -11,6 +11,7 @@ composer install --no-dev --optimize-autoloader
 npm ci
 npm run build
 php artisan migrate --force
+php artisan registration:sync-catalog --force
 php artisan storage:link
 php artisan config:cache
 php artisan route:cache
@@ -26,6 +27,7 @@ composer install --no-dev --optimize-autoloader
 npm ci
 npm run build
 php artisan migrate --force
+php artisan registration:sync-catalog --force
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
@@ -54,3 +56,10 @@ php artisan security:backup-storage
 For MySQL/MariaDB production, configure a server-side `mysqldump` job using credentials from the server `.env` or hosting secret manager. Do not commit the dump command with real passwords.
 
 Do not paste real DB, SMTP, ECPay, NewebPay, or e-invoice secrets into this file.
+
+Never upload `database/database.sqlite` to production and never run `migrate:fresh`
+on the live database. Build the safe ZIP with:
+
+```powershell
+.\scripts\build-deploy-zip.ps1
+```

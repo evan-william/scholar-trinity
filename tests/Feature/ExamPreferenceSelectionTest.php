@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Mail\StudentRegistrationConfirmation;
 use App\Models\ApExamSubject;
+use App\Models\ExamSeason;
 use App\Models\StudentRegistration;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -67,6 +68,43 @@ class ExamPreferenceSelectionTest extends TestCase
             'passport_number' => 'Q12345678',
             'exam_subject_uuids' => [$quotaReached->uuid],
         ]))->assertSessionHasErrors(['exam_subject_uuids']);
+    }
+
+    public function test_closed_subject_displays_the_real_selection_block_reason(): void
+    {
+        $subject = $this->subject([
+            'registration_open_at' => now()->addWeek(),
+            'registration_close_at' => now()->addMonth(),
+        ]);
+
+        $this->assertSame('not_yet_open', $subject->selectionBlockReason());
+
+        $this->get('/student-registration')
+            ->assertOk()
+            ->assertSee($subject->name)
+            ->assertSee('Opens '.$subject->registration_open_at->format('M d, Y H:i'))
+            ->assertSee('disabled', false);
+    }
+
+    public function test_catalog_sync_is_idempotent_and_seeds_three_selectable_categories(): void
+    {
+        $this->artisan('registration:sync-catalog')->assertSuccessful();
+
+        $this->assertSame(11, ApExamSubject::query()->count());
+        $this->assertSame(
+            ['General', 'Mathematics', 'Sciences'],
+            ApExamSubject::query()->distinct()->orderBy('category')->pluck('category')->all()
+        );
+        $this->assertSame(11, ApExamSubject::query()->with('examSeason')->get()->filter->isSelectable()->count());
+
+        $seasonUuid = ExamSeason::query()->where('exam_year', 2027)->value('uuid');
+        $subjectUuid = ApExamSubject::query()->where('code', 'CALAB')->value('uuid');
+
+        $this->artisan('registration:sync-catalog')->assertSuccessful();
+
+        $this->assertSame(11, ApExamSubject::query()->count());
+        $this->assertSame($seasonUuid, ExamSeason::query()->where('exam_year', 2027)->value('uuid'));
+        $this->assertSame($subjectUuid, ApExamSubject::query()->where('code', 'CALAB')->value('uuid'));
     }
 
     public function test_frontend_fee_tampering_is_ignored(): void

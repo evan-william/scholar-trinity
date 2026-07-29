@@ -21,8 +21,22 @@ class ApExamSubjectAdminController extends Controller
 
     public function create(): View
     {
+        $activeSeason = ExamSeason::query()
+            ->where('is_active', true)
+            ->whereNull('archived_at')
+            ->orderByDesc('exam_year')
+            ->first();
+
         return view('admin.ap-exam-subjects.form', [
-            'subject' => new ApExamSubject(['timezone' => 'Asia/Taipei', 'currency' => 'NTD', 'status' => 'draft', 'is_active' => true]),
+            'subject' => new ApExamSubject([
+                'exam_season_id' => $activeSeason?->id,
+                'timezone' => $activeSeason?->timezone ?: 'Asia/Taipei',
+                'currency' => $activeSeason?->currency ?: 'NTD',
+                'status' => 'open',
+                'registration_open_at' => now()->subMinute(),
+                'registration_close_at' => $activeSeason?->late_registration_end_at ?: now()->addYear(),
+                'is_active' => true,
+            ]),
             'seasons' => ExamSeason::query()->orderByDesc('exam_year')->get(),
             'categories' => config('registration.subject_categories', []),
         ]);

@@ -599,20 +599,26 @@
         <section class="hidden" data-step="3">
             <div class="card">
                 <div class="section-title">AP Exam Selection <span>AP 考試選擇與費用</span></div>
+                @if($catalogLoadFailed ?? false)
+                    <div class="notice"><h4>{{ $tx('Registration catalog unavailable', '報名科目暫時無法載入') }}</h4><p>{{ $tx('The database connection is unavailable. Please contact the administrator before submitting this form.', '資料庫連線目前無法使用，請先聯絡管理員再送出表單。') }}</p></div>
+                @elseif($subjects->isEmpty())
+                    <div class="notice"><h4>{{ $tx('No AP subjects published', '目前沒有已發布的 AP 考科') }}</h4><p>{{ $tx('The administrator must publish the AP subject catalog before registration can continue.', '管理員需要先發布 AP 考科目錄，才能繼續報名。') }}</p></div>
+                @endif
                 <div class="exam-sticky"><span id="selBadge" class="sel-badge">0 selected / 已選 0 科</span><span id="pricePreview" class="price-preview">{{ $tx('Coming Soon', '即將公布') }}</span></div>
                 <div class="filters"><label class="lbl">Search exam <span class="zh">搜尋考科</span><input id="examSearch" type="search" placeholder="Calculus, Biology, CSA"></label><label class="lbl">AP exam categories <span class="zh">考科分類</span><select id="categoryFilter"><option value="">All Categories / 全部分類</option>@foreach($subjects->pluck('category')->filter()->unique()->sort() as $category)<option value="{{ $category }}">{{ $category }}</option>@endforeach</select></label></div>
                 @foreach($subjects->groupBy(fn($subject) => $subject->category ?: 'Other') as $category => $categorySubjects)
                     <div class="cat-title">{{ $category }} / {{ $category === 'Mathematics' ? '數學' : ($category === 'Science' || $category === 'Sciences' ? '科學' : '分類') }}</div>
                     <div class="exam-grid">
                         @foreach($categorySubjects as $subject)
-                            @php($selectable = $subject->isSelectable())
+                            @php($blockReason = method_exists($subject, 'selectionBlockReason') ? $subject->selectionBlockReason() : ($subject->isSelectable() ? null : 'status_closed'))
+                            @php($selectable = $blockReason === null)
                             @php($lateFee = $subject->lateFeeApplies() ? $subject->late_registration_fee : 0)
                             @php($statusKey = strtolower($subject->status))
                             <label class="exam-cb regular-exam {{ $selectable ? '' : 'disabled' }}">
                                 <input type="checkbox" name="exam_subject_uuids[]" value="{{ $subject->uuid }}" data-type="regular" data-p="{{ $subject->exam_fee + $subject->service_fee + $lateFee }}" data-exam-fee="{{ $subject->exam_fee }}" data-service-fee="{{ $subject->service_fee }}" data-late-fee="{{ $lateFee }}" data-name="{{ $subject->name }}" data-category="{{ $subject->category }}" @disabled(! $selectable) @checked(in_array($subject->uuid, old('exam_subject_uuids', [])))>
                                 <div>
                                     <div class="exam-name">{{ $subject->name }}</div>
-                                    <div class="exam-sub">{{ $subject->code }} / {{ optional($subject->exam_date)->format('M d, Y') ?? $tx('Date TBA', '日期待公告') }} / {{ __('student_registration.statuses.'.$statusKey) }}</div>
+                                    <div class="exam-sub">{{ $subject->code }} / {{ optional($subject->exam_date)->format('M d, Y') ?? $tx('Date TBA', '日期待公告') }} / {{ $selectable ? __('student_registration.statuses.'.$statusKey) : __('student_registration.availability.'.$blockReason, ['date' => $blockReason === 'not_yet_open' ? optional($subject->registration_open_at)->format('M d, Y H:i') : optional($subject->registration_close_at)->format('M d, Y H:i')]) }}</div>
                                     <div class="exam-sub">{{ $tx('Exam Fee', '考試費') }}: {{ $tx('Coming Soon', '即將公布') }} / {{ $tx('Service Fee', '服務費') }}: {{ $tx('Coming Soon', '即將公布') }} / {{ $tx('Late Fee', '逾期費') }}: {{ $tx('Coming Soon', '即將公布') }}</div>
                                 </div>
                             </label>

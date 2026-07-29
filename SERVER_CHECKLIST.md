@@ -8,6 +8,7 @@ Use this as the deployment QA checklist. Do not commit real passwords or provide
 - Confirm server domain points to `72.60.210.71`.
 - Confirm HTTPS is active for `trinity.sophistec.global`.
 - Create production `.env` from `.env.production.example`.
+- Confirm `DB_CONNECTION=mysql`; do not use or upload `database/database.sqlite`.
 - Fill MySQL database name, username, and password on the server only.
 - Fill SMTP credentials on the server only.
 - Keep passport and payment proof files on the private `local` disk.
@@ -21,6 +22,7 @@ Use this as the deployment QA checklist. Do not commit real passwords or provide
 - Node build generated with `npm run build`.
 - `APP_KEY` generated.
 - Database migrations run.
+- `php artisan registration:sync-catalog --force` reports 11 active subjects, 3 categories, and at least one selectable subject.
 - `storage` and `bootstrap/cache` are writable by the site user.
 - Queue worker is running if `QUEUE_CONNECTION` is not `sync`.
 - Scheduler is configured with Laravel `schedule:run`.
@@ -28,6 +30,8 @@ Use this as the deployment QA checklist. Do not commit real passwords or provide
 ## Functional QA
 
 - Landing page opens.
+- Registration form shows `Sciences`, `Mathematics`, and `General` subject categories.
+- Disabled AP subjects display the real season, status, quota, or registration-window reason.
 - Student registration creates a reference number.
 - Required fields reject blank/fake data.
 - Passport upload stores privately.

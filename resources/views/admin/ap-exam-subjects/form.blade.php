@@ -15,6 +15,7 @@
                 <h2>{{ __('admin.exam_subject') }}</h2>
                 <a class="btn light" href="{{ route('admin.ap-exam-subjects.index') }}">{{ __('admin.back') }}</a>
             </div>
+            <p class="muted">{{ __('admin.subject_availability_hint') }}</p>
             <div class="grid">
                 <label>{{ __('admin.exam_seasons') }}
                     <select name="exam_season_id">

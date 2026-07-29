@@ -26,6 +26,7 @@ composer install --no-dev --optimize-autoloader
 npm ci
 npm run build
 php artisan migrate --force
+php artisan registration:sync-catalog --force
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
@@ -41,10 +42,11 @@ Why this is recommended:
 
 Use this only when GitHub pull is unavailable.
 
-Create a deploy zip that excludes local-only folders:
+Create a deploy ZIP with the repository script. It verifies that local databases,
+secrets, dependencies, logs, and private uploads are excluded:
 
 ```powershell
-Compress-Archive -Path app,bootstrap,config,database,docs,lang,public,resources,routes,tests,artisan,composer.json,composer.lock,package.json,package-lock.json,phpunit.xml,vite.config.js,README.md,LICENSE,.env.production.example -DestinationPath scholar-trinity-deploy.zip -Force
+.\scripts\build-deploy-zip.ps1
 ```
 
 Upload the zip:
@@ -64,6 +66,7 @@ composer install --no-dev --optimize-autoloader
 npm ci
 npm run build
 php artisan migrate --force
+php artisan registration:sync-catalog --force
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
@@ -95,7 +98,17 @@ After `.env` is filled:
 ```bash
 php artisan key:generate
 php artisan migrate --force
+php artisan registration:sync-catalog --force
 ```
+
+The catalog command safely creates or updates the default 2027 AP catalog:
+11 subjects across 3 seeded categories (`Sciences`, `Mathematics`, and `General`).
+It also prints why any subject is not selectable.
+
+Uploading or extracting source files does not delete database rows. Existing admin
+content and registrations remain until intentionally changed through the app or a
+database operation. Never upload a local `.sqlite` file and never use
+`php artisan migrate:fresh` on production.
 
 ## Port 3014
 

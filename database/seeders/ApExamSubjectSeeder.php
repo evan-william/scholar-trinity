@@ -27,34 +27,31 @@ class ApExamSubjectSeeder extends Seeder
         ];
 
         foreach ($subjects as $index => $subject) {
-            $model = ApExamSubject::query()->updateOrCreate(
-                ['code' => $subject['code']],
-                $subject + [
-                    'exam_season_id' => $season?->id,
-                    'category' => in_array($subject['code'], ['CALAB', 'CALBC', 'STAT'], true) ? 'Mathematics' : (in_array($subject['code'], ['BIO', 'CHEM', 'PHY1'], true) ? 'Sciences' : 'General'),
-                    'description' => 'Official AP exam registration subject.',
-                    'start_time' => '08:00',
-                    'end_time' => '12:00',
-                    'timezone' => 'Asia/Taipei',
-                    'location' => 'TPCA Campus',
-                    'quota' => 50,
-                    'exam_fee' => 7800,
-                    'service_fee' => 1200,
-                    'late_registration_fee' => 1500,
-                    'currency' => 'NTD',
-                    'status' => 'open',
-                    'registration_open_at' => now()->subMonth(),
-                    'registration_close_at' => now()->addMonths(6),
-                    'late_registration_start_at' => now()->addMonths(3),
-                    'late_registration_end_at' => now()->addMonths(5),
-                    'sort_order' => $index,
-                    'is_active' => true,
-                ]
-            );
-
-            if (! $model->uuid) {
-                $model->forceFill(['uuid' => (string) Str::uuid()])->save();
-            }
+            $model = ApExamSubject::withTrashed()->firstOrNew(['code' => $subject['code']]);
+            $model->fill($subject + [
+                'exam_season_id' => $season?->id,
+                'category' => in_array($subject['code'], ['CALAB', 'CALBC', 'STAT'], true) ? 'Mathematics' : (in_array($subject['code'], ['BIO', 'CHEM', 'PHY1'], true) ? 'Sciences' : 'General'),
+                'description' => 'Official AP exam registration subject.',
+                'start_time' => '08:00',
+                'end_time' => '12:00',
+                'timezone' => 'Asia/Taipei',
+                'location' => 'TPCA Campus',
+                'quota' => 50,
+                'exam_fee' => 7800,
+                'service_fee' => 1200,
+                'late_registration_fee' => 1500,
+                'currency' => 'NTD',
+                'status' => 'open',
+                'registration_open_at' => now()->subMonth(),
+                'registration_close_at' => now()->addMonths(6),
+                'late_registration_start_at' => now()->addMonths(3),
+                'late_registration_end_at' => now()->addMonths(5),
+                'sort_order' => $index,
+                'is_active' => true,
+            ]);
+            $model->uuid ??= (string) Str::uuid();
+            $model->deleted_at = null;
+            $model->save();
         }
     }
 }

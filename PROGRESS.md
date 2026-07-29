@@ -1,6 +1,6 @@
 # Trinity Scholar Progress Tracker
 
-Last updated: 2026-07-28, Asia/Bangkok
+Last updated: 2026-07-29, Asia/Bangkok
 
 This file is the working source of truth for project status. Every implementation pass must update:
 - `Current Progress` for what changed.
@@ -16,7 +16,7 @@ Do not store server passwords, DB passwords, API keys, or payment provider crede
 - Current frontend state: Laravel Blade is still the main UI. Vue is now wired as a progressive frontend path, but pages still need migration/redesign.
 - Production direction: one Laravel app should serve the site and built Vue assets. Use `npm run build` for production assets; do not run a separate Node frontend server in production unless the deployment plan changes.
 - Server info from team: domain `trinity.sophistec.global`, app port `3014`.
-- Database direction: MySQL/MariaDB for server deploy. DB name, username, and password still need to be filled in server `.env`. Do not commit credentials.
+- Database direction: production MySQL is provisioned. Its credentials belong only in the server `.env`; do not commit them or package them in a deploy ZIP.
 
 ## Template Candidates
 
@@ -60,6 +60,25 @@ Current local template pass:
 - Raw downloaded templates are ignored through `template-source/` in `.gitignore`.
 
 ## Current Progress
+
+2026-07-29
+- Production database and AP catalog repair:
+  - Confirmed production must use the provisioned MySQL database rather than the temporary SQLite fallback. Production examples remain secret-free.
+  - Added `php artisan registration:sync-catalog --force`, an idempotent and transactional production command that synchronizes the 2027 registration season, ensures the 11 default AP subjects across `Sciences`, `Mathematics`, and `General`, and prints each subject's current form availability.
+  - Preserved subject and season UUIDs across repeated synchronization and restored soft-deleted seeded catalog rows without deleting registrations or other admin-managed records.
+  - Changed new AP subject defaults to the active season with open status and a current registration window, so client-created subjects no longer become silently unselectable by default.
+  - Added a shared selection diagnostic for inactive status, closed status, full quota, future opening, expired registration, and closed season.
+  - Updated public and admin subject screens to show the actual blocking reason instead of displaying `Available` on a disabled checkbox.
+  - Removed the fake in-memory subject fallback. A database failure now produces a clear unavailable-catalog notice instead of presenting subject IDs that could never be submitted.
+- Deployment safety:
+  - Replaced the old broad ZIP command with `scripts/build-deploy-zip.ps1`.
+  - The builder excludes and verifies the absence of `.env`, SQLite databases, dependencies, caches, logs, and private uploads while requiring the catalog command and compiled Vite manifest.
+  - Updated deployment guides and server checklist with MySQL setup, catalog synchronization, expected subject/category counts, and explicit warnings against production `migrate:fresh` or uploading a local SQLite file.
+  - Clarified that deploying source code does not remove existing database rows; persisted admin data after re-upload is expected.
+- Verification:
+  - Focused catalog, registration, and admin coverage passed: 28 tests and 169 assertions.
+  - The deploy ZIP safety check passed with zero SQLite and `.env` entries.
+  - Full PHPUnit and production asset build verification are recorded in the verification log below.
 
 2026-07-28
 - Client admin/CMS revision:
@@ -824,6 +843,8 @@ These items come directly from `Reference/Trinity Scholar - Features.pdf` and we
 
 ## Bugs / Re-Audit Findings
 
+- Production source re-uploads do not reset MySQL data. Missing AP categories come from an unsynchronized catalog, while old admin data remaining after deploy is expected database persistence.
+- The previous broad deploy ZIP command could include the ignored local `database/database.sqlite` file. The verified ZIP builder now excludes all SQLite files and fails if a database, `.env`, or private upload enters the archive.
 - PHP is not registered in the Windows PATH, but the local XAMPP PHP runtime is available at `C:\xampp\php\php.exe`; the full PHPUnit suite passes when GD and ZIP are enabled explicitly.
 - Admin dashboard/login requires an initialized database and migrations; the public no-database fallback does not make authenticated admin features database-free.
 - `resources/views/student-registration/create.blade.php` still contains a lot of inline CSS/JS and should be replaced or refactored after template choice.
@@ -840,6 +861,15 @@ These items come directly from `Reference/Trinity Scholar - Features.pdf` and we
 - Server credentials were shared in chat but must stay out of Git.
 
 ## Verification Log
+
+2026-07-29
+- PHP syntax lint passed for the catalog command, controllers, models, seeders, language files, and updated feature test.
+- `git diff --check` passed.
+- Full PHPUnit suite passed with XAMPP PHP 8.2, GD, and ZIP: 79 tests and 476 assertions.
+- Vite production build passed with 61 modules transformed.
+- Catalog regression coverage confirmed 11 subjects, exactly 3 seeded categories, all 11 currently selectable, and stable season/subject UUIDs across repeated synchronization.
+- Regenerated the verified deploy ZIP with 492 entries; confirmed zero SQLite and `.env` entries, with the catalog command and Vite manifest present.
+- Browser QA was intentionally not used per user instruction.
 
 2026-07-28
 - Ran targeted regression coverage for registration durability, receipt/invoice tracking, and CMS registration intro: 23 tests and 158 assertions passed.

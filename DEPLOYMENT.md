@@ -77,9 +77,10 @@ npm run build
 
 ```bash
 php artisan migrate --force
+php artisan registration:sync-catalog --force
 ```
 
-7. Seed only approved production seeders, if needed:
+7. Seed any other specifically approved production settings, if needed:
 
 ```bash
 php artisan db:seed --class=PaymentSettingSeeder --force
