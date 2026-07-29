@@ -106,7 +106,7 @@
         .header{background:var(--primary);color:#fff;padding:14px 24px}.head-inner{max-width:920px;margin:0 auto;display:flex;align-items:center;gap:16px;flex-wrap:wrap}.header-logos{display:flex;align-items:center;gap:12px}.logo-pill{background:#fff;color:var(--primary);font-size:10px;font-weight:800;padding:6px 10px;border-radius:6px;line-height:1.3;text-align:center;letter-spacing:.3px}.logo-divider{width:1px;height:36px;background:rgba(255,255,255,.25)}.header-title{flex:1;min-width:220px}.header-title h1{font-size:16px;font-weight:700;line-height:1.35;margin:0}.header-title p{font-size:11px;opacity:.76;margin:2px 0 0}.header-badge{background:var(--trinity-blue);color:#fff;padding:5px 14px;border-radius:20px;font-size:12px;font-weight:800;white-space:nowrap}.header-actions{display:flex;gap:10px;align-items:center}
         .progress-wrap{background:#fff;border-bottom:1px solid var(--gray-200);padding:0 16px;overflow-x:auto}.progress-steps{display:flex;min-width:max-content;max-width:840px;margin:0 auto}.step-item{flex:1;display:flex;flex-direction:column;align-items:center;padding:14px 6px;position:relative;min-width:118px}.step-item:not(:last-child)::after{content:"";position:absolute;top:28px;left:calc(50% + 17px);right:calc(-50% + 17px);height:2px;background:var(--gray-200)}.step-item.completed:not(:last-child)::after{background:var(--primary)}.step-circle{width:30px;height:30px;border-radius:50%;border:2px solid var(--gray-400);background:#fff;color:var(--gray-600);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;z-index:1}.step-item.active .step-circle,.step-item.completed .step-circle{border-color:var(--primary);background:var(--primary);color:#fff}.step-label{margin-top:5px;font-size:10px;text-align:center;color:var(--gray-600);line-height:1.3}.step-item.active .step-label{color:var(--primary);font-weight:700}
         .main{max-width:760px;margin:0 auto;padding:24px 16px 108px}.card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:26px 24px;margin-bottom:16px}.section-title{font-size:17px;font-weight:800;color:var(--primary);border-bottom:2px solid var(--accent);padding-bottom:9px;margin-bottom:20px}.section-title span{display:block;font-size:12px;font-weight:400;color:var(--gray-600);margin-top:2px}.row{display:grid;gap:14px;margin-bottom:14px}.row-2{grid-template-columns:1fr 1fr}.row-3{grid-template-columns:1fr 1fr .55fr}.row-1{grid-template-columns:1fr}.fg{display:flex;flex-direction:column;gap:5px}.fg.span2{grid-column:1/-1}.lbl{font-size:13px;font-weight:700;color:var(--gray-800)}.lbl .zh{display:block;font-size:11px;font-weight:400;color:var(--gray-600)}.req{color:var(--danger);margin-left:2px}
-        input:not([type]),input[type=text],input[type=email],input[type=tel],input[type=search],input[type=file],select,textarea{border:1.5px solid var(--gray-400);border-radius:6px;padding:9px 12px;font:inherit;font-size:14px;color:var(--gray-800);background:#fff;width:100%}input:focus,select:focus,textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(26,58,107,.1)}input[aria-invalid=true],select[aria-invalid=true],textarea[aria-invalid=true]{border-color:var(--danger);background:#fffafa}.hint{font-size:11px;color:var(--gray-600);margin-top:3px}.error{color:var(--danger);font-size:12px}.error-box{background:#fff0ee;border:1px solid #ffc9c4;color:var(--danger);padding:12px 14px;border-radius:8px;margin-bottom:14px}.hidden{display:none!important}
+        input:not([type]),input[type=text],input[type=email],input[type=tel],input[type=search],input[type=file],select,textarea{border:1.5px solid var(--gray-400);border-radius:6px;padding:9px 12px;font:inherit;font-size:14px;color:var(--gray-800);background:#fff;width:100%}input:focus,select:focus,textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(26,58,107,.1)}input[aria-invalid=true],select[aria-invalid=true],textarea[aria-invalid=true],input.is-invalid,select.is-invalid,textarea.is-invalid{border-color:var(--danger);background:#fffafa}.hint{font-size:11px;color:var(--gray-600);margin-top:3px}.error,.client-error{color:var(--danger);font-size:12px;line-height:1.45}.client-error{display:block;margin-top:2px}.error-box{background:#fff0ee;border:1px solid #ffc9c4;color:var(--danger);padding:12px 14px;border-radius:8px;margin-bottom:14px}.hidden{display:none!important}
         .upload-area{border:2px dashed var(--gray-400);border-radius:var(--radius);padding:22px 16px;text-align:center;cursor:pointer;background:var(--gray-50);position:relative}.upload-area:hover{border-color:var(--primary);background:rgba(26,58,107,.03)}.upload-area input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;height:100%}.upload-icon{font-size:30px;margin-bottom:6px}.upload-text{font-size:13px;color:var(--gray-600)}.upload-text strong{color:var(--primary)}.upload-sub{font-size:11px;color:var(--gray-600);margin-top:3px}.upload-selected{margin-top:8px;font-size:13px;color:var(--success);font-weight:700}
         .notice{background:#f4f7ff;border:1px solid #c9d8f3;border-left:4px solid var(--accent);border-radius:var(--radius);padding:14px 16px;margin-bottom:18px}.notice h4{font-size:13px;font-weight:800;color:var(--trinity-blue-dark);margin:0 0 7px}.notice p,.notice li{font-size:12px;color:#334155;line-height:1.65}.notice ul{padding-left:16px;margin:0}
         .exam-sticky{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid var(--gray-200);padding:10px 0;margin:0 0 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}.sel-badge{display:inline-flex;align-items:center;gap:6px;background:var(--primary);color:#fff;padding:4px 13px;border-radius:20px;font-size:12px;font-weight:800}.price-preview{font-size:14px;font-weight:900;color:var(--primary)}.filters{display:grid;grid-template-columns:1fr 220px;gap:10px;margin-bottom:14px}.cat-title{font-size:13px;font-weight:900;color:var(--primary);margin:18px 0 8px;padding-bottom:5px;border-bottom:1px solid var(--gray-200)}.exam-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.exam-cb{display:flex;align-items:flex-start;gap:10px;border:1.5px solid var(--gray-200);border-radius:8px;padding:10px 11px;cursor:pointer;background:#fff;min-height:58px}.exam-cb.checked{border-color:var(--primary);background:rgba(26,58,107,.05)}.exam-cb.disabled{opacity:.58;cursor:not-allowed;background:#f8fafc}.exam-cb input{width:16px;height:16px;min-height:auto;margin-top:2px;accent-color:var(--primary)}.exam-name{font-size:13px;font-weight:800;color:var(--gray-800);line-height:1.35}.exam-sub{font-size:11px;color:var(--gray-600);line-height:1.4}.exam-price-tag{margin-left:auto;font-size:12px;font-weight:900;color:var(--primary);white-space:nowrap}.price-box{background:var(--gray-50);border:1px solid var(--gray-200);border-radius:8px;padding:14px;margin-top:16px}.price-row{display:flex;justify-content:space-between;gap:12px;padding:5px 0;font-size:13px}.price-row.total{border-top:2px solid var(--primary);margin-top:8px;padding-top:10px;color:var(--primary);font-weight:900;font-size:16px}
@@ -539,12 +539,12 @@
                     <div class="fg"><label class="lbl">Chinese Legal Name <span class="req">*</span><span class="zh">中文法定姓名</span></label><input name="chinese_legal_name" value="{{ old('chinese_legal_name') }}" placeholder="e.g. 陳明華" required></div>
                 </div>
                 <div class="row row-2">
-                    <div class="fg"><label class="lbl">Date of Birth <span class="req">*</span><span class="zh">出生日期</span></label><input type="date" name="date_of_birth" value="{{ old('date_of_birth') }}" required @error('date_of_birth') aria-invalid="true" @enderror></div>
+                    <div class="fg"><label class="lbl">Date of Birth <span class="req">*</span><span class="zh">出生日期</span></label><input type="date" name="date_of_birth" value="{{ old('date_of_birth') }}" max="{{ now()->subDay()->toDateString() }}" required @error('date_of_birth') aria-invalid="true" @enderror></div>
                     <div class="fg"><label class="lbl">Nationality <span class="req">*</span><span class="zh">國籍</span></label><input name="nationality" value="{{ old('nationality') }}" placeholder="e.g. Taiwan" required @error('nationality') aria-invalid="true" @enderror></div>
                 </div>
                 <div class="row row-2">
-                    <div class="fg"><label class="lbl">Passport Number <span class="req">*</span><span class="zh">護照號碼</span></label><input name="passport_number" value="{{ old('passport_number') }}" placeholder="e.g. A12345678" required @error('passport_number') aria-invalid="true" @enderror>@error('passport_number')<span class="error">{{ $message }}</span>@enderror</div>
-                    <div class="fg"><label class="lbl">Passport Expiry Date <span class="zh">護照有效期限</span></label><input type="date" name="passport_expiry_date" value="{{ old('passport_expiry_date') }}" @error('passport_expiry_date') aria-invalid="true" @enderror></div>
+                    <div class="fg"><label class="lbl">Passport Number <span class="req">*</span><span class="zh">護照號碼</span></label><input name="passport_number" value="{{ old('passport_number') }}" placeholder="e.g. A12345678" minlength="5" maxlength="30" pattern="[A-Za-z0-9][A-Za-z0-9-]{4,29}" title="{{ $tx('Use 5-30 letters, numbers, or hyphens only.', '請輸入 5 至 30 個英文字母、數字或連字號。') }}" required @error('passport_number') aria-invalid="true" @enderror>@error('passport_number')<span class="error">{{ $message }}</span>@enderror</div>
+                    <div class="fg"><label class="lbl">Passport Expiry Date <span class="zh">護照有效期限</span></label><input type="date" name="passport_expiry_date" value="{{ old('passport_expiry_date') }}" min="{{ now()->addDay()->toDateString() }}" @error('passport_expiry_date') aria-invalid="true" @enderror></div>
                 </div>
                 <div class="row row-2">
                     <div class="fg"><label class="lbl">Grade <span class="req">*</span><span class="zh">年級</span></label><select name="grade" required><option value="">Select / 請選擇</option>@foreach($gradeLevels as $grade)<option value="{{ $grade }}" @selected(old('grade')===$grade || old('grade_level')===$grade)>Grade {{ $grade }} / {{ $grade }} 年級</option>@endforeach</select></div>
@@ -607,6 +607,7 @@
                 <div class="exam-sticky"><span id="selBadge" class="sel-badge">0 selected / 已選 0 科</span><span id="pricePreview" class="price-preview">{{ $tx('Coming Soon', '即將公布') }}</span></div>
                 <div class="filters"><label class="lbl">Search exam <span class="zh">搜尋考科</span><input id="examSearch" type="search" placeholder="Calculus, Biology, CSA"></label><label class="lbl">AP exam categories <span class="zh">考科分類</span><select id="categoryFilter"><option value="">All Categories / 全部分類</option>@foreach($subjects->pluck('category')->filter()->unique()->sort() as $category)<option value="{{ $category }}">{{ $category }}</option>@endforeach</select></label></div>
                 @foreach($subjects->groupBy(fn($subject) => $subject->category ?: 'Other') as $category => $categorySubjects)
+                    <div class="exam-category-group" data-exam-category="{{ $category }}">
                     <div class="cat-title">{{ $category }} / {{ $category === 'Mathematics' ? '數學' : ($category === 'Science' || $category === 'Sciences' ? '科學' : '分類') }}</div>
                     <div class="exam-grid">
                         @foreach($categorySubjects as $subject)
@@ -623,6 +624,7 @@
                                 </div>
                             </label>
                         @endforeach
+                    </div>
                     </div>
                 @endforeach
                 <div class="section-title" style="margin-top:24px">{{ $tx('Practice Exams (Optional)', '模擬考（選填）') }} <span>{{ $tx('Fee: Coming Soon', '費用：即將公布') }}</span></div>
@@ -802,6 +804,8 @@
         selectedCount: count => isZhLocale ? `已選 ${count} 科` : `${count} selected`,
         step: (current, total) => isZhLocale ? `第 ${current} 步，共 ${total} 步` : `Step ${current} of ${total}`,
         examRequired: isZhLocale ? '請至少選擇一科 AP 考試。' : 'Please select at least one AP exam.',
+        stepRequired: isZhLocale ? '請完成此步驟的必填欄位。' : 'Please complete the required fields in this step.',
+        passportRequired: isZhLocale ? '請先上傳護照影本。' : 'Please upload a passport copy before continuing.',
         uploadedFile: isZhLocale ? '已選擇檔案' : 'Uploaded file',
         noAccommodations: isZhLocale ? '未申請特殊考試需求' : 'No accommodations requested',
         requested: isZhLocale ? '已申請' : 'Requested',
@@ -1024,15 +1028,57 @@
         return true;
     }
 
+    function clearClientError(input) {
+        input.classList.remove('is-invalid');
+        input.removeAttribute('aria-invalid');
+        input.removeAttribute('aria-describedby');
+        const container = input.closest('.fg, .sig-box');
+        container?.querySelector(`.client-error[data-for="${input.name}"]`)?.remove();
+    }
+
+    function showClientError(input) {
+        clearClientError(input);
+        input.classList.add('is-invalid');
+        input.setAttribute('aria-invalid', 'true');
+
+        const container = input.closest('.fg, .sig-box');
+        if (!container) return;
+
+        const message = document.createElement('span');
+        const id = `client-error-${input.name.replace(/[^a-z0-9]+/gi, '-')}`;
+        message.id = id;
+        message.className = 'client-error';
+        message.dataset.for = input.name;
+        message.textContent = input.validationMessage || uiText.stepRequired;
+        input.setAttribute('aria-describedby', id);
+        container.appendChild(message);
+    }
+
     function validateStep() {
         const section = document.querySelector(`[data-step="${cur}"]`);
+        const passportInput = document.getElementById('passportFile');
+
+        if (cur === 1) {
+            const hasPassport = Boolean(
+                passportInput.files[0]
+                || document.getElementById('passportFileToken').value
+                || document.getElementById('passportFileName').value
+            );
+            passportInput.setCustomValidity(hasPassport ? '' : uiText.passportRequired);
+        }
+
         for (const input of section.querySelectorAll('input, select, textarea')) {
+            if (input.disabled || input.type === 'hidden') continue;
             validateNumericField(input);
 
             if (!input.checkValidity()) {
-                input.reportValidity();
+                showClientError(input);
+                input.focus({preventScroll: true});
+                input.scrollIntoView({behavior: 'smooth', block: 'center'});
+                notify(input.validationMessage || uiText.stepRequired);
                 return false;
             }
+            clearClientError(input);
         }
         const selectedRegularExams = [...form.querySelectorAll('input[name="exam_subject_uuids[]"]')]
             .filter(input => input.checked && !input.disabled);
@@ -1158,9 +1204,16 @@
     function filterExams() {
         const query = document.getElementById('examSearch').value.toLowerCase();
         const category = document.getElementById('categoryFilter').value;
-        document.querySelectorAll('.regular-exam').forEach(label => {
-            const input = label.querySelector('input');
-            label.style.display = label.textContent.toLowerCase().includes(query) && (!category || input.dataset.category === category) ? '' : 'none';
+        document.querySelectorAll('.exam-category-group').forEach(group => {
+            let visibleCount = 0;
+            group.querySelectorAll('.regular-exam').forEach(label => {
+                const input = label.querySelector('input');
+                const visible = label.textContent.toLowerCase().includes(query)
+                    && (!category || input.dataset.category === category);
+                label.style.display = visible ? '' : 'none';
+                if (visible) visibleCount++;
+            });
+            group.classList.toggle('hidden', visibleCount === 0);
         });
     }
     document.getElementById('examSearch').addEventListener('input', filterExams);
@@ -1190,6 +1243,10 @@
             if (before !== input.value && cursor !== null) input.setSelectionRange(Math.max(0, cursor - 1), Math.max(0, cursor - 1));
             input.setCustomValidity('');
         });
+    });
+    form.querySelectorAll('input, select, textarea').forEach(input => {
+        input.addEventListener('input', () => clearClientError(input));
+        input.addEventListener('change', () => clearClientError(input));
     });
     form.addEventListener('input', saveFormDraft);
     form.addEventListener('change', saveFormDraft);

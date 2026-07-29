@@ -62,6 +62,14 @@ Current local template pass:
 ## Current Progress
 
 2026-07-29
+- Registration UX, privacy, and admin detail repair:
+  - Added browser constraints for date of birth, passport number, and passport expiry so known invalid values are rejected on step 1 instead of only after final submission.
+  - Added inline per-field client validation, first-invalid-field focus/scroll, passport upload presence validation, and step-specific error feedback on every `Next` action.
+  - Updated AP subject filtering to hide category headings when that category has no visible matching subjects.
+  - Converted the public confirmation route to one-time session access. It works immediately after a successful submission, then redirects to the landing page after refresh, direct access, or URL sharing.
+  - Removed passport number, date of birth, address, guardian contact, fees, and signatures from the public confirmation. The redesigned page now shows only the reference, status, student name, submission time, selected exams, and payment CTA.
+  - Reorganized the admin sidebar into compact task groups, tightened the header actions, standardized admin typography, and removed the oversized white logo panel.
+  - Polished the admin registration detail with a scan-friendly summary toolbar, consistent detail tables, responsive behavior, clearer empty states, and a destructive-action confirmation.
 - Production database and AP catalog repair:
   - Confirmed production must use the provisioned MySQL database rather than the temporary SQLite fallback. Production examples remain secret-free.
   - Added `php artisan registration:sync-catalog --force`, an idempotent and transactional production command that synchronizes the 2027 registration season, ensures the 11 default AP subjects across `Sciences`, `Mathematics`, and `General`, and prints each subject's current form availability.
@@ -362,11 +370,11 @@ Legend:
 | AP Preparation Interest | Private Tutoring | DONE | Private tutoring interest checkbox persists and exports. |
 | AP Preparation Interest | Preferred Schedule | DONE | Preferred tutoring schedule field persists and exports. |
 | AP Preparation Interest | Preferred Language | DONE | Preferred tutoring language field persists and exports. |
-| Registration Confirmation | Registration Summary | DONE | Review step + confirmation page. |
+| Registration Confirmation | Registration Summary | DONE | Review step plus privacy-minimized one-time confirmation page. |
 | Registration Confirmation | Confirmation Checkbox | DONE | Agreement checkboxes and agreement records exist. |
 | Registration Confirmation | Registration Lock | PARTIAL | Public flow has no edit route after submit, but there is no explicit lock flag/policy beyond admin-only edits. |
 | Registration Confirmation | Registration Number | DONE | Unique registration number generated. |
-| Registration Confirmation | Confirmation Page | DONE | `student-registration/show.blade.php`. |
+| Registration Confirmation | Confirmation Page | DONE | One-time, session-bound `student-registration/show.blade.php`; saved/shared URLs do not expose submitted data. |
 | Basic Payment | Payment Summary | DONE | Payment instruction/status pages show totals and references. |
 | Basic Payment | Manual Bank Transfer | DONE | Payment settings/instructions/proof upload/manual verify flow. |
 | Basic Payment | Upload Payment Slip | DONE | `payments.proof.upload`, private storage, admin preview/download. |
@@ -674,8 +682,9 @@ These items come directly from `Reference/Trinity Scholar - Features.pdf` and we
 
 - Submission Confirmation:
   - `PARTIAL`: confirmation page and email exist.
-  - DONE: confirmation page now includes more complete student/guardian/exam/payment summary.
-  - DONE: confirmation page now uses the student-facing public shell and clearer next-step payment CTA.
+  - DONE: confirmation page is available only once after submission and cannot be reopened from a saved/shared URL.
+  - DONE: public confirmation is privacy-minimized to the reference, student name, status, submitted time, selected exams, and payment CTA.
+  - DONE: confirmation page uses the student-facing public shell and a clearer next-step payment CTA.
   - DONE: registration completed email is implemented for paid + verified registrations.
   - TODO: bilingual email rendering QA.
 
@@ -863,9 +872,11 @@ These items come directly from `Reference/Trinity Scholar - Features.pdf` and we
 ## Verification Log
 
 2026-07-29
-- PHP syntax lint passed for the catalog command, controllers, models, seeders, language files, and updated feature test.
+- PHP syntax lint passed for the catalog command, controllers, models, seeders, language files, and updated feature tests.
 - `git diff --check` passed.
-- Full PHPUnit suite passed with XAMPP PHP 8.2, GD, and ZIP: 79 tests and 476 assertions.
+- Full PHPUnit suite passed with XAMPP PHP 8.2, GD, and ZIP: 81 tests and 490 assertions.
+- Registration-only regression suite passed: 14 tests and 92 assertions, including one-time confirmation access and direct-URL denial.
+- Laravel Blade view compilation passed after the wizard, confirmation, and admin-shell changes.
 - Vite production build passed with 61 modules transformed.
 - Catalog regression coverage confirmed 11 subjects, exactly 3 seeded categories, all 11 currently selectable, and stable season/subject UUIDs across repeated synchronization.
 - Regenerated the verified deploy ZIP with 492 entries; confirmed zero SQLite and `.env` entries, with the catalog command and Vite manifest present.

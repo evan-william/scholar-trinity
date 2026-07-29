@@ -1,88 +1,308 @@
 <x-public-flow-shell
     :title="__('student_registration.successful').' | '.$registration->registration_number"
-    heading="Registration Submitted"
-    subtitle="The AP registration form has been received. Payment and admin verification are still required before the registration is complete."
-    badge="Submitted"
+    body-class="registration-confirmation-page"
+    content-class="none"
 >
-    <section class="card">
-        <h2>Registration Reference</h2>
-        <table class="summary-table">
-            <tr><td>Reference Number</td><td><strong>{{ $registration->registration_number }}</strong></td></tr>
-            <tr><td>Status</td><td><span class="status {{ $registration->status }}">{{ str_replace('_', ' ', $registration->status) }}</span></td></tr>
-            <tr><td>Submitted At</td><td>{{ optional($registration->submitted_at)->format('Y-m-d H:i') ?: '-' }}</td></tr>
-            <tr><td>Confirmation Email</td><td>{{ $registration->student_email }}@if($registration->contact?->parent_email)<br>{{ $registration->contact->parent_email }}@endif</td></tr>
-        </table>
-        <div class="actions">
-            <a class="btn gold" href="{{ route('payments.show', $registration->registration_number) }}">Continue to Payment</a>
-            <a class="btn light" href="{{ route('landing') }}">Back to Landing</a>
-        </div>
-    </section>
+    <x-slot:styles>
+        <style>
+            .registration-confirmation {
+                background: #f4f7fb;
+                padding: 64px 20px 80px;
+                color: #1f2937;
+                font-family: "Open Sans", "Microsoft JhengHei", sans-serif;
+            }
+            .confirmation-shell {
+                width: min(1040px, 100%);
+                margin: 0 auto;
+                background: #fff;
+                border: 1px solid #dfe5ee;
+                border-radius: 8px;
+                overflow: hidden;
+                box-shadow: 0 18px 50px rgba(18, 43, 82, .08);
+            }
+            .confirmation-header {
+                display: grid;
+                grid-template-columns: 1fr auto;
+                gap: 32px;
+                align-items: end;
+                padding: 42px 46px 36px;
+                color: #fff;
+                background: #142f63;
+            }
+            .confirmation-eyebrow {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin: 0 0 13px;
+                color: #bcd0f6;
+                font-size: 12px;
+                font-weight: 700;
+                letter-spacing: .08em;
+                text-transform: uppercase;
+            }
+            .confirmation-eyebrow i {
+                display: grid;
+                width: 26px;
+                height: 26px;
+                place-items: center;
+                color: #142f63;
+                background: #fff;
+                border-radius: 50%;
+            }
+            .confirmation-header h1 {
+                max-width: 690px;
+                margin: 0 0 12px;
+                color: #fff;
+                font: 600 clamp(30px, 4vw, 46px)/1.15 "Playfair Display", Georgia, serif;
+                letter-spacing: 0;
+            }
+            .confirmation-header p {
+                max-width: 720px;
+                margin: 0;
+                color: rgba(255, 255, 255, .82);
+                font-size: 15px;
+                line-height: 1.7;
+            }
+            .confirmation-reference {
+                min-width: 230px;
+                padding-left: 30px;
+                border-left: 1px solid rgba(255, 255, 255, .2);
+            }
+            .confirmation-reference span {
+                display: block;
+                margin-bottom: 7px;
+                color: #bcd0f6;
+                font-size: 11px;
+                font-weight: 700;
+                letter-spacing: .06em;
+                text-transform: uppercase;
+            }
+            .confirmation-reference strong {
+                display: block;
+                color: #fff;
+                font-size: 19px;
+                line-height: 1.35;
+                overflow-wrap: anywhere;
+            }
+            .confirmation-body { padding: 38px 46px 44px; }
+            .confirmation-facts {
+                display: grid;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                margin: 0;
+                border-top: 1px solid #e3e8ef;
+                border-bottom: 1px solid #e3e8ef;
+            }
+            .confirmation-facts > div { padding: 22px 24px 22px 0; }
+            .confirmation-facts > div + div {
+                padding-left: 24px;
+                border-left: 1px solid #e3e8ef;
+            }
+            .confirmation-facts dt {
+                margin-bottom: 8px;
+                color: #667085;
+                font-size: 11px;
+                font-weight: 700;
+                letter-spacing: .06em;
+                text-transform: uppercase;
+            }
+            .confirmation-facts dd {
+                margin: 0;
+                color: #172033;
+                font-size: 15px;
+                font-weight: 600;
+                line-height: 1.5;
+                overflow-wrap: anywhere;
+            }
+            .confirmation-status {
+                display: inline-flex;
+                align-items: center;
+                gap: 7px;
+                color: #1f6b4f;
+            }
+            .confirmation-status::before {
+                content: "";
+                width: 8px;
+                height: 8px;
+                background: #2f8d68;
+                border-radius: 50%;
+            }
+            .confirmation-selection {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 36px;
+                padding: 34px 0;
+            }
+            .confirmation-selection h2,
+            .confirmation-payment h2 {
+                margin: 0 0 13px;
+                color: #142f63;
+                font: 600 22px/1.3 "Playfair Display", Georgia, serif;
+                letter-spacing: 0;
+            }
+            .selection-list {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+                margin: 0;
+                padding: 0;
+                list-style: none;
+            }
+            .selection-list li {
+                padding: 7px 10px;
+                color: #244e9a;
+                background: #eef3fb;
+                border: 1px solid #d9e3f4;
+                border-radius: 4px;
+                font-size: 13px;
+                font-weight: 600;
+            }
+            .selection-empty {
+                margin: 0;
+                color: #667085;
+                font-size: 14px;
+            }
+            .confirmation-payment {
+                display: grid;
+                grid-template-columns: 1fr auto;
+                gap: 28px;
+                align-items: center;
+                padding: 28px 30px;
+                background: #f6f8fb;
+                border: 1px solid #e1e6ee;
+                border-radius: 6px;
+            }
+            .confirmation-payment p {
+                max-width: 670px;
+                margin: 0;
+                color: #5d687a;
+                font-size: 14px;
+                line-height: 1.65;
+            }
+            .confirmation-actions {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+            .confirmation-actions .btn {
+                min-height: 40px;
+                padding: 10px 17px;
+                border-radius: 4px;
+                font-size: 12px;
+                font-weight: 700;
+                white-space: nowrap;
+            }
+            .confirmation-actions .btn-light {
+                color: #244e9a;
+                background: #fff;
+                border: 1px solid #cad5e6;
+            }
+            .confirmation-privacy {
+                display: flex;
+                align-items: center;
+                gap: 9px;
+                margin: 18px 0 0;
+                color: #667085;
+                font-size: 12px;
+                line-height: 1.5;
+            }
+            .confirmation-privacy i { color: #244e9a; }
+            @media (max-width: 800px) {
+                .registration-confirmation { padding: 32px 14px 50px; }
+                .confirmation-header { grid-template-columns: 1fr; padding: 32px 26px; }
+                .confirmation-reference { padding: 20px 0 0; border-top: 1px solid rgba(255,255,255,.2); border-left: 0; }
+                .confirmation-body { padding: 28px 26px 32px; }
+                .confirmation-facts,
+                .confirmation-selection,
+                .confirmation-payment { grid-template-columns: 1fr; }
+                .confirmation-facts > div,
+                .confirmation-facts > div + div { padding: 17px 0; border-left: 0; }
+                .confirmation-facts > div + div { border-top: 1px solid #e3e8ef; }
+                .confirmation-selection { gap: 26px; }
+                .confirmation-actions { flex-wrap: wrap; }
+            }
+        </style>
+    </x-slot:styles>
 
-    <section class="grid-2">
-        <div class="card">
-            <h2>Student Information</h2>
-            <table class="summary-table">
-                <tr><td>Student</td><td>{{ $registration->student_full_name }}</td></tr>
-                <tr><td>Legal Name</td><td>{{ collect([$registration->family_name_en, $registration->first_name_en, $registration->middle_name])->filter()->implode(' ') ?: '-' }} @if($registration->chinese_legal_name)<br>{{ $registration->chinese_legal_name }}@endif</td></tr>
-                <tr><td>Date of Birth</td><td>{{ optional($registration->date_of_birth)->format('Y-m-d') ?: '-' }}</td></tr>
-                <tr><td>Nationality</td><td>{{ $registration->nationality ?: '-' }}</td></tr>
-                <tr><td>School</td><td>{{ $registration->school_name ?: '-' }}</td></tr>
-                <tr><td>Grade</td><td>{{ $registration->grade_level ?: '-' }}</td></tr>
-                <tr><td>Passport</td><td>{{ $registration->passport_number ?: '-' }}<br>{{ str_replace('_', ' ', $registration->passport_upload_status) }}</td></tr>
-            </table>
-        </div>
+    <main class="registration-confirmation">
+        <article class="confirmation-shell" aria-labelledby="confirmation-title">
+            <header class="confirmation-header">
+                <div>
+                    <p class="confirmation-eyebrow">
+                        <i class="fa fa-check" aria-hidden="true"></i>
+                        {{ __('student_registration.confirmation.eyebrow') }}
+                    </p>
+                    <h1 id="confirmation-title">{{ __('student_registration.confirmation.title') }}</h1>
+                    <p>{{ __('student_registration.confirmation.body') }}</p>
+                </div>
+                <div class="confirmation-reference">
+                    <span>{{ __('student_registration.confirmation.reference') }}</span>
+                    <strong>{{ $registration->registration_number }}</strong>
+                </div>
+            </header>
 
-        <div class="card">
-            <h2>Parent and Emergency Contact</h2>
-            <table class="summary-table">
-                <tr><td>Parent</td><td>{{ $registration->contact?->parent_full_name ?: '-' }}</td></tr>
-                <tr><td>Relationship</td><td>{{ $registration->contact?->relationship ?: '-' }}</td></tr>
-                <tr><td>Parent Email</td><td>{{ $registration->contact?->parent_email ?: '-' }}</td></tr>
-                <tr><td>Parent Phone</td><td>{{ $registration->contact?->parent_phone ?: '-' }}</td></tr>
-                <tr><td>Mailing Address</td><td>{{ collect([$registration->contact?->mailing_address, $registration->contact?->mailing_city, $registration->contact?->postal_code])->filter()->implode(', ') ?: '-' }}</td></tr>
-                <tr><td>Emergency Contact</td><td>{{ $registration->contact?->emergency_contact_name ?: '-' }} @if($registration->contact?->emergency_contact_phone)<br>{{ $registration->contact->emergency_contact_phone }}@endif @if($registration->contact?->emergency_contact_relationship)<br>{{ $registration->contact->emergency_contact_relationship }}@endif</td></tr>
-            </table>
-        </div>
-    </section>
+            <div class="confirmation-body">
+                <dl class="confirmation-facts">
+                    <div>
+                        <dt>{{ __('student_registration.confirmation.status') }}</dt>
+                        <dd class="confirmation-status">{{ str_replace('_', ' ', ucfirst($registration->status)) }}</dd>
+                    </div>
+                    <div>
+                        <dt>{{ __('student_registration.confirmation.student') }}</dt>
+                        <dd>{{ $registration->student_full_name }}</dd>
+                    </div>
+                    <div>
+                        <dt>{{ __('student_registration.confirmation.submitted_at') }}</dt>
+                        <dd>{{ optional($registration->submitted_at)->format('Y-m-d H:i') ?: '-' }}</dd>
+                    </div>
+                </dl>
 
-    <section class="grid-2">
-        <div class="card">
-            <h2>Exam Selection</h2>
-            <table class="summary-table">
-                <tr><td>Selected AP Exams</td><td>{{ $registration->exams->pluck('name')->join(', ') ?: '-' }}</td></tr>
-                <tr><td>Practice Exams</td><td>{{ $registration->practiceExamSelections->pluck('exam_name')->join(', ') ?: '-' }}</td></tr>
-                <tr><td>Accommodations</td><td>{{ $registration->needs_accommodations ? 'Requested' : 'Not requested' }} @if($registration->ssd_code)<br>SSD {{ $registration->ssd_code }} / {{ $registration->accommodation_status ?: '-' }}@endif</td></tr>
-                <tr><td>Registration Period</td><td>{{ str_replace('_', ' ', $registration->registration_period_type ?: $registration->registration_period) }}</td></tr>
-            </table>
-        </div>
+                <section class="confirmation-selection">
+                    <div>
+                        <h2>{{ __('student_registration.confirmation.selected_exams') }}</h2>
+                        @if($registration->exams->isNotEmpty())
+                            <ul class="selection-list">
+                                @foreach($registration->exams as $exam)
+                                    <li>{{ $exam->name }}</li>
+                                @endforeach
+                            </ul>
+                        @else
+                            <p class="selection-empty">-</p>
+                        @endif
+                    </div>
+                    <div>
+                        <h2>{{ __('student_registration.confirmation.practice_exams') }}</h2>
+                        @if($registration->practiceExamSelections->isNotEmpty())
+                            <ul class="selection-list">
+                                @foreach($registration->practiceExamSelections as $practiceExam)
+                                    <li>{{ $practiceExam->exam_name }}</li>
+                                @endforeach
+                            </ul>
+                        @else
+                            <p class="selection-empty">-</p>
+                        @endif
+                    </div>
+                </section>
 
-        <div class="card">
-            <h2>Fee Summary</h2>
-            <table class="summary-table">
-                <tr><td>AP Exam + Service Fee</td><td>{{ $registration->currency }} {{ number_format($registration->exam_fee_total + $registration->service_fee_total) }}</td></tr>
-                <tr><td>Practice Exam Fee</td><td>{{ $registration->currency }} {{ number_format($registration->practice_exam_total) }}</td></tr>
-                <tr><td>Late Fee</td><td>{{ $registration->currency }} {{ number_format($registration->late_fee_total) }}</td></tr>
-                <tr><td>Total Due</td><td class="amount">{{ $registration->currency }} {{ number_format($registration->grand_total ?: $registration->total_fee) }}</td></tr>
-                <tr><td>Payment Method</td><td>{{ str_replace('_', ' ', $registration->payment_method ?: 'manual bank transfer') }}</td></tr>
-            </table>
-        </div>
-    </section>
+                <section class="confirmation-payment">
+                    <div>
+                        <h2>{{ __('student_registration.confirmation.payment_title') }}</h2>
+                        <p>{{ __('student_registration.confirmation.payment_body') }}</p>
+                    </div>
+                    <div class="confirmation-actions">
+                        <a class="btn btn-primary" href="{{ route('payments.show', $registration->registration_number) }}">
+                            {{ __('student_registration.confirmation.continue_payment') }}
+                        </a>
+                        <a class="btn btn-light" href="{{ route('landing') }}">
+                            {{ __('student_registration.confirmation.back_home') }}
+                        </a>
+                    </div>
+                </section>
 
-    <section class="card">
-        <h2>Next Steps</h2>
-        <ol class="steps">
-            <li>Open the payment page and complete bank transfer or gateway payment.</li>
-            <li>Upload proof of payment if using bank transfer.</li>
-            <li>The admin team reviews passport, payment, and subject availability.</li>
-            <li>Final registration confirmation is sent by email after payment and verification are complete.</li>
-        </ol>
-    </section>
-
-    <section class="card">
-        <h2>Submitted Signatures</h2>
-        <table class="summary-table">
-            <tr><td>Student</td><td>{{ $registration->student_signature_name ?: '-' }} / {{ optional($registration->student_signature_date)->format('Y-m-d') ?: '-' }}</td></tr>
-            <tr><td>Parent / Guardian</td><td>{{ $registration->guardian_signature_name ?: '-' }} / {{ optional($registration->guardian_signature_date)->format('Y-m-d') ?: '-' }}</td></tr>
-        </table>
-    </section>
+                <p class="confirmation-privacy">
+                    <i class="fa fa-lock" aria-hidden="true"></i>
+                    {{ __('student_registration.confirmation.privacy_notice') }}
+                </p>
+            </div>
+        </article>
+    </main>
 </x-public-flow-shell>

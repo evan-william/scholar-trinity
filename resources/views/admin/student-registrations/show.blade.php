@@ -2,13 +2,111 @@
     :title="$registration->registration_number"
     :subtitle="__('admin.registration_detail_subtitle')"
 >
-    <div class="card">
-        <h1>{{ $registration->registration_number }}</h1>
+    <x-slot:styles>
+        <style>
+            .registration-detail { display: grid; gap: 16px; }
+            .registration-detail .card + .card { margin-top: 0; }
+            .registration-toolbar {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 24px;
+                padding: 18px 20px;
+                border-top: 3px solid var(--blue);
+            }
+            .registration-toolbar h2 {
+                margin: 0 0 8px;
+                color: var(--navy);
+                font-size: 20px;
+                font-weight: 700;
+            }
+            .registration-toolbar .summary-line {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px 18px;
+                margin: 0;
+                color: var(--muted);
+                font-size: 12px;
+            }
+            .registration-toolbar .summary-line strong {
+                color: var(--ink);
+                font-weight: 600;
+            }
+            .registration-detail .status {
+                padding: 4px 9px;
+                border: 1px solid #cdd9eb;
+                background: #f1f5fb;
+                color: var(--navy);
+            }
+            .registration-detail > .grid { align-items: start; }
+            .registration-detail .card { min-width: 0; }
+            .registration-detail table { table-layout: fixed; }
+            .registration-detail td {
+                padding: 9px 4px;
+                color: #344054;
+                line-height: 1.5;
+                overflow-wrap: anywhere;
+            }
+            .registration-detail td:first-child {
+                width: 36%;
+                padding-right: 16px;
+                color: #667085;
+                font-size: 12px;
+                font-weight: 600;
+            }
+            .registration-detail tr:last-child td { border-bottom: 0; }
+            .registration-detail h3 {
+                margin: 20px 0 12px;
+                color: var(--navy);
+                font-size: 14px;
+                font-weight: 700;
+            }
+            .registration-detail .card form + form {
+                margin-top: 22px;
+                padding-top: 20px;
+                border-top: 1px solid #e4e8ef;
+            }
+            .registration-detail .note {
+                border-radius: 4px;
+                background: #f8fafc;
+            }
+            .registration-detail .timeline {
+                border-left-width: 2px;
+                border-left-color: #bdc9da;
+            }
+            .registration-detail .timeline div {
+                padding: 0 0 12px 2px;
+                color: #475467;
+                font-size: 13px;
+                line-height: 1.5;
+            }
+            .registration-detail .empty-copy {
+                margin: 8px 0 0;
+                color: var(--muted);
+                font-size: 12px;
+            }
+            @media (max-width: 860px) {
+                .registration-toolbar { align-items: flex-start; flex-direction: column; }
+                .registration-detail > .grid { grid-template-columns: 1fr; }
+            }
+        </style>
+    </x-slot:styles>
+
+    <div class="registration-detail">
+    <div class="card registration-toolbar">
+        <div>
+            <h2>{{ $registration->student_full_name }}</h2>
+            <p class="summary-line">
+                <span>{{ __('admin.reference') }}: <strong>{{ $registration->registration_number }}</strong></span>
+                <span>{{ __('admin.status') }}: <strong>{{ str_replace('_', ' ', $registration->status) }}</strong></span>
+                <span>{{ __('admin.submitted_at') }}: <strong>{{ optional($registration->submitted_at)->format('Y-m-d H:i') ?: '-' }}</strong></span>
+            </p>
+        </div>
         <div class="actions">
             <a class="btn light" href="{{ route('admin.student-registrations.index') }}">{{ __('admin.back') }}</a>
             <a class="btn light" href="{{ route('admin.student-registrations.edit',$registration) }}">{{ __('admin.edit') }}</a>
             <a class="btn light" href="{{ route('admin.student-registrations.print',$registration) }}">{{ __('admin.print') }}</a>
-            <form method="POST" action="{{ route('admin.student-registrations.destroy',$registration) }}">@csrf @method('DELETE')<button class="btn danger" type="submit">{{ __('admin.delete') }}</button></form>
+            <form method="POST" action="{{ route('admin.student-registrations.destroy',$registration) }}" onsubmit="return confirm('Delete this registration permanently?')">@csrf @method('DELETE')<button class="btn danger" type="submit">{{ __('admin.delete') }}</button></form>
         </div>
     </div>
 
@@ -74,7 +172,7 @@
                     @endforeach
                 </ul>
             @else
-                <p class="mini">No accommodation request rows submitted.</p>
+                <p class="empty-copy">No accommodation request rows submitted.</p>
             @endif
         </div>
 
@@ -171,13 +269,18 @@
         <div class="card">
             <div class="section-title"><h2>{{ __('admin.activity_log') }}</h2></div>
             <div class="timeline">
-                @foreach($registration->auditLogs->sortByDesc('performed_at') as $log)
+                @forelse($registration->auditLogs->sortByDesc('performed_at') as $log)
                     <div><strong>{{ $log->action }}</strong> {{ $log->field_name }}<br><small>{{ $log->old_value }} -> {{ $log->new_value }}</small><br><small>{{ $log->performed_at->format('Y-m-d H:i') }} / {{ $log->reason }}</small></div>
-                @endforeach
+                @empty
+                    @if($registration->histories->isEmpty())
+                        <p class="empty-copy">No activity has been recorded yet.</p>
+                    @endif
+                @endforelse
                 @foreach($registration->histories as $history)
                     <div><strong>{{ $history->to_status }}</strong><br>{{ $history->note }}<br><small>{{ $history->created_at->format('Y-m-d H:i') }}</small></div>
                 @endforeach
             </div>
         </div>
+    </div>
     </div>
 </x-admin-shell>

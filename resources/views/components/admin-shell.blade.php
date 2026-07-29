@@ -11,37 +11,42 @@
     <link rel="icon" type="image/png" href="{{ asset('images/trinity-scholar-favicon.png') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root{--navy:#153764;--blue:#25558f;--gold:#c9a84c;--ink:#1f2a37;--muted:#667085;--line:#d9dee8;--soft:#f5f7fb;--white:#fff;--green:#237a4f;--red:#b42318;--amber:#9a6a00;--shadow:0 14px 42px rgba(22,47,83,.11)}
+        :root{--navy:#153764;--blue:#25558f;--ink:#1f2a37;--muted:#667085;--line:#d9dee8;--soft:#f5f7fb;--white:#fff;--green:#237a4f;--red:#b42318;--amber:#9a6a00;--shadow:0 8px 24px rgba(22,47,83,.07)}
         *{box-sizing:border-box}
         body{margin:0;background:var(--soft);color:var(--ink);font-family:"Open Sans",Arial,sans-serif}
-        h1,h2,h3,h4,h5,h6{font-family:"Playfair Display",Georgia,serif}
+        h1,h2,h3,h4,h5,h6{font-family:"Open Sans",Arial,sans-serif;letter-spacing:0}
         a{text-decoration:none}
-        .shell{min-height:100vh;display:grid;grid-template-columns:240px minmax(0,1fr)}
-        .side{background:#102d52;color:#dbe8f8;padding:16px;position:sticky;top:0;height:100vh;overflow:auto}
-        .brand{display:block;color:#fff;margin-bottom:20px}
-        .brand-logo{display:block;width:100%;height:72px;object-fit:contain;background:#fff;border-radius:6px;padding:10px 14px}
-        .brand-label{display:block;margin-top:8px;color:#b9cce4;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
-        .nav-group{display:grid;gap:6px}
-        .nav-link{display:flex;align-items:center;justify-content:space-between;gap:10px;color:#dbe8f8;border-radius:7px;padding:10px 11px;font-size:14px;font-weight:800}
-        .nav-link:hover,.nav-link.active{background:rgba(255,255,255,.12);color:#fff}
+        .shell{min-height:100vh;display:grid;grid-template-columns:232px minmax(0,1fr)}
+        .side{background:#102d52;color:#dbe8f8;padding:18px 14px 26px;position:sticky;top:0;height:100vh;overflow:auto}
+        .brand{display:flex;align-items:center;gap:11px;color:#fff;margin:0 4px 23px;padding:0 4px 18px;border-bottom:1px solid rgba(255,255,255,.12)}
+        .brand-logo{display:block;width:72px;height:44px;object-fit:contain;filter:brightness(0) invert(1)}
+        .brand-label{display:block;color:#fff;font-size:12px;font-weight:700;line-height:1.35}
+        .nav-section+.nav-section{margin-top:19px}
+        .nav-heading{margin:0 9px 7px;color:#8098b7;font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase}
+        .nav-group{display:grid;gap:3px}
+        .nav-link{display:flex;align-items:center;gap:10px;min-height:36px;color:#cbd8e8;border-left:3px solid transparent;border-radius:4px;padding:8px 10px;font-size:12px;font-weight:600}
+        .nav-link:hover{background:rgba(255,255,255,.07);color:#fff}
+        .nav-link.active{background:rgba(143,180,255,.15);border-left-color:#8fb4ff;color:#fff}
         .main{min-width:0}
-        .top{background:#fff;border-bottom:1px solid var(--line);padding:18px 24px;display:flex;justify-content:space-between;gap:16px;align-items:center;position:sticky;top:0;z-index:10}
-        .top h1{margin:0;color:var(--navy);font-size:26px;line-height:1.1}
+        .top{background:rgba(255,255,255,.97);border-bottom:1px solid var(--line);padding:15px clamp(18px,2vw,30px);display:flex;justify-content:space-between;gap:20px;align-items:center;position:sticky;top:0;z-index:10}
+        .top h1{margin:0;color:var(--navy);font-size:22px;line-height:1.2;font-weight:700}
         .top p{margin:4px 0 0;color:var(--muted);font-size:13px}
-        .top-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
-        .wrap{width:100%;max-width:none;margin:0;padding:22px clamp(16px,2vw,32px) 48px}
-        .card{background:#fff;border:1px solid var(--line);border-radius:8px;padding:18px;box-shadow:0 4px 16px rgba(22,47,83,.05)}
+        .top-actions{display:flex;gap:8px;flex-wrap:nowrap;align-items:center;justify-content:flex-end}
+        .top-actions .language-switcher,.top-actions .language-switcher label,.top-actions form{margin:0}
+        .top-actions select{width:auto;min-width:106px;min-height:36px;padding:6px 28px 6px 9px;font-size:12px}
+        .top-actions .btn{min-height:36px;padding:8px 12px;font-size:12px}
+        .wrap{width:100%;max-width:1560px;margin:0 auto;padding:22px clamp(16px,2vw,30px) 48px}
+        .card{background:#fff;border:1px solid var(--line);border-radius:6px;padding:18px;box-shadow:var(--shadow)}
         .card+ .card{margin-top:14px}
         .section-title{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin:0 0 14px}
-        .section-title h2{margin:0;color:var(--navy);font-size:20px}
+        .section-title h2{margin:0;color:var(--navy);font-size:17px;font-weight:700}
         .section-title p{margin:4px 0 0;color:var(--muted);font-size:13px}
-        .btn{border:0;border-radius:6px;padding:10px 14px;background:var(--navy);color:#fff;text-decoration:none;font-family:"Open Sans",Arial,sans-serif;font-size:inherit;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;min-height:40px}
-        .btn.light{background:#fff;color:var(--navy);border:1.5px solid var(--line)}
-        .btn.gold{background:var(--gold);color:#382800}
+        .btn{border:1px solid var(--navy);border-radius:4px;padding:8px 12px;background:var(--navy);color:#fff;text-decoration:none;font-family:"Open Sans",Arial,sans-serif;font-size:12px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;min-height:36px}
+        .btn.light{background:#fff;color:var(--navy);border-color:#cbd4e1}
         .filters{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
-        label{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:850;color:var(--ink);margin-bottom:12px}
+        label{display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:700;color:var(--ink);margin-bottom:12px}
         input,select,textarea{min-height:40px;border:1.5px solid #cbd3df;border-radius:6px;padding:8px 10px;font:inherit;background:#fff;color:var(--ink);width:100%}
         textarea{min-height:92px;resize:vertical}
         .metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
@@ -72,13 +77,14 @@
         .chart{display:flex;align-items:end;gap:8px;height:150px;padding-top:12px}
         .chart-bar{flex:1;min-width:10px;background:linear-gradient(180deg,var(--blue),var(--navy));border-radius:6px 6px 0 0;min-height:4px}
         .muted{color:var(--muted)}
-        .notice{background:#fff8e1;color:#5a4000;border:1px solid #f0c040;padding:11px 13px;border-radius:8px;margin-bottom:14px}
+        .notice{background:#f3f7fd;color:var(--navy);border:1px solid #cdd9eb;padding:11px 13px;border-radius:6px;margin-bottom:14px}
         .notice.error{background:#fff0ee;color:var(--red);border-color:#ffc9c4}
         form{margin:0}
         pre{white-space:pre-wrap;background:#f8fafc;border:1px solid #edf0f5;border-radius:8px;padding:14px;overflow:auto}
-        @media(max-width:1050px){.shell{grid-template-columns:1fr}.side{position:static;height:auto}.brand{max-width:230px}.nav-group{grid-template-columns:repeat(2,minmax(0,1fr))}.filters,.metrics,.grid-2,.grid,.grid-3{grid-template-columns:1fr 1fr}.top{position:static}}
+        @media(max-width:1050px){.shell{grid-template-columns:1fr}.side{position:static;height:auto}.brand{max-width:230px}.nav-section{margin-top:12px!important}.nav-group{grid-template-columns:repeat(3,minmax(0,1fr))}.filters,.metrics,.grid-2,.grid,.grid-3{grid-template-columns:1fr 1fr}.top{position:static}}
         @media(max-width:680px){.top{align-items:flex-start;flex-direction:column}.top-actions{justify-content:flex-start}.filters,.metrics,.grid-2,.grid,.grid-3,.nav-group{grid-template-columns:1fr}table{display:block;overflow-x:auto}.wrap{padding-inline:12px}}
     </style>
+    {{ $styles ?? '' }}
 </head>
 <body>
 <div class="shell">
@@ -87,24 +93,42 @@
             <img class="brand-logo" src="{{ asset('images/trinity-scholar-logo-clean.png') }}" alt="Trinity Scholar">
             <span class="brand-label">{{ __('admin.app_name') }}</span>
         </a>
-        <nav class="nav-group" aria-label="Admin navigation">
-            @foreach([
-                ['route' => 'admin.dashboard', 'active' => 'admin.dashboard', 'label' => __('admin.dashboard')],
-                ['route' => 'admin.notifications.index', 'active' => 'admin.notifications.*', 'label' => 'Notifications'],
-                ['route' => 'admin.student-registrations.index', 'active' => 'admin.student-registrations.*', 'label' => __('admin.registrations')],
-                ['route' => 'admin.payments.index', 'active' => 'admin.payments.*', 'label' => __('admin.payments')],
-                ['route' => 'admin.receipts.index', 'active' => 'admin.receipts.*', 'label' => __('admin.receipts')],
-                ['route' => 'admin.exports.index', 'active' => 'admin.exports.*', 'label' => __('admin.exports')],
-                ['route' => 'admin.reports.annual', 'active' => 'admin.reports.*', 'label' => __('admin.annual_report')],
-                ['route' => 'admin.exam-seasons.index', 'active' => 'admin.exam-seasons.*', 'label' => __('admin.exam_seasons')],
-                ['route' => 'admin.ap-exam-subjects.index', 'active' => 'admin.ap-exam-subjects.*', 'label' => __('admin.ap_subjects')],
-                ['route' => 'admin.practice-exams.index', 'active' => 'admin.practice-exams.*', 'label' => 'Practice Exams'],
-                ['route' => 'admin.landing.edit', 'active' => 'admin.landing.*', 'label' => __('admin.landing_content')],
-                ['route' => 'admin.email-templates.index', 'active' => 'admin.email-templates.*', 'label' => 'Email Templates'],
-                ['route' => 'admin.system-settings.index', 'active' => 'admin.system-settings.*', 'label' => 'System Settings'],
-                ['route' => 'admin.security.audit.index', 'active' => 'admin.security.audit.*', 'label' => __('admin.audit_log')],
-            ] as $item)
-                <a class="nav-link {{ request()->routeIs($item['active']) ? 'active' : '' }}" href="{{ route($item['route']) }}">{{ $item['label'] }}</a>
+        @php
+            $navSections = [
+                'Overview' => [
+                    ['route' => 'admin.dashboard', 'active' => 'admin.dashboard', 'label' => __('admin.dashboard')],
+                    ['route' => 'admin.notifications.index', 'active' => 'admin.notifications.*', 'label' => 'Notifications'],
+                ],
+                'Registration' => [
+                    ['route' => 'admin.student-registrations.index', 'active' => 'admin.student-registrations.*', 'label' => __('admin.registrations')],
+                    ['route' => 'admin.payments.index', 'active' => 'admin.payments.*', 'label' => __('admin.payments')],
+                    ['route' => 'admin.receipts.index', 'active' => 'admin.receipts.*', 'label' => __('admin.receipts')],
+                    ['route' => 'admin.exports.index', 'active' => 'admin.exports.*', 'label' => __('admin.exports')],
+                    ['route' => 'admin.reports.annual', 'active' => 'admin.reports.*', 'label' => __('admin.annual_report')],
+                ],
+                'Programs' => [
+                    ['route' => 'admin.exam-seasons.index', 'active' => 'admin.exam-seasons.*', 'label' => __('admin.exam_seasons')],
+                    ['route' => 'admin.ap-exam-subjects.index', 'active' => 'admin.ap-exam-subjects.*', 'label' => __('admin.ap_subjects')],
+                    ['route' => 'admin.practice-exams.index', 'active' => 'admin.practice-exams.*', 'label' => 'Practice Exams'],
+                ],
+                'Content & System' => [
+                    ['route' => 'admin.landing.edit', 'active' => 'admin.landing.*', 'label' => __('admin.landing_content')],
+                    ['route' => 'admin.email-templates.index', 'active' => 'admin.email-templates.*', 'label' => 'Email Templates'],
+                    ['route' => 'admin.system-settings.index', 'active' => 'admin.system-settings.*', 'label' => 'System Settings'],
+                    ['route' => 'admin.security.audit.index', 'active' => 'admin.security.audit.*', 'label' => __('admin.audit_log')],
+                ],
+            ];
+        @endphp
+        <nav aria-label="Admin navigation">
+            @foreach($navSections as $section => $items)
+                <div class="nav-section">
+                    <p class="nav-heading">{{ $section }}</p>
+                    <div class="nav-group">
+                        @foreach($items as $item)
+                            <a class="nav-link {{ request()->routeIs($item['active']) ? 'active' : '' }}" href="{{ route($item['route']) }}">{{ $item['label'] }}</a>
+                        @endforeach
+                    </div>
+                </div>
             @endforeach
         </nav>
     </aside>

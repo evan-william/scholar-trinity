@@ -55,6 +55,50 @@ class StudentRegistrationTest extends TestCase
         Mail::assertSent(StudentRegistrationConfirmation::class);
     }
 
+    public function test_public_confirmation_is_available_once_after_submission(): void
+    {
+        Mail::fake();
+        $this->seed(ApExamSubjectSeeder::class);
+        $subject = ApExamSubject::query()->firstOrFail();
+
+        $response = $this->post('/student-registration', $this->validPayload([
+            'exam_subject_ids' => [$subject->id],
+        ]));
+
+        $registration = StudentRegistration::query()->firstOrFail();
+        $confirmationUrl = route('student-registrations.show', $registration->registration_number);
+
+        $response->assertRedirect($confirmationUrl);
+
+        $this->get($confirmationUrl)
+            ->assertOk()
+            ->assertSee($registration->registration_number)
+            ->assertSee($registration->student_full_name)
+            ->assertDontSee($registration->passport_number);
+
+        $this->get($confirmationUrl)
+            ->assertRedirect(route('landing'))
+            ->assertSessionHas('status', __('student_registration.confirmation_expired'));
+    }
+
+    public function test_public_confirmation_cannot_be_opened_without_submission_session(): void
+    {
+        Mail::fake();
+        $this->seed(ApExamSubjectSeeder::class);
+        $subject = ApExamSubject::query()->firstOrFail();
+
+        $this->post('/student-registration', $this->validPayload([
+            'exam_subject_ids' => [$subject->id],
+        ]));
+
+        $registration = StudentRegistration::query()->firstOrFail();
+        $this->flushSession();
+
+        $this->get(route('student-registrations.show', $registration->registration_number))
+            ->assertRedirect(route('landing'))
+            ->assertSessionHas('status', __('student_registration.confirmation_expired'));
+    }
+
     public function test_duplicate_email_and_passport_are_rejected(): void
     {
         Mail::fake();

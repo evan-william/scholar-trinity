@@ -20,6 +20,7 @@ use Throwable;
 class StudentRegistrationController extends Controller
 {
     private const PASSPORT_DRAFT_SESSION_KEY = 'student_registration_passport_drafts';
+    private const CONFIRMATION_ACCESS_SESSION_KEY = 'student_registration_confirmation_access';
 
     public function create(
         StudentRegistrationRepository $repository,
@@ -60,6 +61,11 @@ class StudentRegistrationController extends Controller
             (string) $request->userAgent()
         );
 
+        $request->session()->put(
+            self::CONFIRMATION_ACCESS_SESSION_KEY,
+            $registration->registration_number
+        );
+
         return redirect()->route('student-registrations.show', $registration->registration_number);
     }
 
@@ -92,10 +98,21 @@ class StudentRegistrationController extends Controller
         ]);
     }
 
-    public function show(string $registrationNumber): View
+    public function show(Request $request, string $registrationNumber): View|RedirectResponse
     {
+        $allowedRegistrationNumber = (string) $request->session()->pull(
+            self::CONFIRMATION_ACCESS_SESSION_KEY,
+            ''
+        );
+
+        if ($allowedRegistrationNumber === '' || ! hash_equals($allowedRegistrationNumber, $registrationNumber)) {
+            return redirect()
+                ->route('landing')
+                ->with('status', __('student_registration.confirmation_expired'));
+        }
+
         $registration = StudentRegistration::query()
-            ->with(['contact', 'exams', 'practiceExamSelections', 'agreements', 'histories'])
+            ->with(['exams', 'practiceExamSelections'])
             ->where('registration_number', $registrationNumber)
             ->firstOrFail();
 

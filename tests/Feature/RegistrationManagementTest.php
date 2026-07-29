@@ -118,7 +118,8 @@ class RegistrationManagementTest extends TestCase
             ->assertDontSee($note, false);
 
         $this->get(route('student-registrations.show', $registration->registration_number))
-            ->assertOk()
+            ->assertRedirect(route('landing'))
+            ->assertSessionHas('status', __('student_registration.confirmation_expired'))
             ->assertDontSee('Call parent.');
     }
 
