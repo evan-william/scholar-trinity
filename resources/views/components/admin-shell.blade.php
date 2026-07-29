@@ -58,6 +58,17 @@
         .grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
         .actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
         .btn.danger{background:var(--red);color:#fff}
+        .action-menu{position:relative;display:inline-flex;justify-content:flex-end}
+        .action-menu summary{display:grid;width:34px;height:34px;place-items:center;border:1px solid #cbd4e1;border-radius:4px;background:#fff;color:var(--navy);font-size:18px;font-weight:900;line-height:1;cursor:pointer;list-style:none}
+        .action-menu summary::-webkit-details-marker{display:none}
+        .action-menu[open] summary{background:#eef3f9;border-color:#b9c7db}
+        .action-menu-panel{position:absolute;right:0;top:calc(100% + 6px);z-index:20;display:grid;gap:4px;min-width:164px;padding:6px;background:#fff;border:1px solid var(--line);border-radius:6px;box-shadow:0 16px 34px rgba(15,36,64,.16)}
+        .action-menu-panel .btn,.action-menu-panel button{width:100%;min-height:34px;justify-content:flex-start;border:0;border-radius:4px;background:#fff;color:var(--ink);box-shadow:none;text-align:left}
+        .action-menu-panel .btn:hover,.action-menu-panel button:hover{background:#eef3f9;color:var(--navy)}
+        .action-menu-panel .btn.danger,.action-menu-panel button.danger{color:var(--red);background:#fff}
+        .action-menu-panel .btn.danger:hover,.action-menu-panel button.danger:hover{background:#fff0ee}
+        .action-menu-panel form{width:100%}
+        .action-menu-panel input{margin-bottom:6px}
         .mini{font-size:12px;color:var(--muted)}
         .list{margin:0;padding-left:18px}
         .list li{margin-bottom:6px}

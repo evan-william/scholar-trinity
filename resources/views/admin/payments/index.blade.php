@@ -54,7 +54,11 @@
                         <td><span class="status {{ $payment->payment_status }}">{{ str_replace('_', ' ', $payment->payment_status) }}</span></td>
                         <td>{{ $payment->currency }} {{ number_format($payment->grand_total) }}</td>
                         <td>{{ $payment->updated_at->format('Y-m-d H:i') }}</td>
-                        <td><a class="btn light" href="{{ route('admin.payments.show', $payment) }}">View</a></td>
+                        <td>
+                            <x-admin-actions>
+                                <a class="btn light" href="{{ route('admin.payments.show', $payment) }}">View</a>
+                            </x-admin-actions>
+                        </td>
                     </tr>
                 @empty
                     <tr><td colspan="8" class="muted">No payment records found.</td></tr>

@@ -44,7 +44,11 @@
                         <td>{{ $log->action }}</td>
                         <td>{{ $log->ip_address }}</td>
                         <td><span class="status">{{ $log->status }}</span></td>
-                        <td><a class="btn light" href="{{ route('admin.security.audit.show',$log) }}">{{ __('admin.details') }}</a></td>
+                        <td>
+                            <x-admin-actions>
+                                <a class="btn light" href="{{ route('admin.security.audit.show',$log) }}">{{ __('admin.details') }}</a>
+                            </x-admin-actions>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>

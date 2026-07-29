@@ -35,12 +35,16 @@
                         </td>
                         <td>{{ $notification->created_at->format('Y-m-d H:i') }}</td>
                         <td>
-                            <div class="actions">
-                                @if($notification->link_url)<a class="btn light" href="{{ $notification->link_url }}">Open</a>@endif
-                                @unless($notification->read_at)
-                                    <form method="POST" action="{{ route('admin.notifications.read', $notification) }}">@csrf<button class="btn light" type="submit">Mark Read</button></form>
-                                @endunless
-                            </div>
+                            @if($notification->link_url || ! $notification->read_at)
+                                <x-admin-actions>
+                                    @if($notification->link_url)<a class="btn light" href="{{ $notification->link_url }}">Open</a>@endif
+                                    @unless($notification->read_at)
+                                        <form method="POST" action="{{ route('admin.notifications.read', $notification) }}">@csrf<button class="btn light" type="submit">Mark Read</button></form>
+                                    @endunless
+                                </x-admin-actions>
+                            @else
+                                <span class="muted">-</span>
+                            @endif
                         </td>
                     </tr>
                 @empty

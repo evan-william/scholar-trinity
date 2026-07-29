@@ -43,14 +43,14 @@
                             ]) : __('admin.selectable_now') }}</span>
                         </td>
                         <td>
-                            <div class="actions">
+                            <x-admin-actions>
                                 <a class="btn light" href="{{ route('admin.ap-exam-subjects.edit',$subject) }}">{{ __('admin.edit') }}</a>
                                 <form method="POST" action="{{ route('admin.ap-exam-subjects.destroy',$subject) }}">
                                     @csrf
                                     @method('DELETE')
                                     <button class="btn danger" type="submit">{{ __('admin.disable') }}</button>
                                 </form>
-                            </div>
+                            </x-admin-actions>
                         </td>
                     </tr>
                 @endforeach

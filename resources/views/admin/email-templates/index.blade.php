@@ -49,7 +49,11 @@
                         <td>{{ $template->subject }}</td>
                         <td><span class="status">{{ $template->is_active ? 'active' : 'inactive' }}</span></td>
                         <td>{{ $template->updated_at->format('Y-m-d H:i') }}</td>
-                        <td><form method="POST" action="{{ route('admin.email-templates.destroy', $template) }}">@csrf @method('DELETE')<button class="btn danger" type="submit">Delete</button></form></td>
+                        <td>
+                            <x-admin-actions>
+                                <form method="POST" action="{{ route('admin.email-templates.destroy', $template) }}">@csrf @method('DELETE')<button class="btn danger" type="submit">Delete</button></form>
+                            </x-admin-actions>
+                        </td>
                     </tr>
                 @empty
                     <tr><td colspan="6" class="muted">No template overrides saved yet.</td></tr>

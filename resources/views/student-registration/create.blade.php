@@ -124,8 +124,13 @@
         .intro-summary p{font-size:13px;margin:0;color:var(--gray-800)}
         .intro-summary small{display:block;margin-top:12px;color:#667386;font-size:11px;line-height:1.5}
         .test-site-map{display:inline-flex;align-items:center;gap:7px;margin-top:12px;color:var(--primary);font-size:12px;font-weight:700}
+        .preparation-detail{margin-top:12px}
         .preparation-choice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:16px}
         .preparation-choice-grid .check-line{min-height:54px;padding:14px;border:1px solid #dce5f0;border-radius:8px;background:#f8fafc}
+        .choice-group-error{margin-top:10px}
+        .check-line{flex-wrap:wrap}
+        .check-line>span:not(.client-error){flex:1 1 calc(100% - 28px)}
+        .check-line .client-error{flex:0 0 100%;margin-left:28px}
         .pay-opt.unavailable{cursor:not-allowed;opacity:.68;background:#f5f7fa}
         .pay-opt.unavailable>i{width:18px;margin-top:3px;color:var(--primary);text-align:center}
         .sig-box{display:grid;gap:8px}.sig-box .lbl:not(:first-child){margin-top:5px}
@@ -397,6 +402,9 @@
         body.trinity-form .exam-sub{color:#778292;font-size:11px}
         body.trinity-form .exam-price-tag{color:#244e9a;font-size:11px;font-weight:650}
         body.trinity-form .price-box,body.trinity-form .sig-box,body.trinity-form .next-steps,body.trinity-form .rev-section{background:#f8f9fb;border:1px solid #dfe3e8;border-radius:3px;box-shadow:none}
+        body.trinity-form .next-steps{padding:22px 26px}
+        body.trinity-form .next-steps ol{margin:0;padding-left:20px}
+        body.trinity-form .next-steps li{padding-left:3px}
         body.trinity-form .price-row.total{color:#183a73;border-top:1px solid #aebdce;font-family:var(--trinity-display);font-size:16px;font-weight:700}
         body.trinity-form .pay-opt h4,body.trinity-form .next-steps h4,body.trinity-form .rev-section h3{color:#26364d;font-family:var(--trinity-display);font-weight:700}
         body.trinity-form .rev-table{background:#fff;border:1px solid #dfe3e8;border-radius:0}
@@ -666,16 +674,18 @@
                 <div class="section-title">{{ $tx('AP Preparation Interest', 'AP 備考課程意願') }} <span>{{ $tx('Optional tutoring survey', '選填課程需求調查') }}</span></div>
                 <div class="notice"><h4>{{ $tx('Optional tutoring survey', '選填課程需求調查') }}</h4><p>{{ $tx('This does not affect AP exam registration. It helps the team follow up if the student is interested in AP preparation support.', '此調查不影響 AP 考試報名，僅協助團隊了解學生是否需要 AP 備考支援。') }}</p></div>
                 <label class="check-line" style="margin-bottom:12px"><input type="checkbox" name="preparation_interest" value="1" id="prepInterest" @checked(old('preparation_interest'))><span>{{ $tx('I am interested in AP preparation / tutoring information.', '我有興趣了解 AP 備考 / 家教資訊。') }}</span></label>
-                <div class="preparation-choice-grid">
-                    <label class="check-line"><input type="checkbox" name="group_class_interest" value="1" @checked(old('group_class_interest'))><span>{{ $tx('Group class interest', '團體課程意願') }}</span></label>
-                    <label class="check-line"><input type="checkbox" name="private_tutoring_interest" value="1" @checked(old('private_tutoring_interest'))><span>{{ $tx('Private tutoring interest', '一對一家教意願') }}</span></label>
-                </div>
-                <div class="row row-2">
-                    <div class="fg"><label class="lbl">{{ $tx('Preferred Schedule', '偏好上課時間') }}</label><input name="preferred_tutoring_schedule" value="{{ old('preferred_tutoring_schedule') }}" placeholder="{{ $tx('Weekday evening, weekend morning, flexible', '平日晚上、週末上午、時間彈性') }}"></div>
-                    <div class="fg"><label class="lbl">{{ $tx('Preferred Language', '偏好語言') }}</label><select name="preferred_tutoring_language"><option value="">{{ $tx('Select', '請選擇') }}</option><option value="English" @selected(old('preferred_tutoring_language') === 'English')>{{ $tx('English', '英文') }}</option><option value="Mandarin" @selected(old('preferred_tutoring_language') === 'Mandarin')>{{ $tx('Mandarin', '中文') }}</option><option value="Bilingual" @selected(old('preferred_tutoring_language') === 'Bilingual')>{{ $tx('Bilingual', '雙語') }}</option></select></div>
-                </div>
-                <div class="row row-1">
-                    <div class="fg"><label class="lbl">{{ $tx('Preparation Notes', '備考需求備註') }}</label><textarea name="preparation_notes" placeholder="{{ $tx('Subjects, goals, availability, or questions', '科目、目標、可上課時間或問題') }}">{{ old('preparation_notes') }}</textarea></div>
+                <div id="prepDetails" class="preparation-detail hidden">
+                    <div class="preparation-choice-grid">
+                        <label class="check-line"><input type="checkbox" name="group_class_interest" value="1" @checked(old('group_class_interest'))><span>{{ $tx('Group class interest', '團體課程意願') }}</span></label>
+                        <label class="check-line"><input type="checkbox" name="private_tutoring_interest" value="1" @checked(old('private_tutoring_interest'))><span>{{ $tx('Private tutoring interest', '一對一家教意願') }}</span></label>
+                    </div>
+                    <div class="row row-2">
+                        <div class="fg"><label class="lbl">{{ $tx('Preferred Schedule', '偏好上課時間') }}</label><input name="preferred_tutoring_schedule" value="{{ old('preferred_tutoring_schedule') }}" placeholder="{{ $tx('Weekday evening, weekend morning, flexible', '平日晚上、週末上午、時間彈性') }}"></div>
+                        <div class="fg"><label class="lbl">{{ $tx('Preferred Language', '偏好語言') }}</label><select name="preferred_tutoring_language"><option value="">{{ $tx('Select', '請選擇') }}</option><option value="English" @selected(old('preferred_tutoring_language') === 'English')>{{ $tx('English', '英文') }}</option><option value="Mandarin" @selected(old('preferred_tutoring_language') === 'Mandarin')>{{ $tx('Mandarin', '中文') }}</option><option value="Bilingual" @selected(old('preferred_tutoring_language') === 'Bilingual')>{{ $tx('Bilingual', '雙語') }}</option></select></div>
+                    </div>
+                    <div class="row row-1">
+                        <div class="fg"><label class="lbl">{{ $tx('Preparation Notes', '備考需求備註') }}</label><textarea name="preparation_notes" placeholder="{{ $tx('Subjects, goals, availability, or questions', '科目、目標、可上課時間或問題') }}">{{ old('preparation_notes') }}</textarea></div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -806,6 +816,10 @@
         examRequired: isZhLocale ? '請至少選擇一科 AP 考試。' : 'Please select at least one AP exam.',
         stepRequired: isZhLocale ? '請完成此步驟的必填欄位。' : 'Please complete the required fields in this step.',
         passportRequired: isZhLocale ? '請先上傳護照影本。' : 'Please upload a passport copy before continuing.',
+        reviewRequired: isZhLocale ? '請先勾選確認聲明。' : 'Please check the acknowledgement before continuing.',
+        fileType: isZhLocale ? '請上傳 PDF、JPG、JPEG 或 PNG 檔案。' : 'Please upload a PDF, JPG, JPEG, or PNG file.',
+        fileSize: isZhLocale ? '檔案大小不可超過 10MB。' : 'File size must not exceed 10MB.',
+        accommodationRequired: isZhLocale ? '申請特殊考試需求時，請完成此欄位。' : 'Please complete this field when requesting accommodations.',
         uploadedFile: isZhLocale ? '已選擇檔案' : 'Uploaded file',
         noAccommodations: isZhLocale ? '未申請特殊考試需求' : 'No accommodations requested',
         requested: isZhLocale ? '已申請' : 'Requested',
@@ -877,6 +891,7 @@
     const initialStep = Number(@json(session('student_registration_error_step', 1)));
     const preservedPassportName = @json($passportDraft['name'] ?? null);
     const passportDraftUrl = @json(route('student-registrations.passport-draft'));
+    const serverErrors = @json($errors->messages());
     const draftKey = 'studentRegistrationFormDraft';
     let cur = 1;
     const totalSteps = 6;
@@ -1032,7 +1047,7 @@
         input.classList.remove('is-invalid');
         input.removeAttribute('aria-invalid');
         input.removeAttribute('aria-describedby');
-        const container = input.closest('.fg, .sig-box');
+        const container = input.closest('.fg, .sig-box, .check-line');
         container?.querySelector(`.client-error[data-for="${input.name}"]`)?.remove();
     }
 
@@ -1041,7 +1056,7 @@
         input.classList.add('is-invalid');
         input.setAttribute('aria-invalid', 'true');
 
-        const container = input.closest('.fg, .sig-box');
+        const container = input.closest('.fg, .sig-box, .check-line');
         if (!container) return;
 
         const message = document.createElement('span');
@@ -1052,6 +1067,63 @@
         message.textContent = input.validationMessage || uiText.stepRequired;
         input.setAttribute('aria-describedby', id);
         container.appendChild(message);
+    }
+
+    function showGroupError(container, key, message) {
+        if (!container) return;
+        clearGroupError(container, key);
+        const error = document.createElement('span');
+        error.className = 'client-error choice-group-error';
+        error.dataset.for = key;
+        error.textContent = message;
+        container.appendChild(error);
+    }
+
+    function clearGroupError(container, key) {
+        container?.querySelector(`.client-error[data-for="${key}"]`)?.remove();
+    }
+
+    function togglePreparationDetails() {
+        const checked = Boolean(document.getElementById('prepInterest')?.checked);
+        const details = document.getElementById('prepDetails');
+        details?.classList.toggle('hidden', !checked);
+
+        if (checked || !details) return;
+
+        details.querySelectorAll('input[type="checkbox"]').forEach(input => {
+            input.checked = false;
+            clearClientError(input);
+        });
+        details.querySelectorAll('input:not([type="checkbox"]), select, textarea').forEach(input => {
+            input.value = '';
+            clearClientError(input);
+        });
+    }
+
+    function hydrateServerErrors() {
+        Object.entries(serverErrors || {}).forEach(([name, messages]) => {
+            const message = Array.isArray(messages) ? messages[0] : messages;
+            const input = form.elements[name] || form.elements[`${name}[]`];
+
+            if (input instanceof RadioNodeList) {
+                const firstInput = [...input].find(item => item instanceof HTMLElement);
+                const container = firstInput?.closest('.card') || firstInput?.closest('section');
+                if (container) showGroupError(container, name, message);
+                return;
+            }
+
+            if (input instanceof HTMLElement) {
+                input.setCustomValidity(message);
+                showClientError(input);
+                input.addEventListener('input', () => input.setCustomValidity(''), { once: true });
+                input.addEventListener('change', () => input.setCustomValidity(''), { once: true });
+                return;
+            }
+
+            if (name.startsWith('exam_subject_')) {
+                showGroupError(document.querySelector('[data-step="3"] .exam-grid') || document.querySelector('[data-step="3"] .card'), 'exam_subject_uuids', message);
+            }
+        });
     }
 
     function validateStep() {
@@ -1065,6 +1137,27 @@
                 || document.getElementById('passportFileName').value
             );
             passportInput.setCustomValidity(hasPassport ? '' : uiText.passportRequired);
+
+            if (passportInput.files[0]) {
+                const file = passportInput.files[0];
+                const validTypes = ['application/pdf', 'image/jpeg', 'image/png'];
+                const validExtensions = /\.(pdf|jpe?g|png)$/i.test(file.name);
+                if (!validTypes.includes(file.type) && !validExtensions) {
+                    passportInput.setCustomValidity(uiText.fileType);
+                } else if (file.size > 10 * 1024 * 1024) {
+                    passportInput.setCustomValidity(uiText.fileSize);
+                }
+            }
+        }
+
+        if (cur === 4) {
+            const needsAccom = document.getElementById('needsAccom').checked;
+            const ssdCode = form.elements.ssd_code;
+            const accomStatus = form.elements.accommodation_status;
+            ssdCode.required = needsAccom;
+            accomStatus.required = needsAccom;
+            ssdCode.setCustomValidity(needsAccom && !ssdCode.value.trim() ? uiText.accommodationRequired : '');
+            accomStatus.setCustomValidity(needsAccom && !accomStatus.value ? uiText.accommodationRequired : '');
         }
 
         for (const input of section.querySelectorAll('input, select, textarea')) {
@@ -1083,9 +1176,24 @@
         const selectedRegularExams = [...form.querySelectorAll('input[name="exam_subject_uuids[]"]')]
             .filter(input => input.checked && !input.disabled);
         if (cur === 3 && selectedRegularExams.length === 0) {
+            const examContainer = document.querySelector('[data-step="3"] .exam-grid') || document.querySelector('[data-step="3"] .card');
+            showGroupError(examContainer, 'exam_subject_uuids', uiText.examRequired);
+            examContainer?.scrollIntoView({behavior: 'smooth', block: 'center'});
             notify(uiText.examRequired);
             return false;
         }
+        return true;
+    }
+
+    function validateAllBeforeSubmit() {
+        const originalStep = cur;
+
+        for (let step = 1; step <= 5; step++) {
+            setStep(step);
+            if (!validateStep()) return false;
+        }
+
+        setStep(originalStep);
         return true;
     }
 
@@ -1164,6 +1272,9 @@
         });
     });
     document.querySelectorAll('.exam-cb input').forEach(input => input.addEventListener('change', calculate));
+    document.querySelectorAll('input[name="exam_subject_uuids[]"]').forEach(input => input.addEventListener('change', () => {
+        clearGroupError(document.querySelector('[data-step="3"] .exam-grid') || document.querySelector('[data-step="3"] .card'), 'exam_subject_uuids');
+    }));
     document.querySelectorAll('.pay-opt input').forEach(input => input.addEventListener('change', () => {
         document.querySelectorAll('.pay-opt').forEach(label => label.classList.toggle('selected', label.querySelector('input').checked));
     }));
@@ -1194,6 +1305,10 @@
         }
     });
     document.getElementById('needsAccom').addEventListener('change', event => document.getElementById('accomFields').classList.toggle('hidden', !event.target.checked));
+    document.getElementById('prepInterest')?.addEventListener('change', () => {
+        togglePreparationDetails();
+        saveFormDraft();
+    });
     document.getElementById('addAccomRow').addEventListener('click', () => {
         const index = document.querySelectorAll('.accom-row').length;
         const row = document.createElement('div');
@@ -1225,11 +1340,17 @@
             saveFormDraft();
             return;
         }
+        if (!validateAllBeforeSubmit()) return;
         const btn = document.getElementById('btnNext');
         btn.classList.add('loading');
         btn.textContent = uiText.submitting;
         localStorage.removeItem(draftKey);
         form.requestSubmit();
+    });
+    form.addEventListener('submit', event => {
+        if (cur !== totalSteps || !validateAllBeforeSubmit()) {
+            event.preventDefault();
+        }
     });
     document.getElementById('btnBack').addEventListener('click', () => {
         setStep(Math.max(1, cur - 1));
@@ -1251,11 +1372,13 @@
     form.addEventListener('input', saveFormDraft);
     form.addEventListener('change', saveFormDraft);
     localizeStaticFormCopy();
+    hydrateServerErrors();
     const restoredStep = restoreFormDraft();
     if (!preservedPassportName && document.getElementById('passportFileName').value) {
         setPassportLabel(document.getElementById('passportFileName').value);
     }
     document.querySelectorAll('.pay-opt').forEach(label => label.classList.toggle('selected', label.querySelector('input').checked));
+    togglePreparationDetails();
     calculate();
     if (document.getElementById('needsAccom').checked) document.getElementById('accomFields').classList.remove('hidden');
     if (initialStep > 1 && initialStep <= totalSteps) {

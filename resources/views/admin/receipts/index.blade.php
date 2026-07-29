@@ -70,7 +70,11 @@
                             <span class="status">{{ $receipt->invoice_received ? 'Invoice received' : 'Invoice pending' }}</span><br>
                             <span class="status" style="margin-top:4px">{{ $receipt->receipt_received ? 'Fapiao received' : 'Fapiao pending' }}</span>
                         </td>
-                        <td><a class="btn light" href="{{ route('admin.receipts.show', $receipt) }}">View</a></td>
+                        <td>
+                            <x-admin-actions>
+                                <a class="btn light" href="{{ route('admin.receipts.show', $receipt) }}">View</a>
+                            </x-admin-actions>
+                        </td>
                     </tr>
                 @empty
                     <tr><td colspan="11" class="muted">No receipt tracking records found.</td></tr>

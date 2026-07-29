@@ -142,7 +142,7 @@
         </div>
         <table>
             <thead>
-                <tr><th>Reference</th><th>Season</th><th>Student</th><th>Parent</th><th>Passport</th><th>School</th><th>Exams</th><th>AP Prep</th><th>Period</th><th>Payment</th><th>Registration</th><th>Submitted</th><th>Updated</th><th>Actions</th></tr>
+                <tr><th>Reference</th><th>Season</th><th>Student</th><th>Parent</th><th>Passport</th><th>School</th><th>Exams</th><th>Payment</th><th>Registration</th><th>Submitted</th><th>Updated</th><th>Actions</th></tr>
             </thead>
             <tbody>
                 @forelse($registrations as $registration)
@@ -154,21 +154,19 @@
                         <td>{{ $registration->passport_number ?: '-' }}</td>
                         <td>{{ $registration->school_name }}<br><span class="muted">Grade {{ $registration->grade_level }}</span></td>
                         <td>{{ $registration->exams_count }}</td>
-                        <td>{{ $registration->preparation_interest ? 'Yes' : 'No' }}</td>
-                        <td>{{ $registration->registration_period_type ? ucfirst($registration->registration_period_type) : ($registration->late_fee_total > 0 ? 'Late' : 'Main') }}</td>
                         <td><span class="status {{ $registration->payment_status }}">{{ str_replace('_', ' ', $registration->payment_status) }}</span></td>
                         <td><span class="status {{ $registration->status }}">{{ str_replace('_', ' ', $registration->status) }}</span></td>
                         <td>{{ optional($registration->submitted_at)->format('Y-m-d') ?: '-' }}</td>
                         <td>{{ $registration->updated_at->format('Y-m-d') }}</td>
                         <td>
-                            <div class="top-actions" style="justify-content:flex-start">
+                            <x-admin-actions>
                                 <a class="btn light" href="{{ route('admin.student-registrations.show', $registration) }}">View</a>
                                 <a class="btn light" href="{{ route('admin.student-registrations.edit', $registration) }}">Edit</a>
-                            </div>
+                            </x-admin-actions>
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="14" class="muted">No registrations found.</td></tr>
+                    <tr><td colspan="12" class="muted">No registrations found.</td></tr>
                 @endforelse
             </tbody>
         </table>

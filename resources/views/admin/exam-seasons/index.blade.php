@@ -50,7 +50,7 @@
                             </form>
                         </td>
                         <td>
-                            <div class="actions">
+                            <x-admin-actions>
                                 <a class="btn light" href="{{ route('admin.exam-seasons.edit',$season) }}">{{ __('admin.edit') }}</a>
                                 <form method="POST" action="{{ route('admin.exam-seasons.activate',$season) }}">
                                     @csrf
@@ -61,7 +61,7 @@
                                     <input class="compact-input" name="close_reason" placeholder="{{ __('admin.archive_reason') }}">
                                     <button class="btn danger" type="submit">{{ __('admin.archive') }}</button>
                                 </form>
-                            </div>
+                            </x-admin-actions>
                         </td>
                     </tr>
                 @endforeach

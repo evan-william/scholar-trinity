@@ -26,7 +26,9 @@
                         <td>{{ optional($export->expires_at)->format('Y-m-d H:i') ?: '-' }}</td>
                         <td>
                             @if(! $export->expires_at?->isPast())
-                                <a class="btn light" href="{{ route('admin.exports.download', $export) }}">Download</a>
+                                <x-admin-actions>
+                                    <a class="btn light" href="{{ route('admin.exports.download', $export) }}">Download</a>
+                                </x-admin-actions>
                             @else
                                 <span class="status failed">Expired</span>
                             @endif

@@ -73,7 +73,11 @@
                         <td>{{ $setting->type }}</td>
                         <td><pre>{{ $setting->value }}</pre></td>
                         <td>{{ $setting->is_public ? 'yes' : 'no' }}</td>
-                        <td><form method="POST" action="{{ route('admin.system-settings.destroy', $setting) }}">@csrf @method('DELETE')<button class="btn danger" type="submit">Delete</button></form></td>
+                        <td>
+                            <x-admin-actions>
+                                <form method="POST" action="{{ route('admin.system-settings.destroy', $setting) }}">@csrf @method('DELETE')<button class="btn danger" type="submit">Delete</button></form>
+                            </x-admin-actions>
+                        </td>
                     </tr>
                 @empty
                     <tr><td colspan="6" class="muted">No system settings saved yet.</td></tr>

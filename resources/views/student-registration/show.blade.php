@@ -7,7 +7,7 @@
         <style>
             .registration-confirmation {
                 background: #f4f7fb;
-                padding: 64px 20px 80px;
+                padding: 132px 20px 80px;
                 color: #1f2937;
                 font-family: "Open Sans", "Microsoft JhengHei", sans-serif;
             }
@@ -22,7 +22,7 @@
             }
             .confirmation-header {
                 display: grid;
-                grid-template-columns: 1fr auto;
+                grid-template-columns: minmax(0, 1fr) minmax(220px, auto);
                 gap: 32px;
                 align-items: end;
                 padding: 42px 46px 36px;
@@ -65,6 +65,7 @@
             }
             .confirmation-reference {
                 min-width: 230px;
+                max-width: 320px;
                 padding-left: 30px;
                 border-left: 1px solid rgba(255, 255, 255, .2);
             }
@@ -163,7 +164,7 @@
             }
             .confirmation-payment {
                 display: grid;
-                grid-template-columns: 1fr auto;
+                grid-template-columns: minmax(0, 1fr) auto;
                 gap: 28px;
                 align-items: center;
                 padding: 28px 30px;
@@ -181,6 +182,8 @@
             .confirmation-actions {
                 display: flex;
                 align-items: center;
+                flex-wrap: wrap;
+                justify-content: flex-end;
                 gap: 10px;
             }
             .confirmation-actions .btn {
@@ -190,6 +193,7 @@
                 font-size: 12px;
                 font-weight: 700;
                 white-space: nowrap;
+                text-align: center;
             }
             .confirmation-actions .btn-light {
                 color: #244e9a;
@@ -206,10 +210,21 @@
                 line-height: 1.5;
             }
             .confirmation-privacy i { color: #244e9a; }
+            @media (max-width: 991px) {
+                .registration-confirmation { padding-top: 96px; }
+                .confirmation-header,
+                .confirmation-payment { grid-template-columns: 1fr; }
+                .confirmation-reference {
+                    max-width: none;
+                    padding: 20px 0 0;
+                    border-top: 1px solid rgba(255,255,255,.2);
+                    border-left: 0;
+                }
+                .confirmation-actions { justify-content: flex-start; }
+            }
             @media (max-width: 800px) {
-                .registration-confirmation { padding: 32px 14px 50px; }
+                .registration-confirmation { padding: 76px 14px 50px; }
                 .confirmation-header { grid-template-columns: 1fr; padding: 32px 26px; }
-                .confirmation-reference { padding: 20px 0 0; border-top: 1px solid rgba(255,255,255,.2); border-left: 0; }
                 .confirmation-body { padding: 28px 26px 32px; }
                 .confirmation-facts,
                 .confirmation-selection,
@@ -218,7 +233,12 @@
                 .confirmation-facts > div + div { padding: 17px 0; border-left: 0; }
                 .confirmation-facts > div + div { border-top: 1px solid #e3e8ef; }
                 .confirmation-selection { gap: 26px; }
-                .confirmation-actions { flex-wrap: wrap; }
+                .confirmation-actions .btn { width: 100%; }
+            }
+            @media (max-width: 575px) {
+                .registration-confirmation { padding-top: 58px; }
+                .confirmation-header h1 { font-size: 30px; }
+                .confirmation-body { padding-inline: 20px; }
             }
         </style>
     </x-slot:styles>
