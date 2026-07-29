@@ -12,7 +12,7 @@
             <tr><td>{{ __('admin.actions') }}</td><td>{{ $log->action }}</td></tr>
             <tr><td>{{ __('admin.user') }}</td><td>{{ $log->user_id ?: 'guest' }}</td></tr>
             <tr><td>{{ __('admin.ip') }}</td><td>{{ $log->ip_address }}</td></tr>
-            <tr><td>{{ __('admin.status') }}</td><td><span class="status">{{ $log->status }}</span></td></tr>
+            <tr><td>{{ __('admin.status') }}</td><td><span class="status {{ $log->status }}">{{ $log->status }}</span></td></tr>
         </table>
     </div>
 

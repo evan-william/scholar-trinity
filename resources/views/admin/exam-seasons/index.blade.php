@@ -35,7 +35,7 @@
                             Late: {{ optional($season->late_registration_start_at)->format('Y-m-d H:i') ?? '-' }} to {{ optional($season->late_registration_end_at)->format('Y-m-d H:i') ?? '-' }}<br>
                             <span class="mini">{{ $season->timezone }}</span>
                         </td>
-                        <td><span class="status">{{ $season->publicStatus() }}</span><br><span class="mini">{{ $season->status }}</span></td>
+                        <td><span class="status {{ str($season->publicStatus())->snake() }}">{{ $season->publicStatus() }}</span><br><span class="mini">{{ $season->status }}</span></td>
                         <td>{{ $season->subjects_count }}</td>
                         <td>{{ $season->registrations_count }}</td>
                         <td>

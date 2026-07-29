@@ -15,7 +15,7 @@ class ApExamSubjectAdminController extends Controller
     public function index(): View
     {
         return view('admin.ap-exam-subjects.index', [
-            'subjects' => ApExamSubject::query()->with('examSeason')->orderBy('sort_order')->paginate(20),
+            'subjects' => ApExamSubject::query()->with('examSeason')->orderBy('sort_order')->get(),
         ]);
     }
 

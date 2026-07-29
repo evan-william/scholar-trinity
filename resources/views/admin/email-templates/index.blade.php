@@ -39,17 +39,17 @@
 
     <section class="card">
         <div class="section-title"><h2>Saved Templates</h2></div>
-        <table>
-            <thead><tr><th>Key</th><th>Locale</th><th>Subject</th><th>Status</th><th>Updated</th><th>Action</th></tr></thead>
+        <table data-datatable="true" data-table-label="Saved templates">
+            <thead><tr><th>Key</th><th>Locale</th><th>Subject</th><th class="is-centered">Status</th><th>Updated</th><th class="is-centered" data-sortable="false">Action</th></tr></thead>
             <tbody>
                 @forelse($templates as $template)
                     <tr>
                         <td>{{ $template->template_key }}</td>
                         <td>{{ $template->locale }}</td>
                         <td>{{ $template->subject }}</td>
-                        <td><span class="status">{{ $template->is_active ? 'active' : 'inactive' }}</span></td>
+                        <td class="is-centered"><span class="status {{ $template->is_active ? 'active' : 'inactive' }}">{{ $template->is_active ? 'active' : 'inactive' }}</span></td>
                         <td>{{ $template->updated_at->format('Y-m-d H:i') }}</td>
-                        <td>
+                        <td class="is-centered">
                             <x-admin-actions>
                                 <form method="POST" action="{{ route('admin.email-templates.destroy', $template) }}">@csrf @method('DELETE')<button class="btn danger" type="submit">Delete</button></form>
                             </x-admin-actions>

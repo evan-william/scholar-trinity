@@ -13,7 +13,7 @@
     $brandLogo = 'images/trinity-scholar-logo-clean.png';
     $footerLogo = 'images/trinity-scholar-logo-clean.png';
     $brandFavicon = 'images/trinity-scholar-favicon.png';
-    $publicUiVersion = '20260721-2';
+    $publicUiVersion = '20260729-3';
     $uiLocale = session('locale', str_replace('_', '-', app()->getLocale()));
     $isZh = $uiLocale === 'zh-TW';
     $navLabels = $isZh
@@ -189,6 +189,7 @@
     <script src="{{ asset($assetBase.'js/vendor/modernizr-2.8.3.min.js') }}"></script>
     {{ $styles ?? '' }}
     @stack('styles')
+    <link rel="stylesheet" href="{{ asset('theme/trinity/css/modern-ui.css') }}?v={{ $publicUiVersion }}">
 </head>
 <body class="trinity-public {{ $bodyClass }}">
 <header id="header">
@@ -198,15 +199,30 @@
                 <div class="col-sm-8">
                     <div class="ht-address">
                         <ul>
-                            <li><i class="fa fa-phone"></i>886-2-2771-6002</li>
-                            <li><i class="fa fa-envelope"></i>ap-registration@trinityscholar.com</li>
+                            <li>
+                                <a class="utility-link" href="tel:+886227716002">
+                                    <i class="fa fa-phone" aria-hidden="true"></i>
+                                    <span>886-2-2771-6002</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="utility-link" href="mailto:ap-registration@trinityscholar.com">
+                                    <i class="fa fa-envelope" aria-hidden="true"></i>
+                                    <span>ap-registration@trinityscholar.com</span>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </div>
                 <div class="col-sm-4">
                     <div class="ht-social">
                         <ul>
-                            <li>{{ $navLabels['support'] }}</li>
+                            <li>
+                                <span class="support-status">
+                                    <span class="support-status-dot" aria-hidden="true"></span>
+                                    {{ $navLabels['support'] }}
+                                </span>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -375,10 +391,50 @@
             });
         }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
 
-        targets.forEach((target) => {
+        targets.forEach((target, index) => {
             target.classList.add('reveal-on-scroll');
+            target.style.setProperty('--reveal-delay', `${(index % 4) * 65}ms`);
             observer.observe(target);
         });
+
+        let revealQueued = false;
+        const revealPassedTargets = () => {
+            targets.forEach((target) => {
+                if (target.classList.contains('is-visible')) return;
+                if (target.getBoundingClientRect().top > window.innerHeight * 1.05) return;
+
+                target.classList.add('is-visible');
+                observer.unobserve(target);
+            });
+            revealQueued = false;
+        };
+
+        revealPassedTargets();
+        window.addEventListener('scroll', () => {
+            if (revealQueued) return;
+            revealQueued = true;
+            window.requestAnimationFrame(revealPassedTargets);
+        }, { passive: true });
+    })();
+
+    (function () {
+        if (!document.body.classList.contains('landing-refined')) return;
+
+        const header = document.getElementById('header');
+        if (!header) return;
+
+        let queued = false;
+        const updateHeader = () => {
+            header.classList.toggle('is-scrolled', window.scrollY > 42);
+            queued = false;
+        };
+
+        updateHeader();
+        window.addEventListener('scroll', () => {
+            if (queued) return;
+            queued = true;
+            window.requestAnimationFrame(updateHeader);
+        }, { passive: true });
     })();
 </script>
 {{ $scripts ?? '' }}

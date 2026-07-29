@@ -18,7 +18,7 @@
             <select name="status">
                 <option value="">All statuses</option>
                 @foreach(['not_requested','requested','pending_issue','issued','sent','failed','cancelled','voided'] as $status)
-                    <option value="{{ $status }}" @selected(request('status') === $status)>{{ str_replace('_', ' ', $status) }}</option>
+                    <option value="{{ $status }}" @selected(request('status') === $status)>{{ str($status)->replace('_', ' ')->title() }}</option>
                 @endforeach
             </select>
             <select name="receipt_type">
@@ -60,15 +60,15 @@
                         <td>{{ $receipt->registration?->registration_number }}</td>
                         <td>{{ $receipt->registration?->student_full_name }}</td>
                         <td>{{ $receipt->buyer_name ?: '-' }}</td>
-                        <td>{{ str_replace('_', ' ', $receipt->receipt_type) }}</td>
+                        <td>{{ str($receipt->receipt_type)->replace('_', ' ')->title() }}</td>
                         <td>{{ $receipt->company_name ?: '-' }}<br><span class="muted">{{ $receipt->gui_tax_id ?: '-' }}</span></td>
                         <td>{{ $receipt->buyer_email ?: '-' }}<br><span class="muted">{{ $receipt->buyer_phone ?: '-' }}</span></td>
-                        <td><span class="status {{ $receipt->status }}">{{ str_replace('_', ' ', $receipt->status) }}</span></td>
+                        <td><span class="status {{ $receipt->status }}">{{ str($receipt->status)->replace('_', ' ')->title() }}</span></td>
                         <td>{{ $receipt->invoice_number ?: '-' }}</td>
                         <td>{{ $receipt->receipt_number ?: '-' }}</td>
                         <td>
-                            <span class="status">{{ $receipt->invoice_received ? 'Invoice received' : 'Invoice pending' }}</span><br>
-                            <span class="status" style="margin-top:4px">{{ $receipt->receipt_received ? 'Fapiao received' : 'Fapiao pending' }}</span>
+                            <span class="status {{ $receipt->invoice_received ? 'received' : 'pending' }}">{{ $receipt->invoice_received ? 'Invoice received' : 'Invoice pending' }}</span><br>
+                            <span class="status {{ $receipt->receipt_received ? 'received' : 'pending' }}" style="margin-top:4px">{{ $receipt->receipt_received ? 'Fapiao received' : 'Fapiao pending' }}</span>
                         </td>
                         <td>
                             <x-admin-actions>

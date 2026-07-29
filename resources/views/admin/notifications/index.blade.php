@@ -20,7 +20,7 @@
                 @forelse($notifications as $notification)
                     <tr>
                         <td><span class="status {{ $notification->read_at ? 'read' : 'unread' }}">{{ $notification->read_at ? 'read' : 'unread' }}</span></td>
-                        <td>{{ str_replace('_', ' ', $notification->type) }}<br><span class="mini">{{ $notification->severity }}</span></td>
+                        <td>{{ str($notification->type)->replace('_', ' ')->title() }}<br><span class="mini">{{ str($notification->severity)->title() }}</span></td>
                         <td><strong>{{ $notification->title }}</strong><br><span class="muted">{{ $notification->body ?: '-' }}</span></td>
                         <td>
                             @if($notification->registration)

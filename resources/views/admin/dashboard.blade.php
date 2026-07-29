@@ -21,7 +21,7 @@
             <select name="status">
                 <option value="">All statuses</option>
                 @foreach(['submitted','pending_payment','paid','completed','cancelled','expired'] as $status)
-                    <option value="{{ $status }}" @selected(($filters['status'] ?? '') === $status)>{{ str_replace('_', ' ', $status) }}</option>
+                    <option value="{{ $status }}" @selected(($filters['status'] ?? '') === $status)>{{ str($status)->replace('_', ' ')->title() }}</option>
                 @endforeach
             </select>
             <select name="subject_id">
@@ -122,7 +122,7 @@
             <table>
                 <tbody>
                     @forelse($byStatus as $status => $count)
-                        <tr><td><span class="status {{ $status }}">{{ str_replace('_', ' ', $status) }}</span></td><td><strong>{{ $count }}</strong></td></tr>
+                        <tr><td><span class="status {{ $status }}">{{ str($status)->replace('_', ' ')->title() }}</span></td><td><strong>{{ $count }}</strong></td></tr>
                     @empty
                         <tr><td colspan="2" class="muted">No status data yet.</td></tr>
                     @endforelse
@@ -153,7 +153,7 @@
                             {{ $row['remaining'] ?? 'Unlimited' }}
                             <div class="bar"><i style="width:{{ $row['quota'] ? min(100, ($row['selected_count'] / $row['quota']) * 100) : 0 }}%"></i></div>
                         </td>
-                        <td><span class="status {{ $row['status'] }}">{{ str_replace('_', ' ', $row['status']) }}</span></td>
+                        <td><span class="status {{ $row['status'] }}">{{ str($row['status'])->replace('_', ' ')->title() }}</span></td>
                         <td>NT$ {{ number_format($row['exam_fee_total']) }}</td>
                         <td>NT$ {{ number_format($row['service_fee_total']) }}</td>
                         <td>NT$ {{ number_format($row['late_fee_total']) }}</td>

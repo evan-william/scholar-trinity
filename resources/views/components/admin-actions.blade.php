@@ -4,7 +4,7 @@
 
 <details class="action-menu">
     <summary aria-label="{{ $label }}" title="{{ $label }}">
-        <span aria-hidden="true">...</span>
+        <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
     </summary>
     <div class="action-menu-panel">
         {{ $slot }}

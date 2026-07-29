@@ -15,13 +15,13 @@
             <select name="payment_status">
                 <option value="">All statuses</option>
                 @foreach(['pending','proof_uploaded','waiting_verification','paid','failed','cancelled','expired','refunded','rejected'] as $status)
-                    <option value="{{ $status }}" @selected(request('payment_status') === $status)>{{ str_replace('_', ' ', $status) }}</option>
+                    <option value="{{ $status }}" @selected(request('payment_status') === $status)>{{ str($status)->replace('_', ' ')->title() }}</option>
                 @endforeach
             </select>
             <select name="payment_method">
                 <option value="">All methods</option>
                 @foreach(['manual_bank_transfer','credit_card','atm','cvs','barcode','apple_pay'] as $method)
-                    <option value="{{ $method }}" @selected(request('payment_method') === $method)>{{ str_replace('_', ' ', $method) }}</option>
+                    <option value="{{ $method }}" @selected(request('payment_method') === $method)>{{ str($method)->replace('_', ' ')->title() }}</option>
                 @endforeach
             </select>
             <select name="period">
@@ -50,8 +50,8 @@
                         <td><strong>{{ $payment->payment_reference }}</strong></td>
                         <td>{{ $payment->registration?->registration_number }}</td>
                         <td>{{ $payment->registration?->student_full_name }}</td>
-                        <td>{{ str_replace('_', ' ', $payment->payment_method ?: '-') }}</td>
-                        <td><span class="status {{ $payment->payment_status }}">{{ str_replace('_', ' ', $payment->payment_status) }}</span></td>
+                        <td>{{ str($payment->payment_method ?: '-')->replace('_', ' ')->title() }}</td>
+                        <td><span class="status {{ $payment->payment_status }}">{{ str($payment->payment_status)->replace('_', ' ')->title() }}</span></td>
                         <td>{{ $payment->currency }} {{ number_format($payment->grand_total) }}</td>
                         <td>{{ $payment->updated_at->format('Y-m-d H:i') }}</td>
                         <td>

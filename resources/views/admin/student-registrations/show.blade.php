@@ -98,7 +98,7 @@
             <h2>{{ $registration->student_full_name }}</h2>
             <p class="summary-line">
                 <span>{{ __('admin.reference') }}: <strong>{{ $registration->registration_number }}</strong></span>
-                <span>{{ __('admin.status') }}: <strong>{{ str_replace('_', ' ', $registration->status) }}</strong></span>
+                <span>{{ __('admin.status') }}: <strong>{{ str($registration->status)->replace('_', ' ')->title() }}</strong></span>
                 <span>{{ __('admin.submitted_at') }}: <strong>{{ optional($registration->submitted_at)->format('Y-m-d H:i') ?: '-' }}</strong></span>
             </p>
         </div>
@@ -236,7 +236,7 @@
         <div class="grid">
             <div>
                 <table>
-                    <tr><td>Status</td><td><span class="status">{{ $registration->passport_upload_status }}</span></td></tr>
+                    <tr><td>Status</td><td><span class="status {{ $registration->passport_upload_status }}">{{ $registration->passport_upload_status }}</span></td></tr>
                     <tr><td>Document UUID</td><td>{{ $registration->passport_document_uuid ?: 'Not assigned' }}</td></tr>
                     <tr><td>File</td><td>{{ $registration->passport_original_name ?: 'No file stored' }}</td></tr>
                     <tr><td>Type / Size</td><td>{{ $registration->passport_mime_type ?: '-' }} / {{ $registration->passport_file_size ? number_format($registration->passport_file_size / 1024, 1).' KB' : '-' }}</td></tr>

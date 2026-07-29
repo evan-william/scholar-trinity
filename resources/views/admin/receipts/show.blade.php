@@ -7,8 +7,8 @@
             <div class="section-title"><h2>Receipt</h2><a class="btn light" href="{{ route('admin.receipts.index') }}">Back</a></div>
             <table>
                 <tbody>
-                    <tr><td>Status</td><td><span class="status {{ $receipt->status }}">{{ str_replace('_', ' ', $receipt->status) }}</span></td></tr>
-                    <tr><td>Type</td><td>{{ str_replace('_', ' ', $receipt->receipt_type) }}</td></tr>
+                    <tr><td>Status</td><td><span class="status {{ $receipt->status }}">{{ str($receipt->status)->replace('_', ' ')->title() }}</span></td></tr>
+                    <tr><td>Type</td><td>{{ str($receipt->receipt_type)->replace('_', ' ')->title() }}</td></tr>
                     <tr><td>Buyer</td><td>{{ $receipt->buyer_name ?: '-' }}</td></tr>
                     <tr><td>Email</td><td>{{ $receipt->buyer_email ?: '-' }}</td></tr>
                     <tr><td>Phone</td><td>{{ $receipt->buyer_phone ?: '-' }}</td></tr>
@@ -32,7 +32,7 @@
                     <tr><td>Late Fee</td><td>{{ $receipt->currency }} {{ number_format($receipt->late_fee_amount) }}</td></tr>
                     <tr><td>Taxable Receipt Amount</td><td><strong>{{ $receipt->currency }} {{ number_format($receipt->taxable_receipt_amount) }}</strong></td></tr>
                     <tr><td>Non-receipt Amount</td><td>{{ $receipt->currency }} {{ number_format($receipt->non_receipt_amount) }}</td></tr>
-                    <tr><td>Payment Status</td><td><span class="status {{ $receipt->payment?->payment_status }}">{{ str_replace('_', ' ', $receipt->payment?->payment_status ?: '-') }}</span></td></tr>
+                    <tr><td>Payment Status</td><td><span class="status {{ $receipt->payment?->payment_status }}">{{ str($receipt->payment?->payment_status ?: '-')->replace('_', ' ')->title() }}</span></td></tr>
                 </tbody>
             </table>
         </div>
@@ -85,7 +85,7 @@
                 <label>Status
                     <select name="status">
                         @foreach(['requested','pending_issue','issued','sent','failed','cancelled','voided'] as $status)
-                            <option value="{{ $status }}" @selected($receipt->status === $status)>{{ str_replace('_', ' ', $status) }}</option>
+                            <option value="{{ $status }}" @selected($receipt->status === $status)>{{ str($status)->replace('_', ' ')->title() }}</option>
                         @endforeach
                     </select>
                 </label>

@@ -27,51 +27,51 @@
             <select name="payment_status">
                 <option value="">Payment</option>
                 @foreach(['unpaid','pending_payment','waiting_verification','paid','failed','refunded','cancelled'] as $status)
-                    <option value="{{ $status }}" @selected(($filters['payment_status'] ?? '') === $status)>{{ str_replace('_', ' ', $status) }}</option>
+                    <option value="{{ $status }}" @selected(($filters['payment_status'] ?? '') === $status)>{{ str($status)->replace('_', ' ')->title() }}</option>
                 @endforeach
             </select>
             <select name="status">
                 <option value="">Registration</option>
                 @foreach(['submitted','pending_payment','paid','completed','cancelled','expired','draft'] as $status)
-                    <option value="{{ $status }}" @selected(($filters['status'] ?? '') === $status)>{{ str_replace('_', ' ', $status) }}</option>
+                    <option value="{{ $status }}" @selected(($filters['status'] ?? '') === $status)>{{ str($status)->replace('_', ' ')->title() }}</option>
                 @endforeach
             </select>
             <select name="document_status">
                 <option value="">Document</option>
                 @foreach(['missing','uploaded','pending_review','verified','invalid','reupload_requested'] as $status)
-                    <option value="{{ $status }}" @selected(($filters['document_status'] ?? '') === $status)>{{ str_replace('_', ' ', $status) }}</option>
+                    <option value="{{ $status }}" @selected(($filters['document_status'] ?? '') === $status)>{{ str($status)->replace('_', ' ')->title() }}</option>
                 @endforeach
             </select>
             <select name="verification_status">
                 <option value="">Verification</option>
                 @foreach(['unverified','needs_review','verified','rejected'] as $status)
-                    <option value="{{ $status }}" @selected(($filters['verification_status'] ?? '') === $status)>{{ str_replace('_', ' ', $status) }}</option>
+                    <option value="{{ $status }}" @selected(($filters['verification_status'] ?? '') === $status)>{{ str($status)->replace('_', ' ')->title() }}</option>
                 @endforeach
             </select>
             <select name="receipt_status">
                 <option value="">Receipt</option>
                 @foreach(['pending_issue','issued','sent','failed','not_requested'] as $status)
-                    <option value="{{ $status }}" @selected(($filters['receipt_status'] ?? '') === $status)>{{ str_replace('_', ' ', $status) }}</option>
+                    <option value="{{ $status }}" @selected(($filters['receipt_status'] ?? '') === $status)>{{ str($status)->replace('_', ' ')->title() }}</option>
                 @endforeach
             </select>
             <select name="needs_accommodations">
                 <option value="">Accommodations</option>
                 <option value="1" @selected(($filters['needs_accommodations'] ?? '') === '1')>Requested</option>
-                <option value="0" @selected(($filters['needs_accommodations'] ?? '') === '0')>Not requested</option>
+                <option value="0" @selected(($filters['needs_accommodations'] ?? '') === '0')>Not Requested</option>
             </select>
             <select name="accommodation_status">
                 <option value="">Accommodation Status</option>
                 @foreach(['approved','pending','new'] as $status)
-                    <option value="{{ $status }}" @selected(($filters['accommodation_status'] ?? '') === $status)>{{ str_replace('_', ' ', $status) }}</option>
+                    <option value="{{ $status }}" @selected(($filters['accommodation_status'] ?? '') === $status)>{{ str($status)->replace('_', ' ')->title() }}</option>
                 @endforeach
             </select>
             <select name="preparation_interest">
                 <option value="">AP Prep Interest</option>
                 <option value="1" @selected(($filters['preparation_interest'] ?? '') === '1')>Interested</option>
-                <option value="0" @selected(($filters['preparation_interest'] ?? '') === '0')>Not interested</option>
+                <option value="0" @selected(($filters['preparation_interest'] ?? '') === '0')>Not Interested</option>
             </select>
             <select name="period">
-                <option value="">All periods</option>
+                <option value="">All Periods</option>
                 <option value="main" @selected(($filters['period'] ?? '') === 'main')>Main</option>
                 <option value="late" @selected(($filters['period'] ?? '') === 'late')>Late</option>
             </select>
@@ -115,7 +115,7 @@
                     <select name="document_status">
                         <option value="">Any</option>
                         @foreach(['not_uploaded','uploaded','pending_review','verified','invalid','reupload_requested','replaced','deleted'] as $status)
-                            <option value="{{ $status }}">{{ str_replace('_', ' ', $status) }}</option>
+                            <option value="{{ $status }}">{{ str($status)->replace('_', ' ')->title() }}</option>
                         @endforeach
                     </select>
                 </label>
@@ -154,8 +154,8 @@
                         <td>{{ $registration->passport_number ?: '-' }}</td>
                         <td>{{ $registration->school_name }}<br><span class="muted">Grade {{ $registration->grade_level }}</span></td>
                         <td>{{ $registration->exams_count }}</td>
-                        <td><span class="status {{ $registration->payment_status }}">{{ str_replace('_', ' ', $registration->payment_status) }}</span></td>
-                        <td><span class="status {{ $registration->status }}">{{ str_replace('_', ' ', $registration->status) }}</span></td>
+                        <td><span class="status {{ $registration->payment_status }}">{{ str($registration->payment_status)->replace('_', ' ')->title() }}</span></td>
+                        <td><span class="status {{ $registration->status }}">{{ str($registration->status)->replace('_', ' ')->title() }}</span></td>
                         <td>{{ optional($registration->submitted_at)->format('Y-m-d') ?: '-' }}</td>
                         <td>{{ $registration->updated_at->format('Y-m-d') }}</td>
                         <td>

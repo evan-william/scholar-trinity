@@ -63,8 +63,8 @@
 
     <section class="card">
         <div class="section-title"><h2>Saved Settings</h2></div>
-        <table>
-            <thead><tr><th>Group</th><th>Key</th><th>Type</th><th>Value</th><th>Public</th><th>Action</th></tr></thead>
+        <table data-datatable="true" data-table-label="Saved settings">
+            <thead><tr><th>Group</th><th>Key</th><th>Type</th><th>Value</th><th class="is-centered">Public</th><th class="is-centered" data-sortable="false">Action</th></tr></thead>
             <tbody>
                 @forelse($settings as $setting)
                     <tr>
@@ -72,8 +72,8 @@
                         <td>{{ $setting->key }}</td>
                         <td>{{ $setting->type }}</td>
                         <td><pre>{{ $setting->value }}</pre></td>
-                        <td>{{ $setting->is_public ? 'yes' : 'no' }}</td>
-                        <td>
+                        <td class="is-centered"><span class="status {{ $setting->is_public ? 'active' : 'inactive' }}">{{ $setting->is_public ? 'yes' : 'no' }}</span></td>
+                        <td class="is-centered">
                             <x-admin-actions>
                                 <form method="POST" action="{{ route('admin.system-settings.destroy', $setting) }}">@csrf @method('DELETE')<button class="btn danger" type="submit">Delete</button></form>
                             </x-admin-actions>

@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Services\SecurityAuditService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -161,12 +162,25 @@ class SecurityDataProtectionTest extends TestCase
 
     public function test_backup_command_runs_and_logs_result(): void
     {
-        $this->artisan('security:backup-database')->assertExitCode(0);
+        Storage::fake('local');
+        $sourceDatabase = storage_path('framework/testing/backup-source.sqlite');
+        File::ensureDirectoryExists(dirname($sourceDatabase));
+        File::put($sourceDatabase, 'temporary sqlite backup source');
+        config(['database.connections.sqlite.database' => $sourceDatabase]);
+
+        try {
+            $this->artisan('security:backup-database')->assertExitCode(0);
+        } finally {
+            File::delete($sourceDatabase);
+        }
 
         $this->assertDatabaseHas('backup_logs', [
             'backup_type' => 'database',
             'status' => 'completed',
         ]);
+
+        $backup = BackupLog::query()->where('backup_type', 'database')->firstOrFail();
+        Storage::disk('local')->assertExists($backup->path);
     }
 
     public function test_storage_backup_command_creates_private_manifest_and_log(): void

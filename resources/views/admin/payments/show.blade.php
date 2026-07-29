@@ -7,9 +7,9 @@
             <div class="section-title"><h2>Payment</h2><a class="btn light" href="{{ route('admin.payments.index') }}">Back</a></div>
             <table>
                 <tbody>
-                    <tr><td>Status</td><td><span class="status {{ $payment->payment_status }}">{{ str_replace('_', ' ', $payment->payment_status) }}</span></td></tr>
+                    <tr><td>Status</td><td><span class="status {{ $payment->payment_status }}">{{ str($payment->payment_status)->replace('_', ' ')->title() }}</span></td></tr>
                     <tr><td>Provider</td><td>{{ $payment->provider ?: '-' }}</td></tr>
-                    <tr><td>Method</td><td>{{ str_replace('_', ' ', $payment->payment_method ?: '-') }}</td></tr>
+                    <tr><td>Method</td><td>{{ str($payment->payment_method ?: '-')->replace('_', ' ')->title() }}</td></tr>
                     <tr><td>Exam Fee</td><td>{{ $payment->currency }} {{ number_format($payment->exam_fee_amount) }}</td></tr>
                     <tr><td>Service Fee</td><td>{{ $payment->currency }} {{ number_format($payment->service_fee_amount) }}</td></tr>
                     <tr><td>Late Fee</td><td>{{ $payment->currency }} {{ number_format($payment->late_fee_amount) }}</td></tr>

@@ -12,6 +12,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('theme/edification/css/font-awesome.min.css') }}">
     <style>
         :root{--navy:#153764;--blue:#25558f;--ink:#1f2a37;--muted:#667085;--line:#d9dee8;--soft:#f5f7fb;--white:#fff;--green:#237a4f;--red:#b42318;--amber:#9a6a00;--shadow:0 8px 24px rgba(22,47,83,.07)}
         *{box-sizing:border-box}
@@ -96,10 +97,11 @@
         @media(max-width:680px){.top{align-items:flex-start;flex-direction:column}.top-actions{justify-content:flex-start}.filters,.metrics,.grid-2,.grid,.grid-3,.nav-group{grid-template-columns:1fr}table{display:block;overflow-x:auto}.wrap{padding-inline:12px}}
     </style>
     {{ $styles ?? '' }}
+    <link rel="stylesheet" href="{{ asset('theme/trinity/css/admin-modern-ui.css') }}?v=20260729-2">
 </head>
 <body>
 <div class="shell">
-    <aside class="side">
+    <aside class="side" id="adminSidebar">
         <a class="brand" href="{{ route('admin.dashboard') }}">
             <img class="brand-logo" src="{{ asset('images/trinity-scholar-logo-clean.png') }}" alt="Trinity Scholar">
             <span class="brand-label">{{ __('admin.app_name') }}</span>
@@ -107,26 +109,26 @@
         @php
             $navSections = [
                 'Overview' => [
-                    ['route' => 'admin.dashboard', 'active' => 'admin.dashboard', 'label' => __('admin.dashboard')],
-                    ['route' => 'admin.notifications.index', 'active' => 'admin.notifications.*', 'label' => 'Notifications'],
+                    ['route' => 'admin.dashboard', 'active' => 'admin.dashboard', 'label' => __('admin.dashboard'), 'icon' => 'fa-dashboard'],
+                    ['route' => 'admin.notifications.index', 'active' => 'admin.notifications.*', 'label' => 'Notifications', 'icon' => 'fa-bell-o'],
                 ],
                 'Registration' => [
-                    ['route' => 'admin.student-registrations.index', 'active' => 'admin.student-registrations.*', 'label' => __('admin.registrations')],
-                    ['route' => 'admin.payments.index', 'active' => 'admin.payments.*', 'label' => __('admin.payments')],
-                    ['route' => 'admin.receipts.index', 'active' => 'admin.receipts.*', 'label' => __('admin.receipts')],
-                    ['route' => 'admin.exports.index', 'active' => 'admin.exports.*', 'label' => __('admin.exports')],
-                    ['route' => 'admin.reports.annual', 'active' => 'admin.reports.*', 'label' => __('admin.annual_report')],
+                    ['route' => 'admin.student-registrations.index', 'active' => 'admin.student-registrations.*', 'label' => __('admin.registrations'), 'icon' => 'fa-users'],
+                    ['route' => 'admin.payments.index', 'active' => 'admin.payments.*', 'label' => __('admin.payments'), 'icon' => 'fa-credit-card'],
+                    ['route' => 'admin.receipts.index', 'active' => 'admin.receipts.*', 'label' => __('admin.receipts'), 'icon' => 'fa-file-text-o'],
+                    ['route' => 'admin.exports.index', 'active' => 'admin.exports.*', 'label' => __('admin.exports'), 'icon' => 'fa-download'],
+                    ['route' => 'admin.reports.annual', 'active' => 'admin.reports.*', 'label' => __('admin.annual_report'), 'icon' => 'fa-bar-chart'],
                 ],
                 'Programs' => [
-                    ['route' => 'admin.exam-seasons.index', 'active' => 'admin.exam-seasons.*', 'label' => __('admin.exam_seasons')],
-                    ['route' => 'admin.ap-exam-subjects.index', 'active' => 'admin.ap-exam-subjects.*', 'label' => __('admin.ap_subjects')],
-                    ['route' => 'admin.practice-exams.index', 'active' => 'admin.practice-exams.*', 'label' => 'Practice Exams'],
+                    ['route' => 'admin.exam-seasons.index', 'active' => 'admin.exam-seasons.*', 'label' => __('admin.exam_seasons'), 'icon' => 'fa-calendar'],
+                    ['route' => 'admin.ap-exam-subjects.index', 'active' => 'admin.ap-exam-subjects.*', 'label' => __('admin.ap_subjects'), 'icon' => 'fa-book'],
+                    ['route' => 'admin.practice-exams.index', 'active' => 'admin.practice-exams.*', 'label' => 'Practice Exams', 'icon' => 'fa-pencil-square-o'],
                 ],
                 'Content & System' => [
-                    ['route' => 'admin.landing.edit', 'active' => 'admin.landing.*', 'label' => __('admin.landing_content')],
-                    ['route' => 'admin.email-templates.index', 'active' => 'admin.email-templates.*', 'label' => 'Email Templates'],
-                    ['route' => 'admin.system-settings.index', 'active' => 'admin.system-settings.*', 'label' => 'System Settings'],
-                    ['route' => 'admin.security.audit.index', 'active' => 'admin.security.audit.*', 'label' => __('admin.audit_log')],
+                    ['route' => 'admin.landing.edit', 'active' => 'admin.landing.*', 'label' => __('admin.landing_content'), 'icon' => 'fa-picture-o'],
+                    ['route' => 'admin.email-templates.index', 'active' => 'admin.email-templates.*', 'label' => 'Email Templates', 'icon' => 'fa-envelope-o'],
+                    ['route' => 'admin.system-settings.index', 'active' => 'admin.system-settings.*', 'label' => 'System Settings', 'icon' => 'fa-sliders'],
+                    ['route' => 'admin.security.audit.index', 'active' => 'admin.security.audit.*', 'label' => __('admin.audit_log'), 'icon' => 'fa-shield'],
                 ],
             ];
         @endphp
@@ -136,7 +138,10 @@
                     <p class="nav-heading">{{ $section }}</p>
                     <div class="nav-group">
                         @foreach($items as $item)
-                            <a class="nav-link {{ request()->routeIs($item['active']) ? 'active' : '' }}" href="{{ route($item['route']) }}">{{ $item['label'] }}</a>
+                            <a class="nav-link {{ request()->routeIs($item['active']) ? 'active' : '' }}" href="{{ route($item['route']) }}">
+                                <i class="fa {{ $item['icon'] }}" aria-hidden="true"></i>
+                                <span>{{ $item['label'] }}</span>
+                            </a>
                         @endforeach
                     </div>
                 </div>
@@ -146,16 +151,20 @@
 
     <section class="main">
         <header class="top">
-            <div>
+            <button class="sidebar-toggle" type="button" aria-controls="adminSidebar" aria-expanded="false" title="Open navigation">
+                <i class="fa fa-bars" aria-hidden="true"></i>
+                <span class="sr-only">Open navigation</span>
+            </button>
+            <div class="top-copy">
                 <h1>{{ $title }}</h1>
                 @if($subtitle)<p>{{ $subtitle }}</p>@endif
             </div>
             <div class="top-actions">
                 <x-language-switcher />
-                <a class="btn light" href="{{ route('landing') }}">{{ __('admin.public_site') }}</a>
+                <a class="btn light" href="{{ route('landing') }}"><i class="fa fa-external-link" aria-hidden="true"></i>{{ __('admin.public_site') }}</a>
                 <form method="POST" action="{{ route('admin.logout') }}">
                     @csrf
-                    <button class="btn" type="submit">{{ __('admin.logout') }}</button>
+                    <button class="btn" type="submit"><i class="fa fa-sign-out" aria-hidden="true"></i>{{ __('admin.logout') }}</button>
                 </form>
             </div>
         </header>
@@ -171,5 +180,190 @@
         </main>
     </section>
 </div>
+<button class="sidebar-backdrop" type="button" aria-label="Close navigation" tabindex="-1"></button>
+<script>
+    (() => {
+        const body = document.body;
+        const toggle = document.querySelector('.sidebar-toggle');
+        const backdrop = document.querySelector('.sidebar-backdrop');
+        const sidebar = document.getElementById('adminSidebar');
+        if (!toggle || !backdrop || !sidebar) return;
+
+        const setOpen = (open) => {
+            body.classList.toggle('sidebar-open', open);
+            toggle.setAttribute('aria-expanded', String(open));
+            toggle.title = open ? 'Close navigation' : 'Open navigation';
+        };
+
+        toggle.addEventListener('click', () => setOpen(!body.classList.contains('sidebar-open')));
+        backdrop.addEventListener('click', () => setOpen(false));
+        sidebar.addEventListener('click', (event) => {
+            if (event.target.closest('a') && window.innerWidth <= 1050) setOpen(false);
+        });
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') setOpen(false);
+        });
+    })();
+
+    (() => {
+        const normalize = (value) => value.trim().replace(/\s+/g, ' ').toLocaleLowerCase();
+
+        document.querySelectorAll('table[data-datatable="true"]').forEach((table) => {
+            const tbody = table.tBodies[0];
+            if (!tbody) return;
+
+            const rows = Array.from(tbody.rows).filter((row) => !row.querySelector('td[colspan]'));
+            const existingEmptyRows = Array.from(tbody.rows).filter((row) => row.querySelector('td[colspan]'));
+            existingEmptyRows.forEach((row) => row.remove());
+
+            const shell = document.createElement('div');
+            shell.className = 'data-table-shell';
+            table.parentNode.insertBefore(shell, table);
+
+            const toolbar = document.createElement('div');
+            toolbar.className = 'data-table-toolbar';
+            toolbar.innerHTML = `
+                <label class="data-table-search">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                    <span class="sr-only">Search table</span>
+                    <input type="search" placeholder="Search table..." autocomplete="off">
+                </label>
+                <label class="data-table-size">
+                    <span>Rows</span>
+                    <select aria-label="Rows per page">
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="all">All</option>
+                    </select>
+                </label>
+            `;
+
+            const scroll = document.createElement('div');
+            scroll.className = 'data-table-scroll';
+            scroll.appendChild(table);
+
+            const footer = document.createElement('div');
+            footer.className = 'data-table-footer';
+            footer.innerHTML = `
+                <span class="data-table-info" aria-live="polite"></span>
+                <div class="data-table-pagination">
+                    <button type="button" data-page="previous" title="Previous page" aria-label="Previous page">
+                        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                    </button>
+                    <span class="data-table-page"></span>
+                    <button type="button" data-page="next" title="Next page" aria-label="Next page">
+                        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                    </button>
+                </div>
+            `;
+
+            shell.append(toolbar, scroll, footer);
+
+            const search = toolbar.querySelector('input');
+            const size = toolbar.querySelector('select');
+            const info = footer.querySelector('.data-table-info');
+            const pageLabel = footer.querySelector('.data-table-page');
+            const previous = footer.querySelector('[data-page="previous"]');
+            const next = footer.querySelector('[data-page="next"]');
+            const headers = Array.from(table.tHead?.rows[0]?.cells || []);
+            let page = 1;
+            let sortIndex = null;
+            let sortDirection = 'ascending';
+
+            headers.forEach((header, index) => {
+                if (header.dataset.sortable === 'false') return;
+                header.dataset.sortable = 'true';
+                header.tabIndex = 0;
+                header.setAttribute('role', 'button');
+                header.setAttribute('aria-label', `Sort by ${header.textContent.trim()}`);
+
+                const sort = () => {
+                    if (sortIndex === index) {
+                        sortDirection = sortDirection === 'ascending' ? 'descending' : 'ascending';
+                    } else {
+                        sortIndex = index;
+                        sortDirection = 'ascending';
+                    }
+                    page = 1;
+                    render();
+                };
+
+                header.addEventListener('click', sort);
+                header.addEventListener('keydown', (event) => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        sort();
+                    }
+                });
+            });
+
+            const render = () => {
+                const query = normalize(search.value);
+                const filtered = rows.filter((row) => normalize(row.textContent).includes(query));
+
+                if (sortIndex !== null) {
+                    filtered.sort((left, right) => {
+                        const a = normalize(left.cells[sortIndex]?.textContent || '');
+                        const b = normalize(right.cells[sortIndex]?.textContent || '');
+                        const comparison = a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
+                        return sortDirection === 'ascending' ? comparison : -comparison;
+                    });
+                }
+
+                headers.forEach((header, index) => {
+                    if (index === sortIndex) {
+                        header.setAttribute('aria-sort', sortDirection);
+                    } else {
+                        header.removeAttribute('aria-sort');
+                    }
+                });
+
+                const pageSize = size.value === 'all' ? Math.max(filtered.length, 1) : Number(size.value);
+                const totalPages = Math.max(Math.ceil(filtered.length / pageSize), 1);
+                page = Math.min(page, totalPages);
+                const start = (page - 1) * pageSize;
+                const visible = filtered.slice(start, start + pageSize);
+
+                tbody.replaceChildren();
+                visible.forEach((row) => tbody.appendChild(row));
+
+                if (!visible.length) {
+                    const emptyRow = tbody.insertRow();
+                    const emptyCell = emptyRow.insertCell();
+                    emptyCell.colSpan = Math.max(headers.length, 1);
+                    emptyCell.className = 'data-table-empty';
+                    emptyCell.textContent = rows.length ? 'No matching records.' : 'No records available.';
+                }
+
+                const first = filtered.length ? start + 1 : 0;
+                const last = Math.min(start + pageSize, filtered.length);
+                info.textContent = `Showing ${first}-${last} of ${filtered.length}`;
+                pageLabel.textContent = `Page ${page} of ${totalPages}`;
+                previous.disabled = page <= 1;
+                next.disabled = page >= totalPages;
+            };
+
+            search.addEventListener('input', () => {
+                page = 1;
+                render();
+            });
+            size.addEventListener('change', () => {
+                page = 1;
+                render();
+            });
+            previous.addEventListener('click', () => {
+                page = Math.max(page - 1, 1);
+                render();
+            });
+            next.addEventListener('click', () => {
+                page += 1;
+                render();
+            });
+
+            render();
+        });
+    })();
+</script>
 </body>
 </html>

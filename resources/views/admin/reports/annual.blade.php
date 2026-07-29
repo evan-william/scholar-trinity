@@ -103,7 +103,7 @@
             <table>
                 <tbody>
                     @forelse($report['payment_statuses'] as $row)
-                        <tr><td><span class="status {{ $row->payment_status }}">{{ str_replace('_', ' ', $row->payment_status) }}</span></td><td>{{ $row->total }}</td><td>{{ $currency }} {{ number_format($row->amount) }}</td></tr>
+                        <tr><td><span class="status {{ $row->payment_status }}">{{ str($row->payment_status)->replace('_', ' ')->title() }}</span></td><td>{{ $row->total }}</td><td>{{ $currency }} {{ number_format($row->amount) }}</td></tr>
                     @empty
                         <tr><td colspan="3" class="muted">No payment data.</td></tr>
                     @endforelse
@@ -115,7 +115,7 @@
             <table>
                 <tbody>
                     @forelse($report['receipt_statuses'] as $row)
-                        <tr><td><span class="status {{ $row->status }}">{{ str_replace('_', ' ', $row->status) }}</span></td><td>{{ $row->total }}</td><td>{{ $currency }} {{ number_format($row->amount) }}</td></tr>
+                        <tr><td><span class="status {{ $row->status }}">{{ str($row->status)->replace('_', ' ')->title() }}</span></td><td>{{ $row->total }}</td><td>{{ $currency }} {{ number_format($row->amount) }}</td></tr>
                     @empty
                         <tr><td colspan="3" class="muted">No receipt data.</td></tr>
                     @endforelse
