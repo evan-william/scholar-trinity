@@ -96,7 +96,7 @@
     <link rel="stylesheet" href="{{ asset('theme/edification/css/responsive.css') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('theme/trinity/css/public-ui.css') }}?v=20260721-1">
     <script src="{{ asset('theme/edification/js/vendor/modernizr-2.8.3.min.js') }}"></script>
     <style>
@@ -433,6 +433,7 @@
         @media(max-width:575px){body.trinity-form #header .logo img{width:118px;max-height:68px}body.trinity-form .progress-wrap{padding:0 8px}body.trinity-form .step-item{min-width:94px}body.trinity-form .nav-footer .btn{min-width:0}body.trinity-form footer .footer-top .row{grid-template-columns:1fr!important;gap:32px!important}body.trinity-form footer .footer-top .row>:last-child{grid-column:auto}}
     </style>
     <link rel="stylesheet" href="{{ asset('theme/trinity/css/modern-ui.css') }}?v=20260729-3">
+    <link rel="stylesheet" href="{{ asset('theme/trinity/css/public-redesign.css') }}?v=20260801-1">
 </head>
 <body class="trinity-form">
 <header id="header">
@@ -902,7 +903,6 @@
     let cur = 1;
     const totalSteps = 6;
     const form = document.getElementById('studentForm');
-    const money = value => Number(value || 0).toLocaleString('en-US');
     const field = name => form.elements[name]?.value || '';
     const checkedExams = () => [...document.querySelectorAll('.exam-cb input[type="checkbox"]:checked')];
     let toastTimer;

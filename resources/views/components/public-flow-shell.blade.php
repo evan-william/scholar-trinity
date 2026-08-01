@@ -73,7 +73,7 @@
     <link rel="icon" type="image/png" href="{{ asset($brandFavicon) }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset($assetBase.'css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset($assetBase.'css/font-awesome.min.css') }}">
     <link rel="stylesheet" href="{{ asset($assetBase.'css/owl.carousel.min.css') }}">
@@ -210,6 +210,7 @@
     {{ $styles ?? '' }}
     @stack('styles')
     <link rel="stylesheet" href="{{ asset('theme/trinity/css/modern-ui.css') }}?v={{ $publicUiVersion }}">
+    <link rel="stylesheet" href="{{ asset('theme/trinity/css/public-redesign.css') }}?v=20260801-1">
 </head>
 <body class="trinity-public {{ $bodyClass }}">
 <header id="header">

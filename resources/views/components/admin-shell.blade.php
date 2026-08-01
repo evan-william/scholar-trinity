@@ -11,7 +11,7 @@
     <link rel="icon" type="image/png" href="{{ asset('images/trinity-scholar-favicon.png') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('theme/edification/css/font-awesome.min.css') }}">
     <style>
         :root{--navy:#153764;--blue:#25558f;--ink:#1f2a37;--muted:#667085;--line:#d9dee8;--soft:#f5f7fb;--white:#fff;--green:#237a4f;--red:#b42318;--amber:#9a6a00;--shadow:0 8px 24px rgba(22,47,83,.07)}
@@ -98,6 +98,7 @@
     </style>
     {{ $styles ?? '' }}
     <link rel="stylesheet" href="{{ asset('theme/trinity/css/admin-modern-ui.css') }}?v=20260729-2">
+    <link rel="stylesheet" href="{{ asset('theme/trinity/css/admin-redesign.css') }}?v=20260801-1">
 </head>
 <body>
 <div class="shell">

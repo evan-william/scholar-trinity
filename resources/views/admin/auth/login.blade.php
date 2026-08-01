@@ -6,7 +6,7 @@
     <title>{{ __('admin_auth.login_title') }}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap" rel="stylesheet">
     <style>
         :root{--navy:#153764;--gold:#c9a84c;--ink:#1f2a37;--muted:#667085;--line:#d9dee8;--soft:#f5f7fb;--green:#237a4f;--red:#b42318;--shadow:0 24px 70px rgba(12,36,68,.22)}
         *{box-sizing:border-box}
@@ -35,8 +35,9 @@
         a{color:var(--navy);font-weight:850;text-decoration:none}
         @media(max-width:820px){.login-shell{grid-template-columns:1fr}.panel{padding:28px}.panel h1{font-size:30px}.card{padding:28px 22px}}
     </style>
+    <link rel="stylesheet" href="{{ asset('theme/trinity/css/admin-redesign.css') }}?v=20260801-1">
 </head>
-<body>
+<body class="admin-auth admin-auth-login">
 <main class="login-shell">
     <section class="panel">
         <div class="brand"><span class="mark">TS<br>AP</span><span>Trinity Scholar Admin</span></div>
