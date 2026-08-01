@@ -3,6 +3,8 @@
 namespace Tests\Feature;
 
 use Database\Seeders\LandingPageSeeder;
+use App\Models\LandingFaq;
+use App\Models\SystemSetting;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
@@ -49,17 +51,37 @@ class LandingPageTest extends TestCase
         $payload['settings']['hero']['title'] = 'Updated AP Registration';
         $payload['sections']['registration_intro']['title'] = 'Updated Registration Intro';
         $payload['faqs'][0]['answer'] = 'Updated answer for families.';
+        $payload['faqs'][] = ['question' => 'Can FAQs be added?', 'answer' => 'Yes, from Landing Content.'];
+        $payload['registration_settings']['main_test_period'] = 'May 4-15, 2027';
 
         $this->put('/admin/landing', $payload)
             ->assertRedirect(route('admin.landing.edit'));
 
         $this->get('/')
             ->assertSee('Updated AP Registration')
-            ->assertSee('Updated answer for families.');
+            ->assertSee('Updated answer for families.')
+            ->assertSee('Can FAQs be added?')
+            ->assertSee('May 4-15, 2027');
 
         $this->get('/student-registration')
             ->assertOk()
             ->assertSee('Updated Registration Intro');
+
+        $this->assertSame(2, LandingFaq::query()->count());
+        $this->assertSame('May 4-15, 2027', SystemSetting::query()->where('key', 'registration.main_test_period')->value('value'));
+    }
+
+    public function test_landing_content_editor_exposes_schedule_test_site_and_dynamic_faq_controls(): void
+    {
+        $this->seed(LandingPageSeeder::class);
+
+        $this->actingAs($this->adminUser())
+            ->get(route('admin.landing.edit'))
+            ->assertOk()
+            ->assertSee('Registration Schedule and Test Site')
+            ->assertSee('Add FAQ')
+            ->assertSee('registration_settings[main_period]', false)
+            ->assertSee('registration_settings[test_site_map_url]', false);
     }
 
     private function adminUser(): User
@@ -103,6 +125,17 @@ class LandingPageTest extends TestCase
                 'overview' => ['eyebrow' => 'Overview', 'title' => 'Overview Title', 'body' => 'Overview body', 'items' => "One\nTwo", 'sort_order' => 10],
                 'process' => ['eyebrow' => 'Process', 'title' => 'Process Title', 'body' => 'Process body', 'items' => "Read\nPay", 'sort_order' => 20],
                 'privacy' => ['eyebrow' => 'Privacy', 'title' => 'Privacy Title', 'body' => 'Privacy body', 'items' => "Consent\nRetention", 'sort_order' => 30],
+            ],
+            'registration_settings' => [
+                'main_period' => 'August - October',
+                'late_period' => 'Mid November - Mid March',
+                'main_test_period' => 'May 3-14, 2027',
+                'late_test_period' => 'May 17-21, 2027',
+                'test_site_name_en' => 'The Primacy Collegiate Academy',
+                'test_site_name_zh' => '基督教美國高中課程',
+                'test_site_address_en' => 'No. 99, Meide St, Shilin District, Taipei City, 11159',
+                'test_site_address_zh' => '台北市士林區美德街99號',
+                'test_site_map_url' => 'https://www.google.com/maps/search/?api=1&query=Taipei',
             ],
             'timelines' => [
                 ['round' => 'Main Registration', 'month' => 'August', 'status' => 'Open', 'description' => 'Open now'],

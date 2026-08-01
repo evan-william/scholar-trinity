@@ -101,6 +101,18 @@
         $tx('The admin team reviews the submission and confirms enrollment by email.', '管理團隊審核資料並以電子郵件確認報名。'),
     ];
     $registrationSettings ??= [];
+    $rangeLabels = function (string $value, string $fallbackStart, string $fallbackEnd): array {
+        $parts = preg_split('/\s+-\s+|(?<=\d)-(?=\d)/u', $value, 2);
+
+        return [
+            strtoupper(trim($parts[0] ?? $fallbackStart)),
+            strtoupper(trim($parts[1] ?? $fallbackEnd)),
+        ];
+    };
+    [$mainPeriodStart, $mainPeriodEnd] = $rangeLabels($registrationSettings['main_period'] ?? 'August - October', 'AUG', 'OCT');
+    [$latePeriodStart, $latePeriodEnd] = $rangeLabels($registrationSettings['late_period'] ?? 'Mid November - Mid March', 'MID NOV', 'MID MAR');
+    [$mainTestStart, $mainTestEnd] = $rangeLabels($registrationSettings['main_test_period'] ?? 'May 3-14, 2027', 'MAY 3', 'MAY 14');
+    [$lateTestStart, $lateTestEnd] = $rangeLabels($registrationSettings['late_test_period'] ?? 'May 17-21, 2027', 'MAY 17', 'MAY 21');
 @endphp
 
 <x-public-flow-shell :title="$metaTitle" :description="$metaDescription" body-class="landing-refined" content-class="none">
@@ -280,7 +292,7 @@
                             <div class="slider-content">
                                 <h3>{{ $tx('Late Registration', '逾期報名') }}</h3>
                                 <h1><span class="primary-color">{{ $tx('Spring Availability', '春季名額') }}</span> {{ $tx('When Slots Remain', '視剩餘名額開放') }}</h1>
-                                <p>{{ $tx('Main Registration Period runs from August through October. Late Registration Period may open from mid November through mid March if seats remain available.', '一般報名期間為八月至十月；若仍有名額，逾期報名可能於春季學期開放。') }}</p>
+                                <p>{{ $tx('Main Registration Period: '.($registrationSettings['main_period'] ?? 'August - October').'. Late Registration Period: '.($registrationSettings['late_period'] ?? 'Mid November - Mid March').' if seats remain available.', '一般報名期間為八月至十月；若仍有名額，逾期報名可能於春季學期開放。') }}</p>
                                 <a class="btn btn-primary btn-round btn-lg mt-5" href="#registration-information">{{ $tx('View Registration Information', '查看報名資訊') }}</a>
                             </div>
                         </div>
@@ -376,7 +388,7 @@
                             <p>{{ $tx('Students and guardians can prepare personal details, exam choices, and required documents before submitting the guided form.', '學生與家長可先準備個人資料、考試選擇及所需文件，再提交引導式表單。') }}</p>
                             <ul class="notice-list">
                                 <li><i class="fa fa-check-circle"></i><span>{{ $tx('Main registration period:', '一般報名期間：') }} <strong>{{ $registrationSettings['main_period'] ?? 'August - October' }}</strong></span></li>
-                                <li><i class="fa fa-check-circle"></i><span>{{ $tx('Main Test Period: May 3-14, 2027.', 'AP 一般考試通常於五月 3 日舉行。') }}</span></li>
+                                <li><i class="fa fa-check-circle"></i><span>{{ $tx('Main Test Period: '.($registrationSettings['main_test_period'] ?? 'May 3-14, 2027').'.', 'AP 一般考試通常於五月 3 日舉行。') }}</span></li>
                                 <li><i class="fa fa-check-circle"></i><span>{{ $tx('Registration is finalized after the form, payment, and official confirmation email are received.', '表單與付款皆收到，且官方確認信寄出後，報名才算完成。') }}</span></li>
                             </ul>
                         </div>
@@ -390,7 +402,7 @@
                             <p>{{ $tx('Late registration may open during the spring semester after main registration closes, only when test-center slots remain available.', '一般報名結束後，若考場仍有名額，逾期報名可能於春季學期開放。') }}</p>
                             <ul class="notice-list">
                                 <li><i class="fa fa-info-circle"></i><span>{{ $tx('Late Registration Period:', '通常逾期報名期間：') }} <strong>{{ $registrationSettings['late_period'] ?? 'Mid November - Mid March' }}</strong></span></li>
-                                <li><i class="fa fa-info-circle"></i><span>{{ $tx('Late-Testing Period: May 17-21, 2027. Pending approval from Primacy.', '逾期考試通常於五月 17-21 日舉行。') }}</span></li>
+                                <li><i class="fa fa-info-circle"></i><span>{{ $tx('Late-Testing Period: '.($registrationSettings['late_test_period'] ?? 'May 17-21, 2027').'. Pending approval from Primacy.', '逾期考試通常於五月 17-21 日舉行。') }}</span></li>
                                 <li><i class="fa fa-info-circle"></i><span>{{ $tx('Final availability is confirmed by the admin team after review.', '最終名額由管理團隊審核後確認。') }}</span></li>
                             </ul>
                         </div>
@@ -417,10 +429,10 @@
             </div>
             <div class="row">
                 @foreach ([
-                    [$tx('AUG', '八月'), $tx('OCT', '十月'), $tx('Main Registration Period', '一般報名時段'), $tx('Regular registration is normally available from August through October.', '一般報名通常於八月至十月開放。')],
-                    [$tx('MID NOV', '十一月中'), $tx('MID MAR', '三月中'), $tx('Late Registration Period', '逾期報名時段'), $tx('Late registration may open from mid November through mid March if slots remain.', '一般報名結束後，若仍有名額，逾期報名可能於十一月中至三月中開放。')],
-                    [$tx('MAY 3', '五月 3 日'), $tx('MAY 14', '考試'), $tx('Main Test Period', '一般考試時段'), $tx('Regular AP test dates are scheduled for May 3-14, 2027.', 'AP 一般考試日期通常安排於五月 3 日。')],
-                    [$tx('MAY 17', '五月 17 日'), $tx('MAY 21', '五月 21 日'), $tx('Late-Testing Period', '逾期考試時段'), $tx('Late-testing dates are May 17-21, 2027, pending approval from Primacy.', 'AP 逾期考試日期通常安排於五月 17-21 日。')],
+                    [$tx($mainPeriodStart, '八月'), $tx($mainPeriodEnd, '十月'), $tx('Main Registration Period', '一般報名時段'), $tx('Registration period: '.($registrationSettings['main_period'] ?? 'August - October').'.', '一般報名通常於八月至十月開放。')],
+                    [$tx($latePeriodStart, '十一月中'), $tx($latePeriodEnd, '三月中'), $tx('Late Registration Period', '逾期報名時段'), $tx('Late registration period: '.($registrationSettings['late_period'] ?? 'Mid November - Mid March').' if slots remain.', '一般報名結束後，若仍有名額，逾期報名可能於十一月中至三月中開放。')],
+                    [$tx($mainTestStart, '五月 3 日'), $tx($mainTestEnd, '五月 14 日'), $tx('Main Test Period', '一般考試時段'), $tx('Regular AP test dates: '.($registrationSettings['main_test_period'] ?? 'May 3-14, 2027').'.', 'AP 一般考試日期通常安排於五月 3 日。')],
+                    [$tx($lateTestStart, '五月 17 日'), $tx($lateTestEnd, '五月 21 日'), $tx('Late-Testing Period', '逾期考試時段'), $tx('Late-testing dates: '.($registrationSettings['late_test_period'] ?? 'May 17-21, 2027').', pending approval from Primacy.', 'AP 逾期考試日期通常安排於五月 17-21 日。')],
                 ] as $item)
                     <div class="col-md-6 mb-5"><div class="media align-items-center"><div class="media-head primary-bg"><span>{{ $item[0] }}</span><p>{{ $item[1] }}</p></div><div class="media-body"><h4>{{ $item[2] }}</h4><p><i class="fa fa-clock-o"></i>{{ $item[3] }}</p></div></div></div>
                 @endforeach

@@ -9,6 +9,7 @@ use App\Models\LandingRequiredDocument;
 use App\Models\LandingSection;
 use App\Models\LandingSetting;
 use App\Models\LandingTimeline;
+use App\Models\SystemSetting;
 use App\Repositories\LandingContentRepository;
 use Illuminate\Support\Facades\DB;
 
@@ -27,7 +28,9 @@ class LandingContentService
 
     public function adminPayload(): array
     {
-        return $this->repository->adminPayload();
+        return $this->repository->adminPayload() + [
+            'registrationSettings' => app(PublicRegistrationSettings::class)->all(),
+        ];
     }
 
     public function update(array $data): void
@@ -40,6 +43,19 @@ class LandingContentService
                         ['value' => is_array($value) ? $value : ['text' => $value]]
                     );
                 }
+            }
+
+            foreach (($data['registration_settings'] ?? []) as $key => $value) {
+                SystemSetting::query()->updateOrCreate(
+                    ['key' => 'registration.'.$key],
+                    [
+                        'group' => 'registration',
+                        'value' => $value,
+                        'type' => 'string',
+                        'description' => 'Public registration content managed from Landing Content.',
+                        'is_public' => true,
+                    ]
+                );
             }
 
             foreach (($data['sections'] ?? []) as $key => $section) {

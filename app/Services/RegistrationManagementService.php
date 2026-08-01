@@ -193,7 +193,10 @@ class RegistrationManagementService
             ->first();
 
         if (! $payment) {
-            return;
+            $payment = app(PaymentFlowService::class)->ensurePayment(
+                $registration->loadMissing(['contact', 'exams']),
+                $this->paymentRecordMethod((string) ($fields['payment_method'] ?? $registration->payment_method ?? 'bank_transfer'))
+            );
         }
 
         $updates = [
@@ -221,7 +224,7 @@ class RegistrationManagementService
         }
 
         if (array_key_exists('payment_reference', $fields) && filled($fields['payment_reference'])) {
-            $updates['payment_reference'] = (string) $fields['payment_reference'];
+            $updates['transaction_id'] = (string) $fields['payment_reference'];
         }
 
         if (array_key_exists('payment_amount', $fields) && $fields['payment_amount'] !== null) {

@@ -10,6 +10,7 @@ use App\Repositories\StudentRegistrationRepository;
 use App\Services\FileSecurityService;
 use App\Services\StudentRegistrationService;
 use App\Services\PublicRegistrationSettings;
+use App\Services\PaymentFlowService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -24,7 +25,8 @@ class StudentRegistrationController extends Controller
 
     public function create(
         StudentRegistrationRepository $repository,
-        LandingContentRepository $landingContent
+        LandingContentRepository $landingContent,
+        PaymentFlowService $paymentFlow
     ): View
     {
         $catalogLoadFailed = false;
@@ -49,6 +51,7 @@ class StudentRegistrationController extends Controller
             'practiceExamOptions' => $practiceExamOptions,
             'registrationSettings' => app(PublicRegistrationSettings::class)->all(),
             'registrationIntro' => data_get($landingContent->payload(), 'sections')->get('registration_intro'),
+            'paymentSetting' => $paymentFlow->activeSetting(),
             'catalogLoadFailed' => $catalogLoadFailed,
         ]);
     }

@@ -3,10 +3,12 @@
 namespace Tests\Feature;
 
 use App\Models\ApExamSubject;
+use App\Models\RegistrationPayment;
 use App\Models\StudentRegistration;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
 class RegistrationManagementTest extends TestCase
@@ -136,6 +138,31 @@ class RegistrationManagementTest extends TestCase
         $this->actingAs($user)
             ->get(route('admin.student-registrations.edit', $registration))
             ->assertForbidden();
+    }
+
+    public function test_admin_payment_edit_creates_and_synchronizes_missing_payment_record(): void
+    {
+        Mail::fake();
+        [$registration] = $this->registration(['payment_status' => 'pending']);
+        $admin = $this->adminUser();
+
+        $this->assertSame(0, RegistrationPayment::query()->count());
+
+        $this->actingAs($admin)
+            ->patch(route('admin.student-registrations.manage-update', $registration), $this->editPayload($registration, [
+                'payment_status' => 'paid',
+                'payment_method' => 'bank_transfer',
+                'payment_reference' => 'BANK-TX-2027-001',
+                'payment_amount' => 10500,
+                'reason' => 'Confirmed against the bank transfer record.',
+            ]))
+            ->assertRedirect(route('admin.student-registrations.show', $registration));
+
+        $payment = RegistrationPayment::query()->sole();
+        $this->assertSame('paid', $payment->payment_status);
+        $this->assertSame('manual_bank_transfer', $payment->payment_method);
+        $this->assertSame('BANK-TX-2027-001', $payment->transaction_id);
+        $this->assertSame(10500, $payment->grand_total);
     }
 
     private function registration(array $overrides = [], bool $withExam = true): array

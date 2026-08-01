@@ -55,6 +55,26 @@
         </section>
 
         <section class="card">
+            <div class="section-title">
+                <div>
+                    <h2>Registration Schedule and Test Site</h2>
+                    <p>These values update the public homepage and registration form. Dates can be changed here without editing code.</p>
+                </div>
+            </div>
+            <div class="grid">
+                <label>Main Registration Period<input name="registration_settings[main_period]" value="{{ old('registration_settings.main_period', $registrationSettings['main_period']) }}" required></label>
+                <label>Late Registration Period<input name="registration_settings[late_period]" value="{{ old('registration_settings.late_period', $registrationSettings['late_period']) }}" required></label>
+                <label>Main Test Period<input name="registration_settings[main_test_period]" value="{{ old('registration_settings.main_test_period', $registrationSettings['main_test_period']) }}" required></label>
+                <label>Late-Testing Period<input name="registration_settings[late_test_period]" value="{{ old('registration_settings.late_test_period', $registrationSettings['late_test_period']) }}" required></label>
+                <label>Test Site Name (English)<input name="registration_settings[test_site_name_en]" value="{{ old('registration_settings.test_site_name_en', $registrationSettings['test_site_name_en']) }}" required></label>
+                <label>Test Site Name (Traditional Chinese)<input name="registration_settings[test_site_name_zh]" value="{{ old('registration_settings.test_site_name_zh', $registrationSettings['test_site_name_zh']) }}" required></label>
+                <label>Test Site Address (English)<textarea name="registration_settings[test_site_address_en]" required>{{ old('registration_settings.test_site_address_en', $registrationSettings['test_site_address_en']) }}</textarea></label>
+                <label>Test Site Address (Traditional Chinese)<textarea name="registration_settings[test_site_address_zh]" required>{{ old('registration_settings.test_site_address_zh', $registrationSettings['test_site_address_zh']) }}</textarea></label>
+                <label style="grid-column:1/-1;">Test Site Map URL<input name="registration_settings[test_site_map_url]" value="{{ old('registration_settings.test_site_map_url', $registrationSettings['test_site_map_url']) }}" type="url" required></label>
+            </div>
+        </section>
+
+        <section class="card">
             <div class="section-title"><h2>CMS Sections</h2></div>
             @foreach (['overview' => $overview, 'process' => $process, 'privacy' => $privacy] as $key => $section)
                 <div class="row-card">
@@ -113,13 +133,19 @@
         </section>
 
         <section class="card">
-            <div class="section-title"><h2>Frequently Asked Questions</h2></div>
+            <div class="section-title">
+                <div><h2>Frequently Asked Questions</h2><p>Add, edit, or remove questions shown on the public FAQ section.</p></div>
+                <button class="btn light" id="addFaq" type="button">Add FAQ</button>
+            </div>
+            <div id="faqRows">
             @foreach ($faqs as $index => $faq)
-                <div class="row-card grid">
-                    <label>Question<input name="faqs[{{ $index }}][question]" value="{{ old("faqs.$index.question", $faq->question) }}" required></label>
-                    <label>Answer<textarea name="faqs[{{ $index }}][answer]" required>{{ old("faqs.$index.answer", $faq->answer) }}</textarea></label>
+                <div class="row-card grid faq-row">
+                    <label>Question<input name="faqs[{{ $index }}][question]" value="{{ old("faqs.$index.question", $faq->question) }}"></label>
+                    <label>Answer<textarea name="faqs[{{ $index }}][answer]">{{ old("faqs.$index.answer", $faq->answer) }}</textarea></label>
+                    <button class="btn danger remove-faq" type="button">Remove</button>
                 </div>
             @endforeach
+            </div>
         </section>
 
         <section class="card">
@@ -141,4 +167,32 @@
             <button class="btn" type="submit">{{ __('landing.save_changes') }}</button>
         </div>
     </form>
+
+    <template id="faqTemplate">
+        <div class="row-card grid faq-row">
+            <label>Question<input name="faqs[__INDEX__][question]"></label>
+            <label>Answer<textarea name="faqs[__INDEX__][answer]"></textarea></label>
+            <button class="btn danger remove-faq" type="button">Remove</button>
+        </div>
+    </template>
+
+    <script>
+        (() => {
+            const rows = document.getElementById('faqRows');
+            const template = document.getElementById('faqTemplate');
+            const addButton = document.getElementById('addFaq');
+            let nextIndex = rows.querySelectorAll('.faq-row').length;
+
+            addButton.addEventListener('click', () => {
+                rows.insertAdjacentHTML('beforeend', template.innerHTML.replaceAll('__INDEX__', String(nextIndex++)));
+            });
+
+            rows.addEventListener('click', (event) => {
+                const removeButton = event.target.closest('.remove-faq');
+                if (removeButton && rows.querySelectorAll('.faq-row').length > 1) {
+                    removeButton.closest('.faq-row').remove();
+                }
+            });
+        })();
+    </script>
 </x-admin-shell>

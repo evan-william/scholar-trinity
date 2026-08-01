@@ -25,11 +25,11 @@ class PaymentFlowService
             ?? PaymentSetting::query()->create([
                 'provider' => 'manual',
                 'mode' => 'sandbox',
-                'bank_name' => 'Taiwan Bank Songshan Branch',
+                'bank_name' => '臺灣銀行松山分行',
                 'bank_code' => '004',
-                'account_name' => 'Liko Technology Co., Ltd.',
+                'account_name' => '力可科技股份有限公司',
                 'account_number' => '064001061782',
-                'manual_instruction' => 'Please include your AP registration reference number in the transfer note. Bank Name: Taiwan Bank Songshan Branch (004). Account Name: Liko Technology Co., Ltd. Account Number: 064001061782.',
+                'manual_instruction' => 'Please include your AP registration reference number in the transfer note and send the transfer receipt by email or Line for manual verification.',
                 'is_active' => true,
             ]);
     }

@@ -163,7 +163,8 @@ class AdminAuthDashboardTest extends TestCase
         $subject = ApExamSubject::query()->firstOrFail();
         $registration = StudentRegistration::query()->create([
             'registration_number' => 'APR-2026-000001',
-            'status' => 'paid',
+            'status' => 'submitted',
+            'payment_status' => 'paid',
             'student_full_name' => 'Alex Chen',
             'date_of_birth' => '2009-01-15',
             'nationality' => 'Taiwan',
@@ -198,6 +199,14 @@ class AdminAuthDashboardTest extends TestCase
             ->assertSee('NT$ 10,500')
             ->assertSee($subject->name)
             ->assertDontSee('passport_path');
+    }
+
+    public function test_admin_email_templates_page_is_available(): void
+    {
+        $this->actingAs($this->adminUser())
+            ->get(route('admin.email-templates.index'))
+            ->assertOk()
+            ->assertSee('Email Templates');
     }
 
     private function adminUser(): User

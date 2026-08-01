@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use RuntimeException;
 use Tests\TestCase;
 
 class PaymentFlowTest extends TestCase
@@ -117,6 +118,22 @@ class PaymentFlowTest extends TestCase
         $this->assertSame('failed', $registration2->fresh()->payment_status);
     }
 
+    public function test_manual_verification_stays_successful_when_confirmation_email_fails(): void
+    {
+        [$registration, $payment] = $this->registrationAndPayment(['payment_status' => 'waiting_verification']);
+        Mail::shouldReceive('to')->once()->andThrow(new RuntimeException('SMTP unavailable'));
+
+        $this->actingAs($this->adminUser())
+            ->post(route('admin.payments.verify', $payment), [
+                'action' => 'verify',
+                'note' => 'Bank transfer matched.',
+            ])
+            ->assertRedirect(route('admin.payments.show', $payment));
+
+        $this->assertSame('paid', $payment->fresh()->payment_status);
+        $this->assertSame('paid', $registration->fresh()->payment_status);
+    }
+
     public function test_gateway_callback_signature_amount_and_duplicate_processing(): void
     {
         Mail::fake();
@@ -197,6 +214,18 @@ class PaymentFlowTest extends TestCase
         $this->assertInstanceOf(ManualPaymentProvider::class, $manager->forSetting(new PaymentSetting(['provider' => 'manual'])));
         $this->assertInstanceOf(EcpayPaymentProvider::class, $manager->forSetting(new PaymentSetting(['provider' => 'ecpay'])));
         $this->assertInstanceOf(NewebPayPaymentProvider::class, $manager->forSetting(new PaymentSetting(['provider' => 'newebpay'])));
+    }
+
+    public function test_registration_form_uses_admin_payment_settings_and_hides_card_payment(): void
+    {
+        $this->seed(PaymentSettingSeeder::class);
+
+        $this->get(route('student-registrations.create'))
+            ->assertOk()
+            ->assertSee('臺灣銀行松山分行')
+            ->assertSee('力可科技股份有限公司')
+            ->assertSee('064001061782')
+            ->assertDontSee('Credit Card');
     }
 
     private function registrationAndPayment(array $paymentOverrides = [], string $number = 'APR-2026-999001'): array

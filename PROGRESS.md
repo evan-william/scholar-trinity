@@ -1,6 +1,6 @@
 # Trinity Scholar Progress Tracker
 
-Last updated: 2026-07-29, Asia/Bangkok
+Last updated: 2026-08-01, Asia/Bangkok
 
 This file is the working source of truth for project status. Every implementation pass must update:
 - `Current Progress` for what changed.
@@ -60,6 +60,28 @@ Current local template pass:
 - Raw downloaded templates are ignored through `template-source/` in `.gitignore`.
 
 ## Current Progress
+
+2026-08-01
+- Client Review 2 and Review 3 completion pass:
+  - Re-read every text item and screenshot in `Reference/Webpage Edits Request (1).docx`; implemented all actionable non-pending English review items without browser automation.
+  - Added Main Registration Period, Late Registration Period, Main Test Period, Late-Testing Period, bilingual test-site names/addresses, and map URL directly to Landing Content CMS. Homepage and registration-form content now read the same settings.
+  - Made homepage timeline labels and descriptions follow the CMS values instead of retaining fixed August/October/May labels after an admin edit.
+  - Added dynamic FAQ add/remove controls to Landing Content CMS; administrators can publish future questions without code changes.
+  - Fixed the confirmed Email Templates 500 error caused by invalid Blade placeholder markup and added route-level regression coverage.
+  - Kept manual verification successful even when confirmation email delivery fails; the saved paid status no longer becomes an error page.
+  - Made registration-management payment edits create a missing Payment Record and synchronize status, method, amount, verification metadata, and bank transaction reference.
+  - Connected the public registration form to the active admin Payment Settings instead of hardcoded bank details.
+  - Applied the approved bank details for Bank of Taiwan Songshan Branch (004), Liko Technology Co., Ltd., and account `064001061782`; added an idempotent production migration for legacy defaults.
+  - Clarified in Payment Settings where public bank details are controlled and how the payment deadline is calculated.
+  - Confirmed credit-card payment remains hidden, configured subject fees appear in the form, and payment instructions explain external receipt submission for manual verification.
+- Verification:
+  - PHP lint passed for all changed PHP files.
+  - Focused client-review regression suite passed: 31 tests and 172 assertions.
+  - Full PHPUnit suite passed: 86 tests and 519 assertions with local XAMPP PHP, GD, and ZIP.
+  - Vite production build passed with 61 modules transformed.
+  - `git diff --check` passed and all edited Blade views compiled through feature coverage.
+  - Regenerated the safe deploy ZIP with 496 entries; `.env`, SQLite, dependencies, logs, caches, and private uploads remain excluded.
+  - Browser QA remains intentionally skipped per user instruction.
 
 2026-07-29
 - Registration UX, privacy, and admin detail repair:
@@ -605,7 +627,7 @@ These items come directly from `Reference/Trinity Scholar - Features.pdf` and we
 - PENDING: final detailed main-registration information copy from the client.
 - PENDING: final AP course/exam options and approved public fee values.
 - PENDING: credit/debit-card payment method and production payment-provider credentials.
-- PENDING: final production bank-account details; current admin payment settings remain the source for bank instructions.
+- DONE: approved manual bank-account details are seeded/migrated and remain editable from admin Payment Settings.
 
 - Online Practice Exam Platform:
   - FUTURE TODO: question bank.
@@ -654,7 +676,7 @@ These items come directly from `Reference/Trinity Scholar - Features.pdf` and we
 ### Phase 1 - MVP Registration Platform
 
 - Landing / Information Page:
-  - `PARTIAL`: Edification-styled page exists and still supports backend-managed content.
+  - `MOSTLY DONE`: Edification-styled page exists and supports backend-managed content, schedule/test-site settings, and dynamic FAQs.
   - DONE: CTA no longer points to legacy `/register`.
   - DONE: current homepage/compro layout implemented with template assets and extracted announcement content.
   - TODO: final content approval and image replacement if client provides more assets.
@@ -811,8 +833,8 @@ These items come directly from `Reference/Trinity Scholar - Features.pdf` and we
   - TODO: confirm SSL for `trinity.sophistec.global`.
 
 - Database Security:
-  - `PENDING SERVER`: MySQL/MariaDB direction is documented; DB credentials not provided yet.
-  - TODO: define DB name/user/password on server.
+  - `PENDING SERVER`: production MySQL/MariaDB is provisioned; credentials must remain only in the server `.env`.
+  - DONE: production DB name/user/password were provisioned and documented for server-only configuration without committing secrets.
   - DONE: backup checklist documented in `SERVER_CHECKLIST.md`.
   - DONE: `security:backup-storage` creates a private storage manifest or optional zip and logs it.
   - DONE: production-capable bootstrap admin seeding is available and does not overwrite an existing account password on later seed runs.
@@ -870,6 +892,16 @@ These items come directly from `Reference/Trinity Scholar - Features.pdf` and we
 - Server credentials were shared in chat but must stay out of Git.
 
 ## Verification Log
+
+2026-08-01
+- Re-read all text and screenshots from `Reference/Webpage Edits Request (1).docx`, with implementation focused on Review 2 and Review 3 non-pending items.
+- PHP lint passed for the changed controllers, requests, services, seeder, migration, and feature tests.
+- Focused client-review regression suite passed: 31 tests and 172 assertions.
+- Full PHPUnit suite passed: 86 tests and 519 assertions using XAMPP PHP 8.2 with GD and ZIP.
+- Vite production build passed with 61 modules transformed.
+- `git diff --check` passed.
+- Regenerated `scholar-trinity-deploy.zip` with 496 entries; archive safety checks passed.
+- Browser QA was intentionally not used per user instruction.
 
 2026-07-29
 - PHP syntax lint passed for the catalog command, controllers, models, seeders, language files, and updated feature tests.

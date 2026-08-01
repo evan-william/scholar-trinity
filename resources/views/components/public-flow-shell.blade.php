@@ -14,6 +14,7 @@
     $footerLogo = 'images/trinity-scholar-logo-clean.png';
     $brandFavicon = 'images/trinity-scholar-favicon.png';
     $publicUiVersion = '20260729-3';
+    $registrationSettings = app(\App\Services\PublicRegistrationSettings::class)->all();
     $uiLocale = session('locale', str_replace('_', '-', app()->getLocale()));
     $isZh = $uiLocale === 'zh-TW';
     $navLabels = $isZh
@@ -53,8 +54,8 @@
             'notice_body' => 'Registration is finalized once your form and payment are received and you receive an official confirmation email. Seats are limited and may close prior to the listed deadline.',
             'main_period' => 'Main Period :',
             'late_period' => 'Late Period :',
-            'main_period_value' => 'August - October',
-            'late_period_value' => 'Mid November - Mid March',
+            'main_period_value' => $registrationSettings['main_period'],
+            'late_period_value' => $registrationSettings['late_period'],
             'copyright' => 'Copyright',
             'rights' => 'All Rights Reserved.',
             'designed' => 'Designed By',

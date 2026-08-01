@@ -33,6 +33,7 @@
                 </label>
                 <label>Payment Deadline Days
                     <input type="number" name="payment_deadline_days" value="{{ old('payment_deadline_days', $setting->payment_deadline_days ?: 7) }}">
+                    <span class="hint">The deadline is calculated from the registration submission date plus this number of days.</span>
                 </label>
                 <label>Hash Key
                     <input name="hash_key" placeholder="Leave blank to keep existing">
@@ -54,6 +55,7 @@
                 </label>
                 <label>Bank Name
                     <input name="bank_name" value="{{ old('bank_name', $setting->bank_name) }}">
+                    <span class="hint">Shown in public bank-transfer instructions and payment emails.</span>
                 </label>
                 <label>Bank Code
                     <input name="bank_code" value="{{ old('bank_code', $setting->bank_code) }}">

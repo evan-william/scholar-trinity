@@ -24,7 +24,7 @@
             'badge' => 'No login required',
             'title' => '2027 AP Exam Registration',
             'body' => 'Students can submit registration details, passport upload, exam selections, accommodations, and payment method in one guided flow.',
-            'items' => ['Main registration is normally available from August through October.', 'Late Registration Period may open from mid November through mid March if seats remain.', 'Registration is finalized after the form, payment, and official confirmation email are received.'],
+            'items' => ['Main Registration Period: '.($registrationSettings['main_period'] ?? 'August - October').'.', 'Late Registration Period: '.($registrationSettings['late_period'] ?? 'Mid November - Mid March').' if seats remain.', 'Registration is finalized after the form, payment, and official confirmation email are received.'],
             'summary_label' => 'Test Site',
             'summary_title' => $registrationSettings['test_site_name_en'] ?? 'The Primacy Collegiate Academy',
             'summary_body' => $registrationSettings['test_site_address_en'] ?? 'No. 99, Meide St, Shilin District, Taipei City, 11159',
@@ -69,8 +69,8 @@
             'notice_body' => 'Registration is finalized once your form and payment are received and you receive an official confirmation email. Seats are limited and may close prior to the listed deadline.',
             'main_period' => 'Main Period :',
             'late_period' => 'Late Period :',
-            'main_period_value' => 'August - October',
-            'late_period_value' => 'Mid November - Mid March',
+            'main_period_value' => $registrationSettings['main_period'] ?? 'August - October',
+            'late_period_value' => $registrationSettings['late_period'] ?? 'Mid November - Mid March',
             'copyright' => 'Copyright',
             'rights' => 'All Rights Reserved.',
             'designed' => 'Designed By',
@@ -532,7 +532,7 @@
             <strong>{{ $introCopy['summary_title'] }}</strong>
             <p>{{ $introCopy['summary_body'] }}</p>
             <a class="test-site-map" href="{{ $registrationSettings['test_site_map_url'] ?? '#' }}" target="_blank" rel="noopener"><i class="fa fa-map-marker"></i> {{ $tx('Open Map', '開啟地圖') }}</a>
-            <small>{{ $tx('AP fee details are pending and will be shown before payment.', 'AP 費用資訊尚待確認，將於付款前顯示。') }}</small>
+            <small>{{ $tx('Configured exam fees appear in the exam-selection step. The final total is shown before submission.', '已設定的考試費用會顯示於考試選擇步驟，最終金額會在提交前顯示。') }}</small>
         </aside>
     </section>
 
@@ -715,7 +715,7 @@
             <div class="card">
                 <div class="section-title">Payment Method <span>付款方式</span></div>
                 <div class="pay-options">
-                    <label class="pay-opt"><input type="radio" name="payment_method" value="bank_transfer" required @checked(in_array(old('payment_method', 'bank_transfer'), ['bank_transfer', 'manual_bank_transfer'], true))><div><h4>{{ $tx('Bank Transfer', '銀行轉帳') }}</h4><p>{{ $tx('Transfer to the account below, then upload payment proof from the payment page after submission.', '請匯款至下方帳戶，提交後於付款頁面上傳付款證明。') }}</p><div class="bank-details"><span><strong>{{ $tx('Bank Name', '銀行') }}:</strong> Taiwan Bank Songshan Branch (004)</span><span><strong>{{ $tx('Account Name', '戶名') }}:</strong> Liko Technology Co., Ltd.</span><span><strong>{{ $tx('Account Number', '帳號') }}:</strong> 064001061782</span></div></div></label>
+                    <label class="pay-opt"><input type="radio" name="payment_method" value="bank_transfer" required @checked(in_array(old('payment_method', 'bank_transfer'), ['bank_transfer', 'manual_bank_transfer'], true))><div><h4>{{ $tx('Bank Transfer', '銀行轉帳') }}</h4><p>{{ $tx('Transfer to the account below, then upload payment proof from the payment page after submission.', '請匯款至下方帳戶，提交後於付款頁面上傳付款證明。') }}</p><div class="bank-details"><span><strong>{{ $tx('Bank Name', '銀行') }}:</strong> {{ $paymentSetting->bank_name }}{{ $paymentSetting->bank_code ? ' ('.$paymentSetting->bank_code.')' : '' }}</span><span><strong>{{ $tx('Account Name', '戶名') }}:</strong> {{ $paymentSetting->account_name }}</span><span><strong>{{ $tx('Account Number', '帳號') }}:</strong> {{ $paymentSetting->account_number }}</span></div>@if($paymentSetting->manual_instruction)<p class="hint">{{ $paymentSetting->manual_instruction }}</p>@endif</div></label>
                 </div>
                 <div class="notice acknowledgement-notice" style="margin-top:16px"><h4>{{ $tx('Acknowledgement', '聲明確認') }}</h4><ul><li>{{ $tx('All information provided is accurate and complete.', '所填資料正確且完整。') }}</li><li>{{ $tx('I understand there are no refunds once payment is made.', '繳費後恕不退費。') }}</li><li>{{ $tx('I have verified the exam schedule for conflicts.', '我已確認考試時程無衝突。') }}</li></ul></div>
                 <div class="sig-area">
@@ -756,7 +756,7 @@
                         <a href="{{ route('landing') }}"><img src="{{ asset($footerLogo) }}" alt="Trinity Scholar"></a>
                         <div class="address"><h6>{{ $footerLabels['office'] }}</h6><p>{{ $footerLabels['office_body'] }}</p></div>
                         <div class="address"><h6>{{ $footerLabels['phone'] }}</h6><p>886-2-2771-6002</p></div>
-                        <div class="address"><h6>{{ $footerLabels['email'] }}</h6><p>ap-registration@trinityscholar.com</p><p>Line: @TrinityScholar</p></div>
+                        <div class="address"><h6>{{ $footerLabels['email'] }}</h6><p>ap-registration@trinityscholar.com</p><p>Line: <a href="https://lin.ee/VXnDLUW" target="_blank" rel="noopener">@TrinityScholar</a></p></div>
                     </div>
                 </div>
                 <div class="col-md-3">
