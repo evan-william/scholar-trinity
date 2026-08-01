@@ -56,6 +56,10 @@ class RegistrationManagementService
                 $this->replaceExamSelection($registration, $data['exam_subject_uuids'], $reason, $adminId, $ip);
             }
 
+            if ($this->hasPaymentFieldChanges($fields)) {
+                $this->syncPaymentRecord($registration->refresh(), $fields, $adminId);
+            }
+
             Log::info('Registration edited.', ['registration' => $registration->registration_number, 'admin_id' => $adminId]);
 
             return $registration->fresh(['contact', 'exams', 'adminNotes', 'auditLogs']);
@@ -167,6 +171,80 @@ class RegistrationManagementService
                 'grand_total' => $grandTotal,
             ]);
         $this->audit($registration, 'updated', 'exam_subjects', null, $subjects->pluck('code')->join(','), $reason, $adminId, $ip);
+    }
+
+    /**
+     * @param array<string, mixed> $fields
+     */
+    private function hasPaymentFieldChanges(array $fields): bool
+    {
+        return collect(['payment_status', 'payment_method', 'payment_reference', 'payment_date', 'payment_amount'])
+            ->contains(fn (string $field) => array_key_exists($field, $fields));
+    }
+
+    /**
+     * @param array<string, mixed> $fields
+     */
+    private function syncPaymentRecord(StudentRegistration $registration, array $fields, int $adminId): void
+    {
+        $payment = $registration->payments()
+            ->whereNotIn('payment_status', ['refunded', 'cancelled'])
+            ->latest()
+            ->first();
+
+        if (! $payment) {
+            return;
+        }
+
+        $updates = [
+            'exam_fee_amount' => $registration->exam_fee_total,
+            'service_fee_amount' => $registration->service_fee_total,
+            'late_fee_amount' => $registration->late_fee_total,
+            'grand_total' => $registration->payment_amount ?: ($registration->grand_total ?: $registration->total_fee),
+            'currency' => $registration->currency ?: $payment->currency,
+        ];
+
+        if (array_key_exists('payment_status', $fields)) {
+            $updates['payment_status'] = $this->paymentRecordStatus((string) $fields['payment_status']);
+
+            if ($fields['payment_status'] === 'paid') {
+                $updates['paid_at'] = $registration->payment_date ?: now();
+                $updates['verified_by'] = $adminId;
+                $updates['verified_at'] = now();
+                $updates['rejected_reason'] = null;
+            }
+        }
+
+        if (array_key_exists('payment_method', $fields) && filled($fields['payment_method'])) {
+            $updates['payment_method'] = $this->paymentRecordMethod((string) $fields['payment_method']);
+            $updates['provider'] = $updates['payment_method'] === 'manual_bank_transfer' ? 'manual' : $payment->provider;
+        }
+
+        if (array_key_exists('payment_reference', $fields) && filled($fields['payment_reference'])) {
+            $updates['payment_reference'] = (string) $fields['payment_reference'];
+        }
+
+        if (array_key_exists('payment_amount', $fields) && $fields['payment_amount'] !== null) {
+            $updates['grand_total'] = (int) $fields['payment_amount'];
+        }
+
+        $payment->fill($updates)->save();
+    }
+
+    private function paymentRecordStatus(string $status): string
+    {
+        return match ($status) {
+            'paid', 'waiting_verification', 'failed', 'refunded', 'cancelled' => $status,
+            default => 'pending',
+        };
+    }
+
+    private function paymentRecordMethod(string $method): string
+    {
+        return match ($method) {
+            'bank_transfer', 'manual', 'manual_transfer' => 'manual_bank_transfer',
+            default => $method,
+        };
     }
 
     private function audit(StudentRegistration $registration, string $action, ?string $field, mixed $old, mixed $new, ?string $reason, int $adminId, ?string $ip): void

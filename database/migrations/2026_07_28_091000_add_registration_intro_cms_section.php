@@ -14,11 +14,11 @@ return new class extends Migration
         DB::table('landing_sections')->insert([
             'key' => 'registration_intro',
             'eyebrow' => 'No login required',
-            'title' => '2026 AP Exam Registration',
+            'title' => '2027 AP Exam Registration',
             'body' => 'Students can submit registration details, passport upload, exam selections, accommodations, and payment method in one guided flow.',
             'items' => json_encode([
                 'Main registration is normally available from August through October.',
-                'Late registration may open from January through March if seats remain.',
+                'Late Registration Period may open from mid November through mid March if seats remain.',
                 'Registration is finalized after the form, payment, and official confirmation email are received.',
             ]),
             'is_active' => true,

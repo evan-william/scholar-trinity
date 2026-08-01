@@ -11,9 +11,9 @@ class SystemSettingSeeder extends Seeder
     {
         $settings = [
             ['key' => 'registration.main_period', 'value' => 'August - October', 'description' => 'Public main registration period.'],
-            ['key' => 'registration.late_period', 'value' => 'January - March', 'description' => 'Public late registration period.'],
-            ['key' => 'registration.main_test_period', 'value' => 'Beginning of May', 'description' => 'Usual AP main test period shown publicly.'],
-            ['key' => 'registration.late_test_period', 'value' => 'Mid to late May', 'description' => 'Usual AP late test period shown publicly.'],
+            ['key' => 'registration.late_period', 'value' => 'Mid November - Mid March', 'description' => 'Public late registration period.'],
+            ['key' => 'registration.main_test_period', 'value' => 'May 3-14, 2027', 'description' => '2027 AP main test period shown publicly.'],
+            ['key' => 'registration.late_test_period', 'value' => 'May 17-21, 2027', 'description' => '2027 AP late-testing period shown publicly.'],
             ['key' => 'registration.test_site_name_en', 'value' => 'The Primacy Collegiate Academy', 'description' => 'English public test-site name.'],
             ['key' => 'registration.test_site_name_zh', 'value' => '基督教美國高中課程', 'description' => 'Traditional Chinese public test-site name.'],
             ['key' => 'registration.test_site_address_en', 'value' => 'No. 99, Meide St, Shilin District, Taipei City, 11159', 'description' => 'English public test-site address.'],
@@ -22,7 +22,7 @@ class SystemSettingSeeder extends Seeder
         ];
 
         foreach ($settings as $setting) {
-            SystemSetting::query()->firstOrCreate(
+            SystemSetting::query()->updateOrCreate(
                 ['key' => $setting['key']],
                 $setting + ['group' => 'registration', 'type' => 'string', 'is_public' => true]
             );

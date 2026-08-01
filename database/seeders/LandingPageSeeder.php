@@ -38,9 +38,9 @@ class LandingPageSeeder extends Seeder
         $sections = [
             'registration_intro' => [
                 'eyebrow' => 'No login required',
-                'title' => '2026 AP Exam Registration',
+                'title' => '2027 AP Exam Registration',
                 'body' => 'Students can submit registration details, passport upload, exam selections, accommodations, and payment method in one guided flow.',
-                'items' => ['Main registration is normally available from August through October.', 'Late registration may open from January through March if seats remain.', 'Registration is finalized after the form, payment, and official confirmation email are received.'],
+                'items' => ['Main Registration Period: August - October.', 'Late Registration Period: Mid November - Mid March.', 'Registration is finalized after the form, payment, and official confirmation email are received.'],
                 'sort_order' => 5,
             ],
             'overview' => [
@@ -74,9 +74,9 @@ class LandingPageSeeder extends Seeder
             ['round' => 'Main Registration', 'month' => 'August', 'status' => 'Upcoming', 'description' => 'Registration window preparation and document collection begins.'],
             ['round' => 'Main Registration', 'month' => 'September', 'status' => 'Open', 'description' => 'Primary registration intake and review period.'],
             ['round' => 'Main Registration', 'month' => 'October', 'status' => 'Closed', 'description' => 'Final review and payment confirmation for regular registration.'],
-            ['round' => 'Late Registration', 'month' => 'January', 'status' => 'Upcoming', 'description' => 'Late registration opens if seats and subjects remain available.'],
+            ['round' => 'Late Registration', 'month' => 'Mid November', 'status' => 'Upcoming', 'description' => 'Late registration opens if seats and subjects remain available.'],
             ['round' => 'Late Registration', 'month' => 'February', 'status' => 'Upcoming', 'description' => 'Late registration review and payment processing.'],
-            ['round' => 'Late Registration', 'month' => 'March', 'status' => 'Closed', 'description' => 'Late registration closes before final exam administration preparation.'],
+            ['round' => 'Late Registration', 'month' => 'Mid March', 'status' => 'Closed', 'description' => 'Late registration closes before final exam administration preparation.'],
         ];
 
         LandingTimeline::query()->delete();
@@ -87,7 +87,7 @@ class LandingPageSeeder extends Seeder
         $fees = [
             ['name' => 'AP Exam Fee', 'description' => 'Collected for the official AP exam registration.', 'currency' => 'NTD', 'amount' => 7800],
             ['name' => 'Trinity Service Fee', 'description' => 'Service handling fee. Fapiao applies to this fee only.', 'currency' => 'NTD', 'amount' => 1200],
-            ['name' => 'Late Registration Fee', 'description' => 'Applied during January to March late registration.', 'currency' => 'NTD', 'amount' => 1500],
+            ['name' => 'Late Registration Fee', 'description' => 'Applied during the mid-November to mid-March late registration period.', 'currency' => 'NTD', 'amount' => 1500],
         ];
 
         LandingFee::query()->delete();
@@ -132,7 +132,7 @@ class LandingPageSeeder extends Seeder
                 'office_hours' => 'Monday to Friday, 09:00-18:00',
                 'address' => 'No. 99, Meide St, Shilin District, Taipei City, 11159',
                 'map_url' => 'https://www.google.com/maps/search/?api=1&query=No.+99%2C+Meide+St%2C+Shilin+District%2C+Taipei+City+11159',
-                'social_links' => ['Line: @TrinityScholar'],
+                'social_links' => ['Line: https://lin.ee/VXnDLUW'],
             ]
         );
     }

@@ -4,9 +4,9 @@
     $tx = fn (string $en, string $zh): string => $isZh ? $zh : $en;
     $seo = $settings->get('seo', collect());
     $hero = $settings->get('hero', collect());
-    $metaTitle = data_get($seo, 'meta_title.text', $tx('2026 AP Exam Registration | Trinity Scholar', '2026 AP 考試報名 | Trinity Scholar'));
+    $metaTitle = data_get($seo, 'meta_title.text', $tx('2027 AP Exam Registration | Trinity Scholar', '2027 AP 考試報名 | Trinity Scholar'));
     $metaDescription = data_get($seo, 'meta_description.text', $tx('Trinity Scholar AP Exam registration service for students in Taipei.', 'Trinity Scholar 提供台北學生 AP 考試報名支援服務。'));
-    $heroTitle = data_get($hero, 'title.text', $tx('2026 Advanced Placement (AP) Exam Registration', '2026 Advanced Placement (AP) 考試報名'));
+    $heroTitle = data_get($hero, 'title.text', $tx('2027 Advanced Placement (AP) Exam Registration', '2027 Advanced Placement (AP) 考試報名'));
     $heroIntro = data_get($hero, 'introduction.text', $tx('Trinity Scholar offers hassle-free AP Exam registration service for students who need test-center registration support in Taipei.', 'Trinity Scholar 為需要台北考場報名支援的學生提供 AP 考試報名服務。'));
     $overview = $sections->get('overview');
     $process = $sections->get('process');
@@ -280,7 +280,7 @@
                             <div class="slider-content">
                                 <h3>{{ $tx('Late Registration', '逾期報名') }}</h3>
                                 <h1><span class="primary-color">{{ $tx('Spring Availability', '春季名額') }}</span> {{ $tx('When Slots Remain', '視剩餘名額開放') }}</h1>
-                                <p>{{ $tx('Main registration runs from August through October. Late registration may open during the spring semester if seats remain available.', '一般報名期間為八月至十月；若仍有名額，逾期報名可能於春季學期開放。') }}</p>
+                                <p>{{ $tx('Main Registration Period runs from August through October. Late Registration Period may open from mid November through mid March if seats remain available.', '一般報名期間為八月至十月；若仍有名額，逾期報名可能於春季學期開放。') }}</p>
                                 <a class="btn btn-primary btn-round btn-lg mt-5" href="#registration-information">{{ $tx('View Registration Information', '查看報名資訊') }}</a>
                             </div>
                         </div>
@@ -376,7 +376,7 @@
                             <p>{{ $tx('Students and guardians can prepare personal details, exam choices, and required documents before submitting the guided form.', '學生與家長可先準備個人資料、考試選擇及所需文件，再提交引導式表單。') }}</p>
                             <ul class="notice-list">
                                 <li><i class="fa fa-check-circle"></i><span>{{ $tx('Main registration period:', '一般報名期間：') }} <strong>{{ $registrationSettings['main_period'] ?? 'August - October' }}</strong></span></li>
-                                <li><i class="fa fa-check-circle"></i><span>{{ $tx('Main AP testing is usually held at the beginning of May.', 'AP 一般考試通常於五月初舉行。') }}</span></li>
+                                <li><i class="fa fa-check-circle"></i><span>{{ $tx('Main Test Period: May 3-14, 2027.', 'AP 一般考試通常於五月 3 日舉行。') }}</span></li>
                                 <li><i class="fa fa-check-circle"></i><span>{{ $tx('Registration is finalized after the form, payment, and official confirmation email are received.', '表單與付款皆收到，且官方確認信寄出後，報名才算完成。') }}</span></li>
                             </ul>
                         </div>
@@ -389,8 +389,8 @@
                             <h4>{{ $tx('Late registration depends on remaining capacity.', '逾期報名視剩餘名額開放。') }}</h4>
                             <p>{{ $tx('Late registration may open during the spring semester after main registration closes, only when test-center slots remain available.', '一般報名結束後，若考場仍有名額，逾期報名可能於春季學期開放。') }}</p>
                             <ul class="notice-list">
-                                <li><i class="fa fa-info-circle"></i><span>{{ $tx('Usual late registration period:', '通常逾期報名期間：') }} <strong>{{ $registrationSettings['late_period'] ?? 'January - March' }}</strong></span></li>
-                                <li><i class="fa fa-info-circle"></i><span>{{ $tx('Late testing is usually held in mid to late May.', '逾期考試通常於五月中下旬舉行。') }}</span></li>
+                                <li><i class="fa fa-info-circle"></i><span>{{ $tx('Late Registration Period:', '通常逾期報名期間：') }} <strong>{{ $registrationSettings['late_period'] ?? 'Mid November - Mid March' }}</strong></span></li>
+                                <li><i class="fa fa-info-circle"></i><span>{{ $tx('Late-Testing Period: May 17-21, 2027. Pending approval from Primacy.', '逾期考試通常於五月 17-21 日舉行。') }}</span></li>
                                 <li><i class="fa fa-info-circle"></i><span>{{ $tx('Final availability is confirmed by the admin team after review.', '最終名額由管理團隊審核後確認。') }}</span></li>
                             </ul>
                         </div>
@@ -399,8 +399,8 @@
             </div>
             <div class="late-facts">
                 <div class="late-stat"><i class="fa fa-calendar"></i><div><span>{{ $tx('Main Registration', '一般報名') }}</span><strong>{{ $registrationSettings['main_period'] ?? 'August - October' }}</strong></div></div>
-                <div class="late-stat"><i class="fa fa-calendar-check-o"></i><div><span>{{ $tx('Main Test Period', '一般考試時段') }}</span><strong>{{ $registrationSettings['main_test_period'] ?? 'Beginning of May' }}</strong></div></div>
-                <div class="late-stat"><i class="fa fa-clock-o"></i><div><span>{{ $tx('Late Test Period', '逾期考試時段') }}</span><strong>{{ $registrationSettings['late_test_period'] ?? 'Mid to late May' }}</strong></div></div>
+                <div class="late-stat"><i class="fa fa-calendar-check-o"></i><div><span>{{ $tx('Main Test Period', '一般考試時段') }}</span><strong>{{ $registrationSettings['main_test_period'] ?? 'May 3-14, 2027' }}</strong></div></div>
+                <div class="late-stat"><i class="fa fa-clock-o"></i><div><span>{{ $tx('Late-Testing Period', '逾期考試時段') }}</span><strong>{{ $registrationSettings['late_test_period'] ?? 'May 17-21, 2027' }}</strong></div></div>
             </div>
         </div>
     </section>
@@ -418,9 +418,9 @@
             <div class="row">
                 @foreach ([
                     [$tx('AUG', '八月'), $tx('OCT', '十月'), $tx('Main Registration Period', '一般報名時段'), $tx('Regular registration is normally available from August through October.', '一般報名通常於八月至十月開放。')],
-                    [$tx('JAN', '一月'), $tx('MAR', '三月'), $tx('Late Registration Period', '逾期報名時段'), $tx('After main registration closes, late registration may open from January through March if slots remain.', '一般報名結束後，若仍有名額，逾期報名可能於一月至三月開放。')],
-                    [$tx('EARLY', '五月初'), $tx('MAY', '考試'), $tx('Main Test Period', '一般考試時段'), $tx('Regular AP test dates are usually scheduled at the beginning of May.', 'AP 一般考試日期通常安排於五月初。')],
-                    [$tx('MID', '五月中'), $tx('LATE', '下旬'), $tx('Late Test Period', '逾期考試時段'), $tx('Late AP test dates are usually scheduled in mid to late May.', 'AP 逾期考試日期通常安排於五月中下旬。')],
+                    [$tx('MID NOV', '十一月中'), $tx('MID MAR', '三月中'), $tx('Late Registration Period', '逾期報名時段'), $tx('Late registration may open from mid November through mid March if slots remain.', '一般報名結束後，若仍有名額，逾期報名可能於十一月中至三月中開放。')],
+                    [$tx('MAY 3', '五月 3 日'), $tx('MAY 14', '考試'), $tx('Main Test Period', '一般考試時段'), $tx('Regular AP test dates are scheduled for May 3-14, 2027.', 'AP 一般考試日期通常安排於五月 3 日。')],
+                    [$tx('MAY 17', '五月 17 日'), $tx('MAY 21', '五月 21 日'), $tx('Late-Testing Period', '逾期考試時段'), $tx('Late-testing dates are May 17-21, 2027, pending approval from Primacy.', 'AP 逾期考試日期通常安排於五月 17-21 日。')],
                 ] as $item)
                     <div class="col-md-6 mb-5"><div class="media align-items-center"><div class="media-head primary-bg"><span>{{ $item[0] }}</span><p>{{ $item[1] }}</p></div><div class="media-body"><h4>{{ $item[2] }}</h4><p><i class="fa fa-clock-o"></i>{{ $item[3] }}</p></div></div></div>
                 @endforeach
@@ -513,7 +513,7 @@
                         <h3>{{ $contact?->organization ?: 'Trinity Scholar' }}</h3>
                         <p><i class="fa fa-envelope primary-color"></i> ap-registration@trinityscholar.com</p>
                         <p><i class="fa fa-phone primary-color"></i> 886-2-2771-6002</p>
-                        <p><i class="fa fa-comment primary-color"></i> Line: @TrinityScholar</p>
+                        <p><i class="fa fa-comment primary-color"></i> Line: <a href="https://lin.ee/VXnDLUW" target="_blank" rel="noopener">@TrinityScholar</a></p>
                     </div>
                 </div>
                 <div class="col-lg-6 mb-4">

@@ -2,6 +2,13 @@
     :title="__('admin.edit_registration')"
     :subtitle="__('admin.edit_registration_subtitle')"
 >
+    <x-slot:styles>
+        <style>
+            .exam-selection-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px}
+            .exam-selection-option{display:grid;grid-template-columns:18px minmax(0,1fr);align-items:start;gap:9px;min-height:48px;margin:0;padding:11px 12px;border:1px solid #d9dee8;border-radius:6px;background:#fbfcfe;font-weight:700;line-height:1.35}
+            .exam-selection-option input{width:18px;min-height:18px;margin:1px 0 0}
+        </style>
+    </x-slot:styles>
     <form method="POST" action="{{ route('admin.student-registrations.manage-update',$registration) }}">
         @csrf
         @method('PATCH')
@@ -81,9 +88,9 @@
         @if(!in_array($registration->payment_status, ['paid','refunded'], true))
             <div class="card">
                 <div class="section-title"><h2>{{ __('admin.exam_selection') }}</h2></div>
-                <div class="grid">
+                <div class="exam-selection-grid">
                     @foreach($subjects as $subject)
-                        <label style="flex-direction:row;align-items:center"><input type="checkbox" name="exam_subject_uuids[]" value="{{ $subject->uuid }}" @checked($registration->exams->contains('id',$subject->id))> {{ $subject->name }} ({{ $subject->code }})</label>
+                        <label class="exam-selection-option"><input type="checkbox" name="exam_subject_uuids[]" value="{{ $subject->uuid }}" @checked($registration->exams->contains('id',$subject->id))><span>{{ $subject->name }} ({{ $subject->code }})</span></label>
                     @endforeach
                 </div>
                 <p class="mini">Practice exam changes are not editable here yet; use a follow-up admin enhancement if needed.</p>

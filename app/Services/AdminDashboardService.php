@@ -17,7 +17,10 @@ class AdminDashboardService
         $week = (clone $query)->where('created_at', '>=', now()->startOfWeek())->count();
         $month = (clone $query)->where('created_at', '>=', now()->startOfMonth())->count();
 
-        $paidQuery = StudentRegistration::query()->whereIn('status', ['paid', 'confirmed', 'completed']);
+        $paidQuery = StudentRegistration::query()
+            ->where(fn ($paid) => $paid
+                ->where('payment_status', 'paid')
+                ->orWhereIn('status', ['paid', 'confirmed', 'completed']));
         $this->applyFilters($paidQuery, $filters);
 
         $lateQuery = StudentRegistration::query()->where('late_fee_total', '>', 0);

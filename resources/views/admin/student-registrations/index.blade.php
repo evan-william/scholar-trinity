@@ -89,6 +89,9 @@
             </div>
             <a class="btn light" href="{{ route('admin.exports.index') }}">Export History</a>
         </div>
+        <div class="notice">
+            Template controls which columns are included: Standard is the full internal export, TPCA is the test-center handoff format, and School groups student/contact/course fields for school follow-up.
+        </div>
         <div class="actions" style="margin-bottom:14px">
             <a class="btn light" href="{{ route('admin.student-registrations.passport.zip', request()->query()) }}">Download Passport ZIP</a>
             <span class="mini">Uses the current registration filters and only includes stored private passport files.</span>

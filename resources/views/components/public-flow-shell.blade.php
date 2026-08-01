@@ -54,7 +54,7 @@
             'main_period' => 'Main Period :',
             'late_period' => 'Late Period :',
             'main_period_value' => 'August - October',
-            'late_period_value' => 'January - March',
+            'late_period_value' => 'Mid November - Mid March',
             'copyright' => 'Copyright',
             'rights' => 'All Rights Reserved.',
             'designed' => 'Designed By',
@@ -141,6 +141,23 @@
             object-fit: contain;
             filter: none !important;
         }
+        body.trinity-public #header .brand-lockup {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        body.trinity-public #header .partner-wordmark {
+            display: inline-flex;
+            align-items: center;
+            min-height: 46px;
+            max-width: 150px;
+            padding-left: 12px;
+            border-left: 1px solid rgba(36,78,154,.2);
+            color: #244e9a;
+            font-size: 12px;
+            font-weight: 700;
+            line-height: 1.25;
+        }
         body.trinity-public #header .public-header-actions {
             display: flex !important;
             flex-flow: row nowrap !important;
@@ -181,6 +198,8 @@
         }
         @media (max-width: 575px) {
             body.trinity-public #header .logo img { width: 138px; height: 68px; }
+            body.trinity-public #header .brand-lockup { gap: 8px; }
+            body.trinity-public #header .partner-wordmark { max-width: 112px; padding-left: 8px; font-size: 10px; }
             body.trinity-public #header .public-header-actions { justify-content: flex-start !important; width: auto !important; margin-left: 0 !important; }
             body.trinity-public #header .language-switcher select { min-width: 96px; height: 40px; }
             body.trinity-public #header .public-header-actions .btn { min-width: 118px; padding: 12px 14px; font-size: 12px; }
@@ -234,8 +253,9 @@
             <div class="header-bottom-inner">
                 <div class="row align-items-center">
                     <div class="col-lg-3 col-sm-8">
-                        <div class="logo">
+                        <div class="logo brand-lockup">
                             <a href="{{ route('landing') }}"><img src="{{ asset($brandLogo) }}" alt="Trinity Scholar"></a>
+                            <span class="partner-wordmark">The Primacy Collegiate Academy</span>
                         </div>
                     </div>
                     <div class="col-xl-6 col-lg-6 d-none d-lg-block">
@@ -320,7 +340,7 @@
                         <div class="address">
                             <h6>{{ $footerLabels['email'] }}</h6>
                             <p>ap-registration@trinityscholar.com</p>
-                            <p>Line: @TrinityScholar</p>
+                            <p>Line: <a href="https://lin.ee/VXnDLUW" target="_blank" rel="noopener">@TrinityScholar</a></p>
                         </div>
                     </div>
                 </div>

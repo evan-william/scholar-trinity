@@ -1,0 +1,58 @@
+// CUSTOM
+git add PROGRESS.md resources/views/landing/index.blade.php
+git commit -m "Polish late registration section spacing"
+git push origin main
+
+// MANDATORY
+scp .\scholar-trinity-deploy.zip sophistec-trinity@72.60.210.71:/home/sophistec-trinity/
+mDwj6IFhj2lotC4l1adg
+
+
+//CUSTOM MANDATORY
+ssh sophistec-trinity@72.60.210.71
+
+// MANDATORY 
+cd /home/sophistec-trinity/htdocs/trinity.sophistec.global
+unzip -o /home/sophistec-trinity/scholar-trinity-deploy.zip -d .
+rm -f bootstrap/cache/*.php
+composer install --no-dev --optimize-autoloader
+npm run build
+php artisan view:clear
+php artisan config:clear
+php artisan route:clear
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+pkill -f "artisan serve --host=127.0.0.1 --port=3014" || true
+nohup php artisan serve --host=127.0.0.1 --port=3014 > storage/logs/artisan-serve.log 2>&1 &
+
+// MANDATORY 2
+cd /home/sophistec-trinity/htdocs/trinity.sophistec.global
+unzip -o /home/sophistec-trinity/scholar-trinity-deploy.zip -d .
+
+sed -i 's/^CACHE_STORE=.*/CACHE_STORE=file/' .env
+sed -i 's/^SESSION_DRIVER=.*/SESSION_DRIVER=file/' .env
+sed -i 's/^QUEUE_CONNECTION=.*/QUEUE_CONNECTION=sync/' .env
+
+mkdir -p storage/framework/cache storage/framework/sessions storage/framework/views storage/logs bootstrap/cache
+chmod -R ug+rw storage bootstrap/cache
+
+composer install --no-dev --optimize-autoloader
+npm ci
+npm run build
+php artisan optimize:clear
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+
+
+// FULLY ACTIVE MANDATORY
+cd /home/sophistec-trinity/htdocs/trinity.sophistec.global
+pwd
+ls -la artisan storage/logs
+
+pkill -f "artisan serve --host=127.0.0.1 --port=3014" || true
+mkdir -p storage/logs
+nohup php artisan serve --host=127.0.0.1 --port=3014 > storage/logs/artisan-serve.log 2>&1 &
+
+ps aux | grep "artisan serve"

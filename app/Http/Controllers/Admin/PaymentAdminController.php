@@ -87,7 +87,17 @@ class PaymentAdminController extends Controller
     public function settings(): View
     {
         return view('admin.payments.settings', [
-            'setting' => PaymentSetting::query()->where('is_active', true)->latest()->first() ?? new PaymentSetting(['provider' => 'manual', 'mode' => 'sandbox', 'payment_deadline_days' => 7, 'is_active' => true]),
+            'setting' => PaymentSetting::query()->where('is_active', true)->latest()->first() ?? new PaymentSetting([
+                'provider' => 'manual',
+                'mode' => 'sandbox',
+                'bank_name' => 'Taiwan Bank Songshan Branch',
+                'bank_code' => '004',
+                'account_name' => 'Liko Technology Co., Ltd.',
+                'account_number' => '064001061782',
+                'manual_instruction' => 'Please include your AP registration reference number in the transfer note.',
+                'payment_deadline_days' => 7,
+                'is_active' => true,
+            ]),
         ]);
     }
 

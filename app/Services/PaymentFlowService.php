@@ -25,11 +25,11 @@ class PaymentFlowService
             ?? PaymentSetting::query()->create([
                 'provider' => 'manual',
                 'mode' => 'sandbox',
-                'bank_name' => 'Taiwan Bank',
+                'bank_name' => 'Taiwan Bank Songshan Branch',
                 'bank_code' => '004',
-                'account_name' => 'Trinity Scholar',
-                'account_number' => '000-000-000000',
-                'manual_instruction' => 'Please include your registration reference in the transfer note.',
+                'account_name' => 'Liko Technology Co., Ltd.',
+                'account_number' => '064001061782',
+                'manual_instruction' => 'Please include your AP registration reference number in the transfer note. Bank Name: Taiwan Bank Songshan Branch (004). Account Name: Liko Technology Co., Ltd. Account Number: 064001061782.',
                 'is_active' => true,
             ]);
     }
@@ -290,9 +290,16 @@ class PaymentFlowService
 
     private function sendConfirmation(RegistrationPayment $payment): void
     {
-        Mail::to($payment->registration->student_email)
-            ->cc($payment->registration->contact?->parent_email)
-            ->send(new PaymentConfirmationMail($payment));
+        try {
+            Mail::to($payment->registration->student_email)
+                ->cc($payment->registration->contact?->parent_email)
+                ->send(new PaymentConfirmationMail($payment));
+        } catch (Throwable $exception) {
+            Log::error('Payment confirmation email failed after payment status was saved.', [
+                'payment_reference' => $payment->payment_reference,
+                'error' => $exception->getMessage(),
+            ]);
+        }
     }
 
     private function safePayload(array $payload): array

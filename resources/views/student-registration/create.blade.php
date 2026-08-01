@@ -13,18 +13,18 @@
     $introCopy = $isZh
         ? [
             'badge' => '不需登入',
-            'title' => '2026 AP 考試報名',
+            'title' => '2027 AP 考試報名',
             'body' => '學生可在同一個流程中提交報名資料、護照、考試選擇、特殊需求與付款方式。',
-            'items' => ['一般報名期間通常為八月至十月。', '若仍有名額，逾期報名可能於一月至三月開放。', '表單與付款皆收到，且官方確認信寄出後，報名才算完成。'],
+            'items' => ['一般報名期間通常為八月至十月。', '若仍有名額，逾期報名可能於十一月中至三月中開放。', '表單與付款皆收到，且官方確認信寄出後，報名才算完成。'],
             'summary_label' => '考試地點',
             'summary_title' => $registrationSettings['test_site_name_zh'] ?? '基督教美國高中課程',
             'summary_body' => $registrationSettings['test_site_address_zh'] ?? '台北市士林區美德街99號',
         ]
         : [
             'badge' => 'No login required',
-            'title' => '2026 AP Exam Registration',
+            'title' => '2027 AP Exam Registration',
             'body' => 'Students can submit registration details, passport upload, exam selections, accommodations, and payment method in one guided flow.',
-            'items' => ['Main registration is normally available from August through October.', 'Late registration may open from January through March if seats remain.', 'Registration is finalized after the form, payment, and official confirmation email are received.'],
+            'items' => ['Main registration is normally available from August through October.', 'Late Registration Period may open from mid November through mid March if seats remain.', 'Registration is finalized after the form, payment, and official confirmation email are received.'],
             'summary_label' => 'Test Site',
             'summary_title' => $registrationSettings['test_site_name_en'] ?? 'The Primacy Collegiate Academy',
             'summary_body' => $registrationSettings['test_site_address_en'] ?? 'No. 99, Meide St, Shilin District, Taipei City, 11159',
@@ -50,7 +50,7 @@
             'main_period' => '一般時段：',
             'late_period' => '逾期時段：',
             'main_period_value' => '八月至十月',
-            'late_period_value' => '一月至三月',
+            'late_period_value' => '十一月中至三月中',
             'copyright' => '版權所有',
             'rights' => '保留所有權利。',
             'designed' => 'Designed By',
@@ -70,7 +70,7 @@
             'main_period' => 'Main Period :',
             'late_period' => 'Late Period :',
             'main_period_value' => 'August - October',
-            'late_period_value' => 'January - March',
+            'late_period_value' => 'Mid November - Mid March',
             'copyright' => 'Copyright',
             'rights' => 'All Rights Reserved.',
             'designed' => 'Designed By',
@@ -133,6 +133,12 @@
         .check-line .client-error{flex:0 0 100%;margin-left:28px}
         .pay-opt.unavailable{cursor:not-allowed;opacity:.68;background:#f5f7fa}
         .pay-opt.unavailable>i{width:18px;margin-top:3px;color:var(--primary);text-align:center}
+        .bank-details{display:grid;gap:4px;margin-top:10px;padding:10px 12px;border:1px solid #d8e4f2;border-radius:6px;background:#f8fbff;color:#263850;font-size:12px;line-height:1.5}
+        .acknowledgement-notice{border-left-color:var(--danger)!important;background:#fff6f5!important;color:#8a1f16}
+        .acknowledgement-notice h4{display:flex;align-items:center;gap:8px;color:var(--danger)!important;font-size:18px!important;line-height:1.3!important}
+        .acknowledgement-notice ul{padding-left:0!important;list-style:none}
+        .acknowledgement-notice li{display:flex;gap:8px;color:#8a1f16!important;font-size:14px!important;font-weight:800!important;line-height:1.55!important}
+        .acknowledgement-notice li::before{content:"\\2713";display:inline-grid;width:18px;height:18px;flex:0 0 18px;place-items:center;margin-top:2px;border-radius:50%;background:var(--danger);color:#fff;font-size:11px;font-weight:900}
         .sig-box{display:grid;gap:8px}.sig-box .lbl:not(:first-child){margin-top:5px}
         @media(max-width:640px){.form-intro{grid-template-columns:1fr}.preparation-choice-grid{grid-template-columns:1fr}}
         /* Current visual pass: softer registration form styling per client feedback. */
@@ -613,7 +619,7 @@
                 @elseif($subjects->isEmpty())
                     <div class="notice"><h4>{{ $tx('No AP subjects published', '目前沒有已發布的 AP 考科') }}</h4><p>{{ $tx('The administrator must publish the AP subject catalog before registration can continue.', '管理員需要先發布 AP 考科目錄，才能繼續報名。') }}</p></div>
                 @endif
-                <div class="exam-sticky"><span id="selBadge" class="sel-badge">0 selected / 已選 0 科</span><span id="pricePreview" class="price-preview">{{ $tx('Coming Soon', '即將公布') }}</span></div>
+                <div class="exam-sticky"><span id="selBadge" class="sel-badge">0 selected / 已選 0 科</span><span id="pricePreview" class="price-preview">NT$ 0</span></div>
                 <div class="filters"><label class="lbl">Search exam <span class="zh">搜尋考科</span><input id="examSearch" type="search" placeholder="Calculus, Biology, CSA"></label><label class="lbl">AP exam categories <span class="zh">考科分類</span><select id="categoryFilter"><option value="">All Categories / 全部分類</option>@foreach($subjects->pluck('category')->filter()->unique()->sort() as $category)<option value="{{ $category }}">{{ $category }}</option>@endforeach</select></label></div>
                 @foreach($subjects->groupBy(fn($subject) => $subject->category ?: 'Other') as $category => $categorySubjects)
                     <div class="exam-category-group" data-exam-category="{{ $category }}">
@@ -629,27 +635,27 @@
                                 <div>
                                     <div class="exam-name">{{ $subject->name }}</div>
                                     <div class="exam-sub">{{ $subject->code }} / {{ optional($subject->exam_date)->format('M d, Y') ?? $tx('Date TBA', '日期待公告') }} / {{ $selectable ? __('student_registration.statuses.'.$statusKey) : __('student_registration.availability.'.$blockReason, ['date' => $blockReason === 'not_yet_open' ? optional($subject->registration_open_at)->format('M d, Y H:i') : optional($subject->registration_close_at)->format('M d, Y H:i')]) }}</div>
-                                    <div class="exam-sub">{{ $tx('Exam Fee', '考試費') }}: {{ $tx('Coming Soon', '即將公布') }} / {{ $tx('Service Fee', '服務費') }}: {{ $tx('Coming Soon', '即將公布') }} / {{ $tx('Late Fee', '逾期費') }}: {{ $tx('Coming Soon', '即將公布') }}</div>
+                                    <div class="exam-sub">{{ $tx('Exam Fee', '考試費') }}: {{ $subject->currency }} {{ number_format($subject->exam_fee) }} / {{ $tx('Service Fee', '服務費') }}: {{ $subject->currency }} {{ number_format($subject->service_fee) }} / {{ $tx('Late Fee', '逾期費') }}: {{ $subject->currency }} {{ number_format($lateFee) }}</div>
                                 </div>
                             </label>
                         @endforeach
                     </div>
                     </div>
                 @endforeach
-                <div class="section-title" style="margin-top:24px">{{ $tx('Practice Exams (Optional)', '模擬考（選填）') }} <span>{{ $tx('Fee: Coming Soon', '費用：即將公布') }}</span></div>
-                <div class="notice"><h4>{{ $tx('Practice Exam Info', '模擬考說明') }}</h4><p>{{ $tx('Practice-exam fee information is coming soon. Dates remain subject to change.', '模擬考費用資訊即將公布，日期仍可能調整。') }}</p></div>
+                <div class="section-title" style="margin-top:24px">{{ $tx('Practice Exams (Optional)', '模擬考（選填）') }} <span>{{ $tx('Fee shown per practice exam', '費用顯示於各模擬考') }}</span></div>
+                <div class="notice"><h4>{{ $tx('Practice Exam Info', '模擬考說明') }}</h4><p>{{ $tx('Practice-exam fees are shown on each option. Dates remain subject to change.', '模擬考費用顯示於各選項，日期仍可能調整。') }}</p></div>
                 <div class="exam-grid">
                     @php($fallbackPracticeExams = collect(['Biology 生物','English Language and Composition 英文語言與寫作','Physics 1 物理 1','Computer Science A 電腦科學 A','Calculus AB/BC 微積分','Macroeconomics 總體經濟','Precalculus 預備微積分'])->map(fn ($name) => (object) ['uuid' => $name, 'name' => $name, 'fee' => config('registration.practice_exam_fee', 1800), 'currency' => 'NTD', 'practice_date' => null, 'location' => null]))
                     @foreach(($practiceExamOptions ?? collect())->isNotEmpty() ? $practiceExamOptions : $fallbackPracticeExams as $practice)
-                        <label class="exam-cb"><input type="checkbox" name="practice_exams[]" value="{{ $practice->uuid }}" data-type="practice" data-p="{{ $practice->fee }}" data-name="{{ $tx('Practice:', '模擬考：') }} {{ $practice->name }}" @checked(in_array($practice->uuid, old('practice_exams', [])))><div><div class="exam-name">{{ $practice->name }}</div><div class="exam-sub">{{ $tx('Practice Exam', '模擬考') }} @if($practice->practice_date) / {{ $practice->practice_date->format('M d, Y') }} @endif @if($practice->location) / {{ $practice->location }} @endif</div></div><div class="exam-price-tag">{{ $tx('Coming Soon', '即將公布') }}</div></label>
+                        <label class="exam-cb"><input type="checkbox" name="practice_exams[]" value="{{ $practice->uuid }}" data-type="practice" data-p="{{ $practice->fee }}" data-name="{{ $tx('Practice:', '模擬考：') }} {{ $practice->name }}" @checked(in_array($practice->uuid, old('practice_exams', [])))><div><div class="exam-name">{{ $practice->name }}</div><div class="exam-sub">{{ $tx('Practice Exam', '模擬考') }} @if($practice->practice_date) / {{ $practice->practice_date->format('M d, Y') }} @endif @if($practice->location) / {{ $practice->location }} @endif</div></div><div class="exam-price-tag">{{ $practice->currency }} {{ number_format($practice->fee) }}</div></label>
                     @endforeach
                 </div>
                 <input type="hidden" name="practice_exam_total" id="practiceExamTotal" value="0">
                 <div class="price-box">
-                    <div class="price-row"><span>{{ $tx('Regular AP Exams', '正式考試') }} (<span id="regCt">0</span>)</span><span id="regTot">{{ $tx('Coming Soon', '即將公布') }}</span></div>
-                    <div class="price-row"><span>{{ $tx('Practice Exams', '模擬考') }} (<span id="praCt">0</span>)</span><span id="praTot">{{ $tx('Coming Soon', '即將公布') }}</span></div>
-                    <div class="price-row"><span>{{ $tx('Late Registration Fee', '逾期報名費') }}</span><span id="lateTot">{{ $tx('Coming Soon', '即將公布') }}</span></div>
-                    <div class="price-row total"><span>{{ $tx('Total Due', '應付總額') }}</span><span id="grandTot">{{ $tx('Coming Soon', '即將公布') }}</span></div>
+                    <div class="price-row"><span>{{ $tx('Regular AP Exams', '正式考試') }} (<span id="regCt">0</span>)</span><span id="regTot">NT$ 0</span></div>
+                    <div class="price-row"><span>{{ $tx('Practice Exams', '模擬考') }} (<span id="praCt">0</span>)</span><span id="praTot">NT$ 0</span></div>
+                    <div class="price-row"><span>{{ $tx('Late Registration Fee', '逾期報名費') }}</span><span id="lateTot">NT$ 0</span></div>
+                    <div class="price-row total"><span>{{ $tx('Total Due', '應付總額') }}</span><span id="grandTot">NT$ 0</span></div>
                     <p class="hint">{{ $tx('Final pricing confirmed by AP Coordinator.', '最終費用由 AP 協調員確認。') }}</p>
                 </div>
             </div>
@@ -709,10 +715,9 @@
             <div class="card">
                 <div class="section-title">Payment Method <span>付款方式</span></div>
                 <div class="pay-options">
-                    <label class="pay-opt"><input type="radio" name="payment_method" value="bank_transfer" required @checked(in_array(old('payment_method', 'bank_transfer'), ['bank_transfer', 'manual_bank_transfer'], true))><div><h4>{{ $tx('Bank Transfer', '銀行轉帳') }}</h4><p>{{ $tx('Transfer to a Taiwanese bank account, then confirm with Trinity Scholar admin. Bank details and payment-proof instructions are provided after submission.', '匯款至台灣銀行帳戶後，請向 Trinity Scholar 管理員確認。提交表單後將提供銀行資料及付款證明上傳說明。') }}</p></div></label>
-                    <div class="pay-opt unavailable" aria-disabled="true"><i class="fa fa-credit-card"></i><div><h4>{{ $tx('Credit / Debit Card', '信用卡 / 簽帳金融卡') }} <span class="badge-soon">{{ $tx('Pending', '尚待確認') }}</span></h4><p>{{ $tx('This payment option is not available yet.', '此付款方式目前尚未開放。') }}</p></div></div>
+                    <label class="pay-opt"><input type="radio" name="payment_method" value="bank_transfer" required @checked(in_array(old('payment_method', 'bank_transfer'), ['bank_transfer', 'manual_bank_transfer'], true))><div><h4>{{ $tx('Bank Transfer', '銀行轉帳') }}</h4><p>{{ $tx('Transfer to the account below, then upload payment proof from the payment page after submission.', '請匯款至下方帳戶，提交後於付款頁面上傳付款證明。') }}</p><div class="bank-details"><span><strong>{{ $tx('Bank Name', '銀行') }}:</strong> Taiwan Bank Songshan Branch (004)</span><span><strong>{{ $tx('Account Name', '戶名') }}:</strong> Liko Technology Co., Ltd.</span><span><strong>{{ $tx('Account Number', '帳號') }}:</strong> 064001061782</span></div></div></label>
                 </div>
-                <div class="notice" style="margin-top:16px"><h4>{{ $tx('Acknowledgement', '聲明確認') }}</h4><ul><li>{{ $tx('All information provided is accurate and complete.', '所填資料正確且完整。') }}</li><li>{{ $tx('I understand there are no refunds once payment is made.', '繳費後恕不退費。') }}</li><li>{{ $tx('I have verified the exam schedule for conflicts.', '我已確認考試時程無衝突。') }}</li></ul></div>
+                <div class="notice acknowledgement-notice" style="margin-top:16px"><h4>{{ $tx('Acknowledgement', '聲明確認') }}</h4><ul><li>{{ $tx('All information provided is accurate and complete.', '所填資料正確且完整。') }}</li><li>{{ $tx('I understand there are no refunds once payment is made.', '繳費後恕不退費。') }}</li><li>{{ $tx('I have verified the exam schedule for conflicts.', '我已確認考試時程無衝突。') }}</li></ul></div>
                 <div class="sig-area">
                     <div class="sig-box"><label class="lbl">{{ $tx('Student Signature (type full legal name)', '學生簽名（輸入完整法定姓名）') }} <span class="req">*</span></label><input name="student_signature_name" value="{{ old('student_signature_name') }}" required autocomplete="name"><label class="lbl">{{ $tx('Signature Date', '簽名日期') }} <span class="req">*</span></label><input type="date" name="student_signature_date" value="{{ old('student_signature_date', now()->toDateString()) }}" max="{{ now()->toDateString() }}" required></div>
                     <div class="sig-box"><label class="lbl">{{ $tx('Parent / Guardian Signature (type full legal name)', '家長 / 監護人簽名（輸入完整法定姓名）') }} <span class="req">*</span></label><input name="guardian_signature_name" value="{{ old('guardian_signature_name') }}" required autocomplete="name"><label class="lbl">{{ $tx('Signature Date', '簽名日期') }} <span class="req">*</span></label><input type="date" name="guardian_signature_date" value="{{ old('guardian_signature_date', now()->toDateString()) }}" max="{{ now()->toDateString() }}" required></div>
@@ -1215,14 +1220,18 @@
         const grand = regTot + praTot + lateTot;
         document.getElementById('regCt').textContent = regCt;
         document.getElementById('praCt').textContent = praCt;
-        document.getElementById('regTot').textContent = uiText.comingSoon;
-        document.getElementById('praTot').textContent = uiText.comingSoon;
-        document.getElementById('lateTot').textContent = uiText.comingSoon;
-        document.getElementById('grandTot').textContent = uiText.comingSoon;
+        document.getElementById('regTot').textContent = money(regTot);
+        document.getElementById('praTot').textContent = money(praTot);
+        document.getElementById('lateTot').textContent = money(lateTot);
+        document.getElementById('grandTot').textContent = money(grand);
         document.getElementById('selBadge').textContent = uiText.selectedCount(regCt + praCt);
-        document.getElementById('pricePreview').textContent = uiText.comingSoon;
+        document.getElementById('pricePreview').textContent = money(grand);
         document.getElementById('practiceExamTotal').value = praTot;
         return {regCt, praCt, regTot, praTot, lateTot, grand};
+    }
+
+    function money(amount) {
+        return `NT$ ${new Intl.NumberFormat('en-US').format(Number(amount || 0))}`;
     }
 
     function buildReview() {
@@ -1256,10 +1265,10 @@
         if (field('preferred_tutoring_schedule')) prepChoices.push(`${uiText.schedule}: ${field('preferred_tutoring_schedule')}`);
         if (field('preferred_tutoring_language')) prepChoices.push(`${uiText.language}: ${field('preferred_tutoring_language')}`);
         document.getElementById('rPrep').textContent = prepChoices.length ? prepChoices.join(' / ') : uiText.notRequested;
-        document.getElementById('rReg').textContent = `${totals.regCt} ${isZhLocale ? '科' : 'exams'} / ${uiText.comingSoon}`;
-        document.getElementById('rPra').textContent = `${totals.praCt} ${isZhLocale ? '科' : 'exams'} / ${uiText.comingSoon}`;
-        document.getElementById('rLate').textContent = uiText.comingSoon;
-        document.getElementById('rTot').textContent = uiText.comingSoon;
+        document.getElementById('rReg').textContent = `${totals.regCt} ${isZhLocale ? '科' : 'exams'} / ${money(totals.regTot)}`;
+        document.getElementById('rPra').textContent = `${totals.praCt} ${isZhLocale ? '科' : 'exams'} / ${money(totals.praTot)}`;
+        document.getElementById('rLate').textContent = money(totals.lateTot);
+        document.getElementById('rTot').textContent = money(totals.grand);
         document.getElementById('confEmail').textContent = field('student_email') || '-';
     }
 
