@@ -143,9 +143,9 @@
                 <p>{{ $registrations->total() }} result(s)</p>
             </div>
         </div>
-        <table>
+        <table data-datatable="true" data-table-label="Registrations">
             <thead>
-                <tr><th>Reference</th><th>Season</th><th>Student</th><th>Parent</th><th>Passport</th><th>School</th><th>Exams</th><th>Payment</th><th>Registration</th><th>Submitted</th><th>Updated</th><th>Actions</th></tr>
+                <tr><th>Reference</th><th>Season</th><th>Student</th><th>Parent</th><th>Passport</th><th>School</th><th>Exams</th><th>Payment</th><th>Registration</th><th>Submitted</th><th>Updated</th><th data-sortable="false">Actions</th></tr>
             </thead>
             <tbody>
                 @forelse($registrations as $registration)

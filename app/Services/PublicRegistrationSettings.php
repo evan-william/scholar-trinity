@@ -11,7 +11,7 @@ class PublicRegistrationSettings
         'registration.main_period' => 'August - October',
         'registration.late_period' => 'Mid November - Mid March',
         'registration.main_test_period' => 'May 3-14, 2027',
-        'registration.late_test_period' => 'May 17-21, 2027',
+        'registration.late_test_period' => 'May 17 - 21, 2027',
         'registration.test_site_name_en' => 'The Primacy Collegiate Academy',
         'registration.test_site_name_zh' => '基督教美國高中課程',
         'registration.test_site_address_en' => 'No. 99, Meide St, Shilin District, Taipei City, 11159',

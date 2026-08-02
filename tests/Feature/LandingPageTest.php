@@ -22,6 +22,7 @@ class LandingPageTest extends TestCase
             ->assertOk()
             ->assertSee('AP Exam Registration')
             ->assertSee('Registration Timeline')
+            ->assertSee('timeline-card-range', false)
             ->assertSee('Required Documents')
             ->assertSee('Frequently Asked Questions')
             ->assertSee('schema.org', false)
@@ -130,7 +131,7 @@ class LandingPageTest extends TestCase
                 'main_period' => 'August - October',
                 'late_period' => 'Mid November - Mid March',
                 'main_test_period' => 'May 3-14, 2027',
-                'late_test_period' => 'May 17-21, 2027',
+                'late_test_period' => 'May 17 - 21, 2027',
                 'test_site_name_en' => 'The Primacy Collegiate Academy',
                 'test_site_name_zh' => '基督教美國高中課程',
                 'test_site_address_en' => 'No. 99, Meide St, Shilin District, Taipei City, 11159',

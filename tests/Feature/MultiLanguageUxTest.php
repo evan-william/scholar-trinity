@@ -59,6 +59,7 @@ class MultiLanguageUxTest extends TestCase
             ->assertSee('name="viewport"', false)
             ->assertSee('Registration progress')
             ->assertSee('data-step="1"', false)
+            ->assertSee('fa-exclamation-triangle', false)
             ->assertSee('confirmed_review');
 
         $payload = $this->payload(['exam_subject_ids' => [$subject->id]]);

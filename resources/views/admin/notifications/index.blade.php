@@ -14,8 +14,8 @@
                 <form method="POST" action="{{ route('admin.notifications.read-all') }}">@csrf<button class="btn" type="submit">Mark All Read</button></form>
             </div>
         </div>
-        <table>
-            <thead><tr><th>Status</th><th>Type</th><th>Message</th><th>Linked Record</th><th>Created</th><th>Action</th></tr></thead>
+        <table data-datatable="true" data-table-label="Admin notifications">
+            <thead><tr><th>Status</th><th>Type</th><th>Message</th><th>Linked Record</th><th>Created</th><th data-sortable="false">Actions</th></tr></thead>
             <tbody>
                 @forelse($notifications as $notification)
                     <tr>

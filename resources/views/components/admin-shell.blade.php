@@ -98,7 +98,7 @@
     </style>
     {{ $styles ?? '' }}
     <link rel="stylesheet" href="{{ asset('theme/trinity/css/admin-modern-ui.css') }}?v=20260729-2">
-    <link rel="stylesheet" href="{{ asset('theme/trinity/css/admin-redesign.css') }}?v=20260801-1">
+    <link rel="stylesheet" href="{{ asset('theme/trinity/css/admin-redesign.css') }}?v=20260802-2">
 </head>
 <body>
 <div class="shell">

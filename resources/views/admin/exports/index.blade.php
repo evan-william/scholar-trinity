@@ -10,9 +10,9 @@
             </div>
             <a class="btn light" href="{{ route('admin.student-registrations.index') }}">Back to Registrations</a>
         </div>
-        <table>
+        <table data-datatable="true" data-table-label="Generated exports">
             <thead>
-                <tr><th>File</th><th>Template</th><th>Format</th><th>Records</th><th>Created By</th><th>Created</th><th>Expires</th><th>Action</th></tr>
+                <tr><th>File</th><th>Template</th><th>Format</th><th>Records</th><th>Created By</th><th>Created</th><th>Expires</th><th data-sortable="false">Actions</th></tr>
             </thead>
             <tbody>
                 @forelse($exports as $export)

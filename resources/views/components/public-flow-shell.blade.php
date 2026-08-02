@@ -13,7 +13,7 @@
     $brandLogo = 'images/trinity-scholar-logo-clean.png';
     $footerLogo = 'images/trinity-scholar-logo-clean.png';
     $brandFavicon = 'images/trinity-scholar-favicon.png';
-    $publicUiVersion = '20260729-3';
+    $publicUiVersion = '20260802-12';
     $registrationSettings = app(\App\Services\PublicRegistrationSettings::class)->all();
     $uiLocale = session('locale', str_replace('_', '-', app()->getLocale()));
     $isZh = $uiLocale === 'zh-TW';
@@ -35,7 +35,7 @@
             'main_period' => '一般時段：',
             'late_period' => '逾期時段：',
             'main_period_value' => '八月至十月',
-            'late_period_value' => '一月至三月',
+            'late_period_value' => '十一月中旬至三月中旬',
             'copyright' => '版權所有',
             'rights' => '保留所有權利。',
             'designed' => 'Designed By',
@@ -52,8 +52,8 @@
             'register' => 'Register Now',
             'notice' => 'Important Notice',
             'notice_body' => 'Registration is finalized once your form and payment are received and you receive an official confirmation email. Seats are limited and may close prior to the listed deadline.',
-            'main_period' => 'Main Period :',
-            'late_period' => 'Late Period :',
+            'main_period' => 'Main Registration Period:',
+            'late_period' => 'Late Registration Period:',
             'main_period_value' => $registrationSettings['main_period'],
             'late_period_value' => $registrationSettings['late_period'],
             'copyright' => 'Copyright',
@@ -210,14 +210,14 @@
     {{ $styles ?? '' }}
     @stack('styles')
     <link rel="stylesheet" href="{{ asset('theme/trinity/css/modern-ui.css') }}?v={{ $publicUiVersion }}">
-    <link rel="stylesheet" href="{{ asset('theme/trinity/css/public-redesign.css') }}?v=20260801-1">
+    <link rel="stylesheet" href="{{ asset('theme/trinity/css/public-redesign.css') }}?v={{ $publicUiVersion }}">
 </head>
 <body class="trinity-public {{ $bodyClass }}">
 <header id="header">
     <div class="header-top">
         <div class="container">
             <div class="row d-flex flex-center">
-                <div class="col-sm-8">
+                <div class="col-sm-12">
                     <div class="ht-address">
                         <ul>
                             <li>
@@ -231,18 +231,6 @@
                                     <i class="fa fa-envelope" aria-hidden="true"></i>
                                     <span>ap-registration@trinityscholar.com</span>
                                 </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-sm-4">
-                    <div class="ht-social">
-                        <ul>
-                            <li>
-                                <span class="support-status">
-                                    <span class="support-status-dot" aria-hidden="true"></span>
-                                    {{ $navLabels['support'] }}
-                                </span>
                             </li>
                         </ul>
                     </div>

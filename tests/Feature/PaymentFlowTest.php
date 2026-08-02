@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Mail\PaymentConfirmationMail;
+use App\Mail\PaymentInstructionMail;
 use App\Models\ApExamSubject;
 use App\Models\PaymentSetting;
 use App\Models\RegistrationPayment;
@@ -59,7 +60,18 @@ class PaymentFlowTest extends TestCase
         $this->get(route('payments.show', $registration->registration_number))
             ->assertOk()
             ->assertSee('Bank Transfer')
+            ->assertSee('Keep this page easy to find.')
             ->assertSee($payment->payment_reference);
+
+        $instructionEmail = (new PaymentInstructionMail(
+            $payment->load('registration'),
+            new PaymentSetting
+        ))->render();
+
+        $this->assertStringContainsString(
+            route('payments.show', $registration->registration_number),
+            $instructionEmail
+        );
 
         $this->post(route('payments.proof.upload', $payment), [
             'proof' => UploadedFile::fake()->create('proof.exe', 10),

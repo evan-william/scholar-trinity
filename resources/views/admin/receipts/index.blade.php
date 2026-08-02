@@ -50,9 +50,9 @@
                 <p>{{ $receipts->total() }} registration receipt tracking record(s)</p>
             </div>
         </div>
-        <table>
+        <table data-datatable="true" data-table-label="Receipt requests">
             <thead>
-                <tr><th>Registration</th><th>Student</th><th>Buyer</th><th>Type</th><th>Company / GUI</th><th>Email</th><th>Status</th><th>Invoice No.</th><th>Receipt / Fapiao No.</th><th>Tracking</th><th></th></tr>
+                <tr><th>Registration</th><th>Student</th><th>Buyer</th><th>Type</th><th>Company / GUI</th><th>Email</th><th>Status</th><th>Invoice No.</th><th>Receipt / Fapiao No.</th><th>Tracking</th><th data-sortable="false">Actions</th></tr>
             </thead>
             <tbody>
                 @forelse($receipts as $receipt)

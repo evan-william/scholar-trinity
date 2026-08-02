@@ -38,7 +38,7 @@ class AdminDashboardService
                 'paid' => (clone $paidQuery)->count(),
                 'incomplete' => $this->statusCount(['draft', 'missing_passport', 'missing_exam_selection', 'missing_payment_proof', 'invalid_document'], $filters),
                 'late' => (clone $lateQuery)->count(),
-                'total_revenue' => (clone $paidQuery)->sum('total_fee'),
+                'total_revenue' => (int) (clone $paidQuery)->sum(DB::raw('COALESCE(NULLIF(payment_amount, 0), total_fee)')),
                 'exam_fee_revenue' => (clone $paidQuery)->sum('exam_fee_total'),
                 'service_fee_revenue' => (clone $paidQuery)->sum('service_fee_total'),
                 'late_fee_revenue' => (clone $paidQuery)->sum('late_fee_total'),

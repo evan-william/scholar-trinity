@@ -10,4 +10,8 @@ Account: {{ $setting->account_name }} / {{ $setting->account_number }}
 Deadline: {{ optional($payment->payment_deadline_at)->format('Y-m-d H:i') }}
 
 {{ $setting->manual_instruction }}
+
+Open Payment Page: {{ route('payments.show', $payment->registration->registration_number) }}
+Use this link to return later and upload your proof of payment. No account login is required.
+
 {{ __('ap_registration.email.footer') }}

@@ -40,9 +40,9 @@
                 <p>{{ $payments->total() }} payment record(s)</p>
             </div>
         </div>
-        <table>
+        <table data-datatable="true" data-table-label="Payment records">
             <thead>
-                <tr><th>Reference</th><th>Registration</th><th>Student</th><th>Method</th><th>Status</th><th>Amount</th><th>Updated</th><th></th></tr>
+                <tr><th>Reference</th><th>Registration</th><th>Student</th><th>Method</th><th>Status</th><th>Amount</th><th>Updated</th><th data-sortable="false">Actions</th></tr>
             </thead>
             <tbody>
                 @forelse($payments as $payment)

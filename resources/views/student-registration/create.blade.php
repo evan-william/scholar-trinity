@@ -67,8 +67,8 @@
             'register' => 'Register Now',
             'notice' => 'Important Notice',
             'notice_body' => 'Registration is finalized once your form and payment are received and you receive an official confirmation email. Seats are limited and may close prior to the listed deadline.',
-            'main_period' => 'Main Period :',
-            'late_period' => 'Late Period :',
+            'main_period' => 'Main Registration Period:',
+            'late_period' => 'Late Registration Period:',
             'main_period_value' => $registrationSettings['main_period'] ?? 'August - October',
             'late_period_value' => $registrationSettings['late_period'] ?? 'Mid November - Mid March',
             'copyright' => 'Copyright',
@@ -138,7 +138,12 @@
         .acknowledgement-notice h4{display:flex;align-items:center;gap:8px;color:var(--danger)!important;font-size:18px!important;line-height:1.3!important}
         .acknowledgement-notice ul{padding-left:0!important;list-style:none}
         .acknowledgement-notice li{display:flex;gap:8px;color:#8a1f16!important;font-size:14px!important;font-weight:800!important;line-height:1.55!important}
-        .acknowledgement-notice li::before{content:"\\2713";display:inline-grid;width:18px;height:18px;flex:0 0 18px;place-items:center;margin-top:2px;border-radius:50%;background:var(--danger);color:#fff;font-size:11px;font-weight:900}
+        .acknowledgement-notice h4{gap:10px!important}
+        .acknowledgement-heading-icon{display:inline-grid;width:30px;height:30px;flex:0 0 30px;place-items:center;border-radius:4px 10px 4px 10px;background:var(--danger);color:#fff;font-size:14px}
+        .acknowledgement-notice ul{display:grid;gap:8px;margin:14px 0 0!important}
+        .acknowledgement-notice li{align-items:flex-start;gap:10px!important}
+        .acknowledgement-notice li::before{display:none!important;content:none!important}
+        .acknowledgement-item-icon{display:inline-grid;width:19px;height:19px;flex:0 0 19px;place-items:center;margin-top:2px;border:1px solid #d96b62;border-radius:50%;color:var(--danger);font-size:10px}
         .sig-box{display:grid;gap:8px}.sig-box .lbl:not(:first-child){margin-top:5px}
         @media(max-width:640px){.form-intro{grid-template-columns:1fr}.preparation-choice-grid{grid-template-columns:1fr}}
         /* Current visual pass: softer registration form styling per client feedback. */
@@ -433,25 +438,28 @@
         @media(max-width:575px){body.trinity-form #header .logo img{width:118px;max-height:68px}body.trinity-form .progress-wrap{padding:0 8px}body.trinity-form .step-item{min-width:94px}body.trinity-form .nav-footer .btn{min-width:0}body.trinity-form footer .footer-top .row{grid-template-columns:1fr!important;gap:32px!important}body.trinity-form footer .footer-top .row>:last-child{grid-column:auto}}
     </style>
     <link rel="stylesheet" href="{{ asset('theme/trinity/css/modern-ui.css') }}?v=20260729-3">
-    <link rel="stylesheet" href="{{ asset('theme/trinity/css/public-redesign.css') }}?v=20260801-1">
+    <link rel="stylesheet" href="{{ asset('theme/trinity/css/public-redesign.css') }}?v=20260802-12">
 </head>
 <body class="trinity-form">
 <header id="header">
     <div class="header-top">
         <div class="container">
             <div class="row d-flex flex-center">
-                <div class="col-sm-8">
+                <div class="col-sm-12">
                     <div class="ht-address">
                         <ul>
-                            <li><i class="fa fa-phone"></i>886-2-2771-6002</li>
-                            <li><i class="fa fa-envelope"></i>ap-registration@trinityscholar.com</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-sm-4">
-                    <div class="ht-social">
-                        <ul>
-                            <li>{{ $navLabels['support'] }}</li>
+                            <li>
+                                <a class="utility-link" href="tel:+886227716002">
+                                    <i class="fa fa-phone" aria-hidden="true"></i>
+                                    <span>886-2-2771-6002</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="utility-link" href="mailto:ap-registration@trinityscholar.com">
+                                    <i class="fa fa-envelope" aria-hidden="true"></i>
+                                    <span>ap-registration@trinityscholar.com</span>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -463,8 +471,9 @@
             <div class="header-bottom-inner">
                 <div class="row align-items-center">
                     <div class="col-lg-3 col-sm-8">
-                        <div class="logo">
+                        <div class="logo brand-lockup">
                             <a href="{{ route('landing') }}"><img src="{{ asset($brandLogo) }}" alt="Trinity Scholar"></a>
+                            <span class="partner-wordmark">The Primacy Collegiate Academy</span>
                         </div>
                     </div>
                     <div class="col-xl-6 col-lg-6 d-none d-lg-block">
@@ -718,7 +727,14 @@
                 <div class="pay-options">
                     <label class="pay-opt"><input type="radio" name="payment_method" value="bank_transfer" required @checked(in_array(old('payment_method', 'bank_transfer'), ['bank_transfer', 'manual_bank_transfer'], true))><div><h4>{{ $tx('Bank Transfer', '銀行轉帳') }}</h4><p>{{ $tx('Transfer to the account below, then upload payment proof from the payment page after submission.', '請匯款至下方帳戶，提交後於付款頁面上傳付款證明。') }}</p><div class="bank-details"><span><strong>{{ $tx('Bank Name', '銀行') }}:</strong> {{ $paymentSetting->bank_name }}{{ $paymentSetting->bank_code ? ' ('.$paymentSetting->bank_code.')' : '' }}</span><span><strong>{{ $tx('Account Name', '戶名') }}:</strong> {{ $paymentSetting->account_name }}</span><span><strong>{{ $tx('Account Number', '帳號') }}:</strong> {{ $paymentSetting->account_number }}</span></div>@if($paymentSetting->manual_instruction)<p class="hint">{{ $paymentSetting->manual_instruction }}</p>@endif</div></label>
                 </div>
-                <div class="notice acknowledgement-notice" style="margin-top:16px"><h4>{{ $tx('Acknowledgement', '聲明確認') }}</h4><ul><li>{{ $tx('All information provided is accurate and complete.', '所填資料正確且完整。') }}</li><li>{{ $tx('I understand there are no refunds once payment is made.', '繳費後恕不退費。') }}</li><li>{{ $tx('I have verified the exam schedule for conflicts.', '我已確認考試時程無衝突。') }}</li></ul></div>
+                <div class="notice acknowledgement-notice" style="margin-top:16px">
+                    <h4><span class="acknowledgement-heading-icon" aria-hidden="true"><i class="fa fa-exclamation-triangle"></i></span>{{ $tx('Acknowledgement', '聲明確認') }}</h4>
+                    <ul>
+                        <li><span class="acknowledgement-item-icon" aria-hidden="true"><i class="fa fa-check"></i></span><span>{{ $tx('All information provided is accurate and complete.', '所填資料正確且完整。') }}</span></li>
+                        <li><span class="acknowledgement-item-icon" aria-hidden="true"><i class="fa fa-check"></i></span><span>{{ $tx('I understand there are no refunds once payment is made.', '繳費後恕不退費。') }}</span></li>
+                        <li><span class="acknowledgement-item-icon" aria-hidden="true"><i class="fa fa-check"></i></span><span>{{ $tx('I have verified the exam schedule for conflicts.', '我已確認考試時程無衝突。') }}</span></li>
+                    </ul>
+                </div>
                 <div class="sig-area">
                     <div class="sig-box"><label class="lbl">{{ $tx('Student Signature (type full legal name)', '學生簽名（輸入完整法定姓名）') }} <span class="req">*</span></label><input name="student_signature_name" value="{{ old('student_signature_name') }}" required autocomplete="name"><label class="lbl">{{ $tx('Signature Date', '簽名日期') }} <span class="req">*</span></label><input type="date" name="student_signature_date" value="{{ old('student_signature_date', now()->toDateString()) }}" max="{{ now()->toDateString() }}" required></div>
                     <div class="sig-box"><label class="lbl">{{ $tx('Parent / Guardian Signature (type full legal name)', '家長 / 監護人簽名（輸入完整法定姓名）') }} <span class="req">*</span></label><input name="guardian_signature_name" value="{{ old('guardian_signature_name') }}" required autocomplete="name"><label class="lbl">{{ $tx('Signature Date', '簽名日期') }} <span class="req">*</span></label><input type="date" name="guardian_signature_date" value="{{ old('guardian_signature_date', now()->toDateString()) }}" max="{{ now()->toDateString() }}" required></div>

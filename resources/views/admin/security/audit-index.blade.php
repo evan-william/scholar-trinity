@@ -21,7 +21,7 @@
 
     <div class="card">
         <div class="section-title"><h2>{{ __('admin.audit_log') }}</h2></div>
-        <table>
+        <table data-datatable="true" data-table-label="Security audit log">
             <thead>
                 <tr>
                     <th>{{ __('admin.date') }}</th>
@@ -31,7 +31,7 @@
                     <th>{{ __('admin.actions') }}</th>
                     <th>{{ __('admin.ip') }}</th>
                     <th>{{ __('admin.status') }}</th>
-                    <th></th>
+                    <th data-sortable="false">Actions</th>
                 </tr>
             </thead>
             <tbody>

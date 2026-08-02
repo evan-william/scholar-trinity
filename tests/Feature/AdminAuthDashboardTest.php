@@ -201,6 +201,43 @@ class AdminAuthDashboardTest extends TestCase
             ->assertDontSee('passport_path');
     }
 
+    public function test_manual_registration_payment_update_is_reflected_in_dashboard_revenue(): void
+    {
+        $registration = StudentRegistration::query()->create([
+            'registration_number' => 'APR-2027-DASH01',
+            'status' => 'submitted',
+            'payment_status' => 'pending',
+            'student_full_name' => 'Dashboard Student',
+            'date_of_birth' => '2009-01-15',
+            'nationality' => 'Taiwan',
+            'passport_number' => 'DASHBOARD1',
+            'passport_upload_status' => 'uploaded',
+            'student_email' => 'dashboard.student@example.com',
+            'student_phone' => '+886 912 000 001',
+            'school_name' => 'Dashboard School',
+            'school_country' => 'Taiwan',
+            'grade_level' => '11',
+            'exam_fee_total' => 7800,
+            'service_fee_total' => 1200,
+            'late_fee_total' => 0,
+            'total_fee' => 9000,
+            'grand_total' => 9000,
+            'submitted_at' => now(),
+        ]);
+
+        $registration->update([
+            'payment_status' => 'paid',
+            'payment_amount' => 8750,
+            'payment_date' => now(),
+        ]);
+
+        $stats = app(\App\Services\AdminDashboardService::class)->stats();
+
+        $this->assertSame(1, $stats['totals']['paid']);
+        $this->assertSame(8750, $stats['totals']['total_revenue']);
+        $this->assertSame(1200, $stats['totals']['service_fee_revenue']);
+    }
+
     public function test_admin_email_templates_page_is_available(): void
     {
         $this->actingAs($this->adminUser())

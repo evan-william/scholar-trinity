@@ -13,4 +13,8 @@
 <tr><td>Deadline</td><td>{{ optional($payment->payment_deadline_at)->format('Y-m-d H:i') }}</td></tr>
 </table>
 <p>{{ $setting->manual_instruction }}</p>
+<p style="margin:24px 0 10px">
+    <a href="{{ route('payments.show', $payment->registration->registration_number) }}" style="display:inline-block;padding:12px 20px;color:#ffffff;background:#2a57a2;border-radius:2px 12px 2px 12px;text-decoration:none;font-weight:700">Open Payment Page</a>
+</p>
+<p style="margin:0;color:#667085;font-size:13px">Use this link to return later and upload your proof of payment. No account login is required.</p>
 </x-emails.layout>

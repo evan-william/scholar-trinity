@@ -11,7 +11,7 @@
             </div>
         </div>
 
-        <table>
+        <table data-datatable="true" data-table-label="AP registration seasons">
             <thead>
                 <tr>
                     <th>{{ __('admin.season') }}</th>
@@ -20,7 +20,7 @@
                     <th>{{ __('admin.subjects') }}</th>
                     <th>{{ __('admin.registrations') }}</th>
                     <th>{{ __('admin.duplicate') }}</th>
-                    <th>{{ __('admin.actions') }}</th>
+                    <th data-sortable="false">{{ __('admin.actions') }}</th>
                 </tr>
             </thead>
             <tbody>
