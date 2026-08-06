@@ -96,6 +96,22 @@ class ExamPreferenceSelectionTest extends TestCase
             ApExamSubject::query()->distinct()->orderBy('category')->pluck('category')->all()
         );
         $this->assertSame(11, ApExamSubject::query()->with('examSeason')->get()->filter->isSelectable()->count());
+        $this->assertSame([
+            'BIO' => ['2027-05-03', '13:00'],
+            'CHEM' => ['2027-05-06', '13:00'],
+            'PHY1' => ['2027-05-05', '13:00'],
+            'CALAB' => ['2027-05-10', '09:00'],
+            'CALBC' => ['2027-05-10', '09:00'],
+            'STAT' => ['2027-05-11', '13:00'],
+            'CSA' => ['2027-05-12', '13:00'],
+            'ENGLANG' => ['2027-05-12', '09:00'],
+            'MACRO' => ['2027-05-07', '13:00'],
+            'PSY' => ['2027-05-14', '13:00'],
+            'CHN' => ['2027-05-13', '13:00'],
+        ], ApExamSubject::query()->orderBy('sort_order')->get()->mapWithKeys(fn (ApExamSubject $subject) => [
+            $subject->code => [$subject->exam_date->toDateString(), substr((string) $subject->start_time, 0, 5)],
+        ])->all());
+        $this->assertSame(0, ApExamSubject::query()->whereNotNull('end_time')->count());
 
         $seasonUuid = ExamSeason::query()->where('exam_year', 2027)->value('uuid');
         $subjectUuid = ApExamSubject::query()->where('code', 'CALAB')->value('uuid');
@@ -134,7 +150,6 @@ class ExamPreferenceSelectionTest extends TestCase
             'description' => 'AP Art History',
             'exam_date' => '2027-05-20',
             'start_time' => '08:00',
-            'end_time' => '12:00',
             'timezone' => 'Asia/Taipei',
             'location' => 'Room 101',
             'quota' => 20,
@@ -163,6 +178,7 @@ class ExamPreferenceSelectionTest extends TestCase
 
         $this->assertSame('limited', $subject->fresh()->status);
         $this->assertSame(1300, $subject->fresh()->service_fee);
+        $this->assertNull($subject->fresh()->end_time);
 
         $this->delete(route('admin.ap-exam-subjects.destroy', $subject))
             ->assertRedirect(route('admin.ap-exam-subjects.index'));

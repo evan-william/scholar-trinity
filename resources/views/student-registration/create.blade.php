@@ -1,5 +1,6 @@
 @php
     $brandLogo = 'images/trinity-scholar-logo.png';
+    $partnerLogo = 'images/trinity-scholar-primacy-logo.png';
     $footerLogo = 'images/trinity-scholar-logo.png';
     $brandFavicon = 'images/trinity-scholar-favicon.png';
     $uiLocale = session('locale', str_replace('_', '-', app()->getLocale()));
@@ -96,8 +97,8 @@
     <link rel="stylesheet" href="{{ asset('theme/edification/css/responsive.css') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('theme/trinity/css/public-ui.css') }}?v=20260721-1">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('theme/trinity/css/public-ui.css') }}?v=20260806-11">
     <script src="{{ asset('theme/edification/js/vendor/modernizr-2.8.3.min.js') }}"></script>
     <style>
         :root{--trinity-blue:#244e9a;--trinity-blue-dark:#142f63;--trinity-blue-soft:#eaf2ff;--trinity-blue-bright:#9db9ff;--primary:#244e9a;--primary-light:#142f63;--accent:#244e9a;--success:#237a4f;--danger:#b42318;--gray-50:#f8f9fa;--gray-100:#f1f3f5;--gray-200:#e9ecef;--gray-400:#ced4da;--gray-600:#6c757d;--gray-800:#343a40;--white:#fff;--radius:8px;--shadow:0 2px 16px rgba(0,0,0,.09)}
@@ -437,8 +438,8 @@
         @media(max-width:767px){body.trinity-form .main{padding:24px 12px 100px}body.trinity-form .form-intro>div{padding:25px 22px}body.trinity-form .form-intro h2{font-size:27px;line-height:34px}body.trinity-form .card{padding:24px 18px}body.trinity-form .section-title{font-size:20px}body.trinity-form .form-top-band{min-height:86px}}
         @media(max-width:575px){body.trinity-form #header .logo img{width:118px;max-height:68px}body.trinity-form .progress-wrap{padding:0 8px}body.trinity-form .step-item{min-width:94px}body.trinity-form .nav-footer .btn{min-width:0}body.trinity-form footer .footer-top .row{grid-template-columns:1fr!important;gap:32px!important}body.trinity-form footer .footer-top .row>:last-child{grid-column:auto}}
     </style>
-    <link rel="stylesheet" href="{{ asset('theme/trinity/css/modern-ui.css') }}?v=20260729-3">
-    <link rel="stylesheet" href="{{ asset('theme/trinity/css/public-redesign.css') }}?v=20260802-12">
+    <link rel="stylesheet" href="{{ asset('theme/trinity/css/modern-ui.css') }}?v=20260806-11">
+    <link rel="stylesheet" href="{{ asset('theme/trinity/css/public-redesign.css') }}?v=20260806-11">
 </head>
 <body class="trinity-form">
 <header id="header">
@@ -473,7 +474,7 @@
                     <div class="col-lg-3 col-sm-8">
                         <div class="logo brand-lockup">
                             <a href="{{ route('landing') }}"><img src="{{ asset($brandLogo) }}" alt="Trinity Scholar"></a>
-                            <span class="partner-wordmark">The Primacy Collegiate Academy</span>
+                            <img class="partner-logo" src="{{ asset($partnerLogo) }}" alt="Primacy">
                         </div>
                     </div>
                     <div class="col-xl-6 col-lg-6 d-none d-lg-block">
@@ -644,7 +645,7 @@
                                 <input type="checkbox" name="exam_subject_uuids[]" value="{{ $subject->uuid }}" data-type="regular" data-p="{{ $subject->exam_fee + $subject->service_fee + $lateFee }}" data-exam-fee="{{ $subject->exam_fee }}" data-service-fee="{{ $subject->service_fee }}" data-late-fee="{{ $lateFee }}" data-name="{{ $subject->name }}" data-category="{{ $subject->category }}" @disabled(! $selectable) @checked(in_array($subject->uuid, old('exam_subject_uuids', [])))>
                                 <div>
                                     <div class="exam-name">{{ $subject->name }}</div>
-                                    <div class="exam-sub">{{ $subject->code }} / {{ optional($subject->exam_date)->format('M d, Y') ?? $tx('Date TBA', '日期待公告') }} / {{ $selectable ? __('student_registration.statuses.'.$statusKey) : __('student_registration.availability.'.$blockReason, ['date' => $blockReason === 'not_yet_open' ? optional($subject->registration_open_at)->format('M d, Y H:i') : optional($subject->registration_close_at)->format('M d, Y H:i')]) }}</div>
+                                    <div class="exam-sub">{{ $subject->code }} / {{ optional($subject->exam_date)->format('M d, Y') ?? $tx('Date TBA', '日期待公告') }}@if($subject->start_time) / {{ substr($subject->start_time, 0, 5) }}@endif / {{ $selectable ? __('student_registration.statuses.'.$statusKey) : __('student_registration.availability.'.$blockReason, ['date' => $blockReason === 'not_yet_open' ? optional($subject->registration_open_at)->format('M d, Y H:i') : optional($subject->registration_close_at)->format('M d, Y H:i')]) }}</div>
                                     <div class="exam-sub">{{ $tx('Exam Fee', '考試費') }}: {{ $subject->currency }} {{ number_format($subject->exam_fee) }} / {{ $tx('Service Fee', '服務費') }}: {{ $subject->currency }} {{ number_format($subject->service_fee) }} / {{ $tx('Late Fee', '逾期費') }}: {{ $subject->currency }} {{ number_format($lateFee) }}</div>
                                 </div>
                             </label>
@@ -655,9 +656,17 @@
                 <div class="section-title" style="margin-top:24px">{{ $tx('Practice Exams (Optional)', '模擬考（選填）') }} <span>{{ $tx('Fee shown per practice exam', '費用顯示於各模擬考') }}</span></div>
                 <div class="notice"><h4>{{ $tx('Practice Exam Info', '模擬考說明') }}</h4><p>{{ $tx('Practice-exam fees are shown on each option. Dates remain subject to change.', '模擬考費用顯示於各選項，日期仍可能調整。') }}</p></div>
                 <div class="exam-grid">
-                    @php($fallbackPracticeExams = collect(['Biology 生物','English Language and Composition 英文語言與寫作','Physics 1 物理 1','Computer Science A 電腦科學 A','Calculus AB/BC 微積分','Macroeconomics 總體經濟','Precalculus 預備微積分'])->map(fn ($name) => (object) ['uuid' => $name, 'name' => $name, 'fee' => config('registration.practice_exam_fee', 1800), 'currency' => 'NTD', 'practice_date' => null, 'location' => null]))
+                    @php($fallbackPracticeExams = collect(['Biology 生物','English Language and Composition 英文語言與寫作','Physics 1 物理 1','Computer Science A 電腦科學 A','Calculus AB/BC 微積分','Macroeconomics 總體經濟','Precalculus 預備微積分'])->map(fn ($name) => (object) ['uuid' => $name, 'name' => $name, 'fee' => config('registration.practice_exam_fee', 2800), 'currency' => 'NTD', 'practice_date' => null, 'location' => null, 'seat_capacity' => null, 'registered_count' => 0]))
                     @foreach(($practiceExamOptions ?? collect())->isNotEmpty() ? $practiceExamOptions : $fallbackPracticeExams as $practice)
-                        <label class="exam-cb"><input type="checkbox" name="practice_exams[]" value="{{ $practice->uuid }}" data-type="practice" data-p="{{ $practice->fee }}" data-name="{{ $tx('Practice:', '模擬考：') }} {{ $practice->name }}" @checked(in_array($practice->uuid, old('practice_exams', [])))><div><div class="exam-name">{{ $practice->name }}</div><div class="exam-sub">{{ $tx('Practice Exam', '模擬考') }} @if($practice->practice_date) / {{ $practice->practice_date->format('M d, Y') }} @endif @if($practice->location) / {{ $practice->location }} @endif</div></div><div class="exam-price-tag">{{ $practice->currency }} {{ number_format($practice->fee) }}</div></label>
+                        @php($practiceIsFull = $practice->seat_capacity !== null && $practice->registered_count >= $practice->seat_capacity)
+                        <label class="exam-cb {{ $practiceIsFull ? 'disabled' : '' }}">
+                            <input type="checkbox" name="practice_exams[]" value="{{ $practice->uuid }}" data-type="practice" data-p="{{ $practice->fee }}" data-name="{{ $tx('Practice:', '模擬考：') }} {{ $practice->name }}" @checked(in_array($practice->uuid, old('practice_exams', []))) @disabled($practiceIsFull)>
+                            <div>
+                                <div class="exam-name">{{ $practice->name }}</div>
+                                <div class="exam-sub">{{ $tx('Practice Exam', '模擬考') }} @if($practice->practice_date) / {{ $practice->practice_date->format('M d, Y') }} @endif @if($practice->location) / {{ $practice->location }} @endif @if($practice->seat_capacity !== null) / {{ $practiceIsFull ? $tx('Full', '額滿') : $practice->registered_count.'/'.$practice->seat_capacity.' '.$tx('seats', '名額') }} @endif</div>
+                            </div>
+                            <div class="exam-price-tag">{{ $practice->currency }} {{ number_format($practice->fee) }}</div>
+                        </label>
                     @endforeach
                 </div>
                 <input type="hidden" name="practice_exam_total" id="practiceExamTotal" value="0">

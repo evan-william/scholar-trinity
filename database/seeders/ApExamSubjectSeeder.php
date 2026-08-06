@@ -13,17 +13,17 @@ class ApExamSubjectSeeder extends Seeder
     {
         $season = ExamSeason::query()->where('is_active', true)->first();
         $subjects = [
-            ['name' => 'Biology', 'code' => 'BIO', 'exam_date' => '2027-05-10'],
-            ['name' => 'Chemistry', 'code' => 'CHEM', 'exam_date' => '2027-05-11'],
-            ['name' => 'Physics 1', 'code' => 'PHY1', 'exam_date' => '2027-05-13'],
-            ['name' => 'Calculus AB', 'code' => 'CALAB', 'exam_date' => '2027-05-04'],
-            ['name' => 'Calculus BC', 'code' => 'CALBC', 'exam_date' => '2027-05-04'],
-            ['name' => 'Statistics', 'code' => 'STAT', 'exam_date' => '2027-05-06'],
-            ['name' => 'Computer Science A', 'code' => 'CSA', 'exam_date' => '2027-05-07'],
-            ['name' => 'English Language and Composition', 'code' => 'ENGLANG', 'exam_date' => '2027-05-12'],
-            ['name' => 'Macroeconomics', 'code' => 'MACRO', 'exam_date' => '2027-05-14'],
-            ['name' => 'Psychology', 'code' => 'PSY', 'exam_date' => '2027-05-15'],
-            ['name' => 'Chinese Language and Culture', 'code' => 'CHN', 'exam_date' => '2027-05-16'],
+            ['name' => 'Biology', 'code' => 'BIO', 'exam_date' => '2027-05-03', 'start_time' => '13:00'],
+            ['name' => 'Chemistry', 'code' => 'CHEM', 'exam_date' => '2027-05-06', 'start_time' => '13:00'],
+            ['name' => 'Physics 1', 'code' => 'PHY1', 'exam_date' => '2027-05-05', 'start_time' => '13:00'],
+            ['name' => 'Calculus AB', 'code' => 'CALAB', 'exam_date' => '2027-05-10', 'start_time' => '09:00'],
+            ['name' => 'Calculus BC', 'code' => 'CALBC', 'exam_date' => '2027-05-10', 'start_time' => '09:00'],
+            ['name' => 'Statistics', 'code' => 'STAT', 'exam_date' => '2027-05-11', 'start_time' => '13:00'],
+            ['name' => 'Computer Science A', 'code' => 'CSA', 'exam_date' => '2027-05-12', 'start_time' => '13:00'],
+            ['name' => 'English Language and Composition', 'code' => 'ENGLANG', 'exam_date' => '2027-05-12', 'start_time' => '09:00'],
+            ['name' => 'Macroeconomics', 'code' => 'MACRO', 'exam_date' => '2027-05-07', 'start_time' => '13:00'],
+            ['name' => 'Psychology', 'code' => 'PSY', 'exam_date' => '2027-05-14', 'start_time' => '13:00'],
+            ['name' => 'Chinese Language and Culture', 'code' => 'CHN', 'exam_date' => '2027-05-13', 'start_time' => '13:00'],
         ];
 
         foreach ($subjects as $index => $subject) {
@@ -32,8 +32,7 @@ class ApExamSubjectSeeder extends Seeder
                 'exam_season_id' => $season?->id,
                 'category' => in_array($subject['code'], ['CALAB', 'CALBC', 'STAT'], true) ? 'Mathematics' : (in_array($subject['code'], ['BIO', 'CHEM', 'PHY1'], true) ? 'Sciences' : 'General'),
                 'description' => 'Official AP exam registration subject.',
-                'start_time' => '08:00',
-                'end_time' => '12:00',
+                'end_time' => null,
                 'timezone' => 'Asia/Taipei',
                 'location' => 'TPCA Campus',
                 'quota' => 50,

@@ -14,8 +14,9 @@
     --ts-muted: #728098;
     --ts-line: rgba(17, 29, 49, .14);
     --ts-line-strong: rgba(17, 29, 49, .27);
-    --ts-display: "Newsreader", Georgia, "Times New Roman", "Microsoft JhengHei", serif;
-    --ts-body: "Manrope", "Microsoft JhengHei", "PingFang TC", sans-serif;
+    --ts-display: "Cabinet Grotesk", "Microsoft JhengHei", "PingFang TC", sans-serif;
+    --ts-body: "Cabinet Grotesk", "Microsoft JhengHei", "PingFang TC", sans-serif;
+    --ts-input: "Manrope", "Microsoft JhengHei", "PingFang TC", sans-serif;
     --ts-enter: cubic-bezier(.22, 1, .36, 1);
     --ts-move: cubic-bezier(.25, 1, .5, 1);
 }
@@ -60,6 +61,12 @@ body.trinity-public textarea,
 body.trinity-form textarea {
     font-family: var(--ts-body);
     letter-spacing: 0;
+}
+
+body.trinity-form input,
+body.trinity-form select,
+body.trinity-form textarea {
+    font-family: var(--ts-input) !important;
 }
 
 body.trinity-public :focus-visible,
@@ -179,16 +186,18 @@ body.trinity-public #header .brand-lockup,
 body.trinity-form #header .brand-lockup {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     white-space: normal;
 }
 
 body.trinity-public #header .logo img,
 body.trinity-form #header .logo img {
-    width: 130px;
-    height: 68px;
-    max-height: 68px;
+    width: 66px;
+    height: 36px;
+    max-height: 36px;
+    flex: 0 0 66px;
     object-fit: contain;
+    object-position: center;
     filter: none !important;
 }
 
@@ -205,6 +214,20 @@ body.trinity-form #header .partner-wordmark {
     font-size: 11.5px;
     font-weight: 600;
     line-height: 1.18;
+}
+
+body.trinity-public #header .logo img.partner-logo,
+body.trinity-form #header .logo img.partner-logo {
+    width: 112px;
+    height: 36px;
+    max-height: 36px;
+    flex: 0 0 112px;
+    padding-left: 8px;
+    box-sizing: border-box;
+    object-fit: contain;
+    object-position: center;
+    border-left: 1px solid var(--ts-line-strong);
+    transform: translateY(5px);
 }
 
 body.trinity-public #header .main-menu nav ul li a,
@@ -278,6 +301,8 @@ body.trinity-public.landing-refined #header.is-scrolled .logo img { filter: none
 
 body.trinity-public.landing-refined #header:not(.is-scrolled) .partner-wordmark { color: #fff !important; border-left-color: rgba(255, 255, 255, .32) !important; }
 body.trinity-public.landing-refined #header.is-scrolled .partner-wordmark { color: var(--ts-ink) !important; border-left-color: var(--ts-line-strong) !important; }
+body.trinity-public.landing-refined #header:not(.is-scrolled) .partner-logo { filter: brightness(0) invert(1); border-left-color: rgba(255, 255, 255, .32); }
+body.trinity-public.landing-refined #header.is-scrolled .partner-logo { filter: none; border-left-color: var(--ts-line-strong); }
 
 body.trinity-public.landing-refined #header:not(.is-scrolled) .main-menu nav ul li a { color: rgba(255, 255, 255, .9) !important; text-shadow: 0 1px 12px rgba(0, 0, 0, .18) !important; }
 body.trinity-public.landing-refined #header.is-scrolled .main-menu nav ul li a { color: var(--ts-ink) !important; text-shadow: none !important; }
@@ -344,15 +369,39 @@ body.trinity-public.landing-refined #header:not(.is-scrolled) .language-switcher
     background: #fff;
 }
 
-body.trinity-public.landing-refined .slider-area { background: var(--ts-paper); }
+body.trinity-public.landing-refined .slider-area {
+    overflow: hidden;
+    background: var(--ts-ink);
+}
+
+body.trinity-public.landing-refined .slider-area .owl-stage {
+    display: flex;
+    align-items: stretch;
+}
+
+body.trinity-public.landing-refined .slider-area .owl-item {
+    display: flex;
+    float: none;
+    height: auto;
+}
+
+body.trinity-public.landing-refined .slider-area .owl-item .slider_item {
+    width: 100%;
+    flex: 1 0 auto;
+}
 
 body.trinity-public.landing-refined .slider_item {
+    --slider-image: url("../../../images/landing/hero-diverse-classroom.jpg");
     min-height: 760px;
     padding-top: 126px;
-    background-image: linear-gradient(90deg, rgba(10, 27, 48, .96) 0%, rgba(13, 35, 64, .88) 38%, rgba(20, 45, 79, .44) 67%, rgba(20, 45, 79, .12) 100%), url("../../../images/trinity-ap-hero-2027.png") !important;
+    background-image: linear-gradient(90deg, rgba(10, 27, 48, .96) 0%, rgba(13, 35, 64, .88) 38%, rgba(20, 45, 79, .44) 67%, rgba(20, 45, 79, .12) 100%), var(--slider-image) !important;
     background-position: center !important;
     background-size: cover !important;
 }
+
+body.trinity-public.landing-refined .slider_item--registration { --slider-image: url("../../../images/landing/hero-diverse-classroom.jpg"); }
+body.trinity-public.landing-refined .slider_item--support { --slider-image: url("../../../images/landing/hero-diverse-campus.jpg"); }
+body.trinity-public.landing-refined .slider_item--direct { --slider-image: url("../../../images/landing/hero-diverse-study.jpg"); }
 
 body.trinity-public.landing-refined .slider_item::before { display: none; }
 
@@ -473,6 +522,11 @@ body.trinity-public.landing-refined .quick-facts {
     border: 0;
 }
 
+body.trinity-public.landing-refined .quick-facts.reveal-on-scroll {
+    opacity: 1;
+    transform: none;
+}
+
 body.trinity-public.landing-refined .fact-row { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 
 body.trinity-public.landing-refined .quick-facts .fact-row {
@@ -485,6 +539,13 @@ body.trinity-public.landing-refined .fact-item {
     min-height: 116px;
     padding: 22px 26px;
     border-color: rgba(255, 255, 255, .14);
+    transition: background-color 220ms var(--ts-enter), box-shadow 220ms ease, transform 220ms var(--ts-enter);
+}
+
+body.trinity-public.landing-refined .fact-item:hover {
+    background: #2d5da9;
+    box-shadow: inset 0 -4px 0 #8eb4f3;
+    transform: translateY(-4px);
 }
 
 body.trinity-public.landing-refined .fact-icon {
@@ -496,6 +557,13 @@ body.trinity-public.landing-refined .fact-icon {
     background: transparent;
     border-radius: 0;
     font-size: 18px;
+    transition: color 180ms ease, transform 220ms var(--ts-enter);
+}
+
+body.trinity-public.landing-refined .fact-item:hover .fact-icon {
+    color: #fff;
+    background: transparent;
+    transform: translateY(-2px) scale(1.12);
 }
 
 body.trinity-public.landing-refined .fact-item strong {
@@ -508,8 +576,12 @@ body.trinity-public.landing-refined .fact-item strong {
 
 body.trinity-public.landing-refined .fact-item span {
     color: rgba(255, 255, 255, .58);
-    font-size: 12px;
+    font-size: 14px;
+    line-height: 1.45;
 }
+
+body.trinity-public.landing-refined .fact-item:hover strong { color: #fff; }
+body.trinity-public.landing-refined .fact-item:hover span { color: rgba(255, 255, 255, .86); }
 
 body.trinity-public.landing-refined #overview,
 body.trinity-public.landing-refined #process,
@@ -529,7 +601,7 @@ body.trinity-public.landing-refined .section-title-style2 span,
 body.trinity-public.landing-refined .overview-copy .section-title span {
     color: var(--ts-red);
     font-family: var(--ts-body);
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 700;
     text-transform: uppercase;
 }
@@ -549,7 +621,7 @@ body.trinity-public.landing-refined .section-title-style2 p {
     max-width: 62ch;
     margin: 18px auto 0;
     color: var(--ts-copy);
-    font-size: 15px;
+    font-size: 17px;
     line-height: 1.8;
 }
 
@@ -569,11 +641,15 @@ body.trinity-public.landing-refined .overview-lead { margin-bottom: 76px; }
 body.trinity-public.landing-refined .overview-copy p {
     max-width: 58ch;
     color: var(--ts-copy);
-    font-size: 16px;
+    font-size: 18px;
     line-height: 1.85;
 }
 
-body.trinity-public.landing-refined .overview-copy .section-title h2 { margin-inline: auto; }
+body.trinity-public.landing-refined .overview-copy .section-title h2 {
+    max-width: 20ch;
+    margin: 18px auto 0;
+    line-height: 1.16;
+}
 body.trinity-public.landing-refined .overview-copy > p { text-align: center; }
 body.trinity-public.landing-refined .overview-copy > .btn { display: inline-flex; margin-inline: auto; }
 
@@ -635,7 +711,8 @@ body.trinity-public.landing-refined .visual-card .cs-price {
 
 body.trinity-public.landing-refined .late-notice-area {
     padding: 104px 0;
-    background-image: linear-gradient(90deg, rgba(13, 30, 51, .98), rgba(16, 39, 70, .9)), url("../../../images/taipei-registration-support.jpg");
+    background: var(--ts-navy);
+    background-image: none;
     border-top: 6px solid var(--ts-red);
 }
 
@@ -658,10 +735,24 @@ body.trinity-public.landing-refined .notice-card {
 }
 
 body.trinity-public.landing-refined .notice-card .card-body { padding: 28px 0 0; }
-body.trinity-public.landing-refined .notice-kicker { color: #74cfbd; text-transform: none; }
+body.trinity-public.landing-refined .notice-kicker {
+    color: #74cfbd;
+    font-size: 14px;
+    line-height: 1.4;
+    text-transform: none;
+}
 body.trinity-public.landing-refined .notice-card h4 { color: #fff; font-family: var(--ts-display); font-weight: 600; }
 body.trinity-public.landing-refined .notice-card p,
-body.trinity-public.landing-refined .notice-list li { color: rgba(255, 255, 255, .68); }
+body.trinity-public.landing-refined .notice-list li {
+    color: rgba(255, 255, 255, .82);
+    font-size: 16px;
+    line-height: 1.65;
+}
+body.trinity-public.landing-refined .notice-card p {
+    color: rgba(255, 255, 255, .78);
+    font-size: 17px;
+    line-height: 1.7;
+}
 body.trinity-public.landing-refined .notice-list li i { color: #74cfbd; }
 
 body.trinity-public.landing-refined .late-facts {
@@ -671,7 +762,8 @@ body.trinity-public.landing-refined .late-facts {
 }
 
 body.trinity-public.landing-refined .late-stat i { color: #74cfbd; }
-body.trinity-public.landing-refined .late-stat strong { font-family: var(--ts-body); font-size: 18px; }
+body.trinity-public.landing-refined .late-stat span { font-size: 13px; line-height: 1.4; }
+body.trinity-public.landing-refined .late-stat strong { font-family: var(--ts-body); font-size: 19px; }
 
 body.trinity-public.landing-refined #timeline,
 body.trinity-public.landing-refined #faq {
@@ -781,14 +873,14 @@ body.trinity-public.landing-refined #timeline .timeline-card-body p {
     max-width: 42ch;
     margin: 9px auto 0;
     color: var(--ts-copy);
-    font-size: 13px;
-    line-height: 1.55;
+    font-size: 16px;
+    line-height: 1.6;
 }
 
 body.trinity-public.landing-refined #timeline .timeline-card-range {
     margin-top: 8px;
     color: var(--timeline-accent);
-    font-size: 15px;
+    font-size: 16px;
     line-height: 1.35;
     transition: color 220ms ease;
 }
@@ -796,7 +888,7 @@ body.trinity-public.landing-refined #timeline .timeline-card-range {
 body.trinity-public.landing-refined #timeline .timeline-card-range strong {
     color: inherit;
     font-family: var(--ts-body);
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 800;
 }
 
@@ -807,7 +899,7 @@ body.trinity-public.landing-refined #timeline .timeline-card:hover {
 }
 
 body.trinity-public.landing-refined .process-layout {
-    grid-template-columns: minmax(380px, 1fr) minmax(0, 1fr);
+    grid-template-columns: minmax(340px, .72fr) minmax(0, 1.28fr);
     overflow: visible;
     background: transparent;
     border: 0;
@@ -821,7 +913,7 @@ body.trinity-public.landing-refined .process-photo {
 
 body.trinity-public.landing-refined .process-list {
     justify-content: center;
-    padding: 24px 0 24px 58px;
+    padding: 24px 0 24px 42px;
     background: transparent;
 }
 
@@ -860,11 +952,27 @@ body.trinity-public.landing-refined .process-item h4 {
     font-weight: 700;
 }
 
+body.trinity-public.landing-refined .process-item > div {
+    min-width: 0;
+    flex: 1;
+}
+
+body.trinity-public.landing-refined .process-item p {
+    max-width: none;
+    color: #526176;
+    font-size: 15px;
+    line-height: 1.55;
+}
+
+@media (min-width: 1200px) {
+    body.trinity-public.landing-refined .process-item p { white-space: nowrap; }
+}
+
 body.trinity-public.landing-refined .documents-layout { gap: 68px; }
 
 body.trinity-public.landing-refined .documents-photo {
     min-height: 560px;
-    background-image: url("../../../images/trinity-registration-guidance.png");
+    background-image: url("../../../images/landing/student-learning.jpg");
     background-position: 45% center;
     border-radius: 2px;
 }
@@ -905,9 +1013,20 @@ body.trinity-public.landing-refined .faq-item summary::after {
     border-color: var(--ts-line-strong);
     color: var(--ts-red);
     background: transparent;
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1;
 }
 
-body.trinity-public.landing-refined .faq-item[open] summary::after { background: var(--ts-red); }
+body.trinity-public.landing-refined .faq-item[open] summary::after {
+    content: "\2212";
+    color: #fff;
+    background: var(--ts-blue);
+    font-family: Arial, sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    transform: none;
+}
 
 body.trinity-public.landing-refined .contact-panel {
     padding: 10px 48px 10px 0;
@@ -922,6 +1041,83 @@ body.trinity-public.landing-refined .contact-panel h3 {
     font-family: var(--ts-display);
     font-size: 34px;
     font-weight: 600;
+}
+
+body.trinity-public.landing-refined .contact-info-panel {
+    padding: 38px 42px 40px;
+    background: #fff;
+    border: 1px solid var(--ts-line);
+    border-top: 3px solid #2e8f80;
+}
+
+body.trinity-public.landing-refined .contact-info-panel > span {
+    margin-bottom: 0 !important;
+}
+
+body.trinity-public.landing-refined .contact-info-panel h3 {
+    margin: 18px 0 28px;
+}
+
+body.trinity-public.landing-refined .contact-info-panel > p {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin: 0;
+    padding: 17px 0;
+    border-top: 1px solid var(--ts-line);
+    overflow-wrap: anywhere;
+}
+
+body.trinity-public.landing-refined .contact-info-panel > p:last-child {
+    padding-bottom: 0;
+}
+
+body.trinity-public.landing-refined .contact-info-panel > p i {
+    flex: 0 0 20px;
+    margin-top: 5px;
+    text-align: center;
+}
+
+body.trinity-public.landing-refined .privacy-panel {
+    padding: 38px 42px 40px;
+    background: #f7f9fc;
+    border: 1px solid var(--ts-line);
+    border-top: 3px solid var(--ts-blue);
+}
+
+body.trinity-public.landing-refined .privacy-panel > span {
+    margin-bottom: 0 !important;
+}
+
+body.trinity-public.landing-refined .privacy-panel h3 {
+    margin: 18px 0 22px;
+}
+
+body.trinity-public.landing-refined .privacy-panel > p {
+    max-width: 62ch;
+    margin: 0 0 28px;
+    line-height: 1.75;
+}
+
+body.trinity-public.landing-refined .privacy-panel ul {
+    display: grid;
+    gap: 14px;
+    margin: 0;
+    padding: 24px 0 0;
+    border-top: 1px solid var(--ts-line);
+}
+
+body.trinity-public.landing-refined .privacy-panel li {
+    display: flex;
+    align-items: flex-start;
+    gap: 13px;
+    margin: 0;
+}
+
+body.trinity-public.landing-refined .privacy-panel li i {
+    flex: 0 0 18px;
+    margin-top: 6px;
+    text-align: center;
 }
 
 html body.trinity-public.landing-refined .cta-area {
@@ -1253,7 +1449,12 @@ body.trinity-form .step-item.completed .step-circle {
     transform: none;
 }
 
-body.trinity-form .step-label { color: var(--ts-muted); font-size: 11px; }
+body.trinity-form .step-label {
+    margin-top: 8px;
+    color: #536278;
+    font-size: 13px;
+    line-height: 1.35;
+}
 body.trinity-form .step-item.active .step-label { color: var(--ts-ink); font-weight: 700; }
 
 body.trinity-form .main { max-width: 1180px; padding-top: 42px; }
@@ -1376,6 +1577,25 @@ body.trinity-form .step-aside-layout > .notice {
     border-top: 4px solid var(--ts-jade);
     border-radius: 3px;
     box-shadow: none;
+}
+
+body.trinity-form .step-aside-layout > .notice p,
+body.trinity-form .step-aside-layout > .notice li {
+    color: #3d4d61;
+    font-size: 14px;
+    line-height: 1.65;
+}
+
+body.trinity-form .intro-summary small {
+    display: block;
+    margin-top: 14px;
+    padding-top: 12px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 650;
+    line-height: 1.55;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, .72);
+    border-top: 1px solid rgba(255, 255, 255, .34);
 }
 
 body.trinity-form .upload-area {
@@ -1524,7 +1744,12 @@ body.trinity-public .reveal-on-scroll.is-visible { opacity: 1; filter: blur(0); 
     body.trinity-form #header .header-bottom-inner { min-height: 74px; padding: 8px 0; }
 
     body.trinity-public #header .logo img,
-    body.trinity-form #header .logo img { width: 138px; height: 58px; }
+    body.trinity-form #header .logo img {
+        width: 56px;
+        height: 30px;
+        max-height: 30px;
+        flex-basis: 56px;
+    }
 
     body.trinity-public .slicknav_btn,
     body.trinity-form .slicknav_btn { background: var(--ts-red); border-radius: 2px; }
@@ -1532,7 +1757,7 @@ body.trinity-public .reveal-on-scroll.is-visible { opacity: 1; filter: blur(0); 
     body.trinity-public.landing-refined .slider_item {
         min-height: 690px;
         padding-top: 106px;
-        background-image: linear-gradient(90deg, rgba(10, 27, 48, .96), rgba(13, 35, 64, .84) 52%, rgba(20, 45, 79, .22)), url("../../../images/trinity-ap-hero-2027.png") !important;
+        background-image: linear-gradient(90deg, rgba(10, 27, 48, .96), rgba(13, 35, 64, .84) 52%, rgba(20, 45, 79, .22)), var(--slider-image) !important;
     }
 
     body.trinity-public.landing-refined .slider-content h1 { font-size: 52px; }
@@ -1569,7 +1794,7 @@ body.trinity-public .reveal-on-scroll.is-visible { opacity: 1; filter: blur(0); 
     body.trinity-public.landing-refined .slider_item {
         min-height: 640px;
         padding-top: 112px;
-        background-image: linear-gradient(180deg, rgba(9, 25, 45, .96) 0%, rgba(13, 35, 64, .82) 58%, rgba(20, 45, 79, .38) 100%), url("../../../images/trinity-ap-hero-2027.png") !important;
+        background-image: linear-gradient(180deg, rgba(9, 25, 45, .96) 0%, rgba(13, 35, 64, .82) 58%, rgba(20, 45, 79, .38) 100%), var(--slider-image) !important;
         background-position: 62% center !important;
     }
 
@@ -1674,6 +1899,8 @@ body.trinity-public .reveal-on-scroll.is-visible { opacity: 1; filter: blur(0); 
     body.trinity-public.landing-refined .process-photo,
     body.trinity-public.landing-refined .documents-photo { min-height: 360px; }
     body.trinity-public.landing-refined .contact-panel { padding-right: 0; }
+    body.trinity-public.landing-refined .contact-info-panel,
+    body.trinity-public.landing-refined .privacy-panel { padding: 30px 24px 32px; }
     body.trinity-public.landing-refined .late-facts { grid-template-columns: 1fr; }
     body.trinity-public.landing-refined .late-stat { border-right: 0; border-bottom: 1px solid rgba(255, 255, 255, .18); }
     body.trinity-public.landing-refined .late-stat:last-child { border-bottom: 0; }
@@ -1686,6 +1913,181 @@ body.trinity-public .reveal-on-scroll.is-visible { opacity: 1; filter: blur(0); 
 
     body.trinity-public footer .widget-opening li,
     body.trinity-form footer .widget-opening li { grid-template-columns: 1fr; gap: 3px; }
+}
+
+/* Public readability scale: body and control text are enlarged while display type stays bounded. */
+body.trinity-public { font-size: 18px; }
+
+body.trinity-public #header .header-top,
+body.trinity-form #header .header-top { font-size: 16px; }
+
+body.trinity-public #header .main-menu nav ul li a,
+body.trinity-form #header .main-menu nav ul li a { font-size: 16px; }
+
+body.trinity-public .btn,
+body.trinity-public button,
+body.trinity-public select,
+body.trinity-form .btn,
+body.trinity-form button { font-size: 18px; }
+
+body.trinity-public.landing-refined .slider-content h3 { font-size: 21px; }
+body.trinity-public.landing-refined .slider-content h1 { font-size: 84px; line-height: 1.03; }
+body.trinity-public.landing-refined .slider-content p { font-size: 24px; line-height: 1.65; }
+body.trinity-public.landing-refined .fact-item strong { font-size: 24px; }
+body.trinity-public.landing-refined .fact-item span { font-size: 18px; }
+
+body.trinity-public.landing-refined .section-title-style2 span,
+body.trinity-public.landing-refined .overview-copy .section-title span { font-size: 18px; }
+
+body.trinity-public.landing-refined .section-title-style2 h2,
+body.trinity-public.landing-refined .overview-copy .section-title h2 { font-size: 60px; line-height: 1.08; }
+
+body.trinity-public.landing-refined .section-title-style2 p { font-size: 22px; line-height: 1.7; }
+body.trinity-public.landing-refined .overview-copy p { font-size: 24px; line-height: 1.72; }
+body.trinity-public.landing-refined .overview-visual-note strong { font-size: 24px; }
+body.trinity-public.landing-refined .overview-visual-note span { font-size: 17px; line-height: 1.5; }
+body.trinity-public.landing-refined .visual-card h4 { font-size: 24px; }
+body.trinity-public.landing-refined .visual-card p { font-size: 20px; line-height: 1.65; }
+
+body.trinity-public.landing-refined .notice-kicker { font-size: 18px; }
+body.trinity-public.landing-refined .notice-card h4 { font-size: 30px; line-height: 1.3; }
+body.trinity-public.landing-refined .notice-card p { font-size: 22px; line-height: 1.65; }
+body.trinity-public.landing-refined .notice-list li { font-size: 20px; line-height: 1.6; }
+body.trinity-public.landing-refined .late-stat span { font-size: 16px; }
+body.trinity-public.landing-refined .late-stat strong { font-size: 23px; }
+
+body.trinity-public.landing-refined #timeline .timeline-card-body h4 { font-size: 28px; }
+body.trinity-public.landing-refined #timeline .timeline-card-range,
+body.trinity-public.landing-refined #timeline .timeline-card-range strong { font-size: 20px; }
+body.trinity-public.landing-refined #timeline .timeline-card-body p { font-size: 20px; line-height: 1.6; }
+body.trinity-public.landing-refined .process-item h4 { font-size: 20px; }
+body.trinity-public.landing-refined .process-item p { font-size: 18px; line-height: 1.55; }
+body.trinity-public.landing-refined .process-photo-caption strong { font-size: 28px; }
+body.trinity-public.landing-refined .process-photo-caption span { font-size: 18px; line-height: 1.55; }
+body.trinity-public.landing-refined .document-item h4 { font-size: 20px; }
+body.trinity-public.landing-refined .document-item p { font-size: 19px; }
+body.trinity-public.landing-refined .faq-item summary { font-size: 20px; }
+body.trinity-public.landing-refined .faq-item p { font-size: 18px; line-height: 1.7; }
+body.trinity-public.landing-refined .contact-panel p,
+body.trinity-public.landing-refined .contact-panel li { font-size: 18px; line-height: 1.65; }
+
+body.trinity-public:not(.landing-refined) main p,
+body.trinity-public:not(.landing-refined) main li,
+body.trinity-public:not(.landing-refined) main label,
+body.trinity-public:not(.landing-refined) main td,
+body.trinity-public:not(.landing-refined) main th { font-size: 18px; line-height: 1.6; }
+
+body.trinity-public footer p,
+body.trinity-public footer li,
+body.trinity-public footer a,
+body.trinity-form footer p,
+body.trinity-form footer li,
+body.trinity-form footer a { font-size: 18px; line-height: 1.65; }
+
+body.trinity-form { font-size: 18px; }
+body.trinity-form .step-label { font-size: 16px; }
+body.trinity-form .step-circle { font-size: 18px; }
+body.trinity-form .step-ind { font-size: 18px; }
+body.trinity-form .form-intro h2 { font-size: 48px; line-height: 1.12; }
+body.trinity-form .form-intro p { font-size: 20px; line-height: 1.65; }
+body.trinity-form .intro-list { font-size: 18px; line-height: 1.6; }
+body.trinity-form .header-badge,
+body.trinity-form .intro-summary span { font-size: 16px; }
+body.trinity-form .intro-summary strong { font-size: 38px; line-height: 1.18; }
+body.trinity-form .intro-summary p,
+body.trinity-form .intro-summary small { font-size: 17px; }
+body.trinity-form .section-title { font-size: 28px; }
+body.trinity-form .lbl { font-size: 18px; line-height: 1.4; }
+body.trinity-form .zh,
+body.trinity-form .hint,
+body.trinity-form .upload-sub,
+body.trinity-form .exam-sub { font-size: 16px; line-height: 1.55; }
+body.trinity-form .notice p,
+body.trinity-form .notice li { font-size: 18px; line-height: 1.6; }
+body.trinity-form .error,
+body.trinity-form .error-box,
+body.trinity-form .toast { font-size: 16px; line-height: 1.55; }
+body.trinity-form .exam-name,
+body.trinity-form .cat-title,
+body.trinity-form .price-row { font-size: 18px; }
+body.trinity-form input:not([type]),
+body.trinity-form input[type="text"],
+body.trinity-form input[type="email"],
+body.trinity-form input[type="tel"],
+body.trinity-form input[type="search"],
+body.trinity-form input[type="date"],
+body.trinity-form input[type="file"],
+body.trinity-form input[type="number"],
+body.trinity-form select,
+body.trinity-form textarea { font-size: 18px; }
+
+@media (max-width: 1199px) {
+    body.trinity-public #header .brand-lockup,
+    body.trinity-form #header .brand-lockup { gap: 8px; }
+
+    body.trinity-public #header .logo img,
+    body.trinity-form #header .logo img {
+        width: 56px;
+        height: 30px;
+        max-height: 30px;
+        flex-basis: 56px;
+    }
+
+    body.trinity-public #header .logo img.partner-logo,
+    body.trinity-form #header .logo img.partner-logo {
+        width: 96px;
+        height: 30px;
+        max-height: 30px;
+        flex-basis: 96px;
+        padding-left: 6px;
+    }
+
+    body.trinity-public.landing-refined .slider-content h1 { font-size: 68px; }
+    body.trinity-public.landing-refined .process-item p { white-space: normal; }
+}
+
+@media (max-width: 767px) {
+    body.trinity-public.landing-refined .slider-content h1 { font-size: 56px; }
+    body.trinity-public.landing-refined .section-title-style2 h2,
+    body.trinity-public.landing-refined .overview-copy .section-title h2 { font-size: 46px; }
+    body.trinity-public.landing-refined .slider-content p,
+    body.trinity-public.landing-refined .overview-copy p { font-size: 21px; }
+    body.trinity-form .form-intro h2 { font-size: 40px; }
+}
+
+@media (max-width: 575px) {
+    body.trinity-public #header .logo img,
+    body.trinity-form #header .logo img {
+        width: 50px;
+        height: 27px;
+        max-height: 27px;
+        flex-basis: 50px;
+    }
+    body.trinity-public #header .logo img.partner-logo,
+    body.trinity-form #header .logo img.partner-logo {
+        width: 86px;
+        height: 27px;
+        max-height: 27px;
+        flex-basis: 86px;
+        padding-left: 6px;
+    }
+    body.trinity-public #header .public-header-actions .btn,
+    body.trinity-form #header .public-header-actions .btn { font-size: 16px; }
+    body.trinity-public.landing-refined .fact-item strong { font-size: 22px; }
+    body.trinity-public.landing-refined .fact-item span { font-size: 17px; }
+    body.trinity-public.landing-refined .notice-card p { font-size: 20px; }
+    body.trinity-public.landing-refined .notice-list li { font-size: 18px; }
+    body.trinity-form .lbl { font-size: 17px; }
+    body.trinity-form input:not([type]),
+    body.trinity-form input[type="text"],
+    body.trinity-form input[type="email"],
+    body.trinity-form input[type="tel"],
+    body.trinity-form input[type="search"],
+    body.trinity-form input[type="date"],
+    body.trinity-form input[type="file"],
+    body.trinity-form input[type="number"],
+    body.trinity-form select,
+    body.trinity-form textarea { font-size: 18px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -11,7 +11,7 @@ use Illuminate\View\View;
 class ExamRegistrationController extends Controller
 {
     private const REGULAR_EXAM_FEE = 7800;
-    private const PRACTICE_EXAM_FEE = 1800;
+    private const PRACTICE_EXAM_FEE = 2800;
     private const SERVICE_FEE = 1200;
     private const LATE_REGISTRATION_FEE = 1500;
 

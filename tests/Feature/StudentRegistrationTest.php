@@ -40,10 +40,10 @@ class StudentRegistrationTest extends TestCase
         $this->assertTrue($registration->needs_accommodations);
         $this->assertSame('SSD-123', $registration->ssd_code);
         $this->assertSame(1, $registration->practice_exam_count);
-        $this->assertSame(1800, $registration->practice_exam_total);
+        $this->assertSame(2800, $registration->practice_exam_total);
         $this->assertSame(7800, $registration->exam_fee_total);
         $this->assertSame(1200, $registration->service_fee_total);
-        $this->assertSame(10800, $registration->total_fee);
+        $this->assertSame(11800, $registration->total_fee);
         $this->assertSame('Alex Student', $registration->student_signature_name);
         $this->assertSame(now()->toDateString(), $registration->student_signature_date->toDateString());
         $this->assertSame('Pat Parent', $registration->guardian_signature_name);
@@ -151,6 +151,7 @@ class StudentRegistrationTest extends TestCase
             'category' => 'Mathematics',
             'practice_date' => '2027-03-15',
             'fee' => 2500,
+            'seat_capacity' => 20,
             'currency' => 'NTD',
             'is_active' => true,
         ]);
@@ -178,6 +179,61 @@ class StudentRegistrationTest extends TestCase
         $this->assertSame('Needs calculus review.', $registration->preparation_notes);
         $this->assertSame('AP Calculus AB Mock Exam', $registration->practiceExamSelections->first()->exam_name);
         $this->assertSame(2500, $registration->practiceExamSelections->first()->practice_fee);
+        $this->assertSame($practice->id, $registration->practiceExamSelections->first()->practice_exam_option_id);
+    }
+
+    public function test_practice_exam_cannot_be_selected_after_seat_capacity_is_reached(): void
+    {
+        Mail::fake();
+        $this->seed(ApExamSubjectSeeder::class);
+        $subject = ApExamSubject::query()->firstOrFail();
+        $practice = PracticeExamOption::query()->create([
+            'name' => 'Capacity Limited Mock Exam',
+            'fee' => 2800,
+            'seat_capacity' => 1,
+            'currency' => 'NTD',
+            'is_active' => true,
+        ]);
+
+        $this->post('/student-registration', $this->validPayload([
+            'exam_subject_ids' => [$subject->id],
+            'practice_exams' => [$practice->uuid],
+        ]))->assertRedirect();
+
+        $this->post('/student-registration', $this->validPayload([
+            'student_email' => 'second-student@example.com',
+            'parent_email' => 'second-parent@example.com',
+            'passport_number' => 'B98765432',
+            'exam_subject_ids' => [$subject->id],
+            'practice_exams' => [$practice->uuid],
+        ]))->assertSessionHasErrors(['practice_exams']);
+
+        $this->assertSame(1, $practice->selections()->count());
+    }
+
+    public function test_admin_can_set_practice_exam_fee_and_seat_capacity(): void
+    {
+        $this->actingAs($this->adminUser())
+            ->post(route('admin.practice-exams.store'), [
+                'name' => 'Biology Practice Exam',
+                'category' => 'Sciences',
+                'practice_date' => '2027-04-10',
+                'start_time' => '09:00',
+                'location' => 'Room 201',
+                'fee' => 2800,
+                'seat_capacity' => 32,
+                'currency' => 'NTD',
+                'sort_order' => 1,
+                'is_active' => '1',
+            ])
+            ->assertRedirect(route('admin.practice-exams.index'));
+
+        $this->assertDatabaseHas('practice_exam_options', [
+            'name' => 'Biology Practice Exam',
+            'fee' => 2800,
+            'seat_capacity' => 32,
+            'end_time' => null,
+        ]);
     }
 
     public function test_unavailable_practice_exam_option_is_rejected_when_master_data_exists(): void

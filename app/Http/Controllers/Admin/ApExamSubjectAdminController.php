@@ -44,7 +44,10 @@ class ApExamSubjectAdminController extends Controller
 
     public function store(UpsertApExamSubjectRequest $request): RedirectResponse
     {
-        $subject = ApExamSubject::query()->create($request->validated() + ['is_active' => $request->boolean('is_active')]);
+        $subject = ApExamSubject::query()->create(array_merge($request->validated(), [
+            'end_time' => null,
+            'is_active' => $request->boolean('is_active'),
+        ]));
         Log::info('Admin created AP exam subject.', ['code' => $subject->code]);
 
         return redirect()->route('admin.ap-exam-subjects.index')->with('status', 'Exam subject created.');
@@ -62,7 +65,10 @@ class ApExamSubjectAdminController extends Controller
     public function update(UpsertApExamSubjectRequest $request, ApExamSubject $apExamSubject): RedirectResponse
     {
         $before = $apExamSubject->only(['exam_fee', 'service_fee', 'late_registration_fee', 'status']);
-        $apExamSubject->update($request->validated() + ['is_active' => $request->boolean('is_active')]);
+        $apExamSubject->update(array_merge($request->validated(), [
+            'end_time' => null,
+            'is_active' => $request->boolean('is_active'),
+        ]));
         Log::info('Admin updated AP exam subject.', ['code' => $apExamSubject->code, 'before' => $before, 'after' => $apExamSubject->only(array_keys($before))]);
 
         return redirect()->route('admin.ap-exam-subjects.index')->with('status', 'Exam subject updated.');

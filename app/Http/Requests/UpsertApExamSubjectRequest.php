@@ -24,7 +24,6 @@ class UpsertApExamSubjectRequest extends FormRequest
             'description' => ['nullable', 'string', 'max:1000'],
             'exam_date' => ['nullable', 'date'],
             'start_time' => ['nullable', 'date_format:H:i'],
-            'end_time' => ['nullable', 'date_format:H:i', 'after:start_time'],
             'timezone' => ['required', 'string', 'max:80'],
             'location' => ['nullable', 'string', 'max:160'],
             'quota' => ['nullable', 'integer', 'min:0', 'max:9999'],

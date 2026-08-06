@@ -47,7 +47,6 @@
                 <label>{{ __('admin.exam_date') }}<input type="date" name="exam_date" value="{{ old('exam_date', optional($subject->exam_date)->format('Y-m-d')) }}"></label>
                 <label>{{ __('admin.timezone') }}<input name="timezone" value="{{ old('timezone',$subject->timezone ?: 'Asia/Taipei') }}" required></label>
                 <label>{{ __('admin.start_time') }}<input type="time" name="start_time" value="{{ old('start_time', $subject->start_time ? substr($subject->start_time,0,5) : '') }}"></label>
-                <label>{{ __('admin.end_time') }}<input type="time" name="end_time" value="{{ old('end_time', $subject->end_time ? substr($subject->end_time,0,5) : '') }}"></label>
                 <label>{{ __('admin.quota') }}<input type="number" name="quota" value="{{ old('quota',$subject->quota) }}" min="0"></label>
                 <label>{{ __('admin.sort_order') }}<input type="number" name="sort_order" value="{{ old('sort_order',$subject->sort_order ?? 0) }}" required min="0"></label>
                 <label>{{ __('admin.exam_fee') }}<input type="number" name="exam_fee" value="{{ old('exam_fee',$subject->exam_fee ?? 0) }}" required min="0"></label>

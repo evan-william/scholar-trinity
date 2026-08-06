@@ -35,6 +35,7 @@ class StudentRegistrationController extends Controller
             $subjects = $repository->availableSubjects();
             $practiceExamOptions = PracticeExamOption::query()
                 ->where('is_active', true)
+                ->withCount(['selections as registered_count' => fn ($query) => $query->where('selection_type', 'practice')->where('status', 'selected')])
                 ->orderBy('sort_order')
                 ->orderBy('name')
                 ->get();

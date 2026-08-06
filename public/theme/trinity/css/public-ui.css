@@ -1,3 +1,11 @@
+@font-face {
+    font-family: "Cabinet Grotesk";
+    src: url("../../../fonts/cabinet-grotesk/cabinet-grotesk-variable.woff2") format("woff2");
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+}
+
 :root {
     --trinity-blue: #244e9a;
     --trinity-blue-dark: #142f63;
@@ -7,8 +15,9 @@
     --trinity-copy: #596677;
     --trinity-line: #dde3eb;
     --trinity-surface: #f5f7fa;
-    --trinity-display: "Playfair Display", Georgia, "Times New Roman", "Microsoft JhengHei", serif;
-    --trinity-body: "Open Sans", "Microsoft JhengHei", "PingFang TC", Arial, sans-serif;
+    --trinity-display: "Cabinet Grotesk", "Microsoft JhengHei", "PingFang TC", sans-serif;
+    --trinity-body: "Cabinet Grotesk", "Microsoft JhengHei", "PingFang TC", sans-serif;
+    --trinity-input: "Manrope", "Microsoft JhengHei", "PingFang TC", sans-serif;
     --trinity-ease: cubic-bezier(.22, 1, .36, 1);
 }
 

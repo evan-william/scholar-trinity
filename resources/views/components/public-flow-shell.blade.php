@@ -11,9 +11,10 @@
 @php
     $assetBase = 'theme/edification/';
     $brandLogo = 'images/trinity-scholar-logo-clean.png';
+    $partnerLogo = 'images/trinity-scholar-primacy-logo.png';
     $footerLogo = 'images/trinity-scholar-logo-clean.png';
     $brandFavicon = 'images/trinity-scholar-favicon.png';
-    $publicUiVersion = '20260802-12';
+    $publicUiVersion = '20260806-11';
     $registrationSettings = app(\App\Services\PublicRegistrationSettings::class)->all();
     $uiLocale = session('locale', str_replace('_', '-', app()->getLocale()));
     $isZh = $uiLocale === 'zh-TW';
@@ -73,7 +74,7 @@
     <link rel="icon" type="image/png" href="{{ asset($brandFavicon) }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset($assetBase.'css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset($assetBase.'css/font-awesome.min.css') }}">
     <link rel="stylesheet" href="{{ asset($assetBase.'css/owl.carousel.min.css') }}">
@@ -245,7 +246,7 @@
                     <div class="col-lg-3 col-sm-8">
                         <div class="logo brand-lockup">
                             <a href="{{ route('landing') }}"><img src="{{ asset($brandLogo) }}" alt="Trinity Scholar"></a>
-                            <span class="partner-wordmark">The Primacy Collegiate Academy</span>
+                            <img class="partner-logo" src="{{ asset($partnerLogo) }}" alt="Primacy">
                         </div>
                     </div>
                     <div class="col-xl-6 col-lg-6 d-none d-lg-block">

@@ -32,7 +32,7 @@
                         <td>{{ $subject->code }}</td>
                         <td>{{ $subject->name }}</td>
                         <td>{{ $subject->category }}</td>
-                        <td>{{ optional($subject->exam_date)->format('Y-m-d') }} {{ $subject->start_time ? substr($subject->start_time,0,5) : '' }}-{{ $subject->end_time ? substr($subject->end_time,0,5) : '' }}</td>
+                        <td>{{ optional($subject->exam_date)->format('Y-m-d') }}{{ $subject->start_time ? ' '.substr($subject->start_time, 0, 5) : '' }}</td>
                         <td class="is-centered">{{ $subject->registered_count }}/{{ $subject->quota ?? 'No cap' }}</td>
                         <td class="is-centered">{{ $subject->currency }} {{ number_format($subject->exam_fee + $subject->service_fee + $subject->late_registration_fee) }}</td>
                         <td class="is-centered"><span class="status {{ $subject->status }}">{{ $subject->status }}</span></td>

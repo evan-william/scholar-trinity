@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
@@ -21,6 +22,7 @@ class PracticeExamOption extends Model
         'end_time',
         'location',
         'fee',
+        'seat_capacity',
         'currency',
         'sort_order',
         'is_active',
@@ -29,6 +31,7 @@ class PracticeExamOption extends Model
     protected $casts = [
         'practice_date' => 'date',
         'fee' => 'integer',
+        'seat_capacity' => 'integer',
         'sort_order' => 'integer',
         'is_active' => 'boolean',
     ];
@@ -43,5 +46,10 @@ class PracticeExamOption extends Model
     public function examSeason(): BelongsTo
     {
         return $this->belongsTo(ExamSeason::class, 'exam_season_id');
+    }
+
+    public function selections(): HasMany
+    {
+        return $this->hasMany(RegistrationExamSelection::class, 'practice_exam_option_id');
     }
 }

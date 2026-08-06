@@ -15,6 +15,7 @@ class RegistrationExamSelection extends Model
         'uuid',
         'student_registration_id',
         'ap_exam_subject_id',
+        'practice_exam_option_id',
         'selection_type',
         'exam_name',
         'exam_code',
@@ -57,5 +58,10 @@ class RegistrationExamSelection extends Model
     public function subject(): BelongsTo
     {
         return $this->belongsTo(ApExamSubject::class, 'ap_exam_subject_id');
+    }
+
+    public function practiceExamOption(): BelongsTo
+    {
+        return $this->belongsTo(PracticeExamOption::class, 'practice_exam_option_id');
     }
 }

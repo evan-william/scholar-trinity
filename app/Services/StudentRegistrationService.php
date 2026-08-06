@@ -197,6 +197,7 @@ class StudentRegistrationService
                     'uuid' => (string) Str::uuid(),
                     'student_registration_id' => $registration->id,
                     'ap_exam_subject_id' => null,
+                    'practice_exam_option_id' => $practiceExam['id'],
                     'selection_type' => 'practice',
                     'exam_name' => $practiceExam['name'],
                     'practice_fee' => $practiceExam['fee'],
@@ -364,7 +365,7 @@ class StudentRegistrationService
 
     /**
      * @param array<int, mixed> $practiceExams
-     * @return array<int, array{name: string, fee: int}>
+     * @return array<int, array{id: int|null, name: string, fee: int}>
      */
     private function practiceExams(array $practiceExams): array
     {
@@ -383,6 +384,7 @@ class StudentRegistrationService
         $options = PracticeExamOption::query()
             ->whereIn('uuid', $values)
             ->where('is_active', true)
+            ->lockForUpdate()
             ->get()
             ->keyBy('uuid');
 
@@ -392,13 +394,34 @@ class StudentRegistrationService
             ]);
         }
 
-        $fallbackFee = (int) config('registration.practice_exam_fee', 1800);
+        $fullOption = $options->first(function (PracticeExamOption $option): bool {
+            if ($option->seat_capacity === null) {
+                return false;
+            }
+
+            $registeredCount = RegistrationExamSelection::query()
+                ->where('practice_exam_option_id', $option->id)
+                ->where('selection_type', 'practice')
+                ->where('status', 'selected')
+                ->count();
+
+            return $registeredCount >= $option->seat_capacity;
+        });
+
+        if ($fullOption) {
+            throw ValidationException::withMessages([
+                'practice_exams' => "{$fullOption->name} has reached its seat capacity.",
+            ]);
+        }
+
+        $fallbackFee = (int) config('registration.practice_exam_fee', 2800);
 
         return collect($values)
             ->map(function (string $value) use ($options, $fallbackFee): array {
                 $option = $options->get($value);
 
                 return [
+                    'id' => $option?->id,
                     'name' => $option?->name ?? $value,
                     'fee' => $option ? (int) $option->fee : $fallbackFee,
                 ];

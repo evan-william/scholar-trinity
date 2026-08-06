@@ -259,7 +259,7 @@
 
     <x-slot:hero>
         <div class="slider-area owl-carousel has-color">
-            <div class="slider_item" style="background: url({{ asset($assetBase.'images/bg/slider-bg1.jpg') }}) center/cover no-repeat;">
+            <div class="slider_item slider_item--registration">
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-7 col-md-9">
@@ -273,7 +273,7 @@
                     </div>
                 </div>
             </div>
-            <div class="slider_item" style="background: url({{ asset($assetBase.'images/bg/slider-bg2.jpg') }}) center/cover no-repeat;">
+            <div class="slider_item slider_item--support">
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-7 col-md-9">
@@ -287,7 +287,7 @@
                     </div>
                 </div>
             </div>
-            <div class="slider_item" style="background: url({{ asset($assetBase.'images/bg/slider-bg3.jpg') }}) center/cover no-repeat;">
+            <div class="slider_item slider_item--direct">
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-7 col-md-9">
@@ -450,7 +450,7 @@
             <div class="process-layout">
                 <div class="process-photo">
                     <img src="{{ asset('images/trinity-registration-guidance.png') }}" alt="{{ $tx('Students preparing registration information', '學生準備報名資料') }}">
-                    <div class="process-photo-caption"><strong>{{ $tx('One guided submission', '一次完成引導式提交') }}</strong><span>{{ $tx('No student account is required before starting the form.', '開始填寫表單前不需要建立學生帳號。') }}</span></div>
+                    <div class="process-photo-caption"><strong>{{ $tx('One guided submission', '一次完成引導式提交') }}</strong><span>{{ $tx('Start the form without creating a student account.', '無需建立學生帳號即可開始填寫表單。') }}</span></div>
                 </div>
                 <ol class="process-list">
                     @foreach ($processItems as $index => $item)
@@ -516,7 +516,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-6 mb-4">
-                    <div class="contact-panel">
+                    <div class="contact-panel contact-info-panel">
                         <span class="primary-color text-uppercase d-block mb-3">{{ $tx('Contact Information', '聯絡資訊') }}</span>
                         <h3>{{ $contact?->organization ?: 'Trinity Scholar' }}</h3>
                         <p><i class="fa fa-envelope primary-color"></i> ap-registration@trinityscholar.com</p>
@@ -525,7 +525,7 @@
                     </div>
                 </div>
                 <div class="col-lg-6 mb-4">
-                    <div class="contact-panel">
+                    <div class="contact-panel privacy-panel">
                         <span class="primary-color text-uppercase d-block mb-3">{{ $privacy?->eyebrow ?: $tx('Privacy', '隱私保護') }}</span>
                         <h3>{{ $privacy?->title ?: $tx('Private documents stay protected', '文件資料皆受保護') }}</h3>
                         <p>{{ $privacy?->body ?: $tx('Passport and payment documents are stored privately and only available to authorized administrators.', '護照與付款文件會以私密方式保存，僅授權管理員可查看。') }}</p>
