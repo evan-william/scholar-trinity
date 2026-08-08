@@ -98,7 +98,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('theme/trinity/css/public-ui.css') }}?v=20260806-11">
+    <link rel="stylesheet" href="{{ asset('theme/trinity/css/public-ui.css') }}?v=20260806-21">
     <script src="{{ asset('theme/edification/js/vendor/modernizr-2.8.3.min.js') }}"></script>
     <style>
         :root{--trinity-blue:#244e9a;--trinity-blue-dark:#142f63;--trinity-blue-soft:#eaf2ff;--trinity-blue-bright:#9db9ff;--primary:#244e9a;--primary-light:#142f63;--accent:#244e9a;--success:#237a4f;--danger:#b42318;--gray-50:#f8f9fa;--gray-100:#f1f3f5;--gray-200:#e9ecef;--gray-400:#ced4da;--gray-600:#6c757d;--gray-800:#343a40;--white:#fff;--radius:8px;--shadow:0 2px 16px rgba(0,0,0,.09)}
@@ -438,8 +438,8 @@
         @media(max-width:767px){body.trinity-form .main{padding:24px 12px 100px}body.trinity-form .form-intro>div{padding:25px 22px}body.trinity-form .form-intro h2{font-size:27px;line-height:34px}body.trinity-form .card{padding:24px 18px}body.trinity-form .section-title{font-size:20px}body.trinity-form .form-top-band{min-height:86px}}
         @media(max-width:575px){body.trinity-form #header .logo img{width:118px;max-height:68px}body.trinity-form .progress-wrap{padding:0 8px}body.trinity-form .step-item{min-width:94px}body.trinity-form .nav-footer .btn{min-width:0}body.trinity-form footer .footer-top .row{grid-template-columns:1fr!important;gap:32px!important}body.trinity-form footer .footer-top .row>:last-child{grid-column:auto}}
     </style>
-    <link rel="stylesheet" href="{{ asset('theme/trinity/css/modern-ui.css') }}?v=20260806-11">
-    <link rel="stylesheet" href="{{ asset('theme/trinity/css/public-redesign.css') }}?v=20260806-11">
+    <link rel="stylesheet" href="{{ asset('theme/trinity/css/modern-ui.css') }}?v=20260806-21">
+    <link rel="stylesheet" href="{{ asset('theme/trinity/css/public-redesign.css') }}?v=20260806-21">
 </head>
 <body class="trinity-form">
 <header id="header">
@@ -841,6 +841,8 @@
         next: isZhLocale ? '下一步' : 'Next',
         submit: isZhLocale ? '送出' : 'Submit',
         submitting: isZhLocale ? '送出中' : 'Submitting',
+        validating: isZhLocale ? '檢查中' : 'Checking',
+        validationUnavailable: isZhLocale ? '目前無法檢查此步驟，請稍後再試。' : 'This step could not be checked. Please try again.',
         saving: isZhLocale ? '暫存中' : 'Saving',
         selected: isZhLocale ? '已選擇' : 'Selected',
         selectedCount: count => isZhLocale ? `已選 ${count} 科` : `${count} selected`,
@@ -923,9 +925,11 @@
     const initialStep = Number(@json(session('student_registration_error_step', 1)));
     const preservedPassportName = @json($passportDraft['name'] ?? null);
     const passportDraftUrl = @json(route('student-registrations.passport-draft'));
+    const stepValidationUrl = @json(route('student-registrations.validate-step'));
     const serverErrors = @json($errors->messages());
     const draftKey = 'studentRegistrationFormDraft';
     let cur = 1;
+    let submitApproved = false;
     const totalSteps = 6;
     const form = document.getElementById('studentForm');
     const field = name => form.elements[name]?.value || '';
@@ -1131,15 +1135,28 @@
         });
     }
 
-    function hydrateServerErrors() {
-        Object.entries(serverErrors || {}).forEach(([name, messages]) => {
+    function inputForError(name) {
+        const bracketName = name.replace(/\.([^.]*)/g, '[$1]');
+        return form.elements[name]
+            || form.elements[`${name}[]`]
+            || form.elements[bracketName]
+            || form.elements[`${bracketName}[]`];
+    }
+
+    function displayServerErrors(errors) {
+        let firstTarget = null;
+        let firstMessage = null;
+
+        Object.entries(errors || {}).forEach(([name, messages]) => {
             const message = Array.isArray(messages) ? messages[0] : messages;
-            const input = form.elements[name] || form.elements[`${name}[]`];
+            const input = inputForError(name);
+            firstMessage ||= message;
 
             if (input instanceof RadioNodeList) {
                 const firstInput = [...input].find(item => item instanceof HTMLElement);
                 const container = firstInput?.closest('.card') || firstInput?.closest('section');
                 if (container) showGroupError(container, name, message);
+                firstTarget ||= firstInput || container;
                 return;
             }
 
@@ -1148,16 +1165,38 @@
                 showClientError(input);
                 input.addEventListener('input', () => input.setCustomValidity(''), { once: true });
                 input.addEventListener('change', () => input.setCustomValidity(''), { once: true });
+                firstTarget ||= input;
                 return;
             }
 
             if (name.startsWith('exam_subject_')) {
-                showGroupError(document.querySelector('[data-step="3"] .exam-grid') || document.querySelector('[data-step="3"] .card'), 'exam_subject_uuids', message);
+                const container = document.querySelector('[data-step="3"] .exam-grid') || document.querySelector('[data-step="3"] .card');
+                showGroupError(container, 'exam_subject_uuids', message);
+                firstTarget ||= container;
+                return;
+            }
+
+            if (name.startsWith('practice_exams')) {
+                const container = document.querySelector('[data-step="3"] .practice-exams') || document.querySelector('[data-step="3"] .card');
+                showGroupError(container, 'practice_exams', message);
+                firstTarget ||= container;
             }
         });
+
+        if (firstTarget) {
+            firstTarget.focus?.({preventScroll: true});
+            firstTarget.scrollIntoView?.({behavior: 'smooth', block: 'center'});
+        }
+        if (firstMessage && !firstTarget) notify(firstMessage);
+
+        return !firstMessage;
     }
 
-    function validateStep() {
+    function hydrateServerErrors() {
+        displayServerErrors(serverErrors || {});
+    }
+
+    function validateCurrentStepFields() {
         const section = document.querySelector(`[data-step="${cur}"]`);
         const passportInput = document.getElementById('passportFile');
 
@@ -1199,7 +1238,6 @@
                 showClientError(input);
                 input.focus({preventScroll: true});
                 input.scrollIntoView({behavior: 'smooth', block: 'center'});
-                notify(input.validationMessage || uiText.stepRequired);
                 return false;
             }
             clearClientError(input);
@@ -1210,22 +1248,45 @@
             const examContainer = document.querySelector('[data-step="3"] .exam-grid') || document.querySelector('[data-step="3"] .card');
             showGroupError(examContainer, 'exam_subject_uuids', uiText.examRequired);
             examContainer?.scrollIntoView({behavior: 'smooth', block: 'center'});
-            notify(uiText.examRequired);
             return false;
         }
         return true;
     }
 
-    function validateAllBeforeSubmit() {
-        const originalStep = cur;
+    async function validateStepOnServer() {
+        const payload = new FormData(form);
+        payload.delete('passport_file');
+        payload.set('step', String(cur));
 
-        for (let step = 1; step <= 5; step++) {
-            setStep(step);
-            if (!validateStep()) return false;
+        try {
+            const response = await fetch(stepValidationUrl, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': form.elements._token.value,
+                    'Accept': 'application/json',
+                },
+                body: payload,
+            });
+            const result = await response.json().catch(() => ({}));
+
+            if (response.ok) return true;
+            if (response.status === 422) {
+                return displayServerErrors(result.errors || {step: [result.message || uiText.stepRequired]});
+            }
+
+            notify(result.message || uiText.validationUnavailable);
+            return false;
+        } catch (error) {
+            notify(uiText.validationUnavailable);
+            return false;
         }
+    }
 
-        setStep(originalStep);
-        return true;
+    async function validateStep() {
+        if (!validateCurrentStepFields()) return false;
+        if (cur > 5) return true;
+
+        return validateStepOnServer();
     }
 
     function calculate() {
@@ -1368,24 +1429,36 @@
     }
     document.getElementById('examSearch').addEventListener('input', filterExams);
     document.getElementById('categoryFilter').addEventListener('change', filterExams);
-    document.getElementById('btnNext').addEventListener('click', () => {
-        if (!validateStep()) return;
+    document.getElementById('btnNext').addEventListener('click', async () => {
+        const btn = document.getElementById('btnNext');
+
         if (cur < totalSteps) {
+            const originalText = btn.textContent;
+            btn.disabled = true;
+            btn.classList.add('loading');
+            btn.textContent = uiText.validating;
+            const valid = await validateStep();
+            btn.disabled = false;
+            btn.classList.remove('loading');
+            btn.textContent = originalText;
+
+            if (!valid) return;
             setStep(cur + 1);
             saveFormDraft();
             return;
         }
-        if (!validateAllBeforeSubmit()) return;
-        const btn = document.getElementById('btnNext');
+
+        submitApproved = true;
         btn.classList.add('loading');
         btn.textContent = uiText.submitting;
         localStorage.removeItem(draftKey);
         form.requestSubmit();
     });
     form.addEventListener('submit', event => {
-        if (cur !== totalSteps || !validateAllBeforeSubmit()) {
-            event.preventDefault();
-        }
+        if (submitApproved && cur === totalSteps) return;
+
+        event.preventDefault();
+        document.getElementById('btnNext').click();
     });
     document.getElementById('btnBack').addEventListener('click', () => {
         setStep(Math.max(1, cur - 1));

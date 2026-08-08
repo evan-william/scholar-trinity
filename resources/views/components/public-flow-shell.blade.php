@@ -14,7 +14,7 @@
     $partnerLogo = 'images/trinity-scholar-primacy-logo.png';
     $footerLogo = 'images/trinity-scholar-logo-clean.png';
     $brandFavicon = 'images/trinity-scholar-favicon.png';
-    $publicUiVersion = '20260806-11';
+    $publicUiVersion = '20260806-21';
     $registrationSettings = app(\App\Services\PublicRegistrationSettings::class)->all();
     $uiLocale = session('locale', str_replace('_', '-', app()->getLocale()));
     $isZh = $uiLocale === 'zh-TW';

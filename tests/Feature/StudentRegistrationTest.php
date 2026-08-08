@@ -112,6 +112,58 @@ class StudentRegistrationTest extends TestCase
             ->assertSessionHasErrors(['student_email', 'passport_number']);
     }
 
+    public function test_student_information_step_rejects_duplicate_identity_before_progressing(): void
+    {
+        Mail::fake();
+        Storage::fake('local');
+        $this->seed(ApExamSubjectSeeder::class);
+        $subject = ApExamSubject::query()->firstOrFail();
+
+        $this->post('/student-registration', $this->validPayload([
+            'exam_subject_ids' => [$subject->id],
+        ]))->assertRedirect();
+
+        $draft = $this->postJson(route('student-registrations.passport-draft'), [
+            'passport_file' => UploadedFile::fake()->image('duplicate-passport.jpg'),
+        ])->assertOk();
+
+        $this->postJson(route('student-registrations.validate-step'), [
+            'step' => 1,
+            'family_name_en' => 'CHEN',
+            'first_name_en' => 'Ming',
+            'chinese_legal_name' => 'Chen Ming Hua',
+            'date_of_birth' => '2009-01-15',
+            'nationality' => 'Taiwan',
+            'passport_number' => 'A12345678',
+            'passport_expiry_date' => '2030-01-15',
+            'grade' => '11',
+            'current_school' => 'Taipei International School',
+            'student_email' => 'alex@example.com',
+            'student_phone' => '+886 912 345 678',
+            'passport_file_token' => $draft->json('token'),
+        ])->assertUnprocessable()
+            ->assertJsonValidationErrors(['passport_number', 'student_email']);
+    }
+
+    public function test_guardian_step_rejects_missing_required_fields_before_progressing(): void
+    {
+        $this->postJson(route('student-registrations.validate-step'), [
+            'step' => 2,
+        ])->assertUnprocessable()
+            ->assertJsonValidationErrors([
+                'parent_first_name',
+                'parent_last_name',
+                'relationship',
+                'parent_email',
+                'parent_phone',
+                'mailing_address',
+                'mailing_city',
+                'emergency_contact_name',
+                'emergency_contact_phone',
+                'emergency_contact_relationship',
+            ]);
+    }
+
     public function test_registration_remains_visible_when_email_delivery_fails(): void
     {
         $this->seed(ApExamSubjectSeeder::class);

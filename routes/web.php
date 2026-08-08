@@ -31,6 +31,7 @@ Route::redirect('/registrations/{registration}', '/student-registration')->name(
 
 Route::get('/student-registration', [StudentRegistrationController::class, 'create'])->name('student-registrations.create');
 Route::post('/student-registration/passport-draft', [StudentRegistrationController::class, 'storePassportDraft'])->middleware('throttle:12,1')->name('student-registrations.passport-draft');
+Route::post('/student-registration/validate-step', [StudentRegistrationController::class, 'validateStep'])->middleware('throttle:30,1')->name('student-registrations.validate-step');
 Route::post('/student-registration', [StudentRegistrationController::class, 'store'])->middleware('throttle:8,1')->name('student-registrations.store');
 Route::get('/student-registration/{registrationNumber}', [StudentRegistrationController::class, 'show'])->name('student-registrations.show');
 Route::get('/payments/{registrationNumber}', [PaymentController::class, 'show'])->name('payments.show');
