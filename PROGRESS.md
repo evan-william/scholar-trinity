@@ -1,6 +1,6 @@
 # Trinity Scholar Progress Tracker
 
-Last updated: 2026-08-01, Asia/Bangkok
+Last updated: 2026-08-08, Asia/Bangkok
 
 This file is the working source of truth for project status. Every implementation pass must update:
 - `Current Progress` for what changed.
@@ -60,6 +60,31 @@ Current local template pass:
 - Raw downloaded templates are ignored through `template-source/` in `.gitignore`.
 
 ## Current Progress
+
+2026-08-08
+- Client CMS and bilingual-content completion:
+  - Pulled and audited teammate commit `b0784d1` before implementing the new client feedback.
+  - Added non-destructive bilingual JSON storage for landing sections, timeline rows, fee copy, required documents, FAQs, and contact content. Existing English/admin-edited data is retained during migration.
+  - Added a dedicated bilingual `Registration Form Important Notice` editor. The no-login form now reads its title, body, and list items from the database instead of fixed Blade copy.
+  - Added 54 bilingual text controls for remaining landing-page slides, highlights, overview cards, registration information, process details, document section, FAQ heading, contact heading, and CTA. These fields change copy only and cannot modify layout.
+  - Wired the localized CMS timeline, contact address, phone, email, and Line value into the live landing/form/footer output.
+  - Added production-safe English and Traditional Chinese seed/backfill content so switching language no longer falls back to English for managed landing content.
+- Practice exam and pricing updates:
+  - Added an explicit Delete action for practice exam options. Removal uses the existing soft-delete model, so historical registration selections remain intact.
+  - Added database-backed unified registration pricing tiers for 1-10 exams using the client-provided NTD table, including volume discounts and separate TPCA/service accounting snapshots.
+  - Added editable pricing-tier controls to Admin > Payment Settings and enforced the selected tier server-side; client-submitted totals remain ignored.
+  - Preserved exact subject-fee totals as a fallback when pricing tiers are unavailable, avoiding incorrect averages for heterogeneous legacy fees.
+- Branding and resilience:
+  - Added the TPCA/Primacy partner logo beside Trinity Scholar in both shared public footers.
+  - Hardened the payment settings screen so it still renders before the pricing migration is available.
+  - Fixed PHPUnit rate-limiter state isolation without changing production throttle middleware.
+- Verification:
+  - PHP lint passed for every changed and newly added PHP file.
+  - Full PHPUnit suite passed: 93 tests and 564 assertions.
+  - Blade view compilation passed.
+  - Vite production build passed with 61 modules transformed.
+  - `git diff --check` passed and no merge markers or `.agent`/`.agents` directory were found.
+  - Browser QA was intentionally skipped per user instruction.
 
 2026-08-01
 - Client Review 2 and Review 3 completion pass:
@@ -625,7 +650,7 @@ These items come directly from `Reference/Trinity Scholar - Features.pdf` and we
 ### Client-Pending Items - 2026-07-21
 
 - PENDING: final detailed main-registration information copy from the client.
-- PENDING: final AP course/exam options and approved public fee values.
+- DONE: the client-provided 1-10 exam regular-registration pricing table is stored as editable unified pricing tiers; final late-registration pricing remains client-controlled.
 - PENDING: credit/debit-card payment method and production payment-provider credentials.
 - DONE: approved manual bank-account details are seeded/migrated and remain editable from admin Payment Settings.
 
@@ -680,14 +705,14 @@ These items come directly from `Reference/Trinity Scholar - Features.pdf` and we
   - DONE: CTA no longer points to legacy `/register`.
   - DONE: current homepage/compro layout implemented with template assets and extracted announcement content.
   - TODO: final content approval and image replacement if client provides more assets.
-  - TODO: verify bilingual content.
+  - DONE: database-backed English and Traditional Chinese landing content and registration intro/notice have regression coverage.
 
 - Student Registration Form:
   - `PARTIAL`: form and backend exist.
   - DONE: important hidden/missing data persistence fixed.
   - DONE: review step now includes DOB, nationality, passport number, relationship, emergency contact, and accommodations.
   - DONE: top-of-form intro now uses extracted announcement content and no-login registration guidance.
-  - DONE: English top-of-form intro is editable directly from Landing Content CMS; pending Traditional Chinese client copy remains unchanged.
+  - DONE: English and Traditional Chinese top-of-form intro and Important Notice are editable directly from Landing Content CMS.
   - TODO: deeper visual refactor after final frontend/admin template decision.
   - DONE: new submitted fields appear in admin detail/edit/print and exports.
 
@@ -751,7 +776,7 @@ These items come directly from `Reference/Trinity Scholar - Features.pdf` and we
   - `PARTIAL`: fee separation and totals exist.
   - DONE: server-side practice fee calculation.
   - DONE: admin payment settings page now uses the backend/admin shell.
-  - TODO: admin fee update UX and recalculation rules.
+  - DONE: admin unified-pricing tier editor and server-side 1-10 exam volume-discount calculation.
 
 - Taiwan Payment Gateway:
   - `NOT PRODUCTION READY`: gateway payload/callback skeleton exists.
@@ -808,7 +833,8 @@ These items come directly from `Reference/Trinity Scholar - Features.pdf` and we
   - DONE: admin shell navigation/top actions and newly converted admin management pages use shared bilingual keys.
   - DONE: admin language key audit confirms all used `admin.*` translation keys exist in both English and Traditional Chinese files.
   - DONE: language switcher is now visible on landing, student registration, and admin headers; it uses the Laravel locale route/session/cookie flow.
-  - TODO: remove hardcoded text from Blade pages.
+  - DONE: all landing-page content blocks plus the registration intro/notice are database-backed in English and Traditional Chinese.
+  - TODO: migrate remaining operational/admin/email hardcoded copy outside the landing CMS to translation files where needed.
 
 - Form UX:
   - `PARTIAL`: mobile, progress, validation, confirmation exist.
@@ -885,7 +911,7 @@ These items come directly from `Reference/Trinity Scholar - Features.pdf` and we
 - NewebPay payment adapter still throws `LogicException`; only ECPay skeleton has a payload/signature path.
 - Receipt auto issue is still not production-ready; manual sandbox and provider placeholder adapters exist, but real issue/cancel/resend APIs are pending.
 - Built-in database backup command only supports local SQLite; production MySQL/MariaDB needs a server backup job.
-- Language coverage is incomplete because many view strings are hardcoded.
+- Public landing content and the registration intro/notice are fully database-backed in English and Traditional Chinese; remaining localization work is limited to operational/admin/email copy outside the Landing Content CMS.
 - Deep admin static audit 2026-07-04 found and fixed a boolean select bug in AP subject/exam season active status fields.
 - PDF checklist implementation 2026-07-06 resolved the no-credential PDF gaps for AP preparation interest fields, passport ZIP download, practice exam schedule management, payment reminders, admin notifications, email template management UI, and system configuration UI.
 - Remaining PDF gaps that need product/client scope or credentials: tutoring CRM, real ECPay/NewebPay production integration, real Taiwan e-invoice/fapiao API, MySQL production backup job, and future online practice exam platform.

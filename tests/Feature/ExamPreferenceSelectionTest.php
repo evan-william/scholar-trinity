@@ -11,11 +11,18 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Routing\Middleware\ThrottleRequests;
 use Tests\TestCase;
 
 class ExamPreferenceSelectionTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->withoutMiddleware(ThrottleRequests::class);
+    }
 
     public function test_exam_selection_list_shows_status_date_and_fee_availability(): void
     {
@@ -27,8 +34,7 @@ class ExamPreferenceSelectionTest extends TestCase
             ->assertSee($subject->code)
             ->assertSee('Mathematics')
             ->assertSee('Limited Seats')
-            ->assertSee('Exam Fee')
-            ->assertSee('Service Fee')
+            ->assertSee('Unified pricing is based on the total number of AP exams selected.')
             ->assertSee('Coming Soon')
             ->assertDontSee('Exam NT$ 7,800')
             ->assertDontSee('Service NT$ 1,200');
@@ -49,9 +55,9 @@ class ExamPreferenceSelectionTest extends TestCase
 
         $registration = StudentRegistration::query()->with('exams')->firstOrFail();
         $this->assertSame(1500, $registration->late_fee_total);
-        $this->assertSame(10500, $registration->total_fee);
+        $this->assertSame(19000, $registration->total_fee);
         $this->assertSame(1500, (int) $registration->exams->first()->pivot->late_fee_snapshot);
-        $this->assertSame(10500, (int) $registration->exams->first()->pivot->total_amount_snapshot);
+        $this->assertSame(19000, (int) $registration->exams->first()->pivot->total_amount_snapshot);
         Mail::assertSent(StudentRegistrationConfirmation::class);
     }
 
@@ -136,7 +142,7 @@ class ExamPreferenceSelectionTest extends TestCase
 
         $this->post('/student-registration', $payload)->assertRedirect();
 
-        $this->assertSame(9000, StudentRegistration::query()->firstOrFail()->total_fee);
+        $this->assertSame(17500, StudentRegistration::query()->firstOrFail()->total_fee);
     }
 
     public function test_admin_can_create_update_and_delete_exam_subject(): void

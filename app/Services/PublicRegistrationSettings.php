@@ -9,9 +9,13 @@ class PublicRegistrationSettings
 {
     private const DEFAULTS = [
         'registration.main_period' => 'August - October',
+        'registration.main_period_zh' => '八月至十月',
         'registration.late_period' => 'Mid November - Mid March',
+        'registration.late_period_zh' => '十一月中旬至三月中旬',
         'registration.main_test_period' => 'May 3-14, 2027',
+        'registration.main_test_period_zh' => '2027 年 5 月 3 日至 14 日',
         'registration.late_test_period' => 'May 17 - 21, 2027',
+        'registration.late_test_period_zh' => '2027 年 5 月 17 日至 21 日',
         'registration.test_site_name_en' => 'The Primacy Collegiate Academy',
         'registration.test_site_name_zh' => '基督教美國高中課程',
         'registration.test_site_address_en' => 'No. 99, Meide St, Shilin District, Taipei City, 11159',

@@ -78,6 +78,6 @@ class PracticeExamOptionAdminController extends Controller
         $practiceExam->update(['is_active' => false]);
         $practiceExam->delete();
 
-        return redirect()->route('admin.practice-exams.index')->with('status', 'Practice exam option disabled.');
+        return redirect()->route('admin.practice-exams.index')->with('status', 'Practice exam option removed. Existing registration history was preserved.');
     }
 }

@@ -4,6 +4,8 @@
     $tx = fn (string $en, string $zh): string => $isZh ? $zh : $en;
     $seo = $settings->get('seo', collect());
     $hero = $settings->get('hero', collect());
+    $copySettings = $settings->get('copy', collect());
+    $copy = fn (string $key, string $en, string $zh): string => (string) data_get($copySettings, $key.'.text', $tx($en, $zh));
     $metaTitle = data_get($seo, 'meta_title.text', $tx('2027 AP Exam Registration | Trinity Scholar', '2027 AP 考試報名 | Trinity Scholar'));
     $metaDescription = data_get($seo, 'meta_description.text', $tx('Trinity Scholar AP Exam registration service for students in Taipei.', 'Trinity Scholar 提供台北學生 AP 考試報名支援服務。'));
     $heroTitle = data_get($hero, 'title.text', $tx('2027 Advanced Placement (AP) Exam Registration', '2027 Advanced Placement (AP) 考試報名'));
@@ -62,31 +64,7 @@
             'answer' => $tx('Yes. Students can mark accommodation needs and provide SSD or supporting documentation during registration when applicable.', '可以。若適用，學生可在報名時標記特殊需求並提供 SSD 或相關證明文件。'),
         ],
     ]);
-    $displayDocuments = collect([
-        (object) ['name' => $tx('Student Information', '學生資料'), 'description' => $tx('Legal name, school, grade, date of birth, and a personal student email address. School email addresses should not be used.', '法定姓名、學校、年級、出生日期及學生個人電子郵件。請勿使用學校電子郵件。')],
-        (object) ['name' => $tx('Valid Student Passport', '有效學生護照'), 'description' => $tx('Upload a clear copy of the student passport photo page for identity verification.', '上傳清楚的學生護照照片頁，以供身分核對。')],
-        (object) ['name' => $tx('Parent Information', '家長資料'), 'description' => $tx('Parent or guardian name, relationship, email, phone, and mailing address.', '家長或監護人姓名、關係、電子郵件、電話及通訊地址。')],
-        (object) ['name' => $tx('Accommodation Documents', '特殊考試需求文件'), 'description' => $tx('Provide College Board accommodation approval or SSD documentation when applicable.', '如適用，請提供 College Board 特殊考試需求核准或 SSD 文件。')],
-    ]);
-    $displayFaqs = ($faqs->isNotEmpty() ? $faqs : collect([
-        (object) ['question' => 'What is AP?', 'answer' => 'AP stands for Advanced Placement. AP exams allow students to demonstrate college-level subject knowledge and may support university applications.'],
-        (object) ['question' => 'Who can register?', 'answer' => ''],
-        (object) ['question' => 'When is registration considered complete?', 'answer' => ''],
-        (object) ['question' => 'Can I request accommodations?', 'answer' => 'Yes. Students can mark accommodation needs and provide SSD or supporting documentation during registration.'],
-    ]))->map(function ($faq) use ($tx) {
-        $question = strtolower($faq->question);
-        if (str_contains($question, 'who can register')) {
-            return (object) ['question' => $tx('Who can register?', '誰可以報名？'), 'answer' => $tx('Any high school student, homeschooled student, or independent learner.', '任何高中生、在家自學學生或獨立學習者皆可報名。')];
-        }
-        if (str_contains($question, 'registration considered complete')) {
-            return (object) ['question' => $tx('When is registration considered complete?', '何時才算完成報名？'), 'answer' => $tx('Registration is finalized once the form and payment are received and an official confirmation email is issued.', '表單與付款皆收到，且官方確認信寄出後，報名才算完成。')];
-        }
-        return $faq;
-    })->values();
-    if (! $displayFaqs->contains(fn ($faq) => str_contains(strtolower($faq->question), 'age requirement'))) {
-        $displayFaqs->push((object) ['question' => $tx('What is the age requirement?', '年齡限制為何？'), 'answer' => $tx('There is no minimum age, but AP is designed for high school students in grades 9 through 12. College Board generally does not permit students over age 21 to take the exams.', '沒有最低年齡限制，但 AP 是為 9 至 12 年級高中生設計。College Board 通常不允許 21 歲以上的學生參加考試。')]);
-    }
-    $processItems = [
+    $processItems = filled($process?->items) ? $process->items : [
         $tx('Fill registration form', '填寫報名表'),
         $tx('Upload documents', '上傳文件'),
         $tx('Review and submit', '確認並提交'),
@@ -94,16 +72,42 @@
         $tx('Confirmation', '確認報名'),
     ];
     $processDetails = [
-        $tx('Enter student and guardian details, AP subjects or exams, and preparation interests.', '填寫學生與家長資料、AP 科目或考試，以及備考意願。'),
-        $tx('Upload a valid passport and any required accommodation documents.', '上傳有效護照及所需的特殊考試需求文件。'),
-        $tx('Verify that every detail is correct before submitting the registration.', '提交報名前確認所有資料均正確。'),
-        $tx('Select a payment method and complete the required transaction.', '選擇付款方式並完成所需交易。'),
-        $tx('The admin team reviews the submission and confirms enrollment by email.', '管理團隊審核資料並以電子郵件確認報名。'),
+        $copy('process_detail_1', 'Enter student and guardian details, AP subjects or exams, and preparation interests.', '填寫學生與家長資料、AP 科目或考試，以及備考意願。'),
+        $copy('process_detail_2', 'Upload a valid passport and any required accommodation documents.', '上傳有效護照及所需的特殊考試需求文件。'),
+        $copy('process_detail_3', 'Verify that every detail is correct before submitting the registration.', '提交報名前確認所有資料均正確。'),
+        $copy('process_detail_4', 'Select a payment method and complete the required transaction.', '選擇付款方式並完成所需交易。'),
+        $copy('process_detail_5', 'The admin team reviews the submission and confirms enrollment by email.', '管理團隊審核資料並以電子郵件確認報名。'),
     ];
     $registrationSettings ??= [];
+    $schedule = fn (string $key, string $fallback): string => (string) ($registrationSettings[$key.($isZh ? '_zh' : '')] ?? $registrationSettings[$key] ?? $fallback);
+    $timelineCards = $timelines
+        ->groupBy('round')
+        ->map(function ($rows, $round) {
+            $months = $rows->pluck('month')->filter()->values();
+
+            return (object) [
+                'title' => $round,
+                'range' => $months->count() > 1 ? $months->first().' - '.$months->last() : ($months->first() ?? ''),
+                'description' => $rows->pluck('description')->filter()->unique()->implode(' '),
+                'type' => str_contains(strtolower((string) $round), 'late') || str_contains((string) $round, '逾期') ? 'late' : 'main',
+            ];
+        })
+        ->values();
+
+    if ($timelineCards->isEmpty()) {
+        $timelineCards = collect([
+            (object) ['title' => $tx('Main Registration Period', '一般報名時段'), 'range' => $schedule('main_period', 'August - October'), 'description' => $tx('The preferred window for submitting exam choices and required documents.', '建議於此時段提交考試選擇與所需文件。'), 'type' => 'main'],
+            (object) ['title' => $tx('Late Registration Period', '逾期報名時段'), 'range' => $schedule('late_period', 'Mid November - Mid March'), 'description' => $tx('Available only while remaining test-center slots are still open.', '僅於考場仍有剩餘名額時開放。'), 'type' => 'late'],
+        ]);
+    }
+
+    $timelineCards->push(
+        (object) ['title' => $tx('Main Test Period', '一般考試時段'), 'range' => $schedule('main_test_period', 'May 3-14, 2027'), 'description' => $tx('The standard AP testing window for registered students.', '已完成報名學生的一般 AP 考試時段。'), 'type' => 'main'],
+        (object) ['title' => $tx('Late-Testing Period', '逾期考試時段'), 'range' => $schedule('late_test_period', 'May 17 - 21, 2027'), 'description' => $tx('The alternate testing window for approved late-testing arrangements.', '經核准之逾期考試安排所使用的替代時段。'), 'type' => 'late'],
+    );
 @endphp
 
-<x-public-flow-shell :title="$metaTitle" :description="$metaDescription" body-class="landing-refined" content-class="none">
+<x-public-flow-shell :title="$metaTitle" :description="$metaDescription" :contact="$contact" body-class="landing-refined" content-class="none">
     <x-slot:styles>
         <style>
             #overview,#registration-information,#timeline,#process,#documents,#faq,#contact{scroll-margin-top:112px}
@@ -278,10 +282,10 @@
                     <div class="row">
                         <div class="col-lg-7 col-md-9">
                             <div class="slider-content">
-                                <h3>{{ $tx('Late Registration', '逾期報名') }}</h3>
-                                <h1><span class="primary-color">{{ $tx('Spring Availability', '春季名額') }}</span> {{ $tx('When Slots Remain', '視剩餘名額開放') }}</h1>
-                                <p>{{ $tx('Main Registration Period: '.($registrationSettings['main_period'] ?? 'August - October').'. Late Registration Period: '.($registrationSettings['late_period'] ?? 'Mid November - Mid March').' if seats remain available.', '一般報名期間為八月至十月；若仍有名額，逾期報名可能於春季學期開放。') }}</p>
-                                <a class="btn btn-primary btn-round btn-lg mt-5" href="#registration-information">{{ $tx('View Registration Information', '查看報名資訊') }}</a>
+                        <h3>{{ $copy('late_eyebrow', 'Late Registration', '逾期報名') }}</h3>
+                        <h1><span class="primary-color">{{ $copy('late_title_primary', 'Spring Availability', '春季名額') }}</span> {{ $copy('late_title_secondary', 'When Slots Remain', '視剩餘名額開放') }}</h1>
+                                <p>{{ $tx('Main Registration Period: ', '一般報名期間：') }}{{ $schedule('main_period', 'August - October') }}. {{ $tx('Late Registration Period: ', '逾期報名期間：') }}{{ $schedule('late_period', 'Mid November - Mid March') }}.</p>
+                        <a class="btn btn-primary btn-round btn-lg mt-5" href="#registration-information">{{ $copy('late_button', 'View Registration Information', '查看報名資訊') }}</a>
                             </div>
                         </div>
                     </div>
@@ -292,10 +296,10 @@
                     <div class="row">
                         <div class="col-lg-7 col-md-9">
                             <div class="slider-content">
-                                <h3>{{ $tx('No Login Required', '不需登入') }}</h3>
-                                <h1><span class="primary-color">{{ $tx('Submit The Form', '提交表單') }}</span> {{ $tx('Then Admin Reviews', '由管理員審核') }}</h1>
-                                <p>{{ $tx('Students can submit passport, exam selections, accommodations, payment method, and preparation interest in one guided flow.', '學生可在同一流程中提交護照、考試選擇、特殊需求、付款方式與備考意願。') }}</p>
-                                <a class="btn btn-primary btn-round btn-lg mt-5" href="#process">{{ $tx('See Flow', '查看流程') }}</a>
+                        <h3>{{ $copy('form_eyebrow', 'No Login Required', '不需登入') }}</h3>
+                        <h1><span class="primary-color">{{ $copy('form_title_primary', 'Submit The Form', '提交表單') }}</span> {{ $copy('form_title_secondary', 'Then Admin Reviews', '由管理員審核') }}</h1>
+                        <p>{{ $copy('form_body', 'Students can submit passport, exam selections, accommodations, payment method, and preparation interest in one guided flow.', '學生可在同一流程中提交護照、考試選擇、特殊需求、付款方式與備考意願。') }}</p>
+                        <a class="btn btn-primary btn-round btn-lg mt-5" href="#process">{{ $copy('form_button', 'See Flow', '查看流程') }}</a>
                             </div>
                         </div>
                     </div>
@@ -307,10 +311,10 @@
     <section class="quick-facts" aria-label="{{ $tx('Registration highlights', '報名重點') }}">
         <div class="container">
             <div class="fact-row">
-                <div class="fact-item"><i class="fa fa-calendar fact-icon"></i><div><strong>{{ $registrationSettings['main_period'] ?? 'August - October' }}</strong><span>{{ $tx('Main registration period', '一般報名時段') }}</span></div></div>
-                <div class="fact-item"><i class="fa fa-map-marker fact-icon"></i><div><strong>{{ $tx('Taipei', '台北') }}</strong><span>{{ $tx('Test-center support', '考場報名支援') }}</span></div></div>
-                <div class="fact-item"><i class="fa fa-check-square-o fact-icon"></i><div><strong>{{ $tx('Form + Pay', '表單 + 付款') }}</strong><span>{{ $tx('Both required to complete', '兩者皆完成才算報名') }}</span></div></div>
-                <div class="fact-item"><i class="fa fa-unlock-alt fact-icon"></i><div><strong>{{ $tx('No Login', '不需登入') }}</strong><span>{{ $tx('Students register directly', '學生可直接填寫') }}</span></div></div>
+                <div class="fact-item"><i class="fa fa-calendar fact-icon"></i><div><strong>{{ $schedule('main_period', 'August - October') }}</strong><span>{{ $copy('main_period_label', 'Main registration period', '一般報名時段') }}</span></div></div>
+                <div class="fact-item"><i class="fa fa-map-marker fact-icon"></i><div><strong>{{ $copy('location_value', 'Taipei', '台北') }}</strong><span>{{ $copy('location_label', 'Test-center support', '考場報名支援') }}</span></div></div>
+                <div class="fact-item"><i class="fa fa-check-square-o fact-icon"></i><div><strong>{{ $copy('completion_value', 'Form + Pay', '表單 + 付款') }}</strong><span>{{ $copy('completion_label', 'Both required to complete', '兩者皆完成才算報名') }}</span></div></div>
+                <div class="fact-item"><i class="fa fa-unlock-alt fact-icon"></i><div><strong>{{ $copy('access_value', 'No Login', '不需登入') }}</strong><span>{{ $copy('access_label', 'Students register directly', '學生可直接填寫') }}</span></div></div>
             </div>
         </div>
     </section>
@@ -329,8 +333,8 @@
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    <div class="overview-visual" role="img" aria-label="{{ $tx('Taipei test-center support', '台北考場報名支援') }}">
-                        <div class="overview-visual-note"><strong>{{ $tx('Taipei test-center support', '台北考場報名支援') }}</strong><span>{{ $tx('Registration coordination from form submission through admin review.', '從表單提交到管理端審核的完整報名協調。') }}</span></div>
+                        <div class="overview-visual" role="img" aria-label="{{ $copy('visual_title', 'Taipei test-center support', '台北考場報名支援') }}">
+                            <div class="overview-visual-note"><strong>{{ $copy('visual_title', 'Taipei test-center support', '台北考場報名支援') }}</strong><span>{{ $copy('visual_body', 'Registration coordination from form submission through admin review.', '從表單提交到管理端審核的完整報名協調。') }}</span></div>
                     </div>
                 </div>
             </div>
@@ -338,19 +342,19 @@
                 <div class="col-lg-4 col-md-6 mb-5">
                     <article class="visual-card">
                         <div class="course-thumb"><img src="{{ asset($assetBase.'images/course/cs-img1.jpg') }}" alt="{{ $tx('Guided AP registration', 'AP 報名流程') }}"><span class="cs-price primary-bg">AP</span></div>
-                        <div class="card-body p-25"><h4><a href="{{ route('student-registrations.create') }}">{{ $tx('Guided Registration', '引導式報名') }}</a></h4><p>{{ $tx('Student information, guardian contact, passport upload, AP subject choice, accommodations, and payment method are collected in one flow.', '學生資料、家長聯絡資訊、護照上傳、AP 科目選擇、特殊需求與付款方式，皆可在同一流程中完成。') }}</p></div>
+                        <div class="card-body p-25"><h4><a href="{{ route('student-registrations.create') }}">{{ $copy('guided_title', 'Guided Registration', '引導式報名') }}</a></h4><p>{{ $copy('guided_body', 'Student information, guardian contact, passport upload, AP subject choice, accommodations, and payment method are collected in one flow.', '學生資料、家長聯絡資訊、護照上傳、AP 科目選擇、特殊需求與付款方式，皆可在同一流程中完成。') }}</p></div>
                     </article>
                 </div>
                 <div class="col-lg-4 col-md-6 mb-5">
                     <article class="visual-card">
-                        <div class="course-thumb"><img src="{{ asset($assetBase.'images/about/abt-right-thumb.jpg') }}" alt="{{ $tx('Coordinator review', '協調員審核') }}"><span class="cs-price primary-bg">{{ $tx('Admin', '審核') }}</span></div>
-                        <div class="card-body p-25"><h4><a href="{{ route('student-registrations.create') }}">{{ $tx('Coordinator Review', '協調員審核') }}</a></h4><p>{{ $tx('The admin team reviews document validity, payment status, subject availability, quota, notes, and final registration status.', '管理團隊會審核文件有效性、付款狀態、科目名額、配額、備註與最終報名狀態。') }}</p></div>
+                        <div class="course-thumb"><img src="{{ asset($assetBase.'images/about/abt-right-thumb.jpg') }}" alt="{{ $copy('review_title', 'Coordinator Review', '協調員審核') }}"><span class="cs-price primary-bg">{{ $copy('review_badge', 'Admin', '審核') }}</span></div>
+                        <div class="card-body p-25"><h4><a href="{{ route('student-registrations.create') }}">{{ $copy('review_title', 'Coordinator Review', '協調員審核') }}</a></h4><p>{{ $copy('review_body', 'The admin team reviews document validity, payment status, subject availability, quota, notes, and final registration status.', '管理團隊會審核文件有效性、付款狀態、科目名額、配額、備註與最終報名狀態。') }}</p></div>
                     </article>
                 </div>
                 <div class="col-lg-4 col-md-6 mb-5">
                     <article class="visual-card">
-                        <div class="course-thumb"><img src="{{ asset($assetBase.'images/course/cs-img3.jpg') }}" alt="{{ $tx('Exam preparation', '考試準備') }}"><span class="cs-price primary-bg">{{ $tx('Prep', '備考') }}</span></div>
-                        <div class="card-body p-25"><h4><a href="{{ route('student-registrations.create') }}">{{ $tx('Preparation Interest', '備考課程意願') }}</a></h4><p>{{ $tx('Students can indicate AP preparation, group class, private tutoring, preferred schedule, and preferred language for follow-up.', '學生可填寫 AP 備考、團體課、一對一家教、偏好時段與語言等需求，方便後續聯繫。') }}</p></div>
+                        <div class="course-thumb"><img src="{{ asset($assetBase.'images/course/cs-img3.jpg') }}" alt="{{ $copy('prep_title', 'Preparation Interest', '備考課程意願') }}"><span class="cs-price primary-bg">{{ $copy('prep_badge', 'Prep', '備考') }}</span></div>
+                        <div class="card-body p-25"><h4><a href="{{ route('student-registrations.create') }}">{{ $copy('prep_title', 'Preparation Interest', '備考課程意願') }}</a></h4><p>{{ $copy('prep_body', 'Students can indicate AP preparation, group class, private tutoring, preferred schedule, and preferred language for follow-up.', '學生可填寫 AP 備考、團體課、一對一家教、偏好時段與語言等需求，方便後續聯繫。') }}</p></div>
                     </article>
                 </div>
             </div>
@@ -362,8 +366,8 @@
             <div class="row">
                 <div class="col-md-10 offset-md-1">
                     <div class="section-title-style2 white-title text-center compact-section-title">
-                        <span>{{ $tx('Registration Information', '報名資訊') }}</span>
-                        <h2>{{ $tx('Plan for the AP registration cycle', '規劃 AP 考試報名時程') }}</h2>
+                        <span>{{ $copy('eyebrow', 'Registration Information', '報名資訊') }}</span>
+                        <h2>{{ $copy('title', 'Plan for the AP registration cycle', '規劃 AP 考試報名時程') }}</h2>
                     </div>
                 </div>
             </div>
@@ -372,12 +376,12 @@
                     <div class="card notice-card">
                         <div class="card-body p-25">
                             <span class="notice-kicker">{{ $tx('Main Registration', '一般報名') }}</span>
-                            <h4>{{ $tx('Prepare during the main registration window.', '請於一般報名期間提早準備。') }}</h4>
-                            <p>{{ $tx('Students and guardians can prepare personal details, exam choices, and required documents before submitting the guided form.', '學生與家長可先準備個人資料、考試選擇及所需文件，再提交引導式表單。') }}</p>
+                            <h4>{{ $copy('main_title', 'Prepare during the main registration window.', '請於一般報名期間提早準備。') }}</h4>
+                            <p>{{ $copy('main_body', 'Students and guardians can prepare personal details, exam choices, and required documents before submitting the guided form.', '學生與家長可先準備個人資料、考試選擇及所需文件，再提交引導式表單。') }}</p>
                             <ul class="notice-list">
-                                <li><i class="fa fa-check-circle"></i><span>{{ $tx('Main registration period:', '一般報名期間：') }} <strong>{{ $registrationSettings['main_period'] ?? 'August - October' }}</strong></span></li>
-                                <li><i class="fa fa-check-circle"></i><span>{{ $tx('Main Test Period: '.($registrationSettings['main_test_period'] ?? 'May 3-14, 2027').'.', 'AP 一般考試通常於五月 3 日舉行。') }}</span></li>
-                                <li><i class="fa fa-check-circle"></i><span>{{ $tx('Registration is finalized after the form, payment, and official confirmation email are received.', '表單與付款皆收到，且官方確認信寄出後，報名才算完成。') }}</span></li>
+                                <li><i class="fa fa-check-circle"></i><span>{{ $tx('Main registration period:', '一般報名期間：') }} <strong>{{ $schedule('main_period', 'August - October') }}</strong></span></li>
+                                <li><i class="fa fa-check-circle"></i><span>{{ $tx('Main Test Period:', '一般考試期間：') }} <strong>{{ $schedule('main_test_period', 'May 3-14, 2027') }}</strong></span></li>
+                                <li><i class="fa fa-check-circle"></i><span>{{ $copy('main_notice', 'Registration is finalized after the form, payment, and official confirmation email are received.', '表單與付款皆收到，且官方確認信寄出後，報名才算完成。') }}</span></li>
                             </ul>
                         </div>
                     </div>
@@ -386,21 +390,21 @@
                     <div class="card notice-card">
                         <div class="card-body p-25">
                             <span class="notice-kicker">{{ $tx('Late Registration', '逾期報名') }}</span>
-                            <h4>{{ $tx('Late registration depends on remaining capacity.', '逾期報名視剩餘名額開放。') }}</h4>
-                            <p>{{ $tx('Late registration may open during the spring semester after main registration closes, only when test-center slots remain available.', '一般報名結束後，若考場仍有名額，逾期報名可能於春季學期開放。') }}</p>
+                            <h4>{{ $copy('late_title', 'Late registration depends on remaining capacity.', '逾期報名視剩餘名額開放。') }}</h4>
+                            <p>{{ $copy('late_body', 'Late registration may open after main registration closes, only when test-center slots remain available.', '一般報名結束後，若考場仍有名額，才可能開放逾期報名。') }}</p>
                             <ul class="notice-list">
-                                <li><i class="fa fa-info-circle"></i><span>{{ $tx('Late Registration Period:', '通常逾期報名期間：') }} <strong>{{ $registrationSettings['late_period'] ?? 'Mid November - Mid March' }}</strong></span></li>
-                                <li><i class="fa fa-info-circle"></i><span>{{ $tx('Late-Testing Period: '.($registrationSettings['late_test_period'] ?? 'May 17 - 21, 2027').'.', '逾期考試通常於五月 17-21 日舉行。') }}</span></li>
-                                <li><i class="fa fa-info-circle"></i><span>{{ $tx('Final availability is confirmed by the admin team after review.', '最終名額由管理團隊審核後確認。') }}</span></li>
+                                <li><i class="fa fa-info-circle"></i><span>{{ $tx('Late Registration Period:', '通常逾期報名期間：') }} <strong>{{ $schedule('late_period', 'Mid November - Mid March') }}</strong></span></li>
+                                <li><i class="fa fa-info-circle"></i><span>{{ $tx('Late-Testing Period:', '逾期考試期間：') }} <strong>{{ $schedule('late_test_period', 'May 17 - 21, 2027') }}</strong></span></li>
+                                <li><i class="fa fa-info-circle"></i><span>{{ $copy('late_notice', 'Final availability is confirmed by the admin team after review.', '最終名額由管理團隊審核後確認。') }}</span></li>
                             </ul>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="late-facts">
-                <div class="late-stat"><i class="fa fa-calendar"></i><div><span>{{ $tx('Main Registration', '一般報名') }}</span><strong>{{ $registrationSettings['main_period'] ?? 'August - October' }}</strong></div></div>
-                <div class="late-stat"><i class="fa fa-calendar-check-o"></i><div><span>{{ $tx('Main Test Period', '一般考試時段') }}</span><strong>{{ $registrationSettings['main_test_period'] ?? 'May 3-14, 2027' }}</strong></div></div>
-                <div class="late-stat"><i class="fa fa-clock-o"></i><div><span>{{ $tx('Late-Testing Period', '逾期考試時段') }}</span><strong>{{ $registrationSettings['late_test_period'] ?? 'May 17 - 21, 2027' }}</strong></div></div>
+                <div class="late-stat"><i class="fa fa-calendar"></i><div><span>{{ $tx('Main Registration', '一般報名') }}</span><strong>{{ $schedule('main_period', 'August - October') }}</strong></div></div>
+                <div class="late-stat"><i class="fa fa-calendar-check-o"></i><div><span>{{ $tx('Main Test Period', '一般考試時段') }}</span><strong>{{ $schedule('main_test_period', 'May 3-14, 2027') }}</strong></div></div>
+                <div class="late-stat"><i class="fa fa-clock-o"></i><div><span>{{ $tx('Late-Testing Period', '逾期考試時段') }}</span><strong>{{ $schedule('late_test_period', 'May 17 - 21, 2027') }}</strong></div></div>
             </div>
         </div>
     </section>
@@ -410,24 +414,19 @@
             <div class="row">
                 <div class="col-md-10 offset-md-1">
                     <div class="section-title-style2 black-title text-center">
-                        <span>{{ $tx('Registration Timeline', '報名時程') }}</span>
-                        <h2>{{ $tx('Registration And Test Periods', '報名與考試時段') }}</h2>
+                        <span>{{ $copy('timeline_eyebrow', 'Registration Timeline', '報名時程') }}</span>
+                        <h2>{{ $copy('timeline_title', 'Registration And Test Periods', '報名與考試時段') }}</h2>
                     </div>
                 </div>
             </div>
             <div class="row timeline-grid">
-                @foreach ([
-                    [$tx('Main Registration Period', '一般報名時段'), $tx('The preferred window for submitting exam choices and required documents.', '建議於此時段提交考試選擇與所需文件。'), $registrationSettings['main_period'] ?? 'August - October', 'main'],
-                    [$tx('Late Registration Period', '逾期報名時段'), $tx('Available only while remaining test-center slots are still open.', '僅於考場仍有剩餘名額時開放。'), $registrationSettings['late_period'] ?? 'Mid November - Mid March', 'late'],
-                    [$tx('Main Test Period', '一般考試時段'), $tx('The standard AP testing window for registered students.', '已完成報名學生的一般 AP 考試時段。'), $registrationSettings['main_test_period'] ?? 'May 3-14, 2027', 'main'],
-                    [$tx('Late-Testing Period', '逾期考試時段'), $tx('The alternate testing window for approved late-testing arrangements.', '經核准之逾期考試安排所使用的替代時段。'), $registrationSettings['late_test_period'] ?? 'May 17 - 21, 2027', 'late'],
-                ] as $item)
+                @foreach ($timelineCards as $item)
                     <div class="col-md-6 mb-5">
-                        <article class="timeline-card timeline-card--{{ $item[3] }}">
+                        <article class="timeline-card timeline-card--{{ $item->type }}">
                             <div class="timeline-card-body">
-                                <h4>{{ $item[0] }}</h4>
-                                <div class="timeline-card-range"><strong>{{ $item[2] }}</strong></div>
-                                <p>{{ $item[1] }}</p>
+                                <h4>{{ $item->title }}</h4>
+                                <div class="timeline-card-range"><strong>{{ $item->range }}</strong></div>
+                                <p>{{ $item->description }}</p>
                             </div>
                         </article>
                     </div>
@@ -450,7 +449,7 @@
             <div class="process-layout">
                 <div class="process-photo">
                     <img src="{{ asset('images/trinity-registration-guidance.png') }}" alt="{{ $tx('Students preparing registration information', '學生準備報名資料') }}">
-                    <div class="process-photo-caption"><strong>{{ $tx('One guided submission', '一次完成引導式提交') }}</strong><span>{{ $tx('Start the form without creating a student account.', '無需建立學生帳號即可開始填寫表單。') }}</span></div>
+                    <div class="process-photo-caption"><strong>{{ $copy('process_photo_title', 'One guided submission', '一次完成引導式提交') }}</strong><span>{{ $copy('process_photo_body', 'Start the form without creating a student account.', '無需建立學生帳號即可開始填寫表單。') }}</span></div>
                 </div>
                 <ol class="process-list">
                     @foreach ($processItems as $index => $item)
@@ -469,15 +468,15 @@
             <div class="row">
                 <div class="col-md-10 offset-md-1">
                     <div class="section-title-style2 black-title title-tb text-center">
-                        <span>{{ $tx('Required Documents', '所需文件') }}</span>
-                        <h2>{{ $tx('Document Checklist', '文件檢查清單') }}</h2>
-                        <p>{{ $tx('Prepare the core student, parent, passport, exam, and payment information before submitting the form.', '提交表單前請準備學生、家長、護照、考試與付款相關資訊。') }}</p>
+                        <span>{{ $copy('documents_eyebrow', 'Required Documents', '所需文件') }}</span>
+                        <h2>{{ $copy('documents_title', 'Document Checklist', '文件檢查清單') }}</h2>
+                        <p>{{ $copy('documents_body', 'Prepare the core student, parent, passport, exam, and payment information before submitting the form.', '提交表單前請準備學生、家長、護照、考試與付款相關資訊。') }}</p>
                     </div>
                 </div>
             </div>
             <div class="documents-layout">
                 <div class="documents-photo" role="img" aria-label="{{ $tx('Preparing registration documents', '準備報名文件') }}">
-                    <div class="documents-photo-copy"><strong>{{ $tx('Prepare once, submit with confidence', '一次備妥，安心提交') }}</strong><span>{{ $tx('Use clear and accurate files so the admin review can move faster.', '提供清楚且正確的文件，協助管理團隊加快審核。') }}</span></div>
+                        <div class="documents-photo-copy"><strong>{{ $copy('documents_photo_title', 'Prepare once, submit with confidence', '一次備妥，安心提交') }}</strong><span>{{ $copy('documents_photo_body', 'Use clear and accurate files so the admin review can move faster.', '提供清楚且正確的文件，協助管理團隊加快審核。') }}</span></div>
                 </div>
                 <div class="document-grid">
                     @foreach ($displayDocuments as $document)
@@ -496,8 +495,8 @@
             <div class="row">
                 <div class="col-md-10 offset-md-1">
                     <div class="section-title-style2 black-title title-tb text-center">
-                        <span>{{ $tx('FAQ', '常見問題') }}</span>
-                        <h2 class="primary-color">{{ $tx('Frequently Asked Questions', '常見問題') }}</h2>
+                        <span>{{ $copy('faq_eyebrow', 'FAQ', '常見問題') }}</span>
+                        <h2 class="primary-color">{{ $copy('faq_title', 'Frequently Asked Questions', '常見問題') }}</h2>
                     </div>
                 </div>
             </div>
@@ -517,7 +516,7 @@
             <div class="row">
                 <div class="col-lg-6 mb-4">
                     <div class="contact-panel contact-info-panel">
-                        <span class="primary-color text-uppercase d-block mb-3">{{ $tx('Contact Information', '聯絡資訊') }}</span>
+                                <span class="primary-color text-uppercase d-block mb-3">{{ $copy('contact_eyebrow', 'Contact Information', '聯絡資訊') }}</span>
                         <h3>{{ $contact?->organization ?: 'Trinity Scholar' }}</h3>
                         <p><i class="fa fa-envelope primary-color"></i> ap-registration@trinityscholar.com</p>
                         <p><i class="fa fa-phone primary-color"></i> 886-2-2771-6002</p>
@@ -545,13 +544,13 @@
             <div class="row align-items-center">
                 <div class="col-md-9">
                     <div class="cta-content">
-                        <p class="mb-2">{{ $tx('Ready to submit your AP registration?', '準備提交 AP 報名了嗎？') }}</p>
-                        <h2>{{ $tx('Start the student registration form', '開始填寫學生報名表') }}</h2>
+                    <p class="mb-2">{{ $copy('cta_body', 'Ready to submit your AP registration?', '準備提交 AP 報名了嗎？') }}</p>
+                    <h2>{{ $copy('cta_title', 'Start the student registration form', '開始填寫學生報名表') }}</h2>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="cta-btn">
-                        <a class="btn btn-light btn-round" href="{{ route('student-registrations.create') }}">{{ $tx('Register Now', '立即報名') }}</a>
+                    <a class="btn btn-light btn-round" href="{{ route('student-registrations.create') }}">{{ $copy('cta_button', 'Register Now', '立即報名') }}</a>
                     </div>
                 </div>
             </div>

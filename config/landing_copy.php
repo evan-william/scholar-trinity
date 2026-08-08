@@ -1,0 +1,88 @@
+<?php
+
+return [
+    'hero_secondary' => [
+        'label' => 'Hero Slides',
+        'fields' => [
+            'late_eyebrow' => ['label' => 'Late Registration Eyebrow', 'en' => 'Late Registration', 'zh_TW' => '逾期報名'],
+            'late_title_primary' => ['label' => 'Late Registration Title 1', 'en' => 'Spring Availability', 'zh_TW' => '春季名額'],
+            'late_title_secondary' => ['label' => 'Late Registration Title 2', 'en' => 'When Slots Remain', 'zh_TW' => '視剩餘名額開放'],
+            'late_button' => ['label' => 'Late Registration Button', 'en' => 'View Registration Information', 'zh_TW' => '查看報名資訊'],
+            'form_eyebrow' => ['label' => 'Form Slide Eyebrow', 'en' => 'No Login Required', 'zh_TW' => '不需登入'],
+            'form_title_primary' => ['label' => 'Form Slide Title 1', 'en' => 'Submit The Form', 'zh_TW' => '提交表單'],
+            'form_title_secondary' => ['label' => 'Form Slide Title 2', 'en' => 'Then Admin Reviews', 'zh_TW' => '由管理員審核'],
+            'form_body' => ['label' => 'Form Slide Description', 'en' => 'Students can submit passport, exam selections, accommodations, payment method, and preparation interest in one guided flow.', 'zh_TW' => '學生可在同一流程中提交護照、考試選擇、特殊需求、付款方式與備考意願。', 'multiline' => true],
+            'form_button' => ['label' => 'Form Slide Button', 'en' => 'See Flow', 'zh_TW' => '查看流程'],
+        ],
+    ],
+    'highlights' => [
+        'label' => 'Registration Highlights',
+        'fields' => [
+            'main_period_label' => ['label' => 'Main Period Caption', 'en' => 'Main registration period', 'zh_TW' => '一般報名時段'],
+            'location_value' => ['label' => 'Location Value', 'en' => 'Taipei', 'zh_TW' => '台北'],
+            'location_label' => ['label' => 'Location Caption', 'en' => 'Test-center support', 'zh_TW' => '考場報名支援'],
+            'completion_value' => ['label' => 'Completion Value', 'en' => 'Form + Pay', 'zh_TW' => '表單 + 付款'],
+            'completion_label' => ['label' => 'Completion Caption', 'en' => 'Both required to complete', 'zh_TW' => '兩者皆完成才算報名'],
+            'access_value' => ['label' => 'Access Value', 'en' => 'No Login', 'zh_TW' => '不需登入'],
+            'access_label' => ['label' => 'Access Caption', 'en' => 'Students register directly', 'zh_TW' => '學生可直接填寫'],
+        ],
+    ],
+    'overview_cards' => [
+        'label' => 'Program Overview Cards',
+        'fields' => [
+            'visual_title' => ['label' => 'Overview Image Title', 'en' => 'Taipei test-center support', 'zh_TW' => '台北考場報名支援'],
+            'visual_body' => ['label' => 'Overview Image Description', 'en' => 'Registration coordination from form submission through admin review.', 'zh_TW' => '從表單提交到管理端審核的完整報名協調。', 'multiline' => true],
+            'guided_title' => ['label' => 'Guided Registration Title', 'en' => 'Guided Registration', 'zh_TW' => '引導式報名'],
+            'guided_body' => ['label' => 'Guided Registration Description', 'en' => 'Student information, guardian contact, passport upload, AP subject choice, accommodations, and payment method are collected in one flow.', 'zh_TW' => '學生資料、家長聯絡資訊、護照上傳、AP 科目選擇、特殊需求與付款方式，皆可在同一流程中完成。', 'multiline' => true],
+            'review_badge' => ['label' => 'Coordinator Review Badge', 'en' => 'Admin', 'zh_TW' => '審核'],
+            'review_title' => ['label' => 'Coordinator Review Title', 'en' => 'Coordinator Review', 'zh_TW' => '協調員審核'],
+            'review_body' => ['label' => 'Coordinator Review Description', 'en' => 'The admin team reviews document validity, payment status, subject availability, quota, notes, and final registration status.', 'zh_TW' => '管理團隊會審核文件有效性、付款狀態、科目名額、配額、備註與最終報名狀態。', 'multiline' => true],
+            'prep_badge' => ['label' => 'Preparation Badge', 'en' => 'Prep', 'zh_TW' => '備考'],
+            'prep_title' => ['label' => 'Preparation Title', 'en' => 'Preparation Interest', 'zh_TW' => '備考課程意願'],
+            'prep_body' => ['label' => 'Preparation Description', 'en' => 'Students can indicate AP preparation, group class, private tutoring, preferred schedule, and preferred language for follow-up.', 'zh_TW' => '學生可填寫 AP 備考、團體課、一對一家教、偏好時段與語言等需求，方便後續聯繫。', 'multiline' => true],
+        ],
+    ],
+    'registration_information' => [
+        'label' => 'Registration Information',
+        'fields' => [
+            'eyebrow' => ['label' => 'Section Eyebrow', 'en' => 'Registration Information', 'zh_TW' => '報名資訊'],
+            'title' => ['label' => 'Section Title', 'en' => 'Plan for the AP registration cycle', 'zh_TW' => '規劃 AP 考試報名時程'],
+            'main_title' => ['label' => 'Main Registration Title', 'en' => 'Prepare during the main registration window.', 'zh_TW' => '請於一般報名期間提早準備。'],
+            'main_body' => ['label' => 'Main Registration Description', 'en' => 'Students and guardians can prepare personal details, exam choices, and required documents before submitting the guided form.', 'zh_TW' => '學生與家長可先準備個人資料、考試選擇及所需文件，再提交引導式表單。', 'multiline' => true],
+            'main_notice' => ['label' => 'Main Registration Notice', 'en' => 'Registration is finalized after the form, payment, and official confirmation email are received.', 'zh_TW' => '表單與付款皆收到，且官方確認信寄出後，報名才算完成。', 'multiline' => true],
+            'late_title' => ['label' => 'Late Registration Title', 'en' => 'Late registration depends on remaining capacity.', 'zh_TW' => '逾期報名視剩餘名額開放。'],
+            'late_body' => ['label' => 'Late Registration Description', 'en' => 'Late registration may open after main registration closes, only when test-center slots remain available.', 'zh_TW' => '一般報名結束後，若考場仍有名額，才可能開放逾期報名。', 'multiline' => true],
+            'late_notice' => ['label' => 'Late Registration Notice', 'en' => 'Final availability is confirmed by the admin team after review.', 'zh_TW' => '最終名額由管理團隊審核後確認。', 'multiline' => true],
+        ],
+    ],
+    'process_details' => [
+        'label' => 'Registration Process Details',
+        'fields' => [
+            'process_photo_title' => ['label' => 'Process Image Title', 'en' => 'One guided submission', 'zh_TW' => '一次完成引導式提交'],
+            'process_photo_body' => ['label' => 'Process Image Description', 'en' => 'Start the form without creating a student account.', 'zh_TW' => '無需建立學生帳號即可開始填寫表單。'],
+            'process_detail_1' => ['label' => 'Step 1 Description', 'en' => 'Enter student and guardian details, AP subjects or exams, and preparation interests.', 'zh_TW' => '填寫學生與家長資料、AP 科目或考試，以及備考意願。', 'multiline' => true],
+            'process_detail_2' => ['label' => 'Step 2 Description', 'en' => 'Upload a valid passport and any required accommodation documents.', 'zh_TW' => '上傳有效護照及所需的特殊考試需求文件。', 'multiline' => true],
+            'process_detail_3' => ['label' => 'Step 3 Description', 'en' => 'Verify that every detail is correct before submitting the registration.', 'zh_TW' => '提交報名前確認所有資料均正確。', 'multiline' => true],
+            'process_detail_4' => ['label' => 'Step 4 Description', 'en' => 'Select a payment method and complete the required transaction.', 'zh_TW' => '選擇付款方式並完成所需交易。', 'multiline' => true],
+            'process_detail_5' => ['label' => 'Step 5 Description', 'en' => 'The admin team reviews the submission and confirms enrollment by email.', 'zh_TW' => '管理團隊審核資料並以電子郵件確認報名。', 'multiline' => true],
+        ],
+    ],
+    'section_labels' => [
+        'label' => 'Section Titles and Calls to Action',
+        'fields' => [
+            'timeline_eyebrow' => ['label' => 'Timeline Eyebrow', 'en' => 'Registration Timeline', 'zh_TW' => '報名時程'],
+            'timeline_title' => ['label' => 'Timeline Title', 'en' => 'Registration And Test Periods', 'zh_TW' => '報名與考試時段'],
+            'documents_eyebrow' => ['label' => 'Documents Eyebrow', 'en' => 'Required Documents', 'zh_TW' => '所需文件'],
+            'documents_title' => ['label' => 'Documents Title', 'en' => 'Document Checklist', 'zh_TW' => '文件檢查清單'],
+            'documents_body' => ['label' => 'Documents Description', 'en' => 'Prepare the core student, parent, passport, exam, and payment information before submitting the form.', 'zh_TW' => '提交表單前請準備學生、家長、護照、考試與付款相關資訊。', 'multiline' => true],
+            'documents_photo_title' => ['label' => 'Documents Image Title', 'en' => 'Prepare once, submit with confidence', 'zh_TW' => '一次備妥，安心提交'],
+            'documents_photo_body' => ['label' => 'Documents Image Description', 'en' => 'Use clear and accurate files so the admin review can move faster.', 'zh_TW' => '提供清楚且正確的文件，協助管理團隊加快審核。', 'multiline' => true],
+            'faq_eyebrow' => ['label' => 'FAQ Eyebrow', 'en' => 'FAQ', 'zh_TW' => '常見問題'],
+            'faq_title' => ['label' => 'FAQ Title', 'en' => 'Frequently Asked Questions', 'zh_TW' => '常見問題'],
+            'contact_eyebrow' => ['label' => 'Contact Eyebrow', 'en' => 'Contact Information', 'zh_TW' => '聯絡資訊'],
+            'cta_body' => ['label' => 'CTA Description', 'en' => 'Ready to submit your AP registration?', 'zh_TW' => '準備提交 AP 報名了嗎？'],
+            'cta_title' => ['label' => 'CTA Title', 'en' => 'Start the student registration form', 'zh_TW' => '開始填寫學生報名表'],
+            'cta_button' => ['label' => 'CTA Button', 'en' => 'Register Now', 'zh_TW' => '立即報名'],
+        ],
+    ],
+];

@@ -5,6 +5,7 @@
     $brandFavicon = 'images/trinity-scholar-favicon.png';
     $uiLocale = session('locale', str_replace('_', '-', app()->getLocale()));
     $isZh = $uiLocale === 'zh-TW';
+    $tx = fn (string $en, string $zh): string => $isZh ? $zh : $en;
     $navLabels = $isZh
         ? ['home' => '首頁', 'program' => '課程資訊', 'timeline' => '時程', 'faq' => '常見問題', 'contact' => '聯絡我們', 'start' => '開始報名', 'support' => '台北 AP 報名支援']
         : ['home' => 'Home', 'program' => 'Program', 'timeline' => 'Timeline', 'faq' => 'FAQ', 'contact' => 'Contact', 'start' => 'Start Form', 'support' => 'Taipei AP Registration Support'];
@@ -30,12 +31,17 @@
             'summary_title' => $registrationSettings['test_site_name_en'] ?? 'The Primacy Collegiate Academy',
             'summary_body' => $registrationSettings['test_site_address_en'] ?? 'No. 99, Meide St, Shilin District, Taipei City, 11159',
         ];
-    if (! $isZh && isset($registrationIntro) && $registrationIntro) {
+    if (isset($registrationIntro) && $registrationIntro) {
         $introCopy['badge'] = $registrationIntro->eyebrow ?: $introCopy['badge'];
         $introCopy['title'] = $registrationIntro->title ?: $introCopy['title'];
         $introCopy['body'] = $registrationIntro->body ?: $introCopy['body'];
         $introCopy['items'] = filled($registrationIntro->items) ? $registrationIntro->items : $introCopy['items'];
     }
+    $noticeCopy = [
+        'title' => $registrationNotice?->title ?: $tx('Important Notice', '重要提醒'),
+        'body' => $registrationNotice?->body ?: $tx('Except AP Chinese, late or exception exam sessions are not offered.', '除 AP 中文外，不提供補考或例外考試場次。'),
+        'items' => filled($registrationNotice?->items) ? $registrationNotice->items : [$tx('Once payment is submitted, cancelled exams are non-refundable.', '繳費後取消考試恕不退費。')],
+    ];
     $footerLabels = $isZh
         ? [
             'office' => '服務說明',
@@ -50,8 +56,8 @@
             'notice_body' => '表單與付款皆收到，且官方確認信寄出後，報名才算完成。名額有限，可能在公告截止日前額滿關閉。',
             'main_period' => '一般時段：',
             'late_period' => '逾期時段：',
-            'main_period_value' => '八月至十月',
-            'late_period_value' => '十一月中至三月中',
+            'main_period_value' => $registrationSettings['main_period_zh'] ?? '八月至十月',
+            'late_period_value' => $registrationSettings['late_period_zh'] ?? '十一月中至三月中',
             'copyright' => '版權所有',
             'rights' => '保留所有權利。',
             'designed' => 'Designed By',
@@ -77,7 +83,10 @@
             'designed' => 'Designed By',
             'powered' => 'Powered by',
         ];
-    $tx = fn (string $en, string $zh): string => $isZh ? $zh : $en;
+    $footerLabels['office_body'] = $landingContact?->address ?: $footerLabels['office_body'];
+    $footerPhone = $landingContact?->phone ?: '886-2-2771-6002';
+    $footerEmail = $landingContact?->email ?: 'ap-registration@trinityscholar.com';
+    $footerLine = $landingContact?->whatsapp ?: '@TrinityScholar';
 @endphp
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
@@ -434,6 +443,9 @@
         body.trinity-form footer .footer-top .row{display:grid!important;grid-template-columns:minmax(0,4fr) minmax(180px,3fr) minmax(0,5fr)!important;gap:48px!important;margin:0!important}
         body.trinity-form footer .footer-top .row>[class*="col-"]{width:auto!important;max-width:none!important;padding:0!important;flex:none!important}
         body.trinity-form footer .footer-top .widget{margin:0!important}
+        body.trinity-form footer .footer-brand-lockup{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+        body.trinity-form footer .footer-brand-lockup>a>img{width:150px;height:78px;object-fit:contain}
+        body.trinity-form footer .footer-brand-lockup>.partner-logo{width:145px;height:62px;padding-left:14px;border-left:1px solid rgba(255,255,255,.2);object-fit:contain;filter:brightness(0) invert(1)!important}
         @media(max-width:991px){body.trinity-form .form-intro{grid-template-columns:1fr}body.trinity-form .intro-summary{min-height:230px}body.trinity-form .form-top-band{min-height:100px}body.trinity-form .step-aside-layout{grid-template-columns:1fr}body.trinity-form .step-aside-layout>.notice{position:static}body.trinity-form footer .footer-top .row{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:38px 32px!important}body.trinity-form footer .footer-top .row>:last-child{grid-column:1/-1}}
         @media(max-width:767px){body.trinity-form .main{padding:24px 12px 100px}body.trinity-form .form-intro>div{padding:25px 22px}body.trinity-form .form-intro h2{font-size:27px;line-height:34px}body.trinity-form .card{padding:24px 18px}body.trinity-form .section-title{font-size:20px}body.trinity-form .form-top-band{min-height:86px}}
         @media(max-width:575px){body.trinity-form #header .logo img{width:118px;max-height:68px}body.trinity-form .progress-wrap{padding:0 8px}body.trinity-form .step-item{min-width:94px}body.trinity-form .nav-footer .btn{min-width:0}body.trinity-form footer .footer-top .row{grid-template-columns:1fr!important;gap:32px!important}body.trinity-form footer .footer-top .row>:last-child{grid-column:auto}}
@@ -602,7 +614,7 @@
                     </div>
                 </div>
             </div>
-            <div class="notice"><h4>{{ $tx('Important Notice', '重要提醒') }}</h4><ul><li>{{ $tx('Except AP Chinese, late or exception exam sessions are not offered.', '除 AP 中文外，不提供補考或例外考試場次。') }}</li><li>{{ $tx('Once payment is submitted, cancelled exams are non-refundable.', '繳費後取消考試恕不退費。') }}</li></ul></div>
+            <div class="notice"><h4>{{ $noticeCopy['title'] }}</h4><p>{{ $noticeCopy['body'] }}</p>@if($noticeCopy['items'])<ul>@foreach($noticeCopy['items'] as $item)<li>{{ $item }}</li>@endforeach</ul>@endif</div>
             </div>
         </section>
 
@@ -646,7 +658,7 @@
                                 <div>
                                     <div class="exam-name">{{ $subject->name }}</div>
                                     <div class="exam-sub">{{ $subject->code }} / {{ optional($subject->exam_date)->format('M d, Y') ?? $tx('Date TBA', '日期待公告') }}@if($subject->start_time) / {{ substr($subject->start_time, 0, 5) }}@endif / {{ $selectable ? __('student_registration.statuses.'.$statusKey) : __('student_registration.availability.'.$blockReason, ['date' => $blockReason === 'not_yet_open' ? optional($subject->registration_open_at)->format('M d, Y H:i') : optional($subject->registration_close_at)->format('M d, Y H:i')]) }}</div>
-                                    <div class="exam-sub">{{ $tx('Exam Fee', '考試費') }}: {{ $subject->currency }} {{ number_format($subject->exam_fee) }} / {{ $tx('Service Fee', '服務費') }}: {{ $subject->currency }} {{ number_format($subject->service_fee) }} / {{ $tx('Late Fee', '逾期費') }}: {{ $subject->currency }} {{ number_format($lateFee) }}</div>
+                                    <div class="exam-sub">{{ $tx('Unified pricing is based on the total number of AP exams selected.', '統一費用將依所選 AP 考試總科目數計算。') }}@if($lateFee > 0) / {{ $tx('Late fee', '逾期費') }}: {{ $subject->currency }} {{ number_format($lateFee) }}@endif</div>
                                 </div>
                             </label>
                         @endforeach
@@ -671,7 +683,7 @@
                 </div>
                 <input type="hidden" name="practice_exam_total" id="practiceExamTotal" value="0">
                 <div class="price-box">
-                    <div class="price-row"><span>{{ $tx('Regular AP Exams', '正式考試') }} (<span id="regCt">0</span>)</span><span id="regTot">NT$ 0</span></div>
+                    <div class="price-row"><span>{{ $tx('Unified AP Registration Fee', 'AP 統一報名費') }} (<span id="regCt">0</span>)</span><span id="regTot">NT$ 0</span></div>
                     <div class="price-row"><span>{{ $tx('Practice Exams', '模擬考') }} (<span id="praCt">0</span>)</span><span id="praTot">NT$ 0</span></div>
                     <div class="price-row"><span>{{ $tx('Late Registration Fee', '逾期報名費') }}</span><span id="lateTot">NT$ 0</span></div>
                     <div class="price-row total"><span>{{ $tx('Total Due', '應付總額') }}</span><span id="grandTot">NT$ 0</span></div>
@@ -779,10 +791,13 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="widget widget-company">
-                        <a href="{{ route('landing') }}"><img src="{{ asset($footerLogo) }}" alt="Trinity Scholar"></a>
+                        <div class="footer-brand-lockup">
+                            <a href="{{ route('landing') }}"><img src="{{ asset($footerLogo) }}" alt="Trinity Scholar"></a>
+                            <img class="partner-logo" src="{{ asset($partnerLogo) }}" alt="The Primacy Collegiate Academy">
+                        </div>
                         <div class="address"><h6>{{ $footerLabels['office'] }}</h6><p>{{ $footerLabels['office_body'] }}</p></div>
-                        <div class="address"><h6>{{ $footerLabels['phone'] }}</h6><p>886-2-2771-6002</p></div>
-                        <div class="address"><h6>{{ $footerLabels['email'] }}</h6><p>ap-registration@trinityscholar.com</p><p>Line: <a href="https://lin.ee/VXnDLUW" target="_blank" rel="noopener">@TrinityScholar</a></p></div>
+                        <div class="address"><h6>{{ $footerLabels['phone'] }}</h6><p>{{ $footerPhone }}</p></div>
+                        <div class="address"><h6>{{ $footerLabels['email'] }}</h6><p>{{ $footerEmail }}</p><p>Line: <a href="https://lin.ee/VXnDLUW" target="_blank" rel="noopener">{{ $footerLine }}</a></p></div>
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -836,6 +851,10 @@
     });
 
     const isZhLocale = @json($isZh);
+    const pricingTiers = @json(($pricingTiers ?? collect())->mapWithKeys(fn ($tier) => [(string) $tier->exam_count => [
+        'combined' => $tier->combined_fee_per_exam,
+        'currency' => $tier->currency,
+    ]]));
     const uiText = {
         back: isZhLocale ? '上一步' : 'Back',
         next: isZhLocale ? '下一步' : 'Next',
@@ -1242,6 +1261,11 @@
                 lateTot += Number(input.dataset.lateFee || 0);
             }
         });
+        if (regCt > 0 && Object.keys(pricingTiers).length) {
+            const counts = Object.keys(pricingTiers).map(Number).sort((a, b) => a - b);
+            const tierCount = counts.includes(regCt) ? regCt : counts.filter(count => count <= regCt).pop();
+            if (tierCount) regTot = Number(pricingTiers[String(tierCount)].combined || 0) * regCt;
+        }
         const grand = regTot + praTot + lateTot;
         document.getElementById('regCt').textContent = regCt;
         document.getElementById('praCt').textContent = praCt;

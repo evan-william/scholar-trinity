@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use Database\Seeders\LandingPageSeeder;
 use App\Models\LandingFaq;
+use App\Models\LandingSection;
 use App\Models\SystemSetting;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -81,8 +82,52 @@ class LandingPageTest extends TestCase
             ->assertOk()
             ->assertSee('Registration Schedule and Test Site')
             ->assertSee('Add FAQ')
-            ->assertSee('registration_settings[main_period]', false)
-            ->assertSee('registration_settings[test_site_map_url]', false);
+            ->assertSee('registration_settings[main_period][en]', false)
+            ->assertSee('registration_settings[test_site_map_url][en]', false)
+            ->assertSee('Registration Form Important Notice');
+    }
+
+    public function test_admin_can_publish_english_and_chinese_content_to_landing_and_form(): void
+    {
+        $this->seed(LandingPageSeeder::class);
+        $this->actingAs($this->adminUser());
+        $payload = $this->validAdminPayload();
+        $payload['settings']['hero']['title'] = ['en' => 'English AP Registration', 'zh_TW' => '中文 AP 考試報名'];
+        $payload['settings']['copy']['cta_title'] = ['en' => 'Start the English form', 'zh_TW' => '開始填寫中文報名表'];
+        $payload['timelines'][0]['round'] = ['en' => 'Main Registration', 'zh_TW' => '中文一般報名'];
+        $payload['timelines'][0]['month'] = ['en' => 'August', 'zh_TW' => '八月'];
+        $payload['timelines'][0]['description'] = ['en' => 'English timeline copy.', 'zh_TW' => '中文時程內容。'];
+        $payload['contact']['address'] = ['en' => 'Taipei office', 'zh_TW' => '台北中文地址'];
+        $payload['sections']['registration_notice'] = [
+            'eyebrow' => ['en' => 'Please note', 'zh_TW' => '請注意'],
+            'title' => ['en' => 'Important Notice', 'zh_TW' => '報名重要提醒'],
+            'body' => ['en' => 'English notice body.', 'zh_TW' => '這是中文提醒內容。'],
+            'items' => ['en' => "English item one\nEnglish item two", 'zh_TW' => "中文事項一\n中文事項二"],
+            'sort_order' => 6,
+        ];
+
+        $this->put(route('admin.landing.update'), $payload)
+            ->assertRedirect(route('admin.landing.edit'))
+            ->assertSessionHasNoErrors();
+
+        $notice = LandingSection::query()->where('key', 'registration_notice')->firstOrFail();
+        $this->assertSame('報名重要提醒', data_get($notice->translations, 'zh_TW.title'));
+
+        $this->withSession(['locale' => 'zh-TW'])
+            ->get(route('landing'))
+            ->assertOk()
+            ->assertSee('中文 AP 考試報名')
+            ->assertSee('開始填寫中文報名表')
+            ->assertSee('中文一般報名')
+            ->assertSee('中文時程內容。')
+            ->assertSee('台北中文地址');
+
+        $this->withSession(['locale' => 'zh-TW'])
+            ->get(route('student-registrations.create'))
+            ->assertOk()
+            ->assertSee('報名重要提醒')
+            ->assertSee('這是中文提醒內容。')
+            ->assertSee('中文事項一');
     }
 
     private function adminUser(): User
@@ -123,6 +168,7 @@ class LandingPageTest extends TestCase
             ],
             'sections' => [
                 'registration_intro' => ['eyebrow' => 'No login required', 'title' => 'Registration Intro', 'body' => 'Registration intro body', 'items' => "One\nTwo", 'sort_order' => 5],
+                'registration_notice' => ['eyebrow' => 'Please note', 'title' => 'Important Notice', 'body' => 'Important notice body', 'items' => "One\nTwo", 'sort_order' => 6],
                 'overview' => ['eyebrow' => 'Overview', 'title' => 'Overview Title', 'body' => 'Overview body', 'items' => "One\nTwo", 'sort_order' => 10],
                 'process' => ['eyebrow' => 'Process', 'title' => 'Process Title', 'body' => 'Process body', 'items' => "Read\nPay", 'sort_order' => 20],
                 'privacy' => ['eyebrow' => 'Privacy', 'title' => 'Privacy Title', 'body' => 'Privacy body', 'items' => "Consent\nRetention", 'sort_order' => 30],

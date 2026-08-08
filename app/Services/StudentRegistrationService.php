@@ -17,8 +17,10 @@ use Illuminate\Validation\ValidationException;
 
 class StudentRegistrationService
 {
-    public function __construct(private readonly StudentRegistrationRepository $repository)
-    {
+    public function __construct(
+        private readonly StudentRegistrationRepository $repository,
+        private readonly RegistrationPricingService $pricing
+    ) {
     }
 
     public function create(array $data, ?string $ipAddress = null, ?string $userAgent = null): StudentRegistration
@@ -55,7 +57,14 @@ class StudentRegistrationService
             ]);
         }
 
-        $registration = DB::transaction(function () use ($data, $subjects, $ipAddress, $userAgent): StudentRegistration {
+        $subjectCount = $subjects->count();
+        $pricing = $this->pricing->breakdown(
+            $subjectCount,
+            (int) $subjects->sum('exam_fee'),
+            (int) $subjects->sum('service_fee')
+        );
+
+        $registration = DB::transaction(function () use ($data, $subjects, $pricing, $ipAddress, $userAgent): StudentRegistration {
             $passportDraft = null;
             if (! isset($data['passport_file'])) {
                 $passportDraft = ! empty($data['passport_file_token'])
@@ -71,13 +80,13 @@ class StudentRegistrationService
 
             $season = $subjects->first(fn ($subject) => $subject->examSeason)?->examSeason;
             $period = $season?->currentPeriod() === 'late' ? 'late' : 'main';
-            $examTotal = $subjects->sum('exam_fee');
-            $serviceTotal = $subjects->sum('service_fee');
+            $examTotal = $pricing['exam_fee_total'];
+            $serviceTotal = $pricing['service_fee_total'];
             $lateTotal = $subjects->sum(fn ($subject) => $subject->lateFeeApplies() ? $subject->late_registration_fee : 0);
             $practiceExams = $this->practiceExams($data['practice_exams'] ?? []);
             $practiceTotal = collect($practiceExams)->sum('fee');
             $accommodations = $this->accommodations($data['accommodations'] ?? []);
-            $currency = $subjects->first()?->currency ?? 'NTD';
+            $currency = $pricing['currency'];
             $grandTotal = $examTotal + $serviceTotal + $lateTotal + $practiceTotal;
 
             $paymentMethod = $this->paymentMethod($data['payment_method'] ?? null);
@@ -177,15 +186,17 @@ class StudentRegistrationService
 
             foreach ($subjects as $subject) {
                 $lateFee = $subject->lateFeeApplies() ? $subject->late_registration_fee : 0;
+                $examFee = $pricing['uses_tier'] ? $pricing['exam_fee_per_exam'] : (int) $subject->exam_fee;
+                $serviceFee = $pricing['uses_tier'] ? $pricing['service_fee_per_exam'] : (int) $subject->service_fee;
                 $registration->exams()->attach($subject->id, [
                     'uuid' => (string) \Illuminate\Support\Str::uuid(),
                     'subject_name' => $subject->name,
                     'exam_date' => $subject->exam_date,
-                    'exam_fee' => $subject->exam_fee,
-                    'service_fee' => $subject->service_fee,
+                    'exam_fee' => $examFee,
+                    'service_fee' => $serviceFee,
                     'late_fee_snapshot' => $lateFee,
-                    'total_amount_snapshot' => $subject->exam_fee + $subject->service_fee + $lateFee,
-                    'currency_snapshot' => $subject->currency,
+                    'total_amount_snapshot' => $examFee + $serviceFee + $lateFee,
+                    'currency_snapshot' => $currency,
                     'selected_at' => now(),
                     'status' => 'selected',
                 ]);

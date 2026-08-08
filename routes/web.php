@@ -115,6 +115,7 @@ Route::middleware(['auth', 'admin', 'admin.timeout'])->prefix('admin')->name('ad
         Route::get('/', [PaymentAdminController::class, 'index'])->name('index');
         Route::get('/settings', [PaymentAdminController::class, 'settings'])->name('settings');
         Route::put('/settings', [PaymentAdminController::class, 'updateSettings'])->middleware('throttle:20,1')->name('settings.update');
+        Route::put('/pricing', [PaymentAdminController::class, 'updatePricing'])->middleware('throttle:20,1')->name('pricing.update');
         Route::get('/{registrationPayment}', [PaymentAdminController::class, 'show'])->name('show');
         Route::post('/{registrationPayment}/remind', [PaymentAdminController::class, 'remind'])->middleware('throttle:20,1')->name('remind');
         Route::post('/{registrationPayment}/verify', [PaymentAdminController::class, 'verify'])->middleware('throttle:30,1')->name('verify');

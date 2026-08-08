@@ -41,15 +41,15 @@ class PaymentFlowTest extends TestCase
         $payment = RegistrationPayment::query()->firstOrFail();
 
         $this->assertSame(7800, $registration->exam_fee_total);
-        $this->assertSame(1200, $registration->service_fee_total);
+        $this->assertSame(9700, $registration->service_fee_total);
         $this->assertSame(1500, $registration->late_fee_total);
-        $this->assertSame(10500, $registration->grand_total);
+        $this->assertSame(19000, $registration->grand_total);
         $this->assertSame('NTD', $registration->currency);
         $this->assertNotNull($registration->fee_snapshot_at);
 
         $subject->update(['exam_fee' => 9999, 'service_fee' => 2222, 'late_registration_fee' => 3333]);
-        $this->assertSame(10500, $registration->fresh()->grand_total);
-        $this->assertSame(10500, $payment->grand_total);
+        $this->assertSame(19000, $registration->fresh()->grand_total);
+        $this->assertSame(19000, $payment->grand_total);
     }
 
     public function test_manual_payment_instruction_and_proof_upload(): void

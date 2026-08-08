@@ -5,6 +5,7 @@
     'heading' => null,
     'subtitle' => null,
     'badge' => null,
+    'contact' => null,
     'bodyClass' => '',
     'contentClass' => 'ptb--120',
 ])
@@ -35,8 +36,8 @@
             'notice_body' => '表單與付款皆收到，且官方確認信寄出後，報名才算完成。名額有限，可能在公告截止日前額滿關閉。',
             'main_period' => '一般時段：',
             'late_period' => '逾期時段：',
-            'main_period_value' => '八月至十月',
-            'late_period_value' => '十一月中旬至三月中旬',
+            'main_period_value' => $registrationSettings['main_period_zh'] ?? '八月至十月',
+            'late_period_value' => $registrationSettings['late_period_zh'] ?? '十一月中旬至三月中旬',
             'copyright' => '版權所有',
             'rights' => '保留所有權利。',
             'designed' => 'Designed By',
@@ -62,6 +63,10 @@
             'designed' => 'Designed By',
             'powered' => 'Powered by',
         ];
+    $footerLabels['office_body'] = $contact?->address ?: $footerLabels['office_body'];
+    $footerPhone = $contact?->phone ?: '886-2-2771-6002';
+    $footerEmail = $contact?->email ?: 'ap-registration@trinityscholar.com';
+    $footerLine = $contact?->whatsapp ?: '@TrinityScholar';
 @endphp
 <!doctype html>
 <html class="no-js" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
@@ -178,6 +183,22 @@
             height: 100px;
             object-fit: contain;
             filter: none !important;
+        }
+        body.trinity-public footer .footer-brand-lockup,
+        body.trinity-form footer .footer-brand-lockup {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+        body.trinity-public footer .footer-brand-lockup .partner-logo,
+        body.trinity-form footer .footer-brand-lockup .partner-logo {
+            width: 150px;
+            height: 70px;
+            padding-left: 14px;
+            border-left: 1px solid rgba(255,255,255,.2);
+            object-fit: contain;
+            filter: brightness(0) invert(1) !important;
         }
         body.trinity-public footer .address h6,
         body.trinity-public footer .fwidget-title,
@@ -319,19 +340,22 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="widget widget-company">
-                        <a href="{{ route('landing') }}"><img src="{{ asset($footerLogo) }}" alt="Trinity Scholar"></a>
+                        <div class="footer-brand-lockup">
+                            <a href="{{ route('landing') }}"><img src="{{ asset($footerLogo) }}" alt="Trinity Scholar"></a>
+                            <img class="partner-logo" src="{{ asset($partnerLogo) }}" alt="The Primacy Collegiate Academy">
+                        </div>
                         <div class="address">
                             <h6>{{ $footerLabels['office'] }}</h6>
                             <p>{{ $footerLabels['office_body'] }}</p>
                         </div>
                         <div class="address">
                             <h6>{{ $footerLabels['phone'] }}</h6>
-                            <p>886-2-2771-6002</p>
+                            <p>{{ $footerPhone }}</p>
                         </div>
                         <div class="address">
                             <h6>{{ $footerLabels['email'] }}</h6>
-                            <p>ap-registration@trinityscholar.com</p>
-                            <p>Line: <a href="https://lin.ee/VXnDLUW" target="_blank" rel="noopener">@TrinityScholar</a></p>
+                            <p>{{ $footerEmail }}</p>
+                            <p>Line: <a href="https://lin.ee/VXnDLUW" target="_blank" rel="noopener">{{ $footerLine }}</a></p>
                         </div>
                     </div>
                 </div>

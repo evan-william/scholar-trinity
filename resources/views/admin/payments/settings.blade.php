@@ -76,4 +76,36 @@
             <button class="btn" type="submit">Save Settings</button>
         </form>
     </section>
+
+    <section class="card">
+        <div class="section-title">
+            <div>
+                <h2>Unified Registration Pricing</h2>
+                <p>The selected exam count determines one combined per-exam fee. The service fee is calculated automatically as unified fee minus TPCA exam fee.</p>
+            </div>
+        </div>
+        <form method="POST" action="{{ route('admin.payments.pricing.update') }}">
+            @csrf
+            @method('PUT')
+            <div style="overflow-x:auto">
+                <table>
+                    <thead><tr><th>Exams</th><th>Unified Fee / Exam</th><th>TPCA Fee / Exam</th><th>TS Service / Exam</th><th>Estimated Total</th><th>Active</th></tr></thead>
+                    <tbody>
+                    @foreach($pricingTiers as $index => $tier)
+                        <tr>
+                            <td><input type="number" name="tiers[{{ $index }}][exam_count]" value="{{ $tier->exam_count }}" min="1" max="20" required></td>
+                            <td><input type="number" name="tiers[{{ $index }}][combined_fee_per_exam]" value="{{ $tier->combined_fee_per_exam }}" min="0" required></td>
+                            <td><input type="number" name="tiers[{{ $index }}][exam_fee_per_exam]" value="{{ $tier->exam_fee_per_exam }}" min="0" required></td>
+                            <td>{{ $tier->currency }} {{ number_format($tier->service_fee_per_exam) }}</td>
+                            <td>{{ $tier->currency }} {{ number_format($tier->combined_fee_per_exam * $tier->exam_count) }}</td>
+                            <td><input type="hidden" name="tiers[{{ $index }}][currency]" value="{{ $tier->currency }}"><input type="hidden" name="tiers[{{ $index }}][is_active]" value="0"><input style="width:auto;min-height:auto" type="checkbox" name="tiers[{{ $index }}][is_active]" value="1" @checked($tier->is_active)></td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <p class="hint">Current structure lowers the unified per-exam amount as students select more exams, with the configured floor applied from six exams onward.</p>
+            <button class="btn" type="submit">Save Unified Pricing</button>
+        </form>
+    </section>
 </x-admin-shell>

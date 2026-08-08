@@ -75,8 +75,15 @@
                         <label style="display:flex;flex-direction:row;align-items:center;gap:8px;margin:0">
                             <input style="width:auto;min-height:auto" type="checkbox" name="is_active" value="1" @checked($option->is_active)> Active
                         </label>
-                        <button class="btn" type="submit">Save Practice Exam</button>
+                        <div style="display:flex;gap:8px;flex-wrap:wrap">
+                            <button class="btn light" type="submit" form="delete-practice-exam-{{ $option->id }}" onclick="return confirm('Remove this practice exam from future registration forms? Existing registration records will be preserved.')">Delete</button>
+                            <button class="btn" type="submit">Save Practice Exam</button>
+                        </div>
                     </div>
+                </form>
+                <form id="delete-practice-exam-{{ $option->id }}" method="POST" action="{{ route('admin.practice-exams.destroy', $option) }}" hidden>
+                    @csrf
+                    @method('DELETE')
                 </form>
             @empty
                 <p class="muted">No practice exam options yet. The student form will use fallback defaults until options are added.</p>

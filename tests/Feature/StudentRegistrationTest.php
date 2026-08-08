@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Mail\StudentRegistrationConfirmation;
 use App\Models\ApExamSubject;
 use App\Models\PracticeExamOption;
+use App\Models\RegistrationPricingTier;
 use App\Models\StudentRegistration;
 use App\Models\User;
 use Database\Seeders\ApExamSubjectSeeder;
@@ -13,11 +14,18 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Routing\Middleware\ThrottleRequests;
 use Tests\TestCase;
 
 class StudentRegistrationTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->withoutMiddleware(ThrottleRequests::class);
+    }
 
     public function test_student_registration_can_be_submitted_and_email_is_sent(): void
     {
@@ -40,10 +48,11 @@ class StudentRegistrationTest extends TestCase
         $this->assertTrue($registration->needs_accommodations);
         $this->assertSame('SSD-123', $registration->ssd_code);
         $this->assertSame(1, $registration->practice_exam_count);
-        $this->assertSame(2800, $registration->practice_exam_total);
+        $practiceFee = (int) config('registration.practice_exam_fee', 2800);
+        $this->assertSame($practiceFee, $registration->practice_exam_total);
         $this->assertSame(7800, $registration->exam_fee_total);
-        $this->assertSame(1200, $registration->service_fee_total);
-        $this->assertSame(11800, $registration->total_fee);
+        $this->assertSame(9700, $registration->service_fee_total);
+        $this->assertSame(17500 + $practiceFee, $registration->total_fee);
         $this->assertSame('Alex Student', $registration->student_signature_name);
         $this->assertSame(now()->toDateString(), $registration->student_signature_date->toDateString());
         $this->assertSame('Pat Parent', $registration->guardian_signature_name);
@@ -170,7 +179,7 @@ class StudentRegistrationTest extends TestCase
         $registration = StudentRegistration::query()->with('practiceExamSelections')->firstOrFail();
         $this->assertSame(1, $registration->practice_exam_count);
         $this->assertSame(2500, $registration->practice_exam_total);
-        $this->assertSame(11500, $registration->total_fee);
+        $this->assertSame(20000, $registration->total_fee);
         $this->assertTrue($registration->preparation_interest);
         $this->assertTrue($registration->group_class_interest);
         $this->assertTrue($registration->private_tutoring_interest);
@@ -234,6 +243,60 @@ class StudentRegistrationTest extends TestCase
             'seat_capacity' => 32,
             'end_time' => null,
         ]);
+    }
+
+    public function test_admin_can_remove_practice_exam_without_erasing_history(): void
+    {
+        $practice = PracticeExamOption::query()->create([
+            'name' => 'Removable Practice Exam',
+            'fee' => 2500,
+            'currency' => 'NTD',
+            'is_active' => true,
+        ]);
+
+        $this->actingAs($this->adminUser())
+            ->delete(route('admin.practice-exams.destroy', $practice))
+            ->assertRedirect(route('admin.practice-exams.index'));
+
+        $this->assertSoftDeleted('practice_exam_options', ['id' => $practice->id]);
+        $this->assertFalse(PracticeExamOption::withTrashed()->findOrFail($practice->id)->is_active);
+    }
+
+    public function test_admin_can_update_unified_registration_pricing(): void
+    {
+        $this->actingAs($this->adminUser())
+            ->put(route('admin.payments.pricing.update'), [
+                'tiers' => [[
+                    'exam_count' => 2,
+                    'combined_fee_per_exam' => 16000,
+                    'exam_fee_per_exam' => 7800,
+                    'currency' => 'NTD',
+                    'is_active' => '1',
+                ]],
+            ])
+            ->assertRedirect(route('admin.payments.settings'))
+            ->assertSessionHasNoErrors();
+
+        $tier = RegistrationPricingTier::query()->where('exam_count', 2)->firstOrFail();
+        $this->assertSame(8200, $tier->service_fee_per_exam);
+    }
+
+    public function test_two_exam_registration_uses_volume_pricing_tier(): void
+    {
+        Mail::fake();
+        $this->seed(ApExamSubjectSeeder::class);
+        $subjects = ApExamSubject::query()->take(2)->get();
+
+        $this->post('/student-registration', $this->validPayload([
+            'exam_subject_ids' => $subjects->pluck('id')->all(),
+            'practice_exams' => [],
+        ]))->assertRedirect();
+
+        $registration = StudentRegistration::query()->with('exams')->firstOrFail();
+        $this->assertSame(15600, $registration->exam_fee_total);
+        $this->assertSame(17800, $registration->service_fee_total);
+        $this->assertSame(33400, $registration->total_fee);
+        $this->assertSame(16700, (int) $registration->exams->first()->pivot->total_amount_snapshot);
     }
 
     public function test_unavailable_practice_exam_option_is_rejected_when_master_data_exists(): void
