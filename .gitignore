@@ -43,6 +43,7 @@ template-source/
 !/storage/logs/.gitignore
 /storage/*.key
 /storage/pail
+/storage/PsySH/
 /vendor
 Homestead.json
 Homestead.yaml

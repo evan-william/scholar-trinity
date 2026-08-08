@@ -62,6 +62,12 @@ Current local template pass:
 ## Current Progress
 
 2026-08-08
+- Teammate merge integration:
+  - Integrated teammate commit `a15a23b` on top of the bilingual CMS and tiered-pricing work without dropping either change set.
+  - Preserved the new server-backed per-step registration validation, responsive form refinements, payment-page readability updates, route, and regression tests.
+  - Localized the new practice-exam validation failures for English and Traditional Chinese.
+  - Removed and ignored the generated PsySH console-history directory so runtime shell history is not committed or packaged.
+  - Rebuilt the deployment archive from the merged source instead of selecting either stale binary ZIP from the merge conflict.
 - Client CMS and bilingual-content completion:
   - Pulled and audited teammate commit `b0784d1` before implementing the new client feedback.
   - Added non-destructive bilingual JSON storage for landing sections, timeline rows, fee copy, required documents, FAQs, and contact content. Existing English/admin-edited data is retained during migration.

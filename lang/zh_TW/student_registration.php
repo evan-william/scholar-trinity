@@ -60,5 +60,7 @@ return [
         'exam_unavailable' => '一個或多個已選考試目前無法報名。',
         'exam_closed' => '一個或多個已選考試已截止。',
         'exam_full' => '一個或多個已選考試已額滿。',
+        'practice_unavailable' => '一個或多個已選模擬考目前無法報名。',
+        'practice_full' => ':name 已額滿。',
     ],
 ];

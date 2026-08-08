@@ -60,5 +60,7 @@ return [
         'exam_unavailable' => 'One or more selected exams are no longer available.',
         'exam_closed' => 'One or more selected exams are closed.',
         'exam_full' => 'One or more selected exams are full.',
+        'practice_unavailable' => 'One or more selected practice exams are no longer available.',
+        'practice_full' => ':name has reached its seat capacity.',
     ],
 ];
