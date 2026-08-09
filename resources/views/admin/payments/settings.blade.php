@@ -89,11 +89,12 @@
             @method('PUT')
             <div style="overflow-x:auto">
                 <table>
-                    <thead><tr><th>Exams</th><th>Unified Fee / Exam</th><th>TPCA Fee / Exam</th><th>TS Service / Exam</th><th>Estimated Total</th><th>Active</th></tr></thead>
+                    <thead><tr><th>Exams</th><th>Reference USD / Exam</th><th>Unified Fee / Exam (NTD)</th><th>TPCA Fee / Exam</th><th>TS Service / Exam</th><th>Estimated Total</th><th>Active</th></tr></thead>
                     <tbody>
                     @foreach($pricingTiers as $index => $tier)
                         <tr>
                             <td><input type="number" name="tiers[{{ $index }}][exam_count]" value="{{ $tier->exam_count }}" min="1" max="20" required></td>
+                            <td><input type="number" name="tiers[{{ $index }}][reference_usd_per_exam]" value="{{ $tier->reference_usd_per_exam }}" min="0" placeholder="Optional"></td>
                             <td><input type="number" name="tiers[{{ $index }}][combined_fee_per_exam]" value="{{ $tier->combined_fee_per_exam }}" min="0" required></td>
                             <td><input type="number" name="tiers[{{ $index }}][exam_fee_per_exam]" value="{{ $tier->exam_fee_per_exam }}" min="0" required></td>
                             <td>{{ $tier->currency }} {{ number_format($tier->service_fee_per_exam) }}</td>

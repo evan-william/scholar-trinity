@@ -1,6 +1,43 @@
 <?php
 
 return [
+    'site_chrome' => [
+        'label' => 'Header and Footer',
+        'fields' => [
+            'nav_home' => ['label' => 'Navigation: Home', 'en' => 'Home', 'zh_TW' => '首頁'],
+            'nav_program' => ['label' => 'Navigation: Program', 'en' => 'Program', 'zh_TW' => '課程資訊'],
+            'nav_timeline' => ['label' => 'Navigation: Timeline', 'en' => 'Timeline', 'zh_TW' => '時程'],
+            'nav_faq' => ['label' => 'Navigation: FAQ', 'en' => 'FAQ', 'zh_TW' => '常見問題'],
+            'nav_contact' => ['label' => 'Navigation: Contact', 'en' => 'Contact', 'zh_TW' => '聯絡我們'],
+            'nav_start' => ['label' => 'Navigation: Start Form', 'en' => 'Start Form', 'zh_TW' => '開始報名'],
+            'header_support' => ['label' => 'Header Support Text', 'en' => 'Taipei AP Registration Support', 'zh_TW' => '台北 AP 報名支援'],
+            'footer_office' => ['label' => 'Footer: Office Label', 'en' => 'Office Address', 'zh_TW' => '服務說明'],
+            'footer_office_body' => ['label' => 'Footer: Office Description', 'en' => 'Taipei test-center AP registration support.', 'zh_TW' => '台北考場 AP 報名支援。'],
+            'footer_phone' => ['label' => 'Footer: Phone Label', 'en' => 'Business Phone', 'zh_TW' => '聯絡電話'],
+            'footer_email' => ['label' => 'Footer: Email Label', 'en' => 'Business Email', 'zh_TW' => '電子郵件'],
+            'footer_line' => ['label' => 'Footer: Line Label', 'en' => 'Line', 'zh_TW' => 'Line'],
+            'footer_registration' => ['label' => 'Footer: Registration Heading', 'en' => 'Registration', 'zh_TW' => '報名資訊'],
+            'footer_program' => ['label' => 'Footer: Program Link', 'en' => 'Program Information', 'zh_TW' => '課程資訊'],
+            'footer_timeline' => ['label' => 'Footer: Timeline Link', 'en' => 'Timeline', 'zh_TW' => '報名時程'],
+            'footer_register' => ['label' => 'Footer: Register Link', 'en' => 'Register Now', 'zh_TW' => '立即報名'],
+            'footer_main_period' => ['label' => 'Footer: Main Period Label', 'en' => 'Main Registration Period:', 'zh_TW' => '一般時段：'],
+            'footer_late_period' => ['label' => 'Footer: Late Period Label', 'en' => 'Late Registration Period:', 'zh_TW' => '逾期時段：'],
+            'footer_copyright' => ['label' => 'Footer: Copyright Label', 'en' => 'Copyright', 'zh_TW' => '版權所有'],
+            'footer_rights' => ['label' => 'Footer: Rights Text', 'en' => 'All Rights Reserved.', 'zh_TW' => '保留所有權利。'],
+            'footer_designed' => ['label' => 'Footer: Designed By', 'en' => 'Designed By', 'zh_TW' => '設計'],
+            'footer_powered' => ['label' => 'Footer: Powered By', 'en' => 'Powered by', 'zh_TW' => '技術支援'],
+        ],
+    ],
+    'hero_primary' => [
+        'label' => 'Primary Hero Slide',
+        'fields' => [
+            'hero_primary_accent' => ['label' => 'Primary Hero Title 1', 'en' => 'Taipei Test Center', 'zh_TW' => '台北考場'],
+            'hero_primary_title' => ['label' => 'Primary Hero Title 2', 'en' => 'Registration Support', 'zh_TW' => '報名支援'],
+            'hero_primary_button' => ['label' => 'Primary Hero Button', 'en' => 'Start Student Registration', 'zh_TW' => '開始學生報名'],
+            'hero_schedule_main_label' => ['label' => 'Late Slide Main Period Label', 'en' => 'Main Registration Period:', 'zh_TW' => '一般報名期間：'],
+            'hero_schedule_late_label' => ['label' => 'Late Slide Late Period Label', 'en' => 'Late Registration Period:', 'zh_TW' => '逾期報名期間：'],
+        ],
+    ],
     'hero_secondary' => [
         'label' => 'Hero Slides',
         'fields' => [
@@ -30,6 +67,7 @@ return [
     'overview_cards' => [
         'label' => 'Program Overview Cards',
         'fields' => [
+            'overview_button' => ['label' => 'Overview Button', 'en' => 'Start Registration', 'zh_TW' => '開始報名'],
             'visual_title' => ['label' => 'Overview Image Title', 'en' => 'Taipei test-center support', 'zh_TW' => '台北考場報名支援'],
             'visual_body' => ['label' => 'Overview Image Description', 'en' => 'Registration coordination from form submission through admin review.', 'zh_TW' => '從表單提交到管理端審核的完整報名協調。', 'multiline' => true],
             'guided_title' => ['label' => 'Guided Registration Title', 'en' => 'Guided Registration', 'zh_TW' => '引導式報名'],
@@ -47,9 +85,15 @@ return [
         'fields' => [
             'eyebrow' => ['label' => 'Section Eyebrow', 'en' => 'Registration Information', 'zh_TW' => '報名資訊'],
             'title' => ['label' => 'Section Title', 'en' => 'Plan for the AP registration cycle', 'zh_TW' => '規劃 AP 考試報名時程'],
+            'main_kicker' => ['label' => 'Main Registration Card Label', 'en' => 'Main Registration', 'zh_TW' => '一般報名'],
+            'main_period_prefix' => ['label' => 'Main Registration Period Label', 'en' => 'Main registration period:', 'zh_TW' => '一般報名期間：'],
+            'main_test_prefix' => ['label' => 'Main Test Period Label', 'en' => 'Main Test Period:', 'zh_TW' => '一般考試期間：'],
             'main_title' => ['label' => 'Main Registration Title', 'en' => 'Prepare during the main registration window.', 'zh_TW' => '請於一般報名期間提早準備。'],
             'main_body' => ['label' => 'Main Registration Description', 'en' => 'Students and guardians can prepare personal details, exam choices, and required documents before submitting the guided form.', 'zh_TW' => '學生與家長可先準備個人資料、考試選擇及所需文件，再提交引導式表單。', 'multiline' => true],
             'main_notice' => ['label' => 'Main Registration Notice', 'en' => 'Registration is finalized after the form, payment, and official confirmation email are received.', 'zh_TW' => '表單與付款皆收到，且官方確認信寄出後，報名才算完成。', 'multiline' => true],
+            'late_kicker' => ['label' => 'Late Registration Card Label', 'en' => 'Late Registration', 'zh_TW' => '逾期報名'],
+            'late_period_prefix' => ['label' => 'Late Registration Period Label', 'en' => 'Late Registration Period:', 'zh_TW' => '通常逾期報名期間：'],
+            'late_test_prefix' => ['label' => 'Late Testing Period Label', 'en' => 'Late-Testing Period:', 'zh_TW' => '逾期考試期間：'],
             'late_title' => ['label' => 'Late Registration Title', 'en' => 'Late registration depends on remaining capacity.', 'zh_TW' => '逾期報名視剩餘名額開放。'],
             'late_body' => ['label' => 'Late Registration Description', 'en' => 'Late registration may open after main registration closes, only when test-center slots remain available.', 'zh_TW' => '一般報名結束後，若考場仍有名額，才可能開放逾期報名。', 'multiline' => true],
             'late_notice' => ['label' => 'Late Registration Notice', 'en' => 'Final availability is confirmed by the admin team after review.', 'zh_TW' => '最終名額由管理團隊審核後確認。', 'multiline' => true],
@@ -80,6 +124,7 @@ return [
             'faq_eyebrow' => ['label' => 'FAQ Eyebrow', 'en' => 'FAQ', 'zh_TW' => '常見問題'],
             'faq_title' => ['label' => 'FAQ Title', 'en' => 'Frequently Asked Questions', 'zh_TW' => '常見問題'],
             'contact_eyebrow' => ['label' => 'Contact Eyebrow', 'en' => 'Contact Information', 'zh_TW' => '聯絡資訊'],
+            'contact_line_label' => ['label' => 'Contact Line Label', 'en' => 'Line', 'zh_TW' => 'Line'],
             'cta_body' => ['label' => 'CTA Description', 'en' => 'Ready to submit your AP registration?', 'zh_TW' => '準備提交 AP 報名了嗎？'],
             'cta_title' => ['label' => 'CTA Title', 'en' => 'Start the student registration form', 'zh_TW' => '開始填寫學生報名表'],
             'cta_button' => ['label' => 'CTA Button', 'en' => 'Register Now', 'zh_TW' => '立即報名'],

@@ -6,6 +6,8 @@
     'subtitle' => null,
     'badge' => null,
     'contact' => null,
+    'copySettings' => null,
+    'footerNotice' => null,
     'bodyClass' => '',
     'contentClass' => 'ptb--120',
 ])
@@ -19,54 +21,54 @@
     $registrationSettings = app(\App\Services\PublicRegistrationSettings::class)->all();
     $uiLocale = session('locale', str_replace('_', '-', app()->getLocale()));
     $isZh = $uiLocale === 'zh-TW';
-    $navLabels = $isZh
-        ? ['home' => '首頁', 'program' => '課程資訊', 'timeline' => '時程', 'faq' => '常見問題', 'contact' => '聯絡我們', 'start' => '開始報名', 'support' => '台北 AP 報名支援']
-        : ['home' => 'Home', 'program' => 'Program', 'timeline' => 'Timeline', 'faq' => 'FAQ', 'contact' => 'Contact', 'start' => 'Start Form', 'support' => 'Taipei AP Registration Support'];
-    $footerLabels = $isZh
-        ? [
-            'office' => '服務說明',
-            'office_body' => '台北考場 AP 報名支援。',
-            'phone' => '聯絡電話',
-            'email' => '電子郵件',
-            'registration' => '報名資訊',
-            'program' => '課程資訊',
-            'timeline' => '報名時程',
-            'register' => '立即報名',
-            'notice' => '重要提醒',
-            'notice_body' => '表單與付款皆收到，且官方確認信寄出後，報名才算完成。名額有限，可能在公告截止日前額滿關閉。',
-            'main_period' => '一般時段：',
-            'late_period' => '逾期時段：',
-            'main_period_value' => $registrationSettings['main_period_zh'] ?? '八月至十月',
-            'late_period_value' => $registrationSettings['late_period_zh'] ?? '十一月中旬至三月中旬',
-            'copyright' => '版權所有',
-            'rights' => '保留所有權利。',
-            'designed' => 'Designed By',
-            'powered' => 'Powered by',
-        ]
-        : [
-            'office' => 'Office Address',
-            'office_body' => 'Taipei test-center AP registration support.',
-            'phone' => 'Business Phone',
-            'email' => 'Business Email',
-            'registration' => 'Registration',
-            'program' => 'Program Information',
-            'timeline' => 'Timeline',
-            'register' => 'Register Now',
-            'notice' => 'Important Notice',
-            'notice_body' => 'Registration is finalized once your form and payment are received and you receive an official confirmation email. Seats are limited and may close prior to the listed deadline.',
-            'main_period' => 'Main Registration Period:',
-            'late_period' => 'Late Registration Period:',
-            'main_period_value' => $registrationSettings['main_period'],
-            'late_period_value' => $registrationSettings['late_period'],
-            'copyright' => 'Copyright',
-            'rights' => 'All Rights Reserved.',
-            'designed' => 'Designed By',
-            'powered' => 'Powered by',
-        ];
+    $publicPayload = null;
+    if ($copySettings === null || $footerNotice === null) {
+        $publicPayload = app(\App\Repositories\LandingContentRepository::class)->payload();
+    }
+    $copySettings ??= data_get($publicPayload, 'settings.copy', collect());
+    $footerNotice ??= data_get($publicPayload, 'sections.registration_notice');
+    $shellCopy = fn (string $key, string $en, string $zh): string => (string) data_get(
+        $copySettings,
+        $key.'.text',
+        $isZh ? $zh : $en
+    );
+    $navLabels = [
+        'home' => $shellCopy('nav_home', 'Home', '首頁'),
+        'program' => $shellCopy('nav_program', 'Program', '課程資訊'),
+        'timeline' => $shellCopy('nav_timeline', 'Timeline', '時程'),
+        'faq' => $shellCopy('nav_faq', 'FAQ', '常見問題'),
+        'contact' => $shellCopy('nav_contact', 'Contact', '聯絡我們'),
+        'start' => $shellCopy('nav_start', 'Start Form', '開始報名'),
+        'support' => $shellCopy('header_support', 'Taipei AP Registration Support', '台北 AP 報名支援'),
+    ];
+    $footerLabels = [
+        'office' => $shellCopy('footer_office', 'Office Address', '服務說明'),
+        'office_body' => $shellCopy('footer_office_body', 'Taipei test-center AP registration support.', '台北考場 AP 報名支援。'),
+        'phone' => $shellCopy('footer_phone', 'Business Phone', '聯絡電話'),
+        'email' => $shellCopy('footer_email', 'Business Email', '電子郵件'),
+        'line' => $shellCopy('footer_line', 'Line', 'Line'),
+        'registration' => $shellCopy('footer_registration', 'Registration', '報名資訊'),
+        'program' => $shellCopy('footer_program', 'Program Information', '課程資訊'),
+        'timeline' => $shellCopy('footer_timeline', 'Timeline', '報名時程'),
+        'register' => $shellCopy('footer_register', 'Register Now', '立即報名'),
+        'notice' => $footerNotice?->title ?: $shellCopy('footer_notice', 'Important Notice', '重要提醒'),
+        'notice_body' => $footerNotice?->body ?: $shellCopy('footer_notice_body', 'Registration is finalized once your form and payment are received and you receive an official confirmation email. Seats are limited and may close prior to the listed deadline.', '表單與付款皆收到，且官方確認信寄出後，報名才算完成。名額有限，可能在公告截止日前額滿關閉。'),
+        'main_period' => $shellCopy('footer_main_period', 'Main Registration Period:', '一般時段：'),
+        'late_period' => $shellCopy('footer_late_period', 'Late Registration Period:', '逾期時段：'),
+        'main_period_value' => $isZh ? ($registrationSettings['main_period_zh'] ?? '八月至十月') : $registrationSettings['main_period'],
+        'late_period_value' => $isZh ? ($registrationSettings['late_period_zh'] ?? '十一月中旬至三月中旬') : $registrationSettings['late_period'],
+        'copyright' => $shellCopy('footer_copyright', 'Copyright', '版權所有'),
+        'rights' => $shellCopy('footer_rights', 'All Rights Reserved.', '保留所有權利。'),
+        'designed' => $shellCopy('footer_designed', 'Designed By', '設計'),
+        'powered' => $shellCopy('footer_powered', 'Powered by', '技術支援'),
+    ];
     $footerLabels['office_body'] = $contact?->address ?: $footerLabels['office_body'];
     $footerPhone = $contact?->phone ?: '886-2-2771-6002';
     $footerEmail = $contact?->email ?: 'ap-registration@trinityscholar.com';
     $footerLine = $contact?->whatsapp ?: '@TrinityScholar';
+    $footerLineUrl = collect($contact?->social_links ?? [])
+        ->map(fn ($link) => trim((string) str($link)->after(': ')))
+        ->first(fn ($link) => filter_var($link, FILTER_VALIDATE_URL)) ?: 'https://lin.ee/VXnDLUW';
 @endphp
 <!doctype html>
 <html class="no-js" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
@@ -355,7 +357,7 @@
                         <div class="address">
                             <h6>{{ $footerLabels['email'] }}</h6>
                             <p>{{ $footerEmail }}</p>
-                            <p>Line: <a href="https://lin.ee/VXnDLUW" target="_blank" rel="noopener">{{ $footerLine }}</a></p>
+                            <p>{{ $footerLabels['line'] }}: <a href="{{ $footerLineUrl }}" target="_blank" rel="noopener">{{ $footerLine }}</a></p>
                         </div>
                     </div>
                 </div>

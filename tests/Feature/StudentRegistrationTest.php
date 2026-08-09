@@ -320,6 +320,7 @@ class StudentRegistrationTest extends TestCase
             ->put(route('admin.payments.pricing.update'), [
                 'tiers' => [[
                     'exam_count' => 2,
+                    'reference_usd_per_exam' => 460,
                     'combined_fee_per_exam' => 16000,
                     'exam_fee_per_exam' => 7800,
                     'currency' => 'NTD',
@@ -330,7 +331,27 @@ class StudentRegistrationTest extends TestCase
             ->assertSessionHasNoErrors();
 
         $tier = RegistrationPricingTier::query()->where('exam_count', 2)->firstOrFail();
+        $this->assertSame(460, $tier->reference_usd_per_exam);
         $this->assertSame(8200, $tier->service_fee_per_exam);
+    }
+
+    public function test_default_unified_pricing_matches_client_table_for_one_through_ten_exams(): void
+    {
+        $expectedPerExam = [17500, 16700, 15900, 15100, 14300, 13500, 13500, 13500, 13500, 13500];
+        $expectedUsd = [500, 475, 450, 425, 400, 375, 375, 375, 375, 375];
+        $tiers = RegistrationPricingTier::query()->orderBy('exam_count')->get();
+
+        $this->assertCount(10, $tiers);
+
+        foreach ($tiers as $index => $tier) {
+            $this->assertSame($index + 1, $tier->exam_count);
+            $this->assertSame($expectedUsd[$index], $tier->reference_usd_per_exam);
+            $this->assertSame($expectedPerExam[$index], $tier->combined_fee_per_exam);
+            $this->assertSame(7800, $tier->exam_fee_per_exam);
+            $this->assertSame($expectedPerExam[$index] - 7800, $tier->service_fee_per_exam);
+            $this->assertSame('NTD', $tier->currency);
+            $this->assertTrue($tier->is_active);
+        }
     }
 
     public function test_two_exam_registration_uses_volume_pricing_tier(): void

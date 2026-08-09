@@ -1,6 +1,6 @@
 # Trinity Scholar Progress Tracker
 
-Last updated: 2026-08-08, Asia/Bangkok
+Last updated: 2026-08-09, Asia/Bangkok
 
 This file is the working source of truth for project status. Every implementation pass must update:
 - `Current Progress` for what changed.
@@ -60,6 +60,25 @@ Current local template pass:
 - Raw downloaded templates are ignored through `template-source/` in `.gitignore`.
 
 ## Current Progress
+
+2026-08-09
+- Completed the client pricing/CMS verification pass:
+  - Rechecked the supplied 1-10 exam pricing sheet row by row. The NTD unified fee, TPCA fee, Trinity service fee, and calculated totals match all ten rows.
+  - Added the client sheet's USD-per-exam reference values (`500`, `475`, `450`, `425`, `400`, then `375`) to the pricing database and Admin > Payment Settings. These values are informational; production charges remain calculated in NTD.
+  - Added regression coverage that validates every default pricing row and confirms server-side two-exam volume pricing.
+- Closed the remaining bilingual Landing Content CMS gaps:
+  - Added English and Traditional Chinese CMS controls for the primary hero, header navigation, footer labels, overview CTA, registration-period labels, and contact Line label.
+  - Rewired those live landing/header/footer strings to database-backed CMS values instead of fixed Blade text.
+  - Reused the database-managed registration notice in the shared footer and connected landing contact email, phone, Line handle, and Line URL to the Contact CMS record.
+  - Added a non-destructive migration that inserts only missing CMS keys and never overwrites content already edited by the client.
+  - Confirmed the TPCA/Primacy partner logo asset exists and is rendered in both the public header and footer.
+- Verification:
+  - PHP lint passed for every changed PHP and Blade file.
+  - Focused CMS/pricing/registration suite passed: 28 tests and 248 assertions.
+  - Full PHPUnit suite passed: 96 tests and 660 assertions.
+  - Vite production build passed with 61 modules transformed.
+  - Regenerated the safety-checked deployment ZIP with 520 entries; both new migrations, built assets, and updated CMS/admin views are included.
+  - Browser QA was intentionally skipped per user instruction.
 
 2026-08-08
 - Teammate merge integration:

@@ -78,6 +78,9 @@
         $copy('process_detail_4', 'Select a payment method and complete the required transaction.', '選擇付款方式並完成所需交易。'),
         $copy('process_detail_5', 'The admin team reviews the submission and confirms enrollment by email.', '管理團隊審核資料並以電子郵件確認報名。'),
     ];
+    $contactLineUrl = collect($contact?->social_links ?? [])
+        ->map(fn ($link) => trim((string) str($link)->after(': ')))
+        ->first(fn ($link) => filter_var($link, FILTER_VALIDATE_URL)) ?: 'https://lin.ee/VXnDLUW';
     $registrationSettings ??= [];
     $schedule = fn (string $key, string $fallback): string => (string) ($registrationSettings[$key.($isZh ? '_zh' : '')] ?? $registrationSettings[$key] ?? $fallback);
     $timelineCards = $timelines
@@ -107,7 +110,7 @@
     );
 @endphp
 
-<x-public-flow-shell :title="$metaTitle" :description="$metaDescription" :contact="$contact" body-class="landing-refined" content-class="none">
+<x-public-flow-shell :title="$metaTitle" :description="$metaDescription" :contact="$contact" :copy-settings="$copySettings" :footer-notice="$sections->get('registration_notice')" body-class="landing-refined" content-class="none">
     <x-slot:styles>
         <style>
             #overview,#registration-information,#timeline,#process,#documents,#faq,#contact{scroll-margin-top:112px}
@@ -269,9 +272,9 @@
                         <div class="col-lg-7 col-md-9">
                             <div class="slider-content">
                                 <h3>{{ $heroTitle }}</h3>
-                                <h1><span class="primary-color">{{ $tx('Taipei Test Center', '台北考場') }}</span> {{ $tx('Registration Support', '報名支援') }}</h1>
+                                <h1><span class="primary-color">{{ $copy('hero_primary_accent', 'Taipei Test Center', '台北考場') }}</span> {{ $copy('hero_primary_title', 'Registration Support', '報名支援') }}</h1>
                                 <p>{{ $heroIntro }}</p>
-                                <a class="btn btn-primary btn-round btn-lg mt-5" href="{{ route('student-registrations.create') }}">{{ $tx('Start Student Registration', '開始學生報名') }}</a>
+                                <a class="btn btn-primary btn-round btn-lg mt-5" href="{{ route('student-registrations.create') }}">{{ $copy('hero_primary_button', 'Start Student Registration', '開始學生報名') }}</a>
                             </div>
                         </div>
                     </div>
@@ -284,7 +287,7 @@
                             <div class="slider-content">
                         <h3>{{ $copy('late_eyebrow', 'Late Registration', '逾期報名') }}</h3>
                         <h1><span class="primary-color">{{ $copy('late_title_primary', 'Spring Availability', '春季名額') }}</span> {{ $copy('late_title_secondary', 'When Slots Remain', '視剩餘名額開放') }}</h1>
-                                <p>{{ $tx('Main Registration Period: ', '一般報名期間：') }}{{ $schedule('main_period', 'August - October') }}. {{ $tx('Late Registration Period: ', '逾期報名期間：') }}{{ $schedule('late_period', 'Mid November - Mid March') }}.</p>
+                                <p>{{ $copy('hero_schedule_main_label', 'Main Registration Period:', '一般報名期間：') }} {{ $schedule('main_period', 'August - October') }}. {{ $copy('hero_schedule_late_label', 'Late Registration Period:', '逾期報名期間：') }} {{ $schedule('late_period', 'Mid November - Mid March') }}.</p>
                         <a class="btn btn-primary btn-round btn-lg mt-5" href="#registration-information">{{ $copy('late_button', 'View Registration Information', '查看報名資訊') }}</a>
                             </div>
                         </div>
@@ -329,7 +332,7 @@
                             <h2>{{ $overview?->title ?: $tx('A clearer route to AP exam registration', '更清楚的 AP 考試報名流程') }}</h2>
                         </div>
                         <p>{{ $overview?->body ?: $tx('Trinity Scholar helps students submit AP registration details, passport documents, exam selections, payment information, and admin verification in one guided platform.', 'Trinity Scholar 協助學生在同一平台提交 AP 報名資料、護照文件、考試選擇、付款資訊，並由管理團隊完成審核。') }}</p>
-                        <a class="btn btn-primary btn-round" href="{{ route('student-registrations.create') }}">{{ $tx('Start Registration', '開始報名') }}</a>
+                        <a class="btn btn-primary btn-round" href="{{ route('student-registrations.create') }}">{{ $copy('overview_button', 'Start Registration', '開始報名') }}</a>
                     </div>
                 </div>
                 <div class="col-lg-6">
@@ -375,12 +378,12 @@
                 <div class="col-lg-6 mb-4 mb-lg-0">
                     <div class="card notice-card">
                         <div class="card-body p-25">
-                            <span class="notice-kicker">{{ $tx('Main Registration', '一般報名') }}</span>
+                            <span class="notice-kicker">{{ $copy('main_kicker', 'Main Registration', '一般報名') }}</span>
                             <h4>{{ $copy('main_title', 'Prepare during the main registration window.', '請於一般報名期間提早準備。') }}</h4>
                             <p>{{ $copy('main_body', 'Students and guardians can prepare personal details, exam choices, and required documents before submitting the guided form.', '學生與家長可先準備個人資料、考試選擇及所需文件，再提交引導式表單。') }}</p>
                             <ul class="notice-list">
-                                <li><i class="fa fa-check-circle"></i><span>{{ $tx('Main registration period:', '一般報名期間：') }} <strong>{{ $schedule('main_period', 'August - October') }}</strong></span></li>
-                                <li><i class="fa fa-check-circle"></i><span>{{ $tx('Main Test Period:', '一般考試期間：') }} <strong>{{ $schedule('main_test_period', 'May 3-14, 2027') }}</strong></span></li>
+                                <li><i class="fa fa-check-circle"></i><span>{{ $copy('main_period_prefix', 'Main registration period:', '一般報名期間：') }} <strong>{{ $schedule('main_period', 'August - October') }}</strong></span></li>
+                                <li><i class="fa fa-check-circle"></i><span>{{ $copy('main_test_prefix', 'Main Test Period:', '一般考試期間：') }} <strong>{{ $schedule('main_test_period', 'May 3-14, 2027') }}</strong></span></li>
                                 <li><i class="fa fa-check-circle"></i><span>{{ $copy('main_notice', 'Registration is finalized after the form, payment, and official confirmation email are received.', '表單與付款皆收到，且官方確認信寄出後，報名才算完成。') }}</span></li>
                             </ul>
                         </div>
@@ -389,12 +392,12 @@
                 <div class="col-lg-6">
                     <div class="card notice-card">
                         <div class="card-body p-25">
-                            <span class="notice-kicker">{{ $tx('Late Registration', '逾期報名') }}</span>
+                            <span class="notice-kicker">{{ $copy('late_kicker', 'Late Registration', '逾期報名') }}</span>
                             <h4>{{ $copy('late_title', 'Late registration depends on remaining capacity.', '逾期報名視剩餘名額開放。') }}</h4>
                             <p>{{ $copy('late_body', 'Late registration may open after main registration closes, only when test-center slots remain available.', '一般報名結束後，若考場仍有名額，才可能開放逾期報名。') }}</p>
                             <ul class="notice-list">
-                                <li><i class="fa fa-info-circle"></i><span>{{ $tx('Late Registration Period:', '通常逾期報名期間：') }} <strong>{{ $schedule('late_period', 'Mid November - Mid March') }}</strong></span></li>
-                                <li><i class="fa fa-info-circle"></i><span>{{ $tx('Late-Testing Period:', '逾期考試期間：') }} <strong>{{ $schedule('late_test_period', 'May 17 - 21, 2027') }}</strong></span></li>
+                                <li><i class="fa fa-info-circle"></i><span>{{ $copy('late_period_prefix', 'Late Registration Period:', '通常逾期報名期間：') }} <strong>{{ $schedule('late_period', 'Mid November - Mid March') }}</strong></span></li>
+                                <li><i class="fa fa-info-circle"></i><span>{{ $copy('late_test_prefix', 'Late-Testing Period:', '逾期考試期間：') }} <strong>{{ $schedule('late_test_period', 'May 17 - 21, 2027') }}</strong></span></li>
                                 <li><i class="fa fa-info-circle"></i><span>{{ $copy('late_notice', 'Final availability is confirmed by the admin team after review.', '最終名額由管理團隊審核後確認。') }}</span></li>
                             </ul>
                         </div>
@@ -402,9 +405,9 @@
                 </div>
             </div>
             <div class="late-facts">
-                <div class="late-stat"><i class="fa fa-calendar"></i><div><span>{{ $tx('Main Registration', '一般報名') }}</span><strong>{{ $schedule('main_period', 'August - October') }}</strong></div></div>
-                <div class="late-stat"><i class="fa fa-calendar-check-o"></i><div><span>{{ $tx('Main Test Period', '一般考試時段') }}</span><strong>{{ $schedule('main_test_period', 'May 3-14, 2027') }}</strong></div></div>
-                <div class="late-stat"><i class="fa fa-clock-o"></i><div><span>{{ $tx('Late-Testing Period', '逾期考試時段') }}</span><strong>{{ $schedule('late_test_period', 'May 17 - 21, 2027') }}</strong></div></div>
+                <div class="late-stat"><i class="fa fa-calendar"></i><div><span>{{ $copy('main_kicker', 'Main Registration', '一般報名') }}</span><strong>{{ $schedule('main_period', 'August - October') }}</strong></div></div>
+                <div class="late-stat"><i class="fa fa-calendar-check-o"></i><div><span>{{ $copy('main_test_prefix', 'Main Test Period', '一般考試時段') }}</span><strong>{{ $schedule('main_test_period', 'May 3-14, 2027') }}</strong></div></div>
+                <div class="late-stat"><i class="fa fa-clock-o"></i><div><span>{{ $copy('late_test_prefix', 'Late-Testing Period', '逾期考試時段') }}</span><strong>{{ $schedule('late_test_period', 'May 17 - 21, 2027') }}</strong></div></div>
             </div>
         </div>
     </section>
@@ -518,9 +521,9 @@
                     <div class="contact-panel contact-info-panel">
                                 <span class="primary-color text-uppercase d-block mb-3">{{ $copy('contact_eyebrow', 'Contact Information', '聯絡資訊') }}</span>
                         <h3>{{ $contact?->organization ?: 'Trinity Scholar' }}</h3>
-                        <p><i class="fa fa-envelope primary-color"></i> ap-registration@trinityscholar.com</p>
-                        <p><i class="fa fa-phone primary-color"></i> 886-2-2771-6002</p>
-                        <p><i class="fa fa-comment primary-color"></i> Line: <a href="https://lin.ee/VXnDLUW" target="_blank" rel="noopener">@TrinityScholar</a></p>
+                        <p><i class="fa fa-envelope primary-color"></i> {{ $contact?->email ?: 'ap-registration@trinityscholar.com' }}</p>
+                        <p><i class="fa fa-phone primary-color"></i> {{ $contact?->phone ?: '886-2-2771-6002' }}</p>
+                        <p><i class="fa fa-comment primary-color"></i> {{ $copy('contact_line_label', 'Line', 'Line') }}: <a href="{{ $contactLineUrl }}" target="_blank" rel="noopener">{{ $contact?->whatsapp ?: '@TrinityScholar' }}</a></p>
                     </div>
                 </div>
                 <div class="col-lg-6 mb-4">

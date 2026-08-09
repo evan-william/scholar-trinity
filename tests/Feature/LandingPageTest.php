@@ -84,6 +84,9 @@ class LandingPageTest extends TestCase
             ->assertSee('Add FAQ')
             ->assertSee('registration_settings[main_period][en]', false)
             ->assertSee('registration_settings[test_site_map_url][en]', false)
+            ->assertSee('settings[copy][hero_primary_accent][en]', false)
+            ->assertSee('settings[copy][nav_program][zh_TW]', false)
+            ->assertSee('settings[copy][footer_registration][zh_TW]', false)
             ->assertSee('Registration Form Important Notice');
     }
 
@@ -94,6 +97,9 @@ class LandingPageTest extends TestCase
         $payload = $this->validAdminPayload();
         $payload['settings']['hero']['title'] = ['en' => 'English AP Registration', 'zh_TW' => '中文 AP 考試報名'];
         $payload['settings']['copy']['cta_title'] = ['en' => 'Start the English form', 'zh_TW' => '開始填寫中文報名表'];
+        $payload['settings']['copy']['hero_primary_accent'] = ['en' => 'English Test Center', 'zh_TW' => '中文考場'];
+        $payload['settings']['copy']['nav_program'] = ['en' => 'English Program', 'zh_TW' => '中文課程資訊'];
+        $payload['settings']['copy']['footer_registration'] = ['en' => 'English Registration Links', 'zh_TW' => '中文報名資訊'];
         $payload['timelines'][0]['round'] = ['en' => 'Main Registration', 'zh_TW' => '中文一般報名'];
         $payload['timelines'][0]['month'] = ['en' => 'August', 'zh_TW' => '八月'];
         $payload['timelines'][0]['description'] = ['en' => 'English timeline copy.', 'zh_TW' => '中文時程內容。'];
@@ -117,6 +123,9 @@ class LandingPageTest extends TestCase
             ->get(route('landing'))
             ->assertOk()
             ->assertSee('中文 AP 考試報名')
+            ->assertSee('中文考場')
+            ->assertSee('中文課程資訊')
+            ->assertSee('中文報名資訊')
             ->assertSee('開始填寫中文報名表')
             ->assertSee('中文一般報名')
             ->assertSee('中文時程內容。')

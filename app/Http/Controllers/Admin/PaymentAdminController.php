@@ -123,6 +123,7 @@ class PaymentAdminController extends Controller
         $data = $request->validate([
             'tiers' => ['required', 'array', 'min:1', 'max:20'],
             'tiers.*.exam_count' => ['required', 'integer', 'min:1', 'max:20', 'distinct'],
+            'tiers.*.reference_usd_per_exam' => ['nullable', 'integer', 'min:0', 'max:9999'],
             'tiers.*.combined_fee_per_exam' => ['required', 'integer', 'min:0', 'max:999999'],
             'tiers.*.exam_fee_per_exam' => ['required', 'integer', 'min:0', 'max:999999'],
             'tiers.*.currency' => ['required', 'string', 'max:8'],
@@ -143,6 +144,7 @@ class PaymentAdminController extends Controller
                 RegistrationPricingTier::query()->updateOrCreate(
                     ['exam_count' => (int) $row['exam_count']],
                     [
+                        'reference_usd_per_exam' => $row['reference_usd_per_exam'] ?? null,
                         'combined_fee_per_exam' => $combinedFee,
                         'exam_fee_per_exam' => $examFee,
                         'service_fee_per_exam' => $combinedFee - $examFee,
