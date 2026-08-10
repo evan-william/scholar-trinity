@@ -1,6 +1,6 @@
 # Trinity Scholar Progress Tracker
 
-Last updated: 2026-08-09, Asia/Bangkok
+Last updated: 2026-08-10, Asia/Bangkok
 
 This file is the working source of truth for project status. Every implementation pass must update:
 - `Current Progress` for what changed.
@@ -61,9 +61,27 @@ Current local template pass:
 
 ## Current Progress
 
+2026-08-10
+- Completed the latest client pricing, payment, and acknowledgement revision:
+  - Kept the 1-10 exam volume-pricing calculation server-side and aligned Admin > Payment Settings with the client's exact columns: exam count, USD reference, adjusted NTD rate, total, Exam Cost, Service Fee, and TS Service Fee per subject.
+  - Admin now edits the total Exam Cost for each tier; the backend validates it, derives the per-subject amount, and calculates Service Fee without trusting browser totals.
+  - Applied the official Bank of Taiwan Songshan Branch details across the registration form, payment page, gateway payload, and payment emails: bank code `004`, account name `力可科技股份有限公司`, and account number `064001061782`.
+  - Added a dedicated editable bank-branch field and a non-destructive production migration for existing payment settings.
+  - Replaced hidden agreement values with five visible required checkboxes. Every acknowledgement is now validated both on the Review & Payment step and on final submission.
+  - Changed the public footer label from `Office Address` to `Test Center Address` / `考場地址` while preserving client-edited CMS copy.
+  - Fixed nondeterministic payment-provider selection when multiple active settings share the same timestamp by selecting the newest database row deterministically.
+- Verification:
+  - PHP lint passed for every changed PHP and Blade file.
+  - Focused registration suite passed: 24 tests and 216 assertions.
+  - Focused payment suite passed: 9 tests and 69 assertions.
+  - Full PHPUnit suite passed: 99 tests and 681 assertions.
+  - Vite production build passed with 61 modules transformed.
+  - Regenerated the safety-checked deployment ZIP with 522 entries; both new migrations, updated views, tests, and built assets are included.
+  - Browser QA was intentionally skipped per user instruction.
+
 2026-08-09
 - Completed the client pricing/CMS verification pass:
-  - Rechecked the supplied 1-10 exam pricing sheet row by row. The NTD unified fee, TPCA fee, Trinity service fee, and calculated totals match all ten rows.
+  - Rechecked the supplied 1-10 exam pricing sheet row by row. The adjusted NTD rate, Exam Cost, Service Fee, per-subject service fee, and calculated totals match all ten rows.
   - Added the client sheet's USD-per-exam reference values (`500`, `475`, `450`, `425`, `400`, then `375`) to the pricing database and Admin > Payment Settings. These values are informational; production charges remain calculated in NTD.
   - Added regression coverage that validates every default pricing row and confirms server-side two-exam volume pricing.
 - Closed the remaining bilingual Landing Content CMS gaps:

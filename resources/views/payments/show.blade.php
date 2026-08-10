@@ -48,8 +48,7 @@
         <div class="card payment-card bank-card">
             <h2>Bank Transfer</h2>
             <table class="summary-table">
-                <tr><td>Bank</td><td>{{ $setting->bank_name ?: 'To be configured' }}</td></tr>
-                <tr><td>Bank Code</td><td>{{ $setting->bank_code ?: '-' }}</td></tr>
+                <tr><td>Bank</td><td>{{ $setting->bankDisplayName() ?: 'To be configured' }}</td></tr>
                 <tr><td>Account Name</td><td>{{ $setting->account_name ?: '-' }}</td></tr>
                 <tr class="account-row"><td>Account Number</td><td><strong>{{ $setting->account_number ?: '-' }}</strong></td></tr>
                 <tr><td>Transfer Note</td><td>{{ $setting->manual_instruction ?: 'Use the payment reference when transferring.' }}</td></tr>

@@ -319,11 +319,11 @@ class StudentRegistrationTest extends TestCase
         $this->actingAs($this->adminUser())
             ->put(route('admin.payments.pricing.update'), [
                 'tiers' => [[
-                    'exam_count' => 2,
-                    'reference_usd_per_exam' => 460,
-                    'combined_fee_per_exam' => 16000,
-                    'exam_fee_per_exam' => 7800,
-                    'currency' => 'NTD',
+                'exam_count' => 2,
+                'reference_usd_per_exam' => 460,
+                'combined_fee_per_exam' => 16000,
+                'exam_cost_total' => 15600,
+                'currency' => 'NTD',
                     'is_active' => '1',
                 ]],
             ])
@@ -333,6 +333,35 @@ class StudentRegistrationTest extends TestCase
         $tier = RegistrationPricingTier::query()->where('exam_count', 2)->firstOrFail();
         $this->assertSame(460, $tier->reference_usd_per_exam);
         $this->assertSame(8200, $tier->service_fee_per_exam);
+    }
+
+    public function test_registration_form_shows_five_explicit_required_acknowledgements(): void
+    {
+        $response = $this->get(route('student-registrations.create'));
+
+        $response->assertOk();
+
+        foreach (['accurate_information', 'terms_conditions', 'ap_policies', 'privacy_policy', 'confirmed_review'] as $field) {
+            $response->assertSee('type="checkbox" name="'.$field.'"', false);
+        }
+    }
+
+    public function test_review_step_requires_every_acknowledgement(): void
+    {
+        $this->postJson(route('student-registrations.validate-step'), [
+            'step' => 5,
+            'payment_method' => 'bank_transfer',
+            'student_signature_name' => 'Alex Student',
+            'student_signature_date' => now()->toDateString(),
+            'guardian_signature_name' => 'Pat Parent',
+            'guardian_signature_date' => now()->toDateString(),
+        ])->assertStatus(422)->assertJsonValidationErrors([
+            'accurate_information',
+            'terms_conditions',
+            'ap_policies',
+            'privacy_policy',
+            'confirmed_review',
+        ]);
     }
 
     public function test_default_unified_pricing_matches_client_table_for_one_through_ten_exams(): void

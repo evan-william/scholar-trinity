@@ -42,7 +42,7 @@
         'support' => $shellCopy('header_support', 'Taipei AP Registration Support', '台北 AP 報名支援'),
     ];
     $footerLabels = [
-        'office' => $shellCopy('footer_office', 'Office Address', '服務說明'),
+        'office' => $shellCopy('footer_office', 'Test Center Address', '考場地址'),
         'office_body' => $shellCopy('footer_office_body', 'Taipei test-center AP registration support.', '台北考場 AP 報名支援。'),
         'phone' => $shellCopy('footer_phone', 'Business Phone', '聯絡電話'),
         'email' => $shellCopy('footer_email', 'Business Email', '電子郵件'),

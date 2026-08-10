@@ -64,7 +64,7 @@
             'powered' => 'Powered by',
         ]
         : [
-            'office' => 'Office Address',
+            'office' => $isZh ? '考場地址' : 'Test Center Address',
             'office_body' => 'Taipei test-center AP registration support.',
             'phone' => 'Business Phone',
             'email' => 'Business Email',
@@ -154,6 +154,10 @@
         .acknowledgement-notice li{align-items:flex-start;gap:10px!important}
         .acknowledgement-notice li::before{display:none!important;content:none!important}
         .acknowledgement-item-icon{display:inline-grid;width:19px;height:19px;flex:0 0 19px;place-items:center;margin-top:2px;border:1px solid #d96b62;border-radius:50%;color:var(--danger);font-size:10px}
+        .acknowledgement-checks{display:grid;gap:10px;margin-top:14px}
+        .acknowledgement-check{display:flex;align-items:flex-start;gap:11px;padding:11px 12px;border:1px solid #efc8c4;border-radius:6px;background:#fff;cursor:pointer;color:#6f1b15;font-weight:700;line-height:1.45}
+        .acknowledgement-check:hover{border-color:#d96b62;background:#fffafa}
+        .acknowledgement-check input{width:18px;height:18px;flex:0 0 18px;margin-top:1px;accent-color:var(--primary)}
         .sig-box{display:grid;gap:8px}.sig-box .lbl:not(:first-child){margin-top:5px}
         @media(max-width:640px){.form-intro{grid-template-columns:1fr}.preparation-choice-grid{grid-template-columns:1fr}}
         /* Current visual pass: softer registration form styling per client feedback. */
@@ -746,22 +750,22 @@
             <div class="card">
                 <div class="section-title">Payment Method <span>付款方式</span></div>
                 <div class="pay-options">
-                    <label class="pay-opt"><input type="radio" name="payment_method" value="bank_transfer" required @checked(in_array(old('payment_method', 'bank_transfer'), ['bank_transfer', 'manual_bank_transfer'], true))><div><h4>{{ $tx('Bank Transfer', '銀行轉帳') }}</h4><p>{{ $tx('Transfer to the account below, then upload payment proof from the payment page after submission.', '請匯款至下方帳戶，提交後於付款頁面上傳付款證明。') }}</p><div class="bank-details"><span><strong>{{ $tx('Bank Name', '銀行') }}:</strong> {{ $paymentSetting->bank_name }}{{ $paymentSetting->bank_code ? ' ('.$paymentSetting->bank_code.')' : '' }}</span><span><strong>{{ $tx('Account Name', '戶名') }}:</strong> {{ $paymentSetting->account_name }}</span><span><strong>{{ $tx('Account Number', '帳號') }}:</strong> {{ $paymentSetting->account_number }}</span></div>@if($paymentSetting->manual_instruction)<p class="hint">{{ $paymentSetting->manual_instruction }}</p>@endif</div></label>
+                    <label class="pay-opt"><input type="radio" name="payment_method" value="bank_transfer" required @checked(in_array(old('payment_method', 'bank_transfer'), ['bank_transfer', 'manual_bank_transfer'], true))><div><h4>{{ $tx('Bank Transfer', '銀行轉帳') }}</h4><p>{{ $tx('Transfer to the account below, then upload payment proof from the payment page after submission.', '請匯款至下方帳戶，提交後於付款頁面上傳付款證明。') }}</p><div class="bank-details"><span><strong>{{ $tx('Bank Name', '銀行') }}:</strong> {{ $paymentSetting->bankDisplayName() }}</span><span><strong>{{ $tx('Account Name', '戶名') }}:</strong> {{ $paymentSetting->account_name }}</span><span><strong>{{ $tx('Account Number', '帳號') }}:</strong> {{ $paymentSetting->account_number }}</span></div>@if($paymentSetting->manual_instruction)<p class="hint">{{ $paymentSetting->manual_instruction }}</p>@endif</div></label>
                 </div>
                 <div class="notice acknowledgement-notice" style="margin-top:16px">
                     <h4><span class="acknowledgement-heading-icon" aria-hidden="true"><i class="fa fa-exclamation-triangle"></i></span>{{ $tx('Acknowledgement', '聲明確認') }}</h4>
-                    <ul>
-                        <li><span class="acknowledgement-item-icon" aria-hidden="true"><i class="fa fa-check"></i></span><span>{{ $tx('All information provided is accurate and complete.', '所填資料正確且完整。') }}</span></li>
-                        <li><span class="acknowledgement-item-icon" aria-hidden="true"><i class="fa fa-check"></i></span><span>{{ $tx('I understand there are no refunds once payment is made.', '繳費後恕不退費。') }}</span></li>
-                        <li><span class="acknowledgement-item-icon" aria-hidden="true"><i class="fa fa-check"></i></span><span>{{ $tx('I have verified the exam schedule for conflicts.', '我已確認考試時程無衝突。') }}</span></li>
-                    </ul>
+                    <div class="acknowledgement-checks">
+                        <label class="acknowledgement-check"><input type="checkbox" name="accurate_information" value="1" required @checked(old('accurate_information'))><span>{{ $tx('All information provided is accurate and complete.', '所填資料正確且完整。') }} <span class="req">*</span></span></label>
+                        <label class="acknowledgement-check"><input type="checkbox" name="terms_conditions" value="1" required @checked(old('terms_conditions'))><span>{{ $tx('I understand there are no refunds once payment is made.', '我了解付款完成後恕不退款。') }} <span class="req">*</span></span></label>
+                        <label class="acknowledgement-check"><input type="checkbox" name="ap_policies" value="1" required @checked(old('ap_policies'))><span>{{ $tx('I have verified the exam schedule for conflicts.', '我已確認考試時程無衝突。') }} <span class="req">*</span></span></label>
+                        <label class="acknowledgement-check"><input type="checkbox" name="privacy_policy" value="1" required @checked(old('privacy_policy'))><span>{{ $tx('I consent to the handling of my registration data and uploaded documents for registration purposes.', '我同意為報名用途處理我的報名資料與上傳文件。') }} <span class="req">*</span></span></label>
+                        <label class="acknowledgement-check"><input type="checkbox" name="confirmed_review" value="1" required @checked(old('confirmed_review'))><span>{{ $tx('I have reviewed this registration and agree to the statements above.', '我已檢查本報名資料並同意以上聲明。') }} <span class="req">*</span></span></label>
+                    </div>
                 </div>
                 <div class="sig-area">
                     <div class="sig-box"><label class="lbl">{{ $tx('Student Signature (type full legal name)', '學生簽名（輸入完整法定姓名）') }} <span class="req">*</span></label><input name="student_signature_name" value="{{ old('student_signature_name') }}" required autocomplete="name"><label class="lbl">{{ $tx('Signature Date', '簽名日期') }} <span class="req">*</span></label><input type="date" name="student_signature_date" value="{{ old('student_signature_date', now()->toDateString()) }}" max="{{ now()->toDateString() }}" required></div>
                     <div class="sig-box"><label class="lbl">{{ $tx('Parent / Guardian Signature (type full legal name)', '家長 / 監護人簽名（輸入完整法定姓名）') }} <span class="req">*</span></label><input name="guardian_signature_name" value="{{ old('guardian_signature_name') }}" required autocomplete="name"><label class="lbl">{{ $tx('Signature Date', '簽名日期') }} <span class="req">*</span></label><input type="date" name="guardian_signature_date" value="{{ old('guardian_signature_date', now()->toDateString()) }}" max="{{ now()->toDateString() }}" required></div>
                 </div>
-                <div style="margin-top:18px"><label class="check-line"><input type="checkbox" name="confirmed_review" value="1" required @checked(old('confirmed_review'))><span>{{ $tx('I have read and agree to the terms above.', '我已閱讀並同意以上條款。') }} <span class="req">*</span></span></label></div>
-                <input type="hidden" name="accurate_information" value="1"><input type="hidden" name="ap_policies" value="1"><input type="hidden" name="privacy_policy" value="1"><input type="hidden" name="terms_conditions" value="1">
             </div>
         </section>
 

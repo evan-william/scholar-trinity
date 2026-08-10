@@ -21,6 +21,7 @@ class PaymentSetting extends Model
         'failed_url',
         'bank_name',
         'bank_code',
+        'bank_branch',
         'account_name',
         'account_number',
         'manual_instruction',
@@ -64,5 +65,14 @@ class PaymentSetting extends Model
     public function hashIv(): ?string
     {
         return $this->hash_iv_encrypted ? Crypt::decryptString($this->hash_iv_encrypted) : null;
+    }
+
+    public function bankDisplayName(): string
+    {
+        return collect([
+            $this->bank_name,
+            $this->bank_code ? '('.$this->bank_code.')' : null,
+            $this->bank_branch,
+        ])->filter(fn ($value) => filled($value))->implode(' ');
     }
 }

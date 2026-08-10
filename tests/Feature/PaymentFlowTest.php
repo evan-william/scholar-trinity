@@ -210,6 +210,8 @@ class PaymentFlowTest extends TestCase
                 'hash_key' => 'secret-key',
                 'hash_iv' => 'secret-iv',
                 'bank_name' => 'Taiwan Bank',
+                'bank_code' => '004',
+                'bank_branch' => 'Songshan Branch',
                 'payment_deadline_days' => 5,
                 'is_active' => '1',
             ])->assertRedirect(route('admin.payments.settings'));
@@ -217,6 +219,24 @@ class PaymentFlowTest extends TestCase
         $setting = PaymentSetting::query()->firstOrFail();
         $this->assertNotSame('secret-key', $setting->hash_key_encrypted);
         $this->assertSame('secret-key', $setting->hashKey());
+        $this->assertSame('Taiwan Bank (004) Songshan Branch', $setting->bankDisplayName());
+    }
+
+    public function test_client_bank_details_are_visible_in_registration_and_payment_instructions(): void
+    {
+        $this->seed(PaymentSettingSeeder::class);
+        [$registration] = $this->registrationAndPayment([], 'APR-2026-999010');
+
+        $this->get(route('student-registrations.create'))
+            ->assertOk()
+            ->assertSee('臺灣銀行 (004) 松山分行')
+            ->assertSee('力可科技股份有限公司')
+            ->assertSee('064001061782');
+
+        $this->get(route('payments.show', $registration->registration_number))
+            ->assertOk()
+            ->assertSee('臺灣銀行 (004) 松山分行')
+            ->assertSee('064001061782');
     }
 
     public function test_payment_gateway_manager_resolves_provider_adapters(): void
@@ -234,7 +254,7 @@ class PaymentFlowTest extends TestCase
 
         $this->get(route('student-registrations.create'))
             ->assertOk()
-            ->assertSee('臺灣銀行松山分行')
+            ->assertSee('臺灣銀行 (004) 松山分行')
             ->assertSee('力可科技股份有限公司')
             ->assertSee('064001061782')
             ->assertDontSee('Credit Card');

@@ -8,7 +8,7 @@
 <tr><td>Exam Fee</td><td>{{ $payment->currency }} {{ number_format($payment->exam_fee_amount) }}</td></tr>
 <tr><td>Service Fee</td><td>{{ $payment->currency }} {{ number_format($payment->service_fee_amount) }}</td></tr>
 <tr><td>Late Fee</td><td>{{ $payment->currency }} {{ number_format($payment->late_fee_amount) }}</td></tr>
-<tr><td>Bank</td><td>{{ $setting->bank_name }} ({{ $setting->bank_code }})</td></tr>
+<tr><td>Bank</td><td>{{ $setting->bankDisplayName() }}</td></tr>
 <tr><td>Account</td><td>{{ $setting->account_name }} / {{ $setting->account_number }}</td></tr>
 <tr><td>Deadline</td><td>{{ optional($payment->payment_deadline_at)->format('Y-m-d H:i') }}</td></tr>
 </table>

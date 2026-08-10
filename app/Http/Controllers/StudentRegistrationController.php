@@ -267,6 +267,10 @@ class StudentRegistrationController extends Controller
                 'student_signature_date' => ['required', 'date', 'before_or_equal:today'],
                 'guardian_signature_name' => ['required', 'string', 'max:140'],
                 'guardian_signature_date' => ['required', 'date', 'before_or_equal:today'],
+                'accurate_information' => ['accepted'],
+                'ap_policies' => ['accepted'],
+                'privacy_policy' => ['accepted'],
+                'terms_conditions' => ['accepted'],
                 'confirmed_review' => ['accepted'],
             ],
         };

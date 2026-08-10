@@ -25,6 +25,7 @@ class UpdatePaymentSettingsRequest extends FormRequest
             'failed_url' => ['nullable', 'url', 'max:255'],
             'bank_name' => ['nullable', 'string', 'max:120'],
             'bank_code' => ['nullable', 'string', 'max:20'],
+            'bank_branch' => ['nullable', 'string', 'max:120'],
             'account_name' => ['nullable', 'string', 'max:120'],
             'account_number' => ['nullable', 'string', 'max:80'],
             'manual_instruction' => ['nullable', 'string', 'max:2000'],

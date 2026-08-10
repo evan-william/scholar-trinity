@@ -11,6 +11,6 @@ Status: {{ str_replace('_', ' ', $payment->payment_status) }}
 Please include the payment reference in your transfer note and upload the proof of payment after transfer.
 
 @if($setting->bank_name)
-Bank: {{ $setting->bank_name }} {{ $setting->bank_code ? '('.$setting->bank_code.')' : '' }}
+Bank: {{ $setting->bankDisplayName() }}
 Account: {{ $setting->account_name }} / {{ $setting->account_number }}
 @endif

@@ -11,7 +11,7 @@ return [
             'nav_contact' => ['label' => 'Navigation: Contact', 'en' => 'Contact', 'zh_TW' => '聯絡我們'],
             'nav_start' => ['label' => 'Navigation: Start Form', 'en' => 'Start Form', 'zh_TW' => '開始報名'],
             'header_support' => ['label' => 'Header Support Text', 'en' => 'Taipei AP Registration Support', 'zh_TW' => '台北 AP 報名支援'],
-            'footer_office' => ['label' => 'Footer: Office Label', 'en' => 'Office Address', 'zh_TW' => '服務說明'],
+            'footer_office' => ['label' => 'Footer: Test Center Label', 'en' => 'Test Center Address', 'zh_TW' => '考場地址'],
             'footer_office_body' => ['label' => 'Footer: Office Description', 'en' => 'Taipei test-center AP registration support.', 'zh_TW' => '台北考場 AP 報名支援。'],
             'footer_phone' => ['label' => 'Footer: Phone Label', 'en' => 'Business Phone', 'zh_TW' => '聯絡電話'],
             'footer_email' => ['label' => 'Footer: Email Label', 'en' => 'Business Email', 'zh_TW' => '電子郵件'],

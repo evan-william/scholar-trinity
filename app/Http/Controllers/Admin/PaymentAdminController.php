@@ -91,11 +91,12 @@ class PaymentAdminController extends Controller
     public function settings(RegistrationPricingService $pricing): View
     {
         return view('admin.payments.settings', [
-            'setting' => PaymentSetting::query()->where('is_active', true)->latest()->first() ?? new PaymentSetting([
+            'setting' => PaymentSetting::query()->where('is_active', true)->orderByDesc('id')->first() ?? new PaymentSetting([
                 'provider' => 'manual',
                 'mode' => 'sandbox',
-                'bank_name' => '臺灣銀行松山分行',
+                'bank_name' => '臺灣銀行',
                 'bank_code' => '004',
+                'bank_branch' => '松山分行',
                 'account_name' => '力可科技股份有限公司',
                 'account_number' => '064001061782',
                 'manual_instruction' => 'Please include your AP registration reference number in the transfer note and send the transfer receipt by email or Line for manual verification.',
@@ -108,7 +109,7 @@ class PaymentAdminController extends Controller
 
     public function updateSettings(UpdatePaymentSettingsRequest $request): RedirectResponse
     {
-        $setting = PaymentSetting::query()->where('is_active', true)->latest()->first() ?? new PaymentSetting(['created_by' => $request->user()->id]);
+        $setting = PaymentSetting::query()->where('is_active', true)->orderByDesc('id')->first() ?? new PaymentSetting(['created_by' => $request->user()->id]);
         $data = collect($request->validated())->except(['hash_key', 'hash_iv'])->all();
         $setting->fill($data + ['updated_by' => $request->user()->id, 'is_active' => (bool) $request->boolean('is_active', true)]);
         $setting->setHashKey($request->validated('hash_key'));
@@ -125,24 +126,36 @@ class PaymentAdminController extends Controller
             'tiers.*.exam_count' => ['required', 'integer', 'min:1', 'max:20', 'distinct'],
             'tiers.*.reference_usd_per_exam' => ['nullable', 'integer', 'min:0', 'max:9999'],
             'tiers.*.combined_fee_per_exam' => ['required', 'integer', 'min:0', 'max:999999'],
-            'tiers.*.exam_fee_per_exam' => ['required', 'integer', 'min:0', 'max:999999'],
+            'tiers.*.exam_cost_total' => ['nullable', 'required_without:tiers.*.exam_fee_per_exam', 'integer', 'min:0', 'max:9999999'],
+            'tiers.*.exam_fee_per_exam' => ['nullable', 'required_without:tiers.*.exam_cost_total', 'integer', 'min:0', 'max:999999'],
             'tiers.*.currency' => ['required', 'string', 'max:8'],
             'tiers.*.is_active' => ['nullable', 'boolean'],
         ]);
 
         DB::transaction(function () use ($data): void {
             foreach ($data['tiers'] as $row) {
+                $examCount = (int) $row['exam_count'];
                 $combinedFee = (int) $row['combined_fee_per_exam'];
-                $examFee = (int) $row['exam_fee_per_exam'];
+                $examCostTotal = isset($row['exam_cost_total']) ? (int) $row['exam_cost_total'] : null;
+
+                if ($examCostTotal !== null && $examCostTotal % $examCount !== 0) {
+                    throw ValidationException::withMessages([
+                        'tiers' => 'Exam Cost must divide evenly across the selected number of exams.',
+                    ]);
+                }
+
+                $examFee = $examCostTotal !== null
+                    ? intdiv($examCostTotal, $examCount)
+                    : (int) $row['exam_fee_per_exam'];
 
                 if ($examFee > $combinedFee) {
                     throw ValidationException::withMessages([
-                        'tiers' => 'The TPCA exam fee cannot exceed the unified fee.',
+                        'tiers' => 'The Exam Cost per subject cannot exceed the NTD adjusted rate.',
                     ]);
                 }
 
                 RegistrationPricingTier::query()->updateOrCreate(
-                    ['exam_count' => (int) $row['exam_count']],
+                    ['exam_count' => $examCount],
                     [
                         'reference_usd_per_exam' => $row['reference_usd_per_exam'] ?? null,
                         'combined_fee_per_exam' => $combinedFee,

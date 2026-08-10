@@ -8,7 +8,7 @@
     </table>
     <p>Please include the payment reference in your transfer note and upload the proof of payment after transfer.</p>
     @if($setting->bank_name)
-        <p><strong>Bank:</strong> {{ $setting->bank_name }} {{ $setting->bank_code ? '('.$setting->bank_code.')' : '' }}<br>
+        <p><strong>Bank:</strong> {{ $setting->bankDisplayName() }}<br>
         <strong>Account:</strong> {{ $setting->account_name }} / {{ $setting->account_number }}</p>
     @endif
     <p>Thank you.</p>

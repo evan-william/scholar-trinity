@@ -21,6 +21,8 @@ class ManualPaymentProvider implements PaymentGatewayProviderInterface
             'currency' => $payment->currency,
             'bank_name' => $setting->bank_name,
             'bank_code' => $setting->bank_code,
+            'bank_branch' => $setting->bank_branch,
+            'bank_display_name' => $setting->bankDisplayName(),
             'account_name' => $setting->account_name,
             'account_number' => $setting->account_number,
         ];
