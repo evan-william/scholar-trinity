@@ -1,6 +1,6 @@
 # Trinity Scholar Progress Tracker
 
-Last updated: 2026-08-10, Asia/Bangkok
+Last updated: 2026-08-12, Asia/Bangkok
 
 This file is the working source of truth for project status. Every implementation pass must update:
 - `Current Progress` for what changed.
@@ -15,8 +15,8 @@ Do not store server passwords, DB passwords, API keys, or payment provider crede
 - Stack decision: Laravel + Vue.
 - Current frontend state: Laravel Blade is still the main UI. Vue is now wired as a progressive frontend path, but pages still need migration/redesign.
 - Production direction: one Laravel app should serve the site and built Vue assets. Use `npm run build` for production assets; do not run a separate Node frontend server in production unless the deployment plan changes.
-- Server info from team: domain `trinity.sophistec.global`, app port `3014`.
-- Database direction: production MySQL is provisioned. Its credentials belong only in the server `.env`; do not commit them or package them in a deploy ZIP.
+- Current deployment host: `apexamtaiwan.com`; the Laravel process is available locally on server port `3014` while CloudPanel routing is finalized.
+- Database direction: MySQL remains the production target. The new host did not include DB credentials, so the 2026-08-12 bootstrap deploy uses a persistent server-side SQLite database until hosting provisions MySQL. Credentials must remain only in server `.env`; never commit them or package them in a deploy ZIP.
 
 ## Template Candidates
 
@@ -60,6 +60,21 @@ Current local template pass:
 - Raw downloaded templates are ignored through `template-source/` in `.gitignore`.
 
 ## Current Progress
+
+2026-08-12
+- Completed the latest registration content and Primacy consent revision:
+  - Replaced the exam-selection pricing note with the client's exact English and Traditional Chinese wording explaining that the final price includes exam, service, and applicable late fees.
+  - Added an optional bilingual Primacy email-updates checkbox to the registration flow. The preference is stored on the registration, recorded as a timestamped agreement when selected, shown in the admin registration detail, and included in registration exports.
+  - Added a non-destructive production migration for the new consent field; existing registrations default to not opted in.
+  - Reconfirmed that the production catalog sync contains all 11 configured 2027 AP exams across `Sciences`, `Mathematics`, and `General`. Deployment must run `php artisan registration:sync-catalog --force` after migrations so the production database receives the complete list without deleting existing registrations.
+- Verification:
+  - Focused bilingual-copy, Primacy consent, and AP catalog-sync regression tests passed.
+  - Full PHPUnit suite passed: 100 tests and 690 assertions.
+  - Vite production build passed with 61 modules transformed.
+  - Regenerated and inspected the deployment ZIP with 523 entries. The migration and built manifest are present; local dependencies, Git metadata, and runtime `.env` are excluded.
+  - Deployed to `/home/apexamtaiwan/htdocs/apexamtaiwan.com`, ran all migrations and seeders, synchronized 11 selectable AP subjects across 3 categories, loaded 10 pricing tiers, and bootstrapped the admin account.
+  - Server-local HTTP smoke tests passed on port `3014`: landing `200`, registration form `200`, and admin redirect `302`.
+  - Public-domain smoke testing identified a hosting configuration issue: CloudPanel still serves `apexamtaiwan.com` as a static site. The domain must be switched to a reverse proxy targeting `http://127.0.0.1:3014`, or to a PHP site with document root `/home/apexamtaiwan/htdocs/apexamtaiwan.com/public`.
 
 2026-08-10
 - Completed the latest client pricing, payment, and acknowledgement revision:
@@ -697,6 +712,14 @@ These items come directly from `Reference/Trinity Scholar - Features.pdf` and we
 - PENDING: credit/debit-card payment method and production payment-provider credentials.
 - DONE: approved manual bank-account details are seeded/migrated and remain editable from admin Payment Settings.
 
+### Production Host Follow-up - 2026-08-12
+
+- TODO: change the `apexamtaiwan.com` CloudPanel site from static hosting to either:
+  - reverse proxy `http://127.0.0.1:3014`; or
+  - PHP/Laravel hosting with document root `/home/apexamtaiwan/htdocs/apexamtaiwan.com/public`.
+- TODO: provision MySQL credentials for the new host and migrate the temporary server-side SQLite data before real client registrations begin.
+- TODO: replace `MAIL_MAILER=log` with the approved SMTP configuration before confirmation email delivery is expected.
+
 - Online Practice Exam Platform:
   - FUTURE TODO: question bank.
   - FUTURE TODO: multiple choice engine.
@@ -943,6 +966,7 @@ These items come directly from `Reference/Trinity Scholar - Features.pdf` and we
 
 ## Bugs / Re-Audit Findings
 
+- The new `apexamtaiwan.com` CloudPanel vhost is configured as static hosting. Public requests currently return `403/404` and `.php` files are served as downloads; the non-privileged site SSH account cannot edit the Nginx/CloudPanel vhost. Laravel itself passes server-local smoke checks on `127.0.0.1:3014`.
 - Production source re-uploads do not reset MySQL data. Missing AP categories come from an unsynchronized catalog, while old admin data remaining after deploy is expected database persistence.
 - The previous broad deploy ZIP command could include the ignored local `database/database.sqlite` file. The verified ZIP builder now excludes all SQLite files and fails if a database, `.env`, or private upload enters the archive.
 - PHP is not registered in the Windows PATH, but the local XAMPP PHP runtime is available at `C:\xampp\php\php.exe`; the full PHPUnit suite passes when GD and ZIP are enabled explicitly.
@@ -961,6 +985,17 @@ These items come directly from `Reference/Trinity Scholar - Features.pdf` and we
 - Server credentials were shared in chat but must stay out of Git.
 
 ## Verification Log
+
+2026-08-12
+- PHP syntax lint passed for all changed PHP files.
+- Primacy consent persistence/audit, bilingual copy, and AP catalog synchronization regression tests passed.
+- Full PHPUnit suite passed: 100 tests and 690 assertions.
+- Vite production build passed with 61 modules transformed.
+- Deployment ZIP safety inspection passed with 523 entries and no runtime `.env`, `vendor`, `node_modules`, or `.git` content.
+- New-host migrations, seeders, catalog sync, pricing tiers, and admin bootstrap completed successfully.
+- Server data verification returned 11 AP subjects, 3 categories, 10 pricing tiers, and 1 admin.
+- Server-local HTTP smoke checks returned `200` for landing and registration and `302` for the admin login redirect.
+- Browser QA was intentionally not used per user instruction.
 
 2026-08-01
 - Re-read all text and screenshots from `Reference/Webpage Edits Request (1).docx`, with implementation focused on Review 2 and Review 3 non-pending items.

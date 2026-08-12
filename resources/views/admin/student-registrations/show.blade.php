@@ -180,6 +180,7 @@
             <div class="section-title"><h2>AP Preparation Interest</h2></div>
             <table>
                 <tr><td>Interested</td><td>{{ $registration->preparation_interest ? __('admin.yes') : __('admin.no') }}</td></tr>
+                <tr><td>Primacy Email Updates</td><td>{{ $registration->primacy_email_opt_in ? __('admin.yes') : __('admin.no') }}</td></tr>
                 <tr><td>Group Class</td><td>{{ $registration->group_class_interest ? __('admin.yes') : __('admin.no') }}</td></tr>
                 <tr><td>Private Tutoring</td><td>{{ $registration->private_tutoring_interest ? __('admin.yes') : __('admin.no') }}</td></tr>
                 <tr><td>Preferred Schedule</td><td>{{ $registration->preferred_tutoring_schedule ?: '-' }}</td></tr>

@@ -74,6 +74,7 @@ class StoreStudentRegistrationRequest extends FormRequest
             'practice_exams.*' => ['string', 'max:120'],
             'practice_exam_total' => ['nullable', 'integer', 'min:0', 'max:100000'],
             'preparation_interest' => ['nullable', 'boolean'],
+            'primacy_email_opt_in' => ['nullable', 'boolean'],
             'group_class_interest' => ['nullable', 'boolean'],
             'private_tutoring_interest' => ['nullable', 'boolean'],
             'preferred_tutoring_schedule' => ['nullable', 'string', 'max:160'],
@@ -228,7 +229,7 @@ class StoreStudentRegistrationRequest extends FormRequest
             3 => ['exam_subject_uuids', 'exam_subject_ids', 'practice_exams', 'practice_exam_total'],
             4 => [
                 'needs_accommodations', 'ssd_code', 'accommodation_status', 'accommodations',
-                'preparation_interest', 'group_class_interest', 'private_tutoring_interest',
+                'preparation_interest', 'primacy_email_opt_in', 'group_class_interest', 'private_tutoring_interest',
                 'preferred_tutoring_schedule', 'preferred_tutoring_language', 'preparation_notes',
             ],
             5 => [

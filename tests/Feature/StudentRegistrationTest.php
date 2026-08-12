@@ -221,6 +221,7 @@ class StudentRegistrationTest extends TestCase
             'exam_subject_ids' => [$subject->id],
             'practice_exams' => [$practice->uuid],
             'preparation_interest' => '1',
+            'primacy_email_opt_in' => '1',
             'group_class_interest' => '1',
             'private_tutoring_interest' => '1',
             'preferred_tutoring_schedule' => 'Weekend morning',
@@ -228,11 +229,12 @@ class StudentRegistrationTest extends TestCase
             'preparation_notes' => 'Needs calculus review.',
         ]))->assertRedirect();
 
-        $registration = StudentRegistration::query()->with('practiceExamSelections')->firstOrFail();
+        $registration = StudentRegistration::query()->with(['practiceExamSelections', 'agreements'])->firstOrFail();
         $this->assertSame(1, $registration->practice_exam_count);
         $this->assertSame(2500, $registration->practice_exam_total);
         $this->assertSame(20000, $registration->total_fee);
         $this->assertTrue($registration->preparation_interest);
+        $this->assertTrue($registration->primacy_email_opt_in);
         $this->assertTrue($registration->group_class_interest);
         $this->assertTrue($registration->private_tutoring_interest);
         $this->assertSame('Weekend morning', $registration->preferred_tutoring_schedule);
@@ -241,6 +243,7 @@ class StudentRegistrationTest extends TestCase
         $this->assertSame('AP Calculus AB Mock Exam', $registration->practiceExamSelections->first()->exam_name);
         $this->assertSame(2500, $registration->practiceExamSelections->first()->practice_fee);
         $this->assertSame($practice->id, $registration->practiceExamSelections->first()->practice_exam_option_id);
+        $this->assertTrue($registration->agreements->contains('agreement_key', 'primacy_email_marketing'));
     }
 
     public function test_practice_exam_cannot_be_selected_after_seat_capacity_is_reached(): void
@@ -344,6 +347,23 @@ class StudentRegistrationTest extends TestCase
         foreach (['accurate_information', 'terms_conditions', 'ap_policies', 'privacy_policy', 'confirmed_review'] as $field) {
             $response->assertSee('type="checkbox" name="'.$field.'"', false);
         }
+    }
+
+    public function test_registration_form_shows_localized_primacy_email_opt_in_and_pricing_note(): void
+    {
+        $english = $this->get(route('student-registrations.create'));
+
+        $english->assertOk()
+            ->assertSee('name="primacy_email_opt_in"', false)
+            ->assertSee('I would like to receive education trends, exam information, and college application news by email from Primacy. I understand that I may unsubscribe at any time.')
+            ->assertSee('The final price includes the exam fee, service fee, and any applicable late fees.');
+
+        $traditionalChinese = $this->withSession(['locale' => 'zh-TW'])
+            ->get(route('student-registrations.create'));
+
+        $traditionalChinese->assertOk()
+            ->assertSee('我願意透過電子郵件接收 Primacy 提供的留學考試、大學申請、留學趨勢等資訊，並了解可隨時取消訂閱。')
+            ->assertSee('最終價格包含考試費用、代辦手續費，以及任何適用的逾期費用。');
     }
 
     public function test_review_step_requires_every_acknowledgement(): void

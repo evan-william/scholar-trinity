@@ -131,6 +131,7 @@ class StudentRegistrationService
                 'practice_exam_count' => count($practiceExams),
                 'practice_exam_total' => $practiceTotal,
                 'preparation_interest' => (bool) ($data['preparation_interest'] ?? false),
+                'primacy_email_opt_in' => (bool) ($data['primacy_email_opt_in'] ?? false),
                 'group_class_interest' => (bool) ($data['group_class_interest'] ?? false),
                 'private_tutoring_interest' => (bool) ($data['private_tutoring_interest'] ?? false),
                 'preferred_tutoring_schedule' => $data['preferred_tutoring_schedule'] ?? null,
@@ -233,6 +234,15 @@ class StudentRegistrationService
             foreach (['accurate_information', 'ap_policies', 'privacy_policy', 'terms_conditions'] as $agreement) {
                 $registration->agreements()->create([
                     'agreement_key' => $agreement,
+                    'accepted_at' => now(),
+                    'ip_address' => $ipAddress,
+                    'user_agent' => $userAgent,
+                ]);
+            }
+
+            if ($registration->primacy_email_opt_in) {
+                $registration->agreements()->create([
+                    'agreement_key' => 'primacy_email_marketing',
                     'accepted_at' => now(),
                     'ip_address' => $ipAddress,
                     'user_agent' => $userAgent,

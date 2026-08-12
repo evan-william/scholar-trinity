@@ -255,6 +255,7 @@ class StudentRegistrationController extends Controller
                 'accommodations.*.exam' => ['nullable', 'string', 'max:120'],
                 'accommodations.*.request' => ['nullable', 'string', 'max:180'],
                 'preparation_interest' => ['nullable', 'boolean'],
+                'primacy_email_opt_in' => ['nullable', 'boolean'],
                 'group_class_interest' => ['nullable', 'boolean'],
                 'private_tutoring_interest' => ['nullable', 'boolean'],
                 'preferred_tutoring_schedule' => ['nullable', 'string', 'max:160'],

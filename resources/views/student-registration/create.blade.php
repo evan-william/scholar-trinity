@@ -691,7 +691,7 @@
                     <div class="price-row"><span>{{ $tx('Practice Exams', '模擬考') }} (<span id="praCt">0</span>)</span><span id="praTot">NT$ 0</span></div>
                     <div class="price-row"><span>{{ $tx('Late Registration Fee', '逾期報名費') }}</span><span id="lateTot">NT$ 0</span></div>
                     <div class="price-row total"><span>{{ $tx('Total Due', '應付總額') }}</span><span id="grandTot">NT$ 0</span></div>
-                    <p class="hint">{{ $tx('Final pricing confirmed by AP Coordinator.', '最終費用由 AP 協調員確認。') }}</p>
+                    <p class="hint">{{ $tx('The final price includes the exam fee, service fee, and any applicable late fees.', '最終價格包含考試費用、代辦手續費，以及任何適用的逾期費用。') }}</p>
                 </div>
             </div>
         </section>
@@ -716,6 +716,7 @@
                 <div class="section-title">{{ $tx('AP Preparation Interest', 'AP 備考課程意願') }} <span>{{ $tx('Optional tutoring survey', '選填課程需求調查') }}</span></div>
                 <div class="notice"><h4>{{ $tx('Optional tutoring survey', '選填課程需求調查') }}</h4><p>{{ $tx('This does not affect AP exam registration. It helps the team follow up if the student is interested in AP preparation support.', '此調查不影響 AP 考試報名，僅協助團隊了解學生是否需要 AP 備考支援。') }}</p></div>
                 <label class="check-line" style="margin-bottom:12px"><input type="checkbox" name="preparation_interest" value="1" id="prepInterest" @checked(old('preparation_interest'))><span>{{ $tx('I am interested in AP preparation / tutoring information.', '我有興趣了解 AP 備考 / 家教資訊。') }}</span></label>
+                <label class="check-line" style="margin-bottom:16px"><input type="checkbox" name="primacy_email_opt_in" value="1" @checked(old('primacy_email_opt_in'))><span>{{ $tx('I would like to receive education trends, exam information, and college application news by email from Primacy. I understand that I may unsubscribe at any time.', '我願意透過電子郵件接收 Primacy 提供的留學考試、大學申請、留學趨勢等資訊，並了解可隨時取消訂閱。') }}</span></label>
                 <div id="prepDetails" class="preparation-detail hidden">
                     <div class="preparation-choice-grid">
                         <label class="check-line"><input type="checkbox" name="group_class_interest" value="1" @checked(old('group_class_interest'))><span>{{ $tx('Group class interest', '團體課程意願') }}</span></label>

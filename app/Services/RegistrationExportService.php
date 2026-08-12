@@ -161,6 +161,7 @@ class RegistrationExportService
                     'Accommodation Status' => $registration->accommodation_status,
                     'Accommodation Requests' => $this->accommodationSummary($registration),
                     'AP Prep Interest' => $registration->preparation_interest ? 'Yes' : 'No',
+                    'Primacy Email Updates' => $registration->primacy_email_opt_in ? 'Yes' : 'No',
                     'Group Class Interest' => $registration->group_class_interest ? 'Yes' : 'No',
                     'Private Tutoring Interest' => $registration->private_tutoring_interest ? 'Yes' : 'No',
                     'Preferred Tutoring Schedule' => $registration->preferred_tutoring_schedule,
