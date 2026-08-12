@@ -75,6 +75,8 @@ Current local template pass:
   - Deployed to `/home/apexamtaiwan/htdocs/apexamtaiwan.com`, ran all migrations and seeders, synchronized 11 selectable AP subjects across 3 categories, loaded 10 pricing tiers, and bootstrapped the admin account.
   - Server-local HTTP smoke tests passed on port `3014`: landing `200`, registration form `200`, and admin redirect `302`.
   - Public-domain smoke testing identified a hosting configuration issue: CloudPanel still serves `apexamtaiwan.com` as a static site. The domain must be switched to a reverse proxy targeting `http://127.0.0.1:3014`, or to a PHP site with document root `/home/apexamtaiwan/htdocs/apexamtaiwan.com/public`.
+  - Also deployed the verified ZIP to the existing `trinity.sophistec.global` production application. Preserved its private `.env` and MySQL database, applied the new consent migration, synchronized the AP catalog, rebuilt Laravel caches, and restarted the queue.
+  - Post-deploy verification on Trinity production confirmed all 8 existing registrations were preserved, 11 AP subjects remain selectable across 3 categories, 10 pricing tiers remain configured, the Primacy consent column exists, and landing/form/admin endpoints return `200`/`200`/`302`.
 
 2026-08-10
 - Completed the latest client pricing, payment, and acknowledgement revision:
@@ -995,6 +997,7 @@ These items come directly from `Reference/Trinity Scholar - Features.pdf` and we
 - New-host migrations, seeders, catalog sync, pricing tiers, and admin bootstrap completed successfully.
 - Server data verification returned 11 AP subjects, 3 categories, 10 pricing tiers, and 1 admin.
 - Server-local HTTP smoke checks returned `200` for landing and registration and `302` for the admin login redirect.
+- Existing Trinity production deployment passed the same data and HTTP smoke checks while preserving all 8 pre-existing MySQL registrations.
 - Browser QA was intentionally not used per user instruction.
 
 2026-08-01
