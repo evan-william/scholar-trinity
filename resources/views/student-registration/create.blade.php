@@ -135,6 +135,8 @@
         .intro-summary small{display:block;margin-top:12px;color:#667386;font-size:11px;line-height:1.5}
         .test-site-map{display:inline-flex;align-items:center;gap:7px;margin-top:12px;color:var(--primary);font-size:12px;font-weight:700}
         .preparation-detail{margin-top:12px}
+        .preparation-opt-in{gap:12px;font-size:16px;font-weight:600;line-height:1.55;color:#263850}
+        .preparation-opt-in input{width:21px;height:21px;flex:0 0 21px;margin-top:2px}
         .preparation-choice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:16px}
         .preparation-choice-grid .check-line{min-height:54px;padding:14px;border:1px solid #dce5f0;border-radius:8px;background:#f8fafc}
         .choice-group-error{margin-top:10px}
@@ -159,7 +161,7 @@
         .acknowledgement-check:hover{border-color:#d96b62;background:#fffafa}
         .acknowledgement-check input{width:18px;height:18px;flex:0 0 18px;margin-top:1px;accent-color:var(--primary)}
         .sig-box{display:grid;gap:8px}.sig-box .lbl:not(:first-child){margin-top:5px}
-        @media(max-width:640px){.form-intro{grid-template-columns:1fr}.preparation-choice-grid{grid-template-columns:1fr}}
+        @media(max-width:640px){.form-intro{grid-template-columns:1fr}.preparation-choice-grid{grid-template-columns:1fr}.preparation-opt-in{font-size:15px}}
         /* Current visual pass: softer registration form styling per client feedback. */
         body{background:#eef4fb}
         .header{background:linear-gradient(90deg,#102d52,#1d477d);box-shadow:0 12px 34px rgba(16,45,82,.16)}
@@ -715,8 +717,8 @@
             <div class="card">
                 <div class="section-title">{{ $tx('AP Preparation Interest', 'AP 備考課程意願') }} <span>{{ $tx('Optional tutoring survey', '選填課程需求調查') }}</span></div>
                 <div class="notice"><h4>{{ $tx('Optional tutoring survey', '選填課程需求調查') }}</h4><p>{{ $tx('This does not affect AP exam registration. It helps the team follow up if the student is interested in AP preparation support.', '此調查不影響 AP 考試報名，僅協助團隊了解學生是否需要 AP 備考支援。') }}</p></div>
-                <label class="check-line" style="margin-bottom:12px"><input type="checkbox" name="preparation_interest" value="1" id="prepInterest" @checked(old('preparation_interest'))><span>{{ $tx('I am interested in AP preparation / tutoring information.', '我有興趣了解 AP 備考 / 家教資訊。') }}</span></label>
-                <label class="check-line" style="margin-bottom:16px"><input type="checkbox" name="primacy_email_opt_in" value="1" @checked(old('primacy_email_opt_in'))><span>{{ $tx('I would like to receive education trends, exam information, and college application news by email from Primacy. I understand that I may unsubscribe at any time.', '我願意透過電子郵件接收 Primacy 提供的留學考試、大學申請、留學趨勢等資訊，並了解可隨時取消訂閱。') }}</span></label>
+                <label class="check-line preparation-opt-in" style="margin-bottom:12px"><input type="checkbox" name="preparation_interest" value="1" id="prepInterest" @checked(old('preparation_interest'))><span>{{ $tx('I am interested in AP preparation / tutoring information.', '我有興趣了解 AP 備考 / 家教資訊。') }}</span></label>
+                <label class="check-line preparation-opt-in" style="margin-bottom:16px"><input type="checkbox" name="primacy_email_opt_in" value="1" @checked(old('primacy_email_opt_in'))><span>{{ $tx('I would like to receive education trends, exam information, and college application news by email from Primacy. I understand that I may unsubscribe at any time.', '我願意透過電子郵件接收 Primacy 提供的留學考試、大學申請、留學趨勢等資訊，並了解可隨時取消訂閱。') }}</span></label>
                 <div id="prepDetails" class="preparation-detail hidden">
                     <div class="preparation-choice-grid">
                         <label class="check-line"><input type="checkbox" name="group_class_interest" value="1" @checked(old('group_class_interest'))><span>{{ $tx('Group class interest', '團體課程意願') }}</span></label>

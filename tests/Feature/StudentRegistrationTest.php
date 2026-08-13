@@ -358,6 +358,8 @@ class StudentRegistrationTest extends TestCase
             ->assertSee('I would like to receive education trends, exam information, and college application news by email from Primacy. I understand that I may unsubscribe at any time.')
             ->assertSee('The final price includes the exam fee, service fee, and any applicable late fees.');
 
+        $this->assertSame(2, substr_count($english->getContent(), 'check-line preparation-opt-in'));
+
         $traditionalChinese = $this->withSession(['locale' => 'zh-TW'])
             ->get(route('student-registrations.create'));
 

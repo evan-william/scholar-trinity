@@ -1,6 +1,6 @@
 # Trinity Scholar Progress Tracker
 
-Last updated: 2026-08-12, Asia/Bangkok
+Last updated: 2026-08-13, Asia/Bangkok
 
 This file is the working source of truth for project status. Every implementation pass must update:
 - `Current Progress` for what changed.
@@ -60,6 +60,20 @@ Current local template pass:
 - Raw downloaded templates are ignored through `template-source/` in `.gitignore`.
 
 ## Current Progress
+
+2026-08-13
+- Improved Step 4 readability following the latest client feedback:
+  - Increased both AP preparation and Primacy email opt-in label text to `16px` on desktop and `15px` on mobile.
+  - Increased both checkbox controls to `21px` while leaving every other registration field and checkbox unchanged.
+  - Added a regression assertion that keeps the enlarged styling scoped to exactly the two Step 4 opt-in choices.
+- Verification and production deployment:
+  - Focused bilingual opt-in/pricing regression test passed with 8 assertions.
+  - Full PHPUnit suite passed: 100 tests and 691 assertions.
+  - Vite production build passed with 61 modules transformed.
+  - Regenerated the safety-checked deployment ZIP with 523 entries.
+  - Created a timestamped server backup, deployed to `trinity.sophistec.global`, rebuilt Laravel caches, and restarted the queue.
+  - Production verification confirmed all 8 existing registrations remain intact, 11 AP subjects are selectable across 3 categories, and all 10 pricing tiers remain configured.
+  - Production HTTP smoke checks passed: landing `200`, registration form `200`, and admin redirect `302`.
 
 2026-08-12
 - Completed the latest registration content and Primacy consent revision:
