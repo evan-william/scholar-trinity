@@ -15,7 +15,7 @@ Do not store server passwords, DB passwords, API keys, or payment provider crede
 - Stack decision: Laravel + Vue.
 - Current frontend state: Laravel Blade is still the main UI. Vue is now wired as a progressive frontend path, but pages still need migration/redesign.
 - Production direction: one Laravel app should serve the site and built Vue assets. Use `npm run build` for production assets; do not run a separate Node frontend server in production unless the deployment plan changes.
-- Current deployment host: `apexamtaiwan.com`; the Laravel process is available locally on server port `3014` while CloudPanel routing is finalized.
+- Current deployment host: `apexamtaiwan.com`; CloudPanel now serves the Laravel application through its PHP site configuration and public document root.
 - Database direction: MySQL remains the production target. The new host did not include DB credentials, so the 2026-08-12 bootstrap deploy uses a persistent server-side SQLite database until hosting provisions MySQL. Credentials must remain only in server `.env`; never commit them or package them in a deploy ZIP.
 
 ## Template Candidates
@@ -74,6 +74,14 @@ Current local template pass:
   - Created a timestamped server backup, deployed to `trinity.sophistec.global`, rebuilt Laravel caches, and restarted the queue.
   - Production verification confirmed all 8 existing registrations remain intact, 11 AP subjects are selectable across 3 categories, and all 10 pricing tiers remain configured.
   - Production HTTP smoke checks passed: landing `200`, registration form `200`, and admin redirect `302`.
+- Updated the new `apexamtaiwan.com` production host after CloudPanel enabled Laravel/PHP routing:
+  - Confirmed the first active deployment still contained an older registration view, then replaced it with the latest verified deployment ZIP while preserving `.env`, the persistent database, CMS data, and uploaded files.
+  - Applied migrations, synchronized the full AP catalog, rebuilt the application, route, and view caches, and created a timestamped pre-deploy backup.
+  - Production now serves the enlarged Step 4 choices, Primacy email opt-in, and final bilingual pricing copy.
+  - Confirmed the production catalog has 11 selectable AP subjects across 3 categories and 10 configured pricing tiers.
+  - Confirmed the production database is connected through persistent SQLite. It currently contains 0 student registrations and one admin account.
+  - Diagnosed and fixed a PHP-FPM SQLite ACL issue that allowed the SSH deployment user to write but made the database read-only to the web process. This issue caused successful admin authentication to end in a `500` and would also have prevented public registrations from being saved.
+  - Verified the real production admin login using username `admin`: it now returns `302` to `/admin/dashboard`, and the authenticated dashboard returns `200`.
 
 2026-08-12
 - Completed the latest registration content and Primacy consent revision:
